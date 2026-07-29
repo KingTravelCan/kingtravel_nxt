@@ -25,7 +25,7 @@ A modern, full-stack Next.js application built for **King Travel Can Ltd** — a
 
 ## 🛠️ Technology Stack
 
-- **Framework**: Next.js 16 (App Router & Turbopack)
+- **Framework**: Next.js 16+ (App Router & Turbopack)
 - **Language**: TypeScript 5
 - **Styling**: Tailwind CSS 4 & Custom Global Design Tokens (`globals.css`)
 - **Database ORM**: Drizzle ORM
@@ -37,15 +37,7 @@ A modern, full-stack Next.js application built for **King Travel Can Ltd** — a
 ## 📦 Getting Started
 
 ### 1. Prerequisites
-Ensure you have Node.js (v18+) installed on your machine.
-
-### 2. Environment Setup
-Create a `.env` file in the root directory:
-
-```env
-DATABASE_URL=mysql://user:password@localhost:3306/king_travel_db
-NEXTAUTH_SECRET=your_jwt_secret_here
-```
+Ensure you have Node.js (v24+) installed on your machine.
 
 ### 3. Install Dependencies
 ```bash
@@ -84,33 +76,3 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 | `npm run db:push` | Directly pushes schema updates to the connected MySQL database. |
 | `npm run db:studio` | Launches Drizzle Studio in the browser to view/edit database records. |
 
----
-
-## 📁 Key Directory Structure
-
-```
-king-travel-can-nxt/
-├── src/
-│   ├── actions/          # Server Actions (Auth, Packages, Enquiries, Visas)
-│   ├── app/              # Next.js App Router Pages & API Routes
-│   │   ├── about/        # About Us Page
-│   │   ├── admin/        # Protected Admin Dashboard Pages
-│   │   ├── airlines/     # Airline Tickets Page
-│   │   ├── contact/      # Contact Page & Form Handler
-│   │   ├── hajj/         # Hajj Packages & Details Pages
-│   │   ├── letstravel/   # Admin Login Portal
-│   │   ├── saudi-visa/   # Saudi Visa Services Page
-│   │   ├── umrah/        # Umrah Packages Showcase
-│   │   ├── globals.css   # Centralized Global Styling Tokens & Component Classes
-│   │   └── layout.tsx    # Root Layout Component
-│   ├── components/       # Reusable Shared UI Components (Header, Footer, etc.)
-│   └── lib/              # Helper utilities, schema definitions, and DB config
-├── drizzle.config.ts     # Drizzle Kit Configuration
-└── README.md             # Project Documentation
-```
-
----
-
-## 🔒 Security & Admin Access
-- The default Next.js admin login path has been moved to `/letstravel`.
-- Admin API routes and dashboard pages enforce server-side session checks.
