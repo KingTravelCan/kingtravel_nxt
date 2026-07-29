@@ -29,7 +29,7 @@
   --serif: 'Marcellus', serif;
   --sans: 'Plus Jakarta Sans', sans-serif;
 
-  --maxw: 1300px;
+  --maxw: 1280px;
   --r-lg: 28px;
   --r-md: 18px;
   --r-sm: 10px;
@@ -44,8 +44,6 @@
 
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html {
@@ -70,9 +68,6 @@ a {
   text-decoration: none;
 }
 
-a:hover {
-  text-decoration: underline;
-}
 
 ul {
   list-style: none;
@@ -2427,11 +2422,13 @@ ul.social-links li a:hover {
 /* ============ HEADER NAVIGATION DROPDOWN ============ */
 .dropdown-parent {
   position: relative;
+  padding-bottom: 12px;
+  margin-bottom: -12px;
 }
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%;
   left: 0;
   background: #fff;
   border-radius: 8px;
@@ -2442,7 +2439,7 @@ ul.social-links li a:hover {
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease, transform 0.2s ease;
-  transform: translateY(-6px);
+  transform: translateY(2px);
   z-index: 200;
 }
 
@@ -2470,9 +2467,8 @@ ul.social-links li a:hover {
 }
 
 .dropdown-menu a:hover {
-  background: #f5e7c8;
-  color: #7a5a1e !important;
-  text-decoration: none !important;
+  color: var(--gold) !important;
+  background: rgba(212, 175, 55, 0.1);
 }
 
 .nav-arrow {
@@ -2524,7 +2520,7 @@ ul.social-links li a:hover {
 /* Hero Header */
 .umrah-hero {
   background: linear-gradient(rgba(10, 66, 45, 0.88), rgba(10, 66, 45, 0.85)),
-              url('https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg') no-repeat center center/cover;
+    url('https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg') no-repeat center center/cover;
   padding: 90px 20px 140px 20px;
   text-align: center;
   color: #ffffff;

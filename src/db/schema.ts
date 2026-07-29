@@ -169,3 +169,25 @@ export const siteSettings = mysqlTable('site_settings', {
   value: text('value').notNull(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
 });
+
+// 10. Dynamic Pages (CMS)
+export const sitePages = mysqlTable('site_pages', {
+  id: int('id').autoincrement().primaryKey(),
+  title: varchar('title', { length: 255 }).notNull(),
+  slug: varchar('slug', { length: 128 }).notNull().unique(),
+  status: mysqlEnum('status', ['published', 'draft']).notNull().default('published'),
+  showInMenu: boolean('show_in_menu').notNull().default(true),
+  parentPage: varchar('parent_page', { length: 128 }),
+  bannerBgImage: text('banner_bg_image'),
+  bannerPosition: varchar('banner_position', { length: 50 }).default('center center'),
+  bannerSize: varchar('banner_size', { length: 50 }).default('cover'),
+  bannerTitle: text('banner_title'),
+  bannerDescription: text('banner_description'),
+  sections: text('sections'), // JSON string of dynamic sections
+  richText: text('rich_text'),
+  metaTitle: varchar('meta_title', { length: 255 }),
+  metaDescription: text('meta_description'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+

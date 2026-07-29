@@ -1,5 +1,10 @@
+'use client';
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import MarqueeTrack from "@/components/MarqueeTrack";
+import PageBanner from "@/components/PageBanner";
+import { getPageBySlug } from "@/actions/pageActions";
 
 const airlineLogos = [
   { src: "/img/a-1.png", alt: "Saudi Airlines" },
@@ -50,20 +55,24 @@ const availableFlights = [
 ];
 
 export default function AirlinesPage() {
+  const [pageData, setPageData] = useState<any>(null);
+
+  useEffect(() => {
+    getPageBySlug('/airlines').then(p => {
+      if (p) setPageData(p);
+    });
+  }, []);
+
   return (
     <main className="bg-[#f2f5f3] min-h-screen pb-16">
-      {/* ================= HERO ================= */}
-      <section className="hero airlines">
-        <div className="container-full">
-          <h1>
-            Find <span>Lowest Fare</span> Flights &amp; <br />
-            <span>Book Airline</span> Tickets Across Canada
-          </h1>
-          <p>
-            Compare flight prices, discover exclusive travel deals, and book domestic &amp; international air tickets with ease. Fast booking, trusted fares, and 24/7 travel support.
-          </p>
-        </div>
-      </section>
+      {/* ================= DYNAMIC HERO BANNER ================= */}
+      <PageBanner
+        title={pageData?.bannerTitle || pageData?.title || "Find <span>Lowest Fare</span> Flights & Book Airline Tickets Across Canada"}
+        description={pageData?.bannerDescription || "Compare flight prices, discover exclusive travel deals, and book domestic & international air tickets with ease. Fast booking, trusted fares, and 24/7 travel support."}
+        bgImage={pageData?.bannerBgImage}
+        position={pageData?.bannerPosition}
+        size={pageData?.bannerSize}
+      />
 
       {/* ================= AVAILABLE FLIGHTS SECTION ================= */}
       <section className="pt-14 reveal">

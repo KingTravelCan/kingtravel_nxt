@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import PageBanner from "@/components/PageBanner";
+import { getPageBySlug } from "@/actions/pageActions";
 
 export default function ContactPage() {
+  const [pageData, setPageData] = useState<any>(null);
   const [contactForm, setContactForm] = useState({
     name: "",
     email: "",
@@ -11,6 +14,12 @@ export default function ContactPage() {
     message: "",
   });
   const [contactStatus, setContactStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+    getPageBySlug('/contact').then(p => {
+      if (p) setPageData(p);
+    });
+  }, []);
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,15 +55,14 @@ export default function ContactPage() {
 
   return (
     <main className="bg-[#f2f5f3] min-h-screen">
-      {/* ================= HERO ================= */}
-      <section className="hero contact">
-        <div className="container-full">
-          <h1>
-            We'd <span>Love</span> To Hear From You
-          </h1>
-          <p>Have a question or want to work together? Choose the most convenient way to reach us.</p>
-        </div>
-      </section>
+      {/* ================= DYNAMIC HERO BANNER ================= */}
+      <PageBanner
+        title={pageData?.bannerTitle || pageData?.title || "We'd <span>Love</span> To Hear From You"}
+        description={pageData?.bannerDescription || "Have a question or want to work together? Choose the most convenient way to reach us."}
+        bgImage={pageData?.bannerBgImage}
+        position={pageData?.bannerPosition}
+        size={pageData?.bannerSize}
+      />
 
       {/* ================= STATS / INFO CARDS ================= */}
       <div className="container-full reveal py-8 px-4 max-w-7xl mx-auto">

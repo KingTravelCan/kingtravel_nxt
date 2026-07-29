@@ -2,8 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import PageBanner from "@/components/PageBanner";
+import { getPageBySlug } from "@/actions/pageActions";
 
 export default function AboutPage() {
+  const [pageData, setPageData] = useState<any>(null);
   const [counts, setCounts] = useState({
     travelers: 0,
     rating: 0.0,
@@ -12,6 +15,10 @@ export default function AboutPage() {
   });
 
   useEffect(() => {
+    getPageBySlug('/about').then(p => {
+      if (p) setPageData(p);
+    });
+
     let start: number | null = null;
     const duration = 1500;
 
@@ -44,17 +51,14 @@ export default function AboutPage() {
 
   return (
     <main>
-      {/* ================= HERO ================= */}
-      <section className="hero about">
-        <div className="wrap">
-          <h1>
-            Your Trusted Partner for <em>Pilgrimage &amp; Global Travel</em>
-          </h1>
-          <p>
-            Over 25 years of unmatched expertise coordinating safe, seamless, and deeply spiritual journeys across the globe.
-          </p>
-        </div>
-      </section>
+      {/* ================= DYNAMIC HERO BANNER ================= */}
+      <PageBanner
+        title={pageData?.bannerTitle || pageData?.title || "Your Trusted Partner for <span>Pilgrimage & Global Travel</span>"}
+        description={pageData?.bannerDescription || "Over 25 years of unmatched expertise coordinating safe, seamless, and deeply spiritual journeys across the globe."}
+        bgImage={pageData?.bannerBgImage}
+        position={pageData?.bannerPosition}
+        size={pageData?.bannerSize}
+      />
 
       <div className="wrap reveal">
         <div className="stats-bar" style={{ gridTemplateColumns: "repeat(4,1fr)", background: "#fff", boxShadow: "0 4px 30px -10px rgba(19,39,35,.15)" }}>

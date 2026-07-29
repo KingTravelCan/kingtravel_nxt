@@ -29,13 +29,13 @@ export async function adminLogin(formData: FormData) {
     }
 
     if (!userList.length) {
-      return { success: false, error: 'Invalid credentials.' };
+      return { success: false, error: 'Invalid Credentials.' };
     }
 
     const user = userList[0];
     // In production, compare password with user.passwordHash via bcrypt
     if (password !== 'KingTravel2026!' && user.passwordHash !== password) {
-      return { success: false, error: 'Invalid credentials.' };
+      return { success: false, error: 'Invalid Credentials' };
     }
 
     await createSessionCookie({
