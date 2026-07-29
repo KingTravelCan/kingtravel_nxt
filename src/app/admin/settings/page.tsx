@@ -64,44 +64,26 @@ export default function AdminSettingsPage() {
       
       {/* ── Page Header ── */}
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 20 }}>⚙️</span>
-          <h1 style={{ fontSize: 24, fontWeight: 800, color: '#0f172a', margin: 0 }}>Settings</h1>
+        <div className="flex items-center gap-2">
+          <span className="text-xl">⚙️</span>
+          <h1 className="text-2xl font-extrabold text-slate-900 m-0">Settings</h1>
         </div>
-        <p style={{ fontSize: 12, color: '#94a3b8', marginTop: 4, marginBottom: 0 }}>
+        <p className="text-xs text-slate-400 mt-1 mb-0">
           Manage global interface settings, brand identity, navigation builders, and system options.
         </p>
       </div>
 
       {/* ── Top Multi-Tab Bar ── */}
-      <div style={{
-        display: 'flex',
-        gap: 8,
-        flexWrap: 'wrap',
-        background: '#fff',
-        padding: '12px 16px',
-        borderRadius: 16,
-        border: '1px solid #f1f5f9',
-        boxShadow: '0 1px 6px rgba(0,0,0,0.03)',
-      }}>
+      <div className="flex gap-2 flex-wrap bg-white p-3.5 rounded-2xl border border-slate-100 shadow-xs">
         {TABS.map((t) => (
           <button
             key={t.id}
             onClick={() => setActiveTab(t.id)}
-            style={{
-              padding: '8px 14px',
-              borderRadius: 99,
-              border: activeTab === t.id ? '1px solid #004B39' : '1px solid #e2e8f0',
-              background: activeTab === t.id ? '#004B39' : '#fff',
-              color: activeTab === t.id ? '#fff' : '#64748b',
-              fontSize: 12,
-              fontWeight: 700,
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              transition: 'all 0.15s ease',
-            }}
+            className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border ${
+              activeTab === t.id
+                ? 'bg-[#004B39] text-white border-[#004B39]'
+                : 'bg-white text-slate-500 border-slate-200 hover:border-slate-300'
+            }`}
           >
             <span>{t.icon}</span>
             <span>{t.label}</span>
@@ -554,53 +536,31 @@ export default function AdminSettingsPage() {
         {/* ================= TAB 2: GLOBAL CSS ================= */}
         {activeTab === 'css' && (
           <div>
-            <h3 style={{ fontSize: 13, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 12 }}>
+            <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
               💻 CUSTOM GLOBAL CSS OVERRIDES
             </h3>
             <textarea
               rows={12}
               value={customCss}
               onChange={(e) => setCustomCss(e.target.value)}
-              style={{
-                width: '100%',
-                padding: 16,
-                borderRadius: 10,
-                border: '1px solid #cbd5e1',
-                fontFamily: 'monospace',
-                fontSize: 13,
-                background: '#0f172a',
-                color: '#38bdf8',
-                outline: 'none',
-              }}
+              className="w-full p-4 rounded-xl border border-slate-300 font-mono text-xs bg-slate-900 text-sky-400 outline-none focus:ring-2 focus:ring-[#004B39]"
             />
           </div>
         )}
 
         {/* ================= OTHER TABS PLACEHOLDER ================= */}
         {activeTab !== 'header-footer' && activeTab !== 'css' && (
-          <div style={{ padding: 24, textAlign: 'center', color: '#64748b' }}>
-            <h3 style={{ fontSize: 16, fontWeight: 700, color: '#0f172a', marginBottom: 8 }}>
+          <div className="p-6 text-center text-slate-500">
+            <h3 className="text-base font-bold text-slate-900 mb-2">
               {TABS.find((t) => t.id === activeTab)?.label} Configuration
             </h3>
-            <p style={{ fontSize: 13 }}>Advanced settings for {activeTab} can be managed here.</p>
+            <p className="text-xs">Advanced settings for {activeTab} can be managed here.</p>
           </div>
         )}
 
         {/* Save Footer Button */}
-        <div style={{ display: 'flex', justifyContent: 'flex-end', paddingTop: 16, borderTop: '1px solid #f1f5f9' }}>
-          <button
-            style={{
-              background: '#004B39',
-              color: '#fff',
-              padding: '12px 28px',
-              borderRadius: 12,
-              fontWeight: 800,
-              fontSize: 13,
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 4px 14px rgba(0,75,57,0.25)',
-            }}
-          >
+        <div className="flex justify-end pt-4 border-t border-slate-100">
+          <button className="bg-[#004B39] text-white px-7 py-3 rounded-xl font-extrabold text-xs border-none cursor-pointer shadow-md hover:bg-[#00382B] transition-colors">
             💾 Save Settings
           </button>
         </div>

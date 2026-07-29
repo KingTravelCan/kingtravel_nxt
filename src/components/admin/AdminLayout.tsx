@@ -71,69 +71,39 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
   const pathname = usePathname();
 
   return (
-    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#1C1F26', fontFamily: 'inherit' }}>
+    <div className="flex h-screen overflow-hidden bg-[#1C1F26] font-sans">
       {/* ── Left Sidebar ── */}
-      <aside style={{
-        width: 220,
-        minWidth: 220,
-        background: '#16181E',
-        borderRight: '1px solid rgba(255,255,255,0.06)',
-        display: 'flex',
-        flexDirection: 'column',
-        padding: '24px 12px',
-        gap: 0,
-        overflowY: 'auto',
-      }}>
+      <aside className="w-[220px] min-w-[220px] bg-[#16181E] border-r border-white/5 flex flex-col p-6 px-3 gap-0 overflow-y-auto">
         {/* Brand */}
-        <div style={{ padding: '0 8px 24px', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
+        <div className="px-2 pb-6 border-b border-white/5">
           <Image
             src="/img/logo-footer.png"
             alt="King Travel"
             width={140}
             height={36}
             priority
-            style={{ width: 'auto', height: 36, objectFit: 'contain', display: 'block' }}
+            className="w-auto h-[36px] object-contain block"
           />
-          <span style={{
-            marginTop: 6,
-            display: 'inline-block',
-            fontSize: 9,
-            fontWeight: 700,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
-            color: '#DB9E30',
-            background: 'rgba(219,158,48,0.12)',
-            border: '1px solid rgba(219,158,48,0.3)',
-            padding: '2px 8px',
-            borderRadius: 99,
-          }}>
+          <span className="mt-1.5 inline-block text-[9px] font-bold tracking-widest uppercase text-[#DB9E30] bg-[#DB9E30]/10 border border-[#DB9E30]/30 px-2 py-0.5 rounded-full">
             Admin Portal
           </span>
         </div>
 
         {/* Nav */}
-        <nav style={{ flex: 1, paddingTop: 16, display: 'flex', flexDirection: 'column', gap: 4 }}>
+        <nav className="flex-1 pt-4 flex flex-col gap-1">
           {navItems.map((item) => {
             const isActive = pathname === item.href || (item.href === '/admin/pages' && pathname.startsWith('/admin/pages'));
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  padding: '10px 12px',
-                  borderRadius: 12,
-                  fontSize: 12,
-                  fontWeight: isActive ? 700 : 500,
-                  textDecoration: 'none',
-                  color: isActive ? '#0F172A' : 'rgba(255,255,255,0.55)',
-                  background: isActive ? '#ffffff' : 'transparent',
-                  transition: 'all 0.15s ease',
-                }}
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs transition-all ${
+                  isActive
+                    ? 'font-bold text-slate-900 bg-white'
+                    : 'font-medium text-white/55 hover:text-white hover:bg-white/5'
+                }`}
               >
-                <span style={{ color: isActive ? '#0F172A' : 'rgba(255,255,255,0.4)', flexShrink: 0 }}>
+                <span className={`shrink-0 ${isActive ? 'text-slate-900' : 'text-white/40'}`}>
                   {item.icon}
                 </span>
                 {item.label}
@@ -159,87 +129,46 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
       </aside>
 
       {/* ── Right Panel ── */}
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+      <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
-        <header style={{
-          background: '#16181E',
-          borderBottom: '1px solid rgba(255,255,255,0.06)',
-          padding: '14px 24px',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 16,
-          flexShrink: 0,
-        }}>
+        <header className="bg-[#16181E] border-b border-white/5 px-6 py-3.5 flex items-center gap-4 shrink-0">
           {/* Search */}
-          <div style={{ flex: 1, maxWidth: 420, position: 'relative' }}>
-            <svg style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: 'rgba(255,255,255,0.3)' }} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <div className="flex-1 max-w-[420px] relative">
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
             </svg>
             <input
               type="text"
               placeholder="Search something..."
-              style={{
-                width: '100%',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: 99,
-                padding: '8px 14px 8px 34px',
-                color: '#e2e8f0',
-                fontSize: 12,
-                outline: 'none',
-              }}
+              className="w-full bg-white/5 border border-white/10 rounded-full py-2 pr-3.5 pl-8.5 text-slate-200 text-xs outline-none focus:border-[#004B39]"
             />
           </div>
 
           {/* Right side */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginLeft: 'auto' }}>
+          <div className="flex items-center gap-4 ml-auto">
             <Link
               href="/"
               target="_blank"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: 4,
-                fontSize: 11,
-                fontWeight: 600,
-                color: 'rgba(255,255,255,0.55)',
-                textDecoration: 'none',
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: 99,
-                padding: '6px 14px',
-              }}
+              className="inline-flex items-center gap-1 text-[11px] font-semibold text-white/55 bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 no-underline hover:text-white hover:bg-white/10 transition-colors"
             >
               Live Site ↗
             </Link>
 
             {/* Bell */}
-            <div style={{ position: 'relative', cursor: 'pointer' }}>
+            <div className="relative cursor-pointer">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="2">
                 <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 01-3.46 0" />
               </svg>
-              <span style={{ position: 'absolute', top: -2, right: -2, width: 7, height: 7, background: '#10B981', borderRadius: '50%', border: '1.5px solid #16181E' }}></span>
+              <span className="absolute -top-0.5 -right-0.5 w-1.75 h-1.75 bg-emerald-500 rounded-full border-[1.5px] border-[#16181E]"></span>
             </div>
 
             {/* User */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingLeft: 12, borderLeft: '1px solid rgba(255,255,255,0.08)' }}>
-              <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: '#e2e8f0' }}>{user?.name || 'Administrator'}</div>
-                <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', textTransform: 'capitalize' }}>{user?.role?.replace('_', ' ') || 'Super Admin'}</div>
+            <div className="flex items-center gap-2.5 pl-3 border-l border-white/10">
+              <div className="text-right">
+                <div className="text-xs font-bold text-slate-200">{user?.name || 'Administrator'}</div>
+                <div className="text-[10px] text-white/40 capitalize">{user?.role?.replace('_', ' ') || 'Super Admin'}</div>
               </div>
-              <div style={{
-                width: 34,
-                height: 34,
-                borderRadius: '50%',
-                background: 'linear-gradient(135deg, #004B39, #DB9E30)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontWeight: 800,
-                fontSize: 13,
-                color: '#fff',
-                flexShrink: 0,
-              }}>
+              <div className="w-8.5 h-8.5 rounded-full bg-gradient-to-br from-[#004B39] to-[#DB9E30] flex items-center justify-center font-extrabold text-xs text-white shrink-0">
                 {user?.name ? user.name.charAt(0).toUpperCase() : 'A'}
               </div>
             </div>
@@ -247,13 +176,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
         </header>
 
         {/* Main scrollable content — the white/light canvas */}
-        <main style={{
-          flex: 1,
-          overflowY: 'auto',
-          background: '#F4F6FA',
-          padding: '28px 32px',
-          color: '#1e293b',
-        }}>
+        <main className="flex-1 overflow-y-auto bg-[#F4F6FA] p-7 px-8 text-slate-800">
           {children}
         </main>
       </div>
