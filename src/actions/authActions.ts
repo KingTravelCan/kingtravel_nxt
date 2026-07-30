@@ -5,9 +5,10 @@ import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { createSessionCookie, destroySession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import { verifyPassword } from '@/lib/password';
 
 export async function adminLogin(formData: FormData) {
-  const email = formData.get('email') as string;
+  const email = (formData.get('email') as string)?.trim().toLowerCase();
   const password = formData.get('password') as string;
 
   if (!email || !password) {
@@ -17,25 +18,33 @@ export async function adminLogin(formData: FormData) {
   try {
     const userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
 
-    // Initial setup fallback for admin if table is empty
-    if (!userList.length && email === 'admin@kingtravel.ca' && password === 'KingTravel2026!') {
-      await createSessionCookie({
-        userId: 1,
-        email: 'admin@kingtravel.ca',
-        name: 'King Travel Admin',
-        role: 'super_admin',
-      });
-      return redirect('/admin/dashboard');
-    }
-
+    // Initial setup fallback if database table is empty
     if (!userList.length) {
+      const envEmail = (process.env.INITIAL_ADMIN_EMAIL || 'hassan@kingtravelcan.com').trim().toLowerCase();
+      const envPassword = process.env.INITIAL_ADMIN_PASSWORD || 'KingTravel2026!';
+      if (email === envEmail && password === envPassword) {
+        await createSessionCookie({
+          userId: 1,
+          email: envEmail,
+          name: 'Super Admin',
+          role: 'super_admin',
+        });
+        return redirect('/admin/dashboard');
+      }
       return { success: false, error: 'Invalid Credentials.' };
     }
 
     const user = userList[0];
-    // In production, compare password with user.passwordHash via bcrypt
-    if (password !== 'KingTravel2026!' && user.passwordHash !== password) {
-      return { success: false, error: 'Invalid Credentials' };
+
+    // Check account status
+    if (!user.active) {
+      return { success: false, error: 'This user account is currently disabled.' };
+    }
+
+    // Verify hashed password securely
+    const isValid = verifyPassword(password, user.passwordHash);
+    if (!isValid) {
+      return { success: false, error: 'Invalid Credentials.' };
     }
 
     await createSessionCookie({

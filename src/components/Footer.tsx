@@ -1,115 +1,161 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { getFooterData } from "@/actions/pageActions";
 
 export default function Footer() {
+  const [footerData, setFooterData] = useState<any>({});
   const pathname = usePathname();
+
+  useEffect(() => {
+    getFooterData().then((data) => {
+      if (data) setFooterData(data);
+    });
+  }, []);
 
   if (pathname?.startsWith("/admin") || pathname === "/letstravel") {
     return null;
   }
 
   return (
-    <footer id="footer-place">
-      <div className="wrap">
-        <div className="foot-grid">
+    <footer id="footer-place" className="bg-[#004B39] text-[#95a29c] py-[70px] pb-[30px] text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-[#DB9E30]">
+      <div className="max-w-[1280px] mx-auto px-[22px] sm:px-[40px]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-[40px] lg:gap-[50px]">
 
           {/* ── Column 1: Brand + tagline + social + trust badges ── */}
           <div>
-            <div className="foot-brand">
+            <div className="flex gap-[10px] items-center mb-[25px]">
               <Link href="/">
-                <Image
-                  src="/img/logo-footer.png"
-                  alt="King Travel Logo"
-                  width={210}
-                  height={50}
-                  style={{ width: 210, height: "auto" }}
-                />
+                {footerData.logo ? (
+                  footerData.logo.startsWith('data:') ? (
+                    <img src={footerData.logo} alt="King Travel Logo" style={{ width: 210, height: "auto" }} />
+                  ) : (
+                    <Image
+                      src={footerData.logo}
+                      alt="King Travel Logo"
+                      width={210}
+                      height={50}
+                      style={{ width: 210, height: "auto" }}
+                      unoptimized
+                    />
+                  )
+                ) : (
+                  <span className="font-serif font-bold text-xl text-white">KING TRAVEL</span>
+                )}
               </Link>
             </div>
-            <p style={{ maxWidth: "310px", fontWeight: 300, lineHeight: 1.7 }}>
-              A licensed Canadian agency dedicated to Hajj &amp; Umrah travel —
-              trusted, certified, and built for pilgrims.
+            <p className="max-w-[310px] font-light leading-[1.7]">
+              {footerData.tagline || 'A licensed Canadian agency dedicated to Hajj & Umrah travel — trusted, certified, and built for pilgrims.'}
             </p>
 
-            <div className="foot-social">
-              <b>Follow Us:</b>
-              <ul className="social-links">
-                <li>
-                  <a href="https://www.facebook.com/kingtravelcan" target="_blank" rel="noopener noreferrer">
-                    <Image src="/img/fb.svg" alt="Facebook" width={32} height={32} />
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.instagram.com/kingtravelcan/" target="_blank" rel="noopener noreferrer">
-                    <Image src="/img/insta.svg" alt="Instagram" width={32} height={32} />
-                  </a>
-                </li>
-                <li>
-                  <a href="https://ca.linkedin.com/company/kingtravelcan" target="_blank" rel="noopener noreferrer">
-                    <Image src="/img/in.svg" alt="LinkedIn" width={32} height={32} />
-                  </a>
-                </li>
-                <li>
-                  <a href="https://www.tiktok.com/@kingtravelcan" target="_blank" rel="noopener noreferrer">
-                    <Image src="/img/tik.svg" alt="TikTok" width={32} height={32} />
-                  </a>
-                </li>
-              </ul>
-            </div>
+            {/* Social Links */}
+            {footerData.socialLinks && footerData.socialLinks.length > 0 && (
+              <div className="mt-[15px] flex items-center gap-[10px]">
+                <b className="font-bold">Follow Us:</b>
+                <ul className="flex gap-[10px] p-0 m-0 list-none">
+                  {footerData.socialLinks.map((item: any, idx: number) => (
+                    <li key={idx} className="mb-0">
+                      <a
+                        href={item.url || '#'}
+                        target={item.openInNewTab ? "_blank" : "_self"}
+                        rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                        className="opacity-50 hover:opacity-100 transition-all duration-300 ease-in-out inline-block"
+                      >
+                        {item.icon ? (
+                          item.icon.startsWith('data:') ? (
+                            <img src={item.icon} alt={item.name || 'Social Icon'} className="w-[32px] h-[32px] max-w-[32px] max-h-[32px] block object-contain" />
+                          ) : (
+                            <Image src={item.icon} alt={item.name || 'Social Icon'} width={32} height={32} unoptimized className="w-[32px] h-[32px] max-w-[32px] max-h-[32px] block" />
+                          )
+                        ) : (
+                          <span className="text-xs font-bold text-white">{item.name}</span>
+                        )}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
-            {/* Trust badges — class "trusted" matches CSS in globals.css */}
-            <div className="trusted">
-              <Image src="/img/acta.svg" alt="ACTA" width={48} height={48} style={{ width: "auto", height: "auto" }} />
-              <Image src="/img/atac.svg" alt="ATAC" width={48} height={48} style={{ width: "auto", height: "auto" }} />
-              <Image src="/img/tico.svg" alt="TICO" width={48} height={48} style={{ width: "auto", height: "auto" }} />
-              <Image src="/img/iata.svg" alt="IATA" width={48} height={48} style={{ width: "auto", height: "auto" }} />
-              <Image src="/img/asta.svg" alt="ASTA" width={48} height={48} style={{ width: "auto", height: "auto" }} />
-            </div>
+            {/* Trust Badges */}
+            {footerData.trustBadges && footerData.trustBadges.length > 0 && (
+              <div className="flex items-center gap-2 mt-4">
+                {footerData.trustBadges.map((badge: any, bIdx: number) => (
+                  <div key={bIdx} className="bg-white rounded-lg flex items-center justify-center h-12 w-12">
+                    {badge.icon ? (
+                      badge.icon.startsWith('data:') ? (
+                        <img src={badge.icon} alt={badge.name || 'Trust Badge'} className="max-h-7 max-w-full object-contain" />
+                      ) : (
+                        <Image src={badge.icon} alt={badge.name || 'Trust Badge'} width={48} height={48} className="max-h-7 w-auto object-contain" unoptimized />
+                      )
+                    ) : (
+                      <span className="text-[9px] font-extrabold text-[#004B39] text-center">{badge.name}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* ── Column 2: Services ── */}
           <div>
-            <h5>Services</h5>
-            <ul>
-              <li><Link href="/umrah/packages">Umrah Packages</Link></li>
-              <li><Link href="/hajj/packages">Hajj Packages</Link></li>
-              <li><Link href="/airlines">Airline Tickets</Link></li>
-              <li><Link href="/saudi-visa">Saudi Visa Services</Link></li>
+            <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.servicesTitle || 'SERVICES'}</h5>
+            <ul className="list-none p-0 m-0">
+              {(footerData.servicesLinks || []).map((link: any, sIdx: number) => (
+                <li key={sIdx} className="mb-[10px] font-light">
+                  <Link href={link.url || '#'}>{link.label}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* ── Column 3: Sitemap ── */}
           <div>
-            <h5>Sitemap</h5>
-            <ul>
-              <li><Link href="/about">About Us</Link></li>
-              <li><Link href="/umrah/packages">Packages</Link></li>
-              <li><Link href="/contact">Contact</Link></li>
-              <li><Link href="#">Terms of Use</Link></li>
+            <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.sitemapTitle || 'SITEMAP'}</h5>
+            <ul className="list-none p-0 m-0">
+              {(footerData.sitemapLinks || []).map((link: any, mIdx: number) => (
+                <li key={mIdx} className="mb-[10px] font-light">
+                  <Link href={link.url || '#'}>{link.label}</Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           {/* ── Column 4: Customer Support ── */}
           <div>
-            <h5>Customer Support</h5>
-            <ul>
-              <li>24/7 customer support</li>
-              <li><a href="tel:+18008445464">+1 800-844-5464</a></li>
-              <li><a href="tel:+19056248555">+1 905-624-8555</a></li>
-              <li><a href="tel:+19056248344">+1 905-624-8344</a></li>
-              <li><a href="mailto:info@kingtravelcan.com">info@kingtravelcan.com</a></li>
-              <li>Mon–Sat, 9am – 7pm EST</li>
+            <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.supportTitle || 'CUSTOMER SUPPORT'}</h5>
+            <ul className="list-none p-0 m-0">
+              {(footerData.supportItems || []).map((item: any, cIdx: number) => (
+                <li key={cIdx} className="mb-[10px] font-light">
+                  {item.url ? (
+                    <a
+                      href={item.url}
+                      target={item.openInNewTab ? "_blank" : "_self"}
+                      rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                    >
+                      {item.text}
+                    </a>
+                  ) : (
+                    <span>{item.text}</span>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
 
         </div>
 
-        <div className="foot-bottom">
-          <span>© {new Date().getFullYear()} King Travel Can LTD. All Rights Reserved.</span>
-          <span>Design &amp; Developed by <a href="https://www.dks.com.pk" target="_blank" rel="noopener noreferrer">DKS</a></span>
+        <div className="mt-[60px] pt-[24px] border-t border-white/20 flex flex-wrap justify-between gap-[12px] text-[14px] font-light text-[#bccfc6]">
+          <span>{footerData.copyrightText || `© ${new Date().getFullYear()} King Travel Can LTD. All Rights Reserved.`}</span>
+          <span>
+            {footerData.developerText || 'Design & Developed by DKS'}
+            {footerData.developerUrl && (
+              <> <a href={footerData.developerUrl} target="_blank" rel="noopener noreferrer">DKS</a></>
+            )}
+          </span>
         </div>
       </div>
     </footer>

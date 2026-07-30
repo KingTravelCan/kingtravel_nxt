@@ -37,6 +37,7 @@ export default function Home() {
     adults: 1,
   });
   const [quoteStatus, setQuoteStatus] = useState<string | null>(null);
+  const [quoteErrors, setQuoteErrors] = useState<Record<string, string>>({});
 
   const [contactForm, setContactForm] = useState({
     fullName: "",
@@ -46,9 +47,25 @@ export default function Home() {
     message: "",
   });
   const [contactStatus, setContactStatus] = useState<string | null>(null);
+  const [contactErrors, setContactErrors] = useState<Record<string, string>>({});
 
   const handleQuoteSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors: Record<string, string> = {};
+    if (!quoteForm.fullName.trim()) newErrors.fullName = "Please fill out this field.";
+    if (!quoteForm.phone.trim()) newErrors.phone = "Please fill out this field.";
+    if (!quoteForm.email.trim()) {
+      newErrors.email = "Please fill out this field.";
+    } else if (!/\S+@\S+\.\S+/.test(quoteForm.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setQuoteErrors(newErrors);
+      return;
+    }
+
+    setQuoteErrors({});
     setQuoteStatus("Submitting...");
     try {
       const res = await fetch("/api/quote", {
@@ -77,6 +94,20 @@ export default function Home() {
 
   const handleContactSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const newErrors: Record<string, string> = {};
+    if (!contactForm.fullName.trim()) newErrors.fullName = "Please fill out this field.";
+    if (!contactForm.email.trim()) {
+      newErrors.email = "Please fill out this field.";
+    } else if (!/\S+@\S+\.\S+/.test(contactForm.email)) {
+      newErrors.email = "Please enter a valid email address.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setContactErrors(newErrors);
+      return;
+    }
+
+    setContactErrors({});
     setContactStatus("Sending...");
     try {
       const res = await fetch("/api/contact", {
@@ -161,77 +192,138 @@ export default function Home() {
         </div>
 
         <div className="wrap">
-          <form className="search-card reveal" onSubmit={handleQuoteSubmit}>
-            <h3>Get a free Quote</h3>
-            {quoteStatus && <p className="text-center text-emerald-700 font-semibold mb-4">{quoteStatus}</p>}
-            <div className="search-row">
-              <div className="field">
-                <label>Your Name</label>
-                <input
-                  type="text"
-                  placeholder="Full Name"
-                  value={quoteForm.fullName}
-                  onChange={(e) => setQuoteForm({ ...quoteForm, fullName: e.target.value })}
-                  required
-                />
+          <div className="relative rounded-3xl overflow-hidden shadow-xl border border-gold bg-[#fadeac] p-6 md:p-8 -mt-8 reveal">
+            <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#004B39] tracking-tight text-center mb-6">
+              Get a free Quote
+            </h2>
+            {quoteStatus && <p className="text-center text-emerald-800 font-semibold mb-6">{quoteStatus}</p>}
+
+            <form noValidate className="flex flex-col gap-4" onSubmit={handleQuoteSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="quote-fullName"
+                    placeholder=" "
+                    value={quoteForm.fullName}
+                    onChange={(e) => {
+                      setQuoteForm({ ...quoteForm, fullName: e.target.value });
+                      if (quoteErrors.fullName) setQuoteErrors((prev) => ({ ...prev, fullName: "" }));
+                    }}
+                    className={`peer w-full border p-3 rounded-xl bg-white/80 outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${quoteErrors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                      }`}
+                  />
+                  <label
+                    htmlFor="quote-fullName"
+                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${quoteErrors.fullName ? "text-red-600 peer-focus:text-red-600" : "text-slate-500 peer-focus:text-emerald-800"
+                      }`}
+                  >
+                    Your Name
+                  </label>
+                  {quoteErrors.fullName && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.fullName}</span>}
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="text"
+                    id="quote-phone"
+                    placeholder=" "
+                    value={quoteForm.phone}
+                    onChange={(e) => {
+                      setQuoteForm({ ...quoteForm, phone: e.target.value });
+                      if (quoteErrors.phone) setQuoteErrors((prev) => ({ ...prev, phone: "" }));
+                    }}
+                    className={`peer w-full border p-3 rounded-xl bg-white/80 outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${quoteErrors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                      }`}
+                  />
+                  <label
+                    htmlFor="quote-phone"
+                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${quoteErrors.phone ? "text-red-600 peer-focus:text-red-600" : "text-slate-500 peer-focus:text-emerald-800"
+                      }`}
+                  >
+                    Phone Number
+                  </label>
+                  {quoteErrors.phone && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.phone}</span>}
+                </div>
+
+                <div className="relative">
+                  <input
+                    type="email"
+                    id="quote-email"
+                    placeholder=" "
+                    value={quoteForm.email}
+                    onChange={(e) => {
+                      setQuoteForm({ ...quoteForm, email: e.target.value });
+                      if (quoteErrors.email) setQuoteErrors((prev) => ({ ...prev, email: "" }));
+                    }}
+                    className={`peer w-full border p-3 rounded-xl bg-white/80 outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${quoteErrors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                      }`}
+                  />
+                  <label
+                    htmlFor="quote-email"
+                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${quoteErrors.email ? "text-red-600 peer-focus:text-red-600" : "text-slate-500 peer-focus:text-emerald-800"
+                      }`}
+                  >
+                    Email Address
+                  </label>
+                  {quoteErrors.email && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.email}</span>}
+                </div>
               </div>
-              <div className="field">
-                <label>Phone Number</label>
-                <input
-                  type="text"
-                  placeholder="+1 (___) ___-____"
-                  value={quoteForm.phone}
-                  onChange={(e) => setQuoteForm({ ...quoteForm, phone: e.target.value })}
-                  required
-                />
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+                <div className="relative">
+                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                    Select Your Package
+                  </label>
+                  <select
+                    value={quoteForm.packageType}
+                    onChange={(e) => setQuoteForm({ ...quoteForm, packageType: e.target.value })}
+                    className="w-full border border-slate-300 p-3 rounded-xl bg-white outline-none focus:border-emerald-800 transition-colors text-slate-900 text-sm font-medium"
+                  >
+                    <option>Select your package</option>
+                    <option>Umrah Package</option>
+                    <option>Hajj Package</option>
+                    <option>Flight Only</option>
+                  </select>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                    Departure Date
+                  </label>
+                  <input
+                    type="date"
+                    value={quoteForm.departureDate}
+                    onChange={(e) => setQuoteForm({ ...quoteForm, departureDate: e.target.value })}
+                    className="w-full border border-slate-300 p-3 rounded-xl bg-white outline-none focus:border-emerald-800 transition-colors text-slate-900 text-sm font-medium"
+                  />
+                </div>
+
+                <div className="relative">
+                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                    Number of Adults
+                  </label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={quoteForm.adults}
+                    onChange={(e) => setQuoteForm({ ...quoteForm, adults: parseInt(e.target.value, 10) || 1 })}
+                    className="w-full border border-slate-300 p-3 rounded-xl bg-white outline-none focus:border-emerald-800 transition-colors text-slate-900 text-sm font-medium"
+                  />
+                </div>
+
+                <div>
+                  <button
+                    type="submit"
+                    className="group w-full bg-[#004B39] text-white font-extrabold py-3.5 px-6 rounded-xl shadow-md hover:bg-[#DB9E30] hover:text-[#004B39] hover:border hover:border-[#004B39] active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>SUBMIT QUOTE</span>
+                    <i className="fa-solid fa-paper-plane text-xs group-hover:translate-x-1 transition-transform"></i>
+                  </button>
+                </div>
               </div>
-              <div className="field">
-                <label>Email Address</label>
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  value={quoteForm.email}
-                  onChange={(e) => setQuoteForm({ ...quoteForm, email: e.target.value })}
-                  required
-                />
-              </div>
-            </div>
-            <div className="search-row">
-              <div className="field">
-                <label>Select Your Package</label>
-                <select
-                  value={quoteForm.packageType}
-                  onChange={(e) => setQuoteForm({ ...quoteForm, packageType: e.target.value })}
-                >
-                  <option>Select your package</option>
-                  <option>Umrah Package</option>
-                  <option>Hajj Package</option>
-                  <option>Flight Only</option>
-                </select>
-              </div>
-              <div className="field">
-                <label>Departure Date</label>
-                <input
-                  type="text"
-                  placeholder="mm/dd/yyyy"
-                  value={quoteForm.departureDate}
-                  onChange={(e) => setQuoteForm({ ...quoteForm, departureDate: e.target.value })}
-                />
-              </div>
-              <div className="field">
-                <label>Number of Adults</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={quoteForm.adults}
-                  onChange={(e) => setQuoteForm({ ...quoteForm, adults: parseInt(e.target.value, 10) || 1 })}
-                />
-              </div>
-              <div className="submit-cell">
-                <button className="btn block" type="submit">Submit</button>
-              </div>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </section>
 
@@ -1017,83 +1109,82 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= SAUDI VISA GRID ================= */}
-      <section id="saudi-visa">
-        <div className="wrap">
-          <div className="section-head center reveal">
-            <div>
-              <div className="eyebrow">Explore Our</div>
-              <h2>Saudi Visa Solutions</h2>
-            </div>
+      {/* ================= SAUDI VISA GRID (MATCHING IMAGE 2 LAYOUT) ================= */}
+      <section id="saudi-visa" className="py-16 bg-[#f8fafc]">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] mb-2">Explore Our</div>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-slate-900">Saudi Visa Solutions</h2>
           </div>
-          <div className="visa-grid">
-            <div className="visa-card">
-              <div className="card-image-wrapper">
-                <Image src="/img/saudi-visa-1.webp" alt="Tourist Visa" width={400} height={200} style={{ width: "100%", height: "100%" }} />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100/80 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <Image src="/img/saudi-visa-1.webp" alt="Tourist Visa" width={400} height={200} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
               </div>
-              <div className="card-content">
-                <h3 className="card-title">Tourist Visa</h3>
-                <p className="card-description">Only passport required. Explore the beauty and culture of Saudi Arabia effortlessly.</p>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Tourist Visa</h3>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">Only passport required. Explore the beauty and culture of Saudi Arabia effortlessly.</p>
               </div>
             </div>
 
-            <div className="visa-card">
-              <div className="card-image-wrapper">
-                <Image src="/img/saudi-visa-2.webp" alt="Umrah Visa" width={400} height={200} style={{ width: "100%", height: "100%" }} />
+            <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100/80 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <Image src="/img/saudi-visa-2.webp" alt="Umrah Visa" width={400} height={200} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
               </div>
-              <div className="card-content">
-                <h3 className="card-title">Umrah Visa</h3>
-                <p className="card-description">Requires passport and PR Card or other proof of residence. Start your spiritual journey with official Umrah visa services.</p>
-              </div>
-            </div>
-
-            <div className="visa-card">
-              <div className="card-image-wrapper">
-                <Image src="/img/saudi-visa-3.jpg" alt="Family Visit Visa" width={400} height={200} style={{ width: "100%", height: "100%" }} />
-              </div>
-              <div className="card-content">
-                <h3 className="card-title">Family Visit Visa</h3>
-                <p className="card-description">Complete list of requirements sent via email. Reunite with your loved ones quickly and securely.</p>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Umrah Visa</h3>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">Requires passport and PR Card or other proof of residence. Start your spiritual journey with official Umrah visa services.</p>
               </div>
             </div>
 
-            <div className="visa-card">
-              <div className="card-image-wrapper">
-                <Image src="/img/saudi-visa-4.webp" alt="Resident Iqama" width={400} height={200} style={{ width: "100%", height: "100%" }} />
+            <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100/80 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <Image src="/img/saudi-visa-3.jpg" alt="Family Visit Visa" width={400} height={200} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
               </div>
-              <div className="card-content">
-                <h3 className="card-title">Resident Iqama Visa</h3>
-                <p className="card-description">Get all the requirements sent to your inbox. Simplify your residency process with expert guidance.</p>
-              </div>
-            </div>
-
-            <div className="visa-card">
-              <div className="card-image-wrapper">
-                <Image src="/img/saudi-visa-5.webp" alt="Business Visit Visa" width={400} height={200} style={{ width: "100%", height: "100%" }} />
-              </div>
-              <div className="card-content">
-                <h3 className="card-title">Business Visit Visa</h3>
-                <p className="card-description">We'll email the full details you need. Expand your business horizons with an authorized visa service.</p>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Family Visit Visa</h3>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">Complete list of requirements sent via email. Reunite with your loved ones quickly and securely.</p>
               </div>
             </div>
 
-            <div className="visa-card">
-              <div className="card-image-wrapper">
-                <Image src="/img/saudi-visa-6.jpg" alt="Work Visa Assistance" width={400} height={200} style={{ width: "100%", height: "100%" }} />
+            <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100/80 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <Image src="/img/saudi-visa-4.webp" alt="Resident Iqama" width={400} height={200} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
               </div>
-              <div className="card-content">
-                <h3 className="card-title">Work Visa</h3>
-                <p className="card-description">Contact us for detailed requirements via email. Begin your career in Saudi Arabia with professional assistance.</p>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Resident Iqama Visa</h3>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">Get all the requirements sent to your inbox. Simplify your residency process with expert guidance.</p>
               </div>
             </div>
 
-            <div className="visa-card">
-              <div className="card-image-wrapper">
-                <Image src="/img/riyadh.jpg" alt="Personal Visit Visa" width={400} height={200} />
+            <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100/80 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <Image src="/img/saudi-visa-5.webp" alt="Business Visit Visa" width={400} height={200} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
               </div>
-              <div className="card-content">
-                <h3 className="card-title">Personal Visit Visa</h3>
-                <p className="card-description">Get in touch with us today to get the detailed requirements and fast-track your Saudi personal visit visa with our professional guidance.</p>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Business Visit Visa</h3>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">We'll email the full details you need. Expand your business horizons with an authorized visa service.</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100/80 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <Image src="/img/saudi-visa-6.jpg" alt="Work Visa Assistance" width={400} height={200} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Work Visa</h3>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">Contact us for detailed requirements via email. Begin your career in Saudi Arabia with professional assistance.</p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100/80 flex flex-col transition-all duration-300 hover:-translate-y-1 hover:shadow-xl group md:col-span-2 lg:col-span-1">
+              <div className="relative h-48 w-full overflow-hidden shrink-0">
+                <Image src="/img/riyadh.jpg" alt="Personal Visit Visa" width={400} height={200} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
+              </div>
+              <div className="p-6 flex flex-col flex-1">
+                <h3 className="text-lg font-bold text-slate-900 mb-2">Personal Visit Visa</h3>
+                <p className="text-xs text-slate-500 font-medium leading-relaxed">Get in touch with us today to get the detailed requirements and fast-track your Saudi personal visit visa with our professional guidance.</p>
               </div>
             </div>
           </div>
@@ -1101,165 +1192,219 @@ export default function Home() {
       </section>
 
       {/* ================= TESTIMONIALS ================= */}
-      <section className="section-dark">
-        <div className="wrap">
-          <div className="section-head center reveal">
-            <div className="eyebrow" style={{ justifyContent: "center" }}>Happy Pilgrims</div>
-            <h2>What our clients say</h2>
-          </div>
-          <div className="reviews-outer mb-8">
-            <div className="reviews-owner-details">
-              <Image src="/img/round-logo.png" className="reviews-owner-img" alt="King Travel logo" width={64} height={64} />
-              <div className="reviews-owner">
-                <b>King Travel Can Ltd - Mississauga</b>
-                <div className="stars">
-                  <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                  <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                  <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                  <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                  <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
-                </div>
-                <span className="review-count">927 Google reviews</span>
-                <button className="btn outline">Write a review</button>
-              </div>
-            </div>
+      {/* ================= TESTIMONIALS (MATCHING SCREENSHOT 4) ================= */}
+      <section className="bg-[#004B39] text-white py-16 overflow-hidden">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] mb-2">HAPPY PILGRIMS</div>
+            <h2 className="text-3xl md:text-4xl font-serif text-white">What our clients say</h2>
           </div>
 
-          <TestimonialsCarousel />
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            {/* Left Rating Box */}
+            <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left space-y-3">
+              <div className="flex items-center gap-3">
+                <Image src="/img/round-logo.png" className="w-12 h-12 rounded-full border border-white/20 object-cover" alt="King Travel logo" width={48} height={48} />
+                <div className="text-sm font-bold text-white">King Travel Can Ltd - Mississauga</div>
+              </div>
+              <div className="flex items-center gap-1 text-amber-400 text-lg">
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+                <i className="fa-solid fa-star"></i>
+              </div>
+              <div className="text-xs font-medium text-slate-200">927 Google reviews</div>
+              <a href="https://maps.app.goo.gl/1BRUoBxtt4wWw58t6" target="_blank" rel="noopener noreferrer" className="inline-block border border-white/40 text-white font-bold text-xs px-5 py-2.5 rounded-full hover:bg-white/10 transition-colors">
+                Write A Review
+              </a>
+            </div>
+
+            {/* Right Testimonial Cards Carousel */}
+            <div className="lg:col-span-8 relative">
+              <TestimonialsCarousel />
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ================= AIRLINES ================= */}
-      <section id="flights">
-        <div className="wrap">
-          <div className="section-head center reveal" style={{ marginBottom: "40px" }}>
-            <div className="eyebrow" style={{ justifyContent: "center" }}>Our Trusted Partners</div>
-            <h2>Airlines we work with</h2>
+      <section id="flights" className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <div className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] mb-2">Our Trusted Partners</div>
+            <h2 className="text-2xl md:text-3xl font-serif text-slate-900">Airlines we work with</h2>
           </div>
         </div>
         <MarqueeTrack type="airline" images={airlineLogos} />
       </section>
 
-      {/* ================= CONTACT ================= */}
-      <section id="contact" className="tint-gray">
-        <div className="wrap">
-          <div className="contact-grid reveal">
-            <div className="contact-info">
-              <div className="eyebrow">Get In Touch</div>
-              <h3 style={{ marginTop: "16px" }}>We're here to help</h3>
-              <div className="contacts-num">
-                <div className="row">
-                  <b>Landlines:</b>
-                  <a href="tel:+18008445464">+1 800-844-5464</a>
-                  <a href="tel:+19056248555">+1 905-624-8555</a>
-                  <a href="tel:+19056248344">+1 905-624-8344</a>
-                </div>
-                <div className="row">
-                  <b>Whatsapp:</b>
-                  <div>
-                    <a
-                      href="https://wa.me/19056248344?text=Hi!%20I%E2%80%99d%20like%20to%20reserve%20a%20package.%20Could%20you%20please%20help%20me%20with%20the%20reservation%20process%3F"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      +1 905-624-8344
-                    </a>{" "}
-                    - <span>Reservation</span>
+      {/* ================= CONTACT / GET IN TOUCH (MATCHING SCREENSHOT 3) ================= */}
+      <section id="contact" className="py-16 bg-[#FAF8F5]">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            {/* Left Contact Info (5 Cols) */}
+            <div className="lg:col-span-5 space-y-6">
+              <div>
+                <div className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] mb-2">GET IN TOUCH</div>
+                <h2 className="text-3xl md:text-4xl font-serif text-slate-900">We're here to help</h2>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                <div>
+                  <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-[#DB9E30] mb-2">LANDLINES:</h4>
+                  <div className="space-y-1 text-xs font-semibold text-slate-700">
+                    <div><a href="tel:+18008445464" className="hover:text-[#004B39]">+1 800-844-5464</a></div>
+                    <div><a href="tel:+19056248555" className="hover:text-[#004B39]">+1 905-624-8555</a></div>
+                    <div><a href="tel:+19056248344" className="hover:text-[#004B39]">+1 905-624-8344</a></div>
                   </div>
-                  <div>
-                    <a
-                      href="https://wa.me/16479828555?text=Hi%20King%20Travel!%20I'm%20interested%20in%20applying%20for%20a%20Saudi%20Visa.%20Could%20you%20please%20provide%20me%20with%20more%20details%20on%20the%20requirements%20and%20process%3F"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      +1 647-982-8555
-                    </a>{" "}
-                    - <span>Saudi Visa</span>
+                </div>
+
+                <div>
+                  <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-[#DB9E30] mb-2">WHATSAPP:</h4>
+                  <div className="space-y-1 text-xs font-semibold text-slate-700">
+                    <div>
+                      <a href="https://wa.me/19056248344" target="_blank" rel="noopener noreferrer" className="hover:text-[#004B39]">
+                        +1 905-624-8344
+                      </a> <span className="text-slate-400 font-normal">- Reservation</span>
+                    </div>
+                    <div>
+                      <a href="https://wa.me/16479828555" target="_blank" rel="noopener noreferrer" className="hover:text-[#004B39]">
+                        +1 647-982-8555
+                      </a> <span className="text-slate-400 font-normal">- Saudi Visa</span>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="row">
-                <b>Email</b>
-                <a href="mailto:info@kingtravelcan.com">info@kingtravelcan.com</a>
-              </div>
-              <div className="row">
-                <b>Office Hours</b>Mon–Sat, 9am – 7pm EST
-              </div>
-              <div className="row">
-                <b>Head Office</b>
-                <a href="https://maps.app.goo.gl/1BRUoBxtt4wWw58t6" target="_blank" rel="noopener noreferrer">
-                  1325 Eglinton Ave E Ste 218, <br />
-                  Mississauga, ON L4W 4L9, Canada
-                </a>
-              </div>
-              <div className="row">
-                <b>Branch Office</b>
-                <a href="https://maps.app.goo.gl/U6B4fci2Jas4sh6S6" target="_blank" rel="noopener noreferrer">
-                  22 Ontario St S, <br />
-                  Milton, ON L9T 2M6, Canada
-                </a>
+              <div className="space-y-4 pt-2 border-t border-slate-200/60">
+                <div>
+                  <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-[#DB9E30] mb-1">EMAIL</h4>
+                  <a href="mailto:info@kingtravelcan.com" className="text-xs font-semibold text-slate-700 hover:text-[#004B39]">
+                    info@kingtravelcan.com
+                  </a>
+                </div>
+
+                <div>
+                  <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-[#DB9E30] mb-1">OFFICE HOURS</h4>
+                  <p className="text-xs font-semibold text-slate-700">Mon–Sat, 9am – 7pm EST</p>
+                </div>
+
+                <div>
+                  <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-[#DB9E30] mb-1">HEAD OFFICE</h4>
+                  <a href="https://maps.app.goo.gl/1BRUoBxtt4wWw58t6" target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-slate-700 hover:text-[#004B39] leading-relaxed block">
+                    1325 Eglinton Ave E Ste 218,<br />
+                    Mississauga, ON L4W 4L9, Canada
+                  </a>
+                </div>
+
+                <div>
+                  <h4 className="text-[11px] font-extrabold uppercase tracking-wider text-[#DB9E30] mb-1">BRANCH OFFICE</h4>
+                  <a href="https://maps.app.goo.gl/U6B4fci2Jas4sh6S6" target="_blank" rel="noopener noreferrer" className="text-xs font-semibold text-slate-700 hover:text-[#004B39] leading-relaxed block">
+                    22 Ontario St S,<br />
+                    Milton, ON L9T 2M6, Canada
+                  </a>
+                </div>
               </div>
             </div>
-            <form className="contact-form-card" onSubmit={handleContactSubmit}>
-              {contactStatus && <p className="text-emerald-700 font-semibold mb-4">{contactStatus}</p>}
-              <div className="two-col">
-                <div className="field">
-                  <label>Full Name</label>
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    value={contactForm.fullName}
-                    onChange={(e) => setContactForm({ ...contactForm, fullName: e.target.value })}
-                    required
-                  />
+
+            {/* Right Contact Form Card (7 Cols - White Box matching Screenshot 3) */}
+            <div className="lg:col-span-7">
+              <form noValidate className="bg-white rounded-3xl p-8 md:p-10 shadow-xl border border-slate-100 space-y-5" onSubmit={handleContactSubmit}>
+                {contactStatus && <p className="text-emerald-700 font-semibold mb-4 text-xs">{contactStatus}</p>}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className={`block text-[11px] font-extrabold uppercase tracking-wider mb-1.5 ${contactErrors.fullName ? "text-red-600" : "text-slate-600"}`}>
+                      FULL NAME
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Full Name"
+                      value={contactForm.fullName}
+                      onChange={(e) => {
+                        setContactForm({ ...contactForm, fullName: e.target.value });
+                        if (contactErrors.fullName) setContactErrors((prev) => ({ ...prev, fullName: "" }));
+                      }}
+                      className={`w-full text-xs font-medium px-4 py-3 rounded-xl border bg-white focus:outline-none transition-colors ${
+                        contactErrors.fullName ? "border-red-600 focus:border-red-600" : "border-slate-200 focus:border-[#DB9E30]"
+                      }`}
+                    />
+                    {contactErrors.fullName && <span className="text-red-600 text-xs font-semibold mt-1 block">{contactErrors.fullName}</span>}
+                  </div>
+
+                  <div>
+                    <label className={`block text-[11px] font-extrabold uppercase tracking-wider mb-1.5 ${contactErrors.email ? "text-red-600" : "text-slate-600"}`}>
+                      EMAIL ADDRESS
+                    </label>
+                    <input
+                      type="email"
+                      placeholder="Email Address"
+                      value={contactForm.email}
+                      onChange={(e) => {
+                        setContactForm({ ...contactForm, email: e.target.value });
+                        if (contactErrors.email) setContactErrors((prev) => ({ ...prev, email: "" }));
+                      }}
+                      className={`w-full text-xs font-medium px-4 py-3 rounded-xl border bg-white focus:outline-none transition-colors ${
+                        contactErrors.email ? "border-red-600 focus:border-red-600" : "border-slate-200 focus:border-[#DB9E30]"
+                      }`}
+                    />
+                    {contactErrors.email && <span className="text-red-600 text-xs font-semibold mt-1 block">{contactErrors.email}</span>}
+                  </div>
                 </div>
-                <div className="field">
-                  <label>Email Address</label>
-                  <input
-                    type="email"
-                    placeholder="Email Address"
-                    value={contactForm.email}
-                    onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })}
-                    required
-                  />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                      PHONE NUMBER
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="Phone Number"
+                      value={contactForm.phone}
+                      onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                      className="w-full text-xs font-medium px-4 py-3 rounded-xl border border-slate-200 bg-white focus:border-[#DB9E30] focus:outline-none transition-colors"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                      SELECT PACKAGE
+                    </label>
+                    <select
+                      value={contactForm.packageType}
+                      onChange={(e) => setContactForm({ ...contactForm, packageType: e.target.value })}
+                      className="w-full text-xs font-medium px-4 py-3 rounded-xl border border-slate-200 bg-white focus:border-[#DB9E30] focus:outline-none transition-colors appearance-none cursor-pointer"
+                    >
+                      <option>Select Package</option>
+                      <option>Umrah Package</option>
+                      <option>Hajj Package</option>
+                      <option>Saudi Visa</option>
+                    </select>
+                  </div>
                 </div>
-              </div>
-              <div className="two-col">
-                <div className="field">
-                  <label>Phone Number</label>
-                  <input
-                    type="text"
-                    placeholder="Phone Number"
-                    value={contactForm.phone}
-                    onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                  />
+
+                <div>
+                  <label className="block text-[11px] font-extrabold uppercase tracking-wider text-slate-600 mb-1.5">
+                    MESSAGE
+                  </label>
+                  <textarea
+                    rows={4}
+                    placeholder="Your Message"
+                    value={contactForm.message}
+                    onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
+                    className="w-full text-xs font-medium px-4 py-3 rounded-xl border border-slate-200 bg-white focus:border-[#DB9E30] focus:outline-none transition-colors resize-none"
+                  ></textarea>
                 </div>
-                <div className="field">
-                  <label>Select Package</label>
-                  <select
-                    value={contactForm.packageType}
-                    onChange={(e) => setContactForm({ ...contactForm, packageType: e.target.value })}
-                  >
-                    <option>Select Package</option>
-                    <option>Umrah Package</option>
-                    <option>Hajj Package</option>
-                    <option>Saudi Visa</option>
-                  </select>
-                </div>
-              </div>
-              <div className="field" style={{ marginBottom: "20px" }}>
-                <label>Message</label>
-                <textarea
-                  placeholder="Your Message"
-                  value={contactForm.message}
-                  onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })}
-                ></textarea>
-              </div>
-              <button className="btn dark block" type="submit">
-                Send Enquiry
-              </button>
-            </form>
+
+                <button
+                  type="submit"
+                  className="w-full bg-[#DB9E30] hover:bg-[#c98e29] text-[#004B39] font-extrabold text-xs py-4 rounded-full shadow-lg transition-all uppercase tracking-wider text-center"
+                >
+                  SEND ENQUIRY
+                </button>
+              </form>
+            </div>
           </div>
         </div>
       </section>

@@ -67,6 +67,12 @@ export default function TestimonialsCarousel() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedCards, setExpandedCards] = useState<Record<number, boolean>>({});
   const [visibleItems, setVisibleItems] = useState(3);
+  const [isPaused, setIsPaused] = useState(false);
+  const [enableTransition, setEnableTransition] = useState(true);
+
+  // Triple array for continuous infinite sliding
+  const extendedReviews = [...reviewsData, ...reviewsData, ...reviewsData];
+  const totalOriginal = reviewsData.length;
 
   useEffect(() => {
     const handleResize = () => {
@@ -84,6 +90,38 @@ export default function TestimonialsCarousel() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Auto carousel effect with 3.5s interval & hover pause
+  useEffect(() => {
+    if (isPaused) return;
+
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => prev + 1);
+    }, 3500);
+
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
+  // Seamless infinite reset when passing boundaries
+  useEffect(() => {
+    if (currentIndex >= totalOriginal * 2) {
+      const timer = setTimeout(() => {
+        setEnableTransition(false);
+        setCurrentIndex((prev) => prev - totalOriginal);
+      }, 500);
+      return () => clearTimeout(timer);
+    } else if (currentIndex < 0) {
+      setEnableTransition(false);
+      setCurrentIndex(totalOriginal - 1);
+    } else {
+      if (!enableTransition) {
+        const timer = setTimeout(() => {
+          setEnableTransition(true);
+        }, 50);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [currentIndex, totalOriginal, enableTransition]);
+
   const toggleReview = (id: number) => {
     setExpandedCards((prev) => ({
       ...prev,
@@ -92,63 +130,62 @@ export default function TestimonialsCarousel() {
   };
 
   const handleNext = () => {
-    if (currentIndex < reviewsData.length - visibleItems) {
-      setCurrentIndex((prev) => prev + 1);
-    }
+    setEnableTransition(true);
+    setCurrentIndex((prev) => prev + 1);
   };
 
   const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex((prev) => prev - 1);
-    }
+    setEnableTransition(true);
+    setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalOriginal - 1));
   };
 
   return (
-    <div className="carousel-container">
-      {currentIndex > 0 && (
-        <button
-          className="nav-btn prev-btn"
-          onClick={handlePrev}
-          aria-label="Previous slide"
-        >
-          <svg viewBox="0 0 24 24">
-            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-          </svg>
-        </button>
-      )}
+    <div
+      className="relative w-full mx-auto max-w-[884px]"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      <button
+        className="absolute top-1/2 -translate-y-1/2 -left-4 max-sm:-left-2 w-9 h-9 rounded-full border border-slate-200 bg-white cursor-pointer flex items-center justify-center z-10 shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+        onClick={handlePrev}
+        aria-label="Previous slide"
+      >
+        <svg viewBox="0 0 24 24" className="w-6 h-6 fill-[#132723]">
+          <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+        </svg>
+      </button>
 
-      <div className="carousel-view">
+      <div className="overflow-hidden w-full rounded-3xl">
         <div
-          className="carousel-track"
+          className={`flex gap-4 ${enableTransition ? "transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]" : ""}`}
           style={{
-            transform: `translateX(-${(100 / visibleItems) * currentIndex}%)`,
+            transform: `translateX(calc(-${currentIndex} * ((100% + 16px) / ${visibleItems})))`,
           }}
         >
-          {reviewsData.map((review) => {
+          {extendedReviews.map((review, idx) => {
             const isExpanded = !!expandedCards[review.id];
             return (
-              <div className="carousel-item" key={review.id}>
-                <div className={`review-card ${isExpanded ? "expanded" : ""}`}>
-                  <div className="card-header">
-                    <div className="user-profile">
+              <div className="flex-[0_0_100%] sm:flex-[0_0_calc((100%-16px)/2)] lg:flex-[0_0_calc((100%-32px)/3)] box-border shrink-0" key={`${review.id}-${idx}`}>
+                <div className={`bg-white rounded-3xl p-6 w-full shadow-lg border border-slate-100 flex flex-col justify-between h-full ${isExpanded ? "expanded" : ""}`}>
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex items-center gap-3">
                       <Image
-                        className="avatar"
+                        className="rounded-full object-cover"
                         src={review.avatar}
                         alt={review.name}
                         width={42}
                         height={42}
-                        style={{ borderRadius: "50%", objectFit: "cover" }}
                       />
-                      <div className="user-info">
-                        <div className="name">{review.name}</div>
-                        <div className="time">{review.time}</div>
+                      <div>
+                        <div className="text-[15px] font-bold text-slate-900 mb-[1px] font-sans">{review.name}</div>
+                        <div className="text-[12px] text-slate-400 font-medium">{review.time}</div>
                       </div>
                     </div>
-                    <div className="google-logo">
+                    <div className="flex items-center justify-center w-6 h-6">
                       <svg
                         viewBox="0 0 24 24"
-                        width="22"
-                        height="22"
+                        width="20"
+                        height="20"
                         xmlns="http://www.w3.org/2000/svg"
                       >
                         <path
@@ -164,26 +201,24 @@ export default function TestimonialsCarousel() {
                           fill="#FBBC05"
                         />
                         <path
-                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z"
+                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 12-4.53z"
                           fill="#EA4335"
                         />
                       </svg>
                     </div>
                   </div>
 
-                  <div className="rating-row">
-                    <div className="stars">
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="flex gap-1 text-amber-400 [&_svg]:fill-amber-400 [&_svg]:w-4 [&_svg]:h-4">
                       <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                       <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                       <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                       <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                       <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
                     </div>
-                    <div className="verified-badge">
+                    <div className="flex items-center text-blue-500 [&_svg]:w-3.5 [&_svg]:h-3.5 [&_svg]:fill-blue-500">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
                         viewBox="0 0 24 24"
                         fill="#3b82f6"
                         stroke="#ffffff"
@@ -197,9 +232,9 @@ export default function TestimonialsCarousel() {
                     </div>
                   </div>
 
-                  <div className="review-text">{review.text}</div>
+                  <div className={`text-xs leading-relaxed text-slate-600 font-normal mb-3 font-sans transition-[max-height] duration-500 ease-in-out overflow-hidden ${isExpanded ? "line-clamp-none max-h-[300px]" : "line-clamp-3 max-h-[60px]"}`}>{review.text}</div>
 
-                  <span className="read-more" onClick={() => toggleReview(review.id)}>
+                  <span className="text-xs text-slate-400 font-semibold no-underline cursor-pointer inline-block hover:text-[#004B39] transition-colors" onClick={() => toggleReview(review.id)}>
                     {isExpanded ? "Read less" : "Read more"}
                   </span>
                 </div>
@@ -209,17 +244,15 @@ export default function TestimonialsCarousel() {
         </div>
       </div>
 
-      {currentIndex < reviewsData.length - visibleItems && (
-        <button
-          className="nav-btn next-btn"
-          onClick={handleNext}
-          aria-label="Next slide"
-        >
-          <svg viewBox="0 0 24 24">
-            <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-          </svg>
-        </button>
-      )}
+      <button
+        className="absolute top-1/2 -translate-y-1/2 -right-4 max-sm:-right-2 w-9 h-9 rounded-full border border-slate-200 bg-white cursor-pointer flex items-center justify-center z-10 shadow-lg transition-all duration-200 hover:scale-105 active:scale-95"
+        onClick={handleNext}
+        aria-label="Next slide"
+      >
+        <svg viewBox="0 0 24 24" className="w-6 h-6 fill-[#132723]">
+          <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+        </svg>
+      </button>
     </div>
   );
 }

@@ -8,6 +8,8 @@ interface PageBannerProps {
   size?: string | null;
 }
 
+const DEFAULT_BANNER_BG = "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg";
+
 export default function PageBanner({
   title,
   description,
@@ -15,18 +17,22 @@ export default function PageBanner({
   position = 'center center',
   size = 'cover',
 }: PageBannerProps) {
-  const defaultBg = 'https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg';
-  const activeBg = bgImage || defaultBg;
+  const activeBg = (bgImage && bgImage.trim() !== '') ? bgImage : DEFAULT_BANNER_BG;
   const activePos = position || 'center center';
   const activeSize = size || 'cover';
+
+  const cleanBg = activeBg.replace(/"/g, "'");
 
   return (
     <section
       className="relative text-center text-white py-20 px-5 overflow-hidden"
       style={{
-        background: `linear-gradient(rgba(10, 66, 45, 0.88), rgba(10, 66, 45, 0.85)), url('${activeBg}') ${activePos} / ${activeSize} no-repeat`,
-        minHeight: '260px',
-        maxHeight: '360px',
+        backgroundImage: `linear-gradient(rgba(10, 66, 45, 0.45), rgba(10, 66, 45, 0.45)), url("${cleanBg}")`,
+        backgroundPosition: activePos,
+        backgroundSize: activeSize,
+        backgroundRepeat: 'no-repeat',
+        height: '360px',
+        minHeight: '360px',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',

@@ -4,20 +4,30 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { getNavItems } from "@/actions/pageActions";
+import { getNavItems, getSiteIdentity } from "@/actions/pageActions";
 
 export default function Header() {
   const [menuActive, setMenuActive] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [navItems, setNavItems] = useState<any[]>([]);
+  const [identityData, setIdentityData] = useState<any>(null);
   const pathname = usePathname();
 
   useEffect(() => {
+    let isMounted = true;
     getNavItems().then((items) => {
-      if (items && Array.isArray(items) && items.length > 0) {
+      if (isMounted && items && Array.isArray(items) && items.length > 0) {
         setNavItems(items);
       }
     });
+    getSiteIdentity().then((data) => {
+      if (isMounted && data) {
+        setIdentityData(data);
+      }
+    });
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   if (pathname?.startsWith("/admin") || pathname === "/letstravel") {
@@ -25,25 +35,45 @@ export default function Header() {
   }
 
   return (
-    <header>
-        <div className="nav-shell">
-          <div className="nav">
+    <header className="sticky top-0 z-[1000] w-full bg-white backdrop-blur-md shadow-[0_2px_24px_-12px_rgba(19,39,35,0.18)]">
+        <div className="w-full max-w-[1400px] mx-auto px-[20px]">
+          <div className="flex items-center justify-between min-h-[80px] py-[10px]">
             {/* Logo */}
-            <div className="logo">
-              <Link href="/" onClick={() => setMenuActive(false)}>
-                <Image
-                  src="/img/logo.png"
-                  alt="King Travel Logo"
-                  width={250}
-                  height={60}
-                  priority
-                  style={{ width: "auto", height: "auto" }}
-                />
+            <div className="block max-w-[250px] max-lg:max-w-[220px] max-sm:max-w-[180px] w-full">
+              <Link href="/" onClick={() => setMenuActive(false)} className="block">
+                {identityData?.logo ? (
+                  identityData.logo.startsWith('data:') ? (
+                    <img
+                      src={identityData.logo}
+                      alt={identityData.logoAlt || identityData.siteName || "King Travel Logo"}
+                      style={{ width: '100%', height: 'auto', maxHeight: '60px', objectFit: 'contain' }}
+                    />
+                  ) : (
+                    <Image
+                      src={identityData.logo}
+                      alt={identityData.logoAlt || identityData.siteName || "King Travel Logo"}
+                      width={250}
+                      height={60}
+                      priority
+                      style={{ width: '100%', height: 'auto' }}
+                      unoptimized
+                    />
+                  )
+                ) : (
+                  <Image
+                    src="/img/logo.png"
+                    alt="King Travel Logo"
+                    width={250}
+                    height={60}
+                    priority
+                    style={{ width: '100%', height: 'auto' }}
+                  />
+                )}
               </Link>
             </div>
 
             {/* Desktop + Mobile Nav */}
-            <nav className={`navlinks ${menuActive ? "active" : ""}`} id="navLinks">
+            <nav className={`flex gap-[20px] max-lg:gap-[10px] items-center max-lg:hidden max-lg:flex-col max-lg:absolute max-lg:top-full max-lg:left-0 max-lg:w-full max-lg:bg-white max-lg:p-[20px] max-lg:shadow-[0_4px_10px_rgba(0,0,0,0.1)] max-lg:gap-y-[15px] max-lg:items-start ${menuActive ? "!flex" : ""}`} id="navLinks">
               {navItems.map((item) => {
                 const itemHref = item.url || item.href || '#';
                 const itemLabel = item.label || item.title;
@@ -57,8 +87,7 @@ export default function Header() {
                       key={item.id || itemHref}
                       href={itemHref}
                       onClick={() => setMenuActive(false)}
-                      className={isActive ? "text-gold font-bold" : ""}
-                      style={isActive ? { color: "var(--gold, #DB9E30)" } : undefined}
+                      className={`text-[#333333] text-[16px] max-lg:text-[13px] max-lg:w-full max-lg:py-[8px] max-lg:border-b max-lg:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-[#DB9E30] ${isActive ? "!text-[#DB9E30] font-bold" : ""}`}
                     >
                       {itemLabel}
                     </Link>
@@ -72,7 +101,7 @@ export default function Header() {
                     className={`dropdown-parent${openDropdown === mobKey ? " mob-open" : ""}`}
                   >
                     <span
-                      style={{ cursor: "pointer", display: "flex", alignItems: "center" }}
+                      className="cursor-pointer flex items-center"
                       onClick={() => {
                         if (window.innerWidth < 1024) {
                           setOpenDropdown(openDropdown === mobKey ? null : mobKey);
@@ -82,8 +111,7 @@ export default function Header() {
                       <Link
                         href={itemHref}
                         onClick={() => setMenuActive(false)}
-                        className={isParentActive ? "text-gold font-bold" : ""}
-                        style={{ color: isParentActive ? "var(--gold, #DB9E30)" : "inherit", textDecoration: "none" }}
+                        className={`text-[#333333] text-[16px] max-lg:text-[13px] max-lg:w-full max-lg:py-[8px] max-lg:border-b max-lg:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-[#DB9E30] ${isParentActive ? "!text-[#DB9E30] font-bold" : ""}`}
                       >
                         {itemLabel}
                       </Link>
@@ -98,8 +126,7 @@ export default function Header() {
                           <Link
                             key={sub.id || subHref}
                             href={subHref}
-                            className={isSubActive ? "text-gold font-bold" : ""}
-                            style={isSubActive ? { color: "var(--gold, #DB9E30)" } : undefined}
+                            className={isSubActive ? "!text-[#DB9E30] font-bold" : ""}
                             onClick={() => {
                               setMenuActive(false);
                               setOpenDropdown(null);
@@ -116,9 +143,9 @@ export default function Header() {
             </nav>
 
             {/* Right: WhatsApp chip + hamburger */}
-            <div className="nav-right">
-              <div className="contact-chip">
-                <div className="wa-ico">
+            <div className="flex items-center max-lg:order-2 max-lg:ml-auto max-lg:mr-[15px]">
+              <div className="flex items-center gap-[5px] max-sm:hidden">
+                <div className="w-[32px] max-sm:w-[24px] h-auto block">
                   <Image
                     src="/img/whatsapp.svg"
                     alt="WhatsApp"
@@ -126,12 +153,13 @@ export default function Header() {
                     height={32}
                   />
                 </div>
-                <div className="txt">
-                  <div className="l">Book Hajj &amp; Umrah</div>
+                <div>
+                  <div className="text-[11px] text-[#666] uppercase tracking-[0.5px]">Book Hajj &amp; Umrah</div>
                   <a
                     href="https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20your%20services!"
                     target="_blank"
                     rel="noopener noreferrer"
+                    className="text-[15px] max-sm:text-[13px] font-bold text-[#25D366] no-underline"
                   >
                     +1 905-624-8344
                   </a>
@@ -139,7 +167,7 @@ export default function Header() {
               </div>
 
               <button
-                className="menu-toggle"
+                className="hidden max-lg:flex max-lg:order-3 flex-col gap-[5px] cursor-pointer bg-transparent border-none p-0"
                 id="menuToggle"
                 aria-label="Toggle menu"
                 onClick={() => {
@@ -147,9 +175,9 @@ export default function Header() {
                   setOpenDropdown(null);
                 }}
               >
-                <span></span>
-                <span></span>
-                <span></span>
+                <span className="block w-[25px] h-[3px] bg-[#333] rounded-[2px]"></span>
+                <span className="block w-[25px] h-[3px] bg-[#333] rounded-[2px]"></span>
+                <span className="block w-[25px] h-[3px] bg-[#333] rounded-[2px]"></span>
               </button>
             </div>
           </div>

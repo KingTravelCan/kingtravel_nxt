@@ -19,6 +19,8 @@ export const users = mysqlTable('users', {
     .notNull()
     .default('admin'),
   active: boolean('active').notNull().default(true),
+  badgeBg: varchar('badge_bg', { length: 32 }).default('#0F766E'),
+  badgeTextColor: varchar('badge_text_color', { length: 32 }).default('#FFFFFF'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
 });

@@ -1,9 +1,12 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { adminLogout } from '@/actions/authActions';
+import { getSiteIdentity } from '@/actions/pageActions';
+
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -69,6 +72,21 @@ const navItems = [
 
 export default function AdminLayout({ children, user }: AdminLayoutProps) {
   const pathname = usePathname();
+  const [identity, setIdentity] = useState<any>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+    getSiteIdentity().then(data => {
+      if (isMounted && data) setIdentity(data);
+    });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+
+  const logoSrc = identity?.logo || '/img/logo.png';
+  const logoAlt = identity?.logoAlt || 'King Travel Canada Logo';
 
   return (
     <div className="flex h-screen overflow-hidden bg-[#1C1F26] font-sans">
@@ -77,8 +95,8 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
         {/* Brand */}
         <div className="px-2 pb-6 border-b border-white/5">
           <Image
-            src="/img/logo-footer.png"
-            alt="King Travel"
+            src={logoSrc}
+            alt={logoAlt}
             width={140}
             height={36}
             priority
@@ -89,6 +107,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
           </span>
         </div>
 
+
         {/* Nav */}
         <nav className="flex-1 pt-4 flex flex-col gap-1">
           {navItems.map((item) => {
@@ -97,13 +116,13 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs transition-all ${
-                  isActive
-                    ? 'font-bold text-slate-900 bg-white'
-                    : 'font-medium text-white/55 hover:text-white hover:bg-white/5'
-                }`}
+                style={{ color: isActive ? '#004B39' : '#ffffff' }}
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs transition-all ${isActive
+                  ? 'font-bold bg-white shadow-md border-l-4 border-[#DB9E30] pl-2.5'
+                  : 'font-medium hover:bg-white/15'
+                  }`}
               >
-                <span className={`shrink-0 ${isActive ? 'text-slate-900' : 'text-white/40'}`}>
+                <span className="shrink-0" style={{ color: isActive ? '#004B39' : '#ffffff' }}>
                   {item.icon}
                 </span>
                 {item.label}
@@ -112,7 +131,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
           })}
         </nav>
 
-        {/* Bottom */}
+        {/* Logout Button */}
         <div className="border-t border-white/10 pt-3">
           <form action={adminLogout}>
             <button
@@ -132,24 +151,13 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Header */}
         <header className="bg-[#16181E] border-b border-white/5 px-6 py-3.5 flex items-center gap-4 shrink-0">
-          {/* Search */}
-          <div className="flex-1 max-w-[420px] relative">
-            <svg className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <input
-              type="text"
-              placeholder="Search something..."
-              className="w-full bg-white/5 border border-white/10 rounded-full py-2 pr-3.5 pl-8.5 text-slate-200 text-xs outline-none focus:border-[#004B39]"
-            />
-          </div>
 
           {/* Right side */}
           <div className="flex items-center gap-4 ml-auto">
             <Link
               href="/"
               target="_blank"
-              className="inline-flex items-center gap-1 text-[11px] font-semibold text-white/55 bg-white/5 border border-white/10 rounded-full px-3.5 py-1.5 no-underline hover:text-white hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-1 text-[11px] font-bold text-[#004B39] bg-white border border-slate-200 rounded-full px-3.5 py-1.5 no-underline hover:bg-slate-100 transition-colors shadow-xs"
             >
               Live Site ↗
             </Link>

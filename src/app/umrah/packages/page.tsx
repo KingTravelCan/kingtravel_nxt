@@ -1,12 +1,10 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getOrganizationJsonLd } from "@/lib/jsonLd";
-
-export const metadata = {
-  title: "King Travel — Premium Umrah Packages from Canada 2026",
-  description:
-    "Perform your sacred obligation of Umrah in 2026 with comfort, organization, and spiritual focus. King Travel proudly offers premium Umrah Packages from Canada 2026.",
-};
+import PageBanner from "@/components/PageBanner";
+import { getPageBySlug } from "@/actions/pageActions";
 
 const umrahCardsData = [
   {
@@ -66,9 +64,9 @@ const umrahCardsData = [
     price: "$5,850",
     makkahHotel: {
       name: "Hyatt Regency Makkah",
-      location: "Jabal Omar (Short Walk)",
+      location: "2 Mins Walk",
       image:
-        "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=300&q=80",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=300&q=80",
       badge: "Breakfast",
       nights: "5 Nights",
     },
@@ -84,27 +82,24 @@ const umrahCardsData = [
 ];
 
 export default function UmrahPackagesPage() {
-  return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(getOrganizationJsonLd()) }}
-      />
+  const [pageData, setPageData] = useState<any>(null);
 
-      <div className="umrah-page-wrapper">
-        {/* ================= HERO SECTION ================= */}
-        <section className="umrah-hero">
-          <div className="mx-auto">
-            <h1>
-              Umrah Packages from Canada 2026
-              <br />
-              <span>Travel with Confidence</span> by King Travel
-            </h1>
-            <p>
-              Perform your sacred obligation of Umrah in 2026 with comfort, organization, and spiritual focus. King Travel proudly offers premium Umrah Packages from Canada 2026, designed to provide Canadian Muslims with a smooth and well-managed pilgrimage experience.
-            </p>
-          </div>
-        </section>
+  useEffect(() => {
+    getPageBySlug('/umrah/packages').then(p => {
+      if (p) setPageData(p);
+    });
+  }, []);
+
+  return (
+    <div className="umrah-page-wrapper">
+      {/* ================= DYNAMIC HERO BANNER ================= */}
+      <PageBanner
+        title={pageData?.bannerTitle || pageData?.title || "Umrah Packages from Canada 2026 <br /><span>Travel with Confidence</span> by King Travel"}
+        description={pageData?.bannerDescription || "Perform your sacred obligation of Umrah in 2026 with comfort, organization, and spiritual focus. King Travel proudly offers premium Umrah Packages from Canada 2026, designed to provide Canadian Muslims with a smooth and well-managed pilgrimage experience."}
+        bgImage={pageData?.bannerBgImage}
+        position={pageData?.bannerPosition}
+        size={pageData?.bannerSize}
+      />
 
         {/* ================= 4 FLOATING ACCREDITATION BADGES ================= */}
         <div className="badges-overlap-container">
@@ -279,6 +274,5 @@ export default function UmrahPackagesPage() {
           </div>
         </section>
       </div>
-    </>
   );
 }

@@ -36,6 +36,8 @@ INITIAL_FRONTEND_PAGES.forEach((p, idx) => {
   };
 });
 
+let pageOrderMemoryCache: number[] = [];
+
 export async function getPagesList() {
   try {
     let pages = await db.select().from(sitePages);
@@ -50,10 +52,37 @@ export async function getPagesList() {
       }
       pages = await db.select().from(sitePages);
     }
+
+    // Apply stored reordering sequence if available
+    try {
+      const orderSetting = await db.select().from(siteSettings).where(eq(siteSettings.key, 'ordered_pages')).limit(1);
+      const orderIds: number[] = orderSetting && orderSetting.length > 0 ? JSON.parse(orderSetting[0].value) : pageOrderMemoryCache;
+
+      if (orderIds && orderIds.length > 0) {
+        const orderMap = new Map(orderIds.map((id, index) => [id, index]));
+        pages.sort((a, b) => {
+          const orderA = orderMap.has(a.id) ? (orderMap.get(a.id) as number) : 999;
+          const orderB = orderMap.has(b.id) ? (orderMap.get(b.id) as number) : 999;
+          return orderA - orderB;
+        });
+      }
+    } catch (orderErr) {
+      console.warn('Page order sorting failed:', orderErr);
+    }
+
     return pages;
   } catch (err) {
     console.error('getPagesList DB query failed, returning fallback list:', err);
-    return Object.values(pageMemoryCache);
+    let cachedList = Object.values(pageMemoryCache);
+    if (pageOrderMemoryCache && pageOrderMemoryCache.length > 0) {
+      const orderMap = new Map(pageOrderMemoryCache.map((id, index) => [id, index]));
+      cachedList.sort((a: any, b: any) => {
+        const orderA = orderMap.has(a.id) ? (orderMap.get(a.id) as number) : 999;
+        const orderB = orderMap.has(b.id) ? (orderMap.get(b.id) as number) : 999;
+        return orderA - orderB;
+      });
+    }
+    return cachedList;
   }
 }
 
@@ -97,6 +126,7 @@ export async function savePageAction(formData: FormData) {
   const bannerDescription = formData.get('bannerDescription') ? String(formData.get('bannerDescription')) : null;
 
   try {
+    let savedId = id;
     if (id) {
       await db.update(sitePages).set({
         title,
@@ -116,7 +146,7 @@ export async function savePageAction(formData: FormData) {
         updatedAt: new Date(),
       }).where(eq(sitePages.id, id));
     } else {
-      await db.insert(sitePages).values({
+      const inserted = await db.insert(sitePages).values({
         title,
         slug,
         status,
@@ -131,12 +161,62 @@ export async function savePageAction(formData: FormData) {
         richText: richText || null,
         metaTitle: metaTitle || null,
         metaDescription: metaDescription || null,
-      });
+      }).$returningId();
+      if (inserted && inserted.length > 0) {
+        savedId = inserted[0].id;
+      }
+    }
+
+    // Always update memory cache so getPageBySlug works instantly
+    const targetId = savedId || (Object.keys(pageMemoryCache).length + 1);
+    pageMemoryCache[targetId] = {
+      id: targetId,
+      title,
+      slug,
+      status,
+      showInMenu,
+      parentPage,
+      bannerBgImage,
+      bannerPosition,
+      bannerSize,
+      bannerTitle,
+      bannerDescription,
+      sections,
+      richText,
+      metaTitle,
+      metaDescription,
+      updatedAt: new Date(),
+    };
+
+    // Synchronize nav_items if slug or title changed
+    try {
+      const navRes = await db.select().from(siteSettings).where(eq(siteSettings.key, 'nav_items')).limit(1);
+      if (navRes && navRes.length > 0) {
+        let navItems = JSON.parse(navRes[0].value);
+        let updatedNav = false;
+        const syncItem = (item: any) => {
+          if ((savedId && String(item.id) === String(savedId)) || item.label === title || item.url === slug) {
+            item.url = slug;
+            item.label = title;
+            updatedNav = true;
+          }
+          if (item.children && Array.isArray(item.children)) {
+            item.children.forEach(syncItem);
+          }
+        };
+        navItems.forEach(syncItem);
+        if (updatedNav) {
+          await db.update(siteSettings).set({ value: JSON.stringify(navItems), updatedAt: new Date() }).where(eq(siteSettings.key, 'nav_items'));
+        }
+      }
+    } catch (e) {
+      console.error('Failed to sync nav_items on savePageAction:', e);
     }
 
     revalidatePath('/admin/pages');
     revalidatePath(slug);
-    return { success: true, error: undefined };
+    revalidatePath('/', 'layout');
+    return { success: true, pageId: savedId, error: undefined };
   } catch (err: any) {
     console.warn('savePageAction DB query failed, saving to cache fallback:', err);
     // Fallback save to memory cache so UI updates smoothly even without DB table
@@ -148,6 +228,11 @@ export async function savePageAction(formData: FormData) {
       status,
       showInMenu,
       parentPage,
+      bannerBgImage,
+      bannerPosition,
+      bannerSize,
+      bannerTitle,
+      bannerDescription,
       sections,
       richText,
       metaTitle,
@@ -156,7 +241,8 @@ export async function savePageAction(formData: FormData) {
     };
     revalidatePath('/admin/pages');
     revalidatePath(slug);
-    return { success: true, error: undefined, warning: 'Saved to session memory cache.' };
+    revalidatePath('/', 'layout');
+    return { success: true, pageId: targetId, error: undefined, warning: 'Saved to session memory cache.' };
   }
 }
 
@@ -207,3 +293,493 @@ export async function saveNavItemsAction(navItems: any[]) {
     return { success: false, error: err.message };
   }
 }
+
+export async function getDefaultFooterData() {
+  return {
+    logo: '/img/logo-footer.png',
+    tagline: 'A licensed Canadian agency dedicated to Hajj & Umrah travel — trusted, certified, and built for pilgrims.',
+    socialLinks: [
+      { name: 'Facebook', url: 'https://www.facebook.com/kingtravelcan', icon: '/img/fb.svg', openInNewTab: true },
+      { name: 'Instagram', url: 'https://www.instagram.com/kingtravelcan/', icon: '/img/insta.svg', openInNewTab: true },
+      { name: 'LinkedIn', url: 'https://ca.linkedin.com/company/kingtravelcan', icon: '/img/in.svg', openInNewTab: true },
+      { name: 'TikTok', url: 'https://www.tiktok.com/@kingtravelcan', icon: '/img/tik.svg', openInNewTab: true },
+    ],
+    trustBadges: [
+      { name: 'ACTA', icon: '/img/acta.svg' },
+      { name: 'ATAC', icon: '/img/atac.svg' },
+      { name: 'TICO', icon: '/img/tico.svg' },
+      { name: 'IATA', icon: '/img/iata.svg' },
+      { name: 'ASTA', icon: '/img/asta.svg' },
+    ],
+    servicesTitle: 'SERVICES',
+    servicesLinks: [
+      { label: 'Umrah Packages', url: '/umrah/packages' },
+      { label: 'Hajj Packages', url: '/hajj/packages' },
+      { label: 'Airline Tickets', url: '/airlines' },
+      { label: 'Saudi Visa Services', url: '/saudi-visa' },
+    ],
+    sitemapTitle: 'SITEMAP',
+    sitemapLinks: [
+      { label: 'About Us', url: '/about' },
+      { label: 'Packages', url: '/umrah/packages' },
+      { label: 'Contact', url: '/contact' },
+      { label: 'Terms of Use', url: '#' },
+    ],
+    supportTitle: 'CUSTOMER SUPPORT',
+    supportItems: [
+      { text: '24/7 customer support', url: '', openInNewTab: false },
+      { text: '+1800-844-5464', url: 'tel:+18008445464', openInNewTab: false },
+      { text: '+1905-624-8555', url: 'tel:+19056248555', openInNewTab: false },
+      { text: '+1905-624-8344', url: 'tel:+19056248344', openInNewTab: false },
+      { text: 'info@kingtravelcan.com', url: 'mailto:info@kingtravelcan.com', openInNewTab: false },
+      { text: 'Mon–Sat, 9am – 7pm EST', url: '', openInNewTab: false },
+    ],
+    copyrightText: '© 2026 King Travel Can LTD. All Rights Reserved.',
+    developerText: 'Design & Developed by DKS',
+    developerUrl: 'https://www.dks.com.pk',
+  };
+}
+
+let footerMemoryCache: any = null;
+
+export async function getFooterData() {
+  try {
+    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'footer_settings')).limit(1);
+    if (res && res.length > 0) {
+      return JSON.parse(res[0].value);
+    }
+  } catch (err) {
+    console.error('getFooterData DB query failed:', err);
+  }
+  return footerMemoryCache || getDefaultFooterData();
+}
+
+export async function saveFooterSettingsAction(footerData: any) {
+  try {
+    footerMemoryCache = footerData;
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'footer_settings')).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: JSON.stringify(footerData), updatedAt: new Date() }).where(eq(siteSettings.key, 'footer_settings'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'footer_settings', value: JSON.stringify(footerData) });
+    }
+    revalidatePath('/', 'layout');
+    return { success: true };
+  } catch (err: any) {
+    console.warn('saveFooterSettingsAction DB insert failed, fallback to memory cache:', err);
+    footerMemoryCache = footerData;
+    revalidatePath('/', 'layout');
+    return { success: true, warning: 'Saved to session cache.' };
+  }
+}
+
+export async function deletePageAction(id: number) {
+  try {
+    // Delete from DB
+    await db.delete(sitePages).where(eq(sitePages.id, id));
+    // Also delete from memory cache if present
+    delete pageMemoryCache[id];
+    revalidatePath('/admin/pages');
+    revalidatePath('/', 'layout');
+    return { success: true };
+  } catch (err: any) {
+    console.error('deletePageAction DB query failed:', err);
+    delete pageMemoryCache[id];
+    revalidatePath('/admin/pages');
+    return { success: true };
+  }
+}
+
+
+export async function getDefaultSiteIdentity() {
+  return {
+    siteName: 'King Travel Canada',
+    tagline: 'Trusted Hajj & Umrah Pilgrimage Travel Agency in Canada',
+    logo: '/img/logo.png',
+    logoAlt: 'King Travel Canada Logo',
+    favicon: '/img/favicon.ico',
+    faviconAlt: 'King Travel Favicon',
+  };
+}
+
+let siteIdentityMemoryCache: any = null;
+
+export async function getSiteIdentity() {
+  try {
+    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'site_identity')).limit(1);
+    if (res && res.length > 0) {
+      return JSON.parse(res[0].value);
+    }
+  } catch (err) {
+    console.error('getSiteIdentity DB query failed:', err);
+  }
+  return siteIdentityMemoryCache || getDefaultSiteIdentity();
+}
+
+export async function saveSiteIdentityAction(data: any) {
+  try {
+    siteIdentityMemoryCache = data;
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'site_identity')).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: JSON.stringify(data), updatedAt: new Date() }).where(eq(siteSettings.key, 'site_identity'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'site_identity', value: JSON.stringify(data) });
+    }
+    revalidatePath('/', 'layout');
+    return { success: true };
+  } catch (err: any) {
+    console.warn('saveSiteIdentityAction DB query failed, saving to cache fallback:', err);
+    siteIdentityMemoryCache = data;
+    revalidatePath('/', 'layout');
+    return { success: true, warning: 'Saved to session memory cache.' };
+  }
+}
+
+export async function getDefaultShareTools() {
+  return {
+    enabled: true,
+    iconStyle: 'rounded-square', // rounded-square | circle | flat | minimal
+    iconSize: 40,
+    colorScheme: 'brand-colors', // brand-colors | monochrome | custom
+    gapFromEdge: 20,
+    verticalPosition: 'center', // top | center | bottom
+    sidebarEdge: 'right', // left | right
+    showLabels: true,
+    hideOnScrollDown: false,
+    openBehavior: 'popup', // popup | same-tab | new-tab
+    delayBeforeShowing: 0,
+    excludePages: '/cart, /checkout, /private',
+    urlToShare: 'current', // current | custom
+    customShareUrl: '',
+    utmParameters: false,
+    trackClicks: true,
+    gaEventName: 'share_click',
+    activePlatforms: [
+      { id: 'facebook', name: 'Facebook', enabled: true, color: '#1877F2' },
+      { id: 'whatsapp', name: 'WhatsApp', enabled: true, color: '#25D366' },
+      { id: 'x', name: 'X (Twitter)', enabled: true, color: '#000000' },
+      { id: 'email', name: 'Email', enabled: true, color: '#EA4335' },
+      { id: 'linkedin', name: 'LinkedIn', enabled: true, color: '#0A66C2' },
+      { id: 'pinterest', name: 'Pinterest', enabled: true, color: '#E60023' },
+      { id: 'telegram', name: 'Telegram', enabled: true, color: '#24A1DE' },
+    ],
+  };
+}
+
+let shareToolsMemoryCache: any = null;
+
+export async function getShareTools() {
+  try {
+    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'share_tools')).limit(1);
+    if (res && res.length > 0) {
+      return JSON.parse(res[0].value);
+    }
+  } catch (err) {
+    console.error('getShareTools DB query failed:', err);
+  }
+  return shareToolsMemoryCache || getDefaultShareTools();
+}
+
+export async function saveShareToolsAction(data: any) {
+  try {
+    shareToolsMemoryCache = data;
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'share_tools')).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: JSON.stringify(data), updatedAt: new Date() }).where(eq(siteSettings.key, 'share_tools'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'share_tools', value: JSON.stringify(data) });
+    }
+    revalidatePath('/', 'layout');
+    return { success: true };
+  } catch (err: any) {
+    console.warn('saveShareToolsAction DB query failed, saving to cache fallback:', err);
+    shareToolsMemoryCache = data;
+    revalidatePath('/', 'layout');
+    return { success: true, warning: 'Saved to session memory cache.' };
+  }
+}
+
+export async function getGlobalCss() {
+  try {
+    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'global_css')).limit(1);
+    if (res && res.length > 0) {
+      return res[0].value;
+    }
+  } catch (err) {
+    console.error('getGlobalCss DB query failed:', err);
+  }
+  return '';
+}
+
+export async function saveGlobalCssAction(css: string) {
+  try {
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'global_css')).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: css, updatedAt: new Date() }).where(eq(siteSettings.key, 'global_css'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'global_css', value: css });
+    }
+    revalidatePath('/', 'layout');
+    return { success: true };
+  } catch (err: any) {
+    console.warn('saveGlobalCssAction DB query failed:', err);
+    revalidatePath('/', 'layout');
+    return { success: true };
+  }
+}
+
+export async function updatePageOrderAction(orderedIds: number[]) {
+  try {
+    pageOrderMemoryCache = orderedIds;
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'ordered_pages')).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: JSON.stringify(orderedIds), updatedAt: new Date() }).where(eq(siteSettings.key, 'ordered_pages'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'ordered_pages', value: JSON.stringify(orderedIds) });
+    }
+    revalidatePath('/admin/pages');
+    return { success: true };
+  } catch (err: any) {
+    console.warn('updatePageOrderAction DB query failed:', err);
+    pageOrderMemoryCache = orderedIds;
+    revalidatePath('/admin/pages');
+    return { success: true };
+  }
+}
+
+export async function updatePageStatusAction(id: number, status: 'published' | 'draft') {
+  try {
+    await db.update(sitePages).set({ status, updatedAt: new Date() }).where(eq(sitePages.id, id));
+    if (pageMemoryCache[id]) {
+      pageMemoryCache[id].status = status;
+      pageMemoryCache[id].updatedAt = new Date();
+    }
+    revalidatePath('/admin/pages');
+    revalidatePath('/', 'layout');
+    return { success: true };
+  } catch (err: any) {
+    console.error('updatePageStatusAction DB error, updating memory cache:', err);
+    if (pageMemoryCache[id]) {
+      pageMemoryCache[id].status = status;
+      pageMemoryCache[id].updatedAt = new Date();
+    }
+    revalidatePath('/admin/pages');
+    revalidatePath('/', 'layout');
+    return { success: true };
+  }
+}
+
+let loginAuthMemoryCache: any = null;
+
+export async function getDefaultLoginAuthSettings() {
+  return {
+    backgroundImage: '',
+    backgroundAlt: 'Login screen background image',
+    footerText: '© 2026 King Travel Can Ltd. All Rights Reserved.',
+    maintenanceMode: false,
+  };
+}
+
+export async function getLoginAuthSettings() {
+  try {
+    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'login_auth_settings')).limit(1);
+    if (res && res.length > 0) {
+      return JSON.parse(res[0].value);
+    }
+  } catch (err) {
+    console.error('getLoginAuthSettings DB query failed:', err);
+  }
+  return loginAuthMemoryCache || getDefaultLoginAuthSettings();
+}
+
+export async function saveLoginAuthSettingsAction(data: any) {
+  try {
+    loginAuthMemoryCache = data;
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'login_auth_settings')).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: JSON.stringify(data), updatedAt: new Date() }).where(eq(siteSettings.key, 'login_auth_settings'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'login_auth_settings', value: JSON.stringify(data) });
+    }
+    revalidatePath('/letstravel');
+    return { success: true };
+  } catch (err: any) {
+    console.warn('saveLoginAuthSettingsAction DB query failed:', err);
+    loginAuthMemoryCache = data;
+    revalidatePath('/letstravel');
+    return { success: true };
+  }
+}
+
+export interface DisclaimerSettings {
+  enabled: boolean;
+  image: string;
+  altText?: string;
+}
+
+let disclaimerMemoryCache: any = null;
+
+export async function getDisclaimerSettings(): Promise<DisclaimerSettings> {
+  try {
+    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'disclaimer_settings')).limit(1);
+    if (res && res.length > 0) {
+      return JSON.parse(res[0].value);
+    }
+  } catch (err) {
+    console.error('getDisclaimerSettings DB query failed:', err);
+  }
+  return disclaimerMemoryCache || { enabled: false, image: '', altText: 'Disclaimer Popup Image' };
+}
+
+export async function saveDisclaimerSettingsAction(data: DisclaimerSettings) {
+  try {
+    disclaimerMemoryCache = data;
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'disclaimer_settings')).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: JSON.stringify(data), updatedAt: new Date() }).where(eq(siteSettings.key, 'disclaimer_settings'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'disclaimer_settings', value: JSON.stringify(data) });
+    }
+    revalidatePath('/', 'layout');
+    return { success: true };
+  } catch (err: any) {
+    console.warn('saveDisclaimerSettingsAction DB query failed:', err);
+    disclaimerMemoryCache = data;
+    revalidatePath('/', 'layout');
+    return { success: true };
+  }
+}
+
+export async function getFormsSettings() {
+  try {
+    const setting = await db.select().from(siteSettings).where(eq(siteSettings.key, 'forms_settings')).limit(1);
+    if (setting && setting.length > 0) {
+      const parsed = JSON.parse(setting[0].value);
+      if (parsed.formsData) return parsed;
+      return {
+        formsData: parsed,
+        emailConfigs: {
+          sendToEmail: 'info@kingtravelcan.com',
+          emailSubjectLine: 'New Pilgrimage Form Submission',
+          fromName: 'King Travel Canada',
+          fromEmail: 'no-reply@kingtravelcan.com',
+          replyTo: 'no-reply@kingtravelcan.com',
+          successHeading: 'Message Sent Successfully!',
+          successDescription: 'Thank you for contacting King Travel Canada. We will respond within 24 hours.',
+        },
+        emailTemplateHtml: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Inquiry Notification</title></head>
+<body style="font-family: sans-serif; background: #f8fafc; padding: 20px;">
+  <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+    <h2 style="color: #004B39; margin-top: 0;">King Travel Canada</h2>
+    <h3 style="color: #0f172a;">New Form Submission Received</h3>
+    <table width="100%" style="border-collapse: collapse; font-size: 13px;">
+      <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Full Name:</td><td>[name]</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">Email Address:</td><td>[email]</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">Phone Number:</td><td>[phone]</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">Subject:</td><td>[subject]</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">Message:</td><td>[msg]</td></tr>
+    </table>
+    <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 20px 0;" />
+    <p style="font-size: 11px; color: #94a3b8; text-align: center;">© 2026 King Travel Canada Ltd. All Rights Reserved.</p>
+  </div>
+</body>
+</html>`,
+      };
+    }
+  } catch (err) {
+    console.warn('getFormsSettings DB query failed, using defaults:', err);
+  }
+
+  return {
+    formsData: {
+      contact: {
+        title: 'Get In Touch With Us',
+        subtitle: 'Have questions about Umrah, Hajj or Saudi Visa? Our travel experts are here 24/7.',
+        recipientEmail: 'info@kingtravelcan.com',
+        successMessage: 'Thank you! Your message has been received. Our team will contact you shortly.',
+        enabled: true,
+        buttonText: 'Send Message',
+        fieldsCount: 5,
+      },
+      packageInquiry: {
+        title: 'Inquire About Pilgrimage Packages',
+        subtitle: 'Fill in your details below and our team will craft a customized package for you.',
+        recipientEmail: 'booking@kingtravelcan.com',
+        successMessage: 'Package inquiry submitted successfully! A representative will call you soon.',
+        enabled: true,
+        buttonText: 'Submit Package Inquiry',
+        fieldsCount: 6,
+      },
+      visaConsultation: {
+        title: 'Apply For Saudi Visa Consultation',
+        subtitle: 'Fast, authorized & reliable Saudi eVisa and Pilgrimage visa processing.',
+        recipientEmail: 'visas@kingtravelcan.com',
+        successMessage: 'Visa application submitted! We will process your requirements immediately.',
+        enabled: true,
+        buttonText: 'Submit Visa Request',
+        fieldsCount: 6,
+      },
+      flightInquiry: {
+        title: 'Request Flight Booking Assistance',
+        subtitle: 'Get the best rates on direct and connecting flights to Jeddah & Madinah.',
+        recipientEmail: 'flights@kingtravelcan.com',
+        successMessage: 'Flight request received! We will send available flight options to your email.',
+        enabled: true,
+        buttonText: 'Request Flight Quote',
+        fieldsCount: 6,
+      },
+    },
+    emailConfigs: {
+      sendToEmail: 'info@kingtravelcan.com',
+      emailSubjectLine: 'New Pilgrimage Form Submission',
+      fromName: 'King Travel Canada',
+      fromEmail: 'no-reply@kingtravelcan.com',
+      replyTo: 'no-reply@kingtravelcan.com',
+      successHeading: 'Message Sent Successfully!',
+      successDescription: 'Thank you for contacting King Travel Canada. We will respond within 24 hours.',
+    },
+    emailTemplateHtml: `<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>Inquiry Notification</title></head>
+<body style="font-family: sans-serif; background: #f8fafc; padding: 20px;">
+  <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
+    <h2 style="color: #004B39; margin-top: 0;">King Travel Canada</h2>
+    <h3 style="color: #0f172a;">New Form Submission Received</h3>
+    <table width="100%" style="border-collapse: collapse; font-size: 13px;">
+      <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Full Name:</td><td>[name]</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">Email Address:</td><td>[email]</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">Phone Number:</td><td>[phone]</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">Subject:</td><td>[subject]</td></tr>
+      <tr><td style="padding: 8px; font-weight: bold;">Message:</td><td>[msg]</td></tr>
+    </table>
+    <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 20px 0;" />
+    <p style="font-size: 11px; color: #94a3b8; text-align: center;">© 2026 King Travel Canada Ltd. All Rights Reserved.</p>
+  </div>
+</body>
+</html>`,
+  };
+}
+
+export async function saveFormsSettingsAction(settingsData: any) {
+  try {
+    const json = JSON.stringify(settingsData);
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'forms_settings')).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: json, updatedAt: new Date() }).where(eq(siteSettings.key, 'forms_settings'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'forms_settings', value: json });
+    }
+    revalidatePath('/', 'layout');
+    return { success: true };
+  } catch (err: any) {
+    console.error('saveFormsSettingsAction failed:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+
+
+
+

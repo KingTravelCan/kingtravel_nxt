@@ -13,7 +13,7 @@ export default function WhatsAppFloat() {
   return (
     <a
       href="https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20your%20services!"
-      className="fixed-whatsapp"
+      className="fixed bottom-[30px] right-[30px] z-[100] w-[60px] h-[60px] max-sm:w-[50px] max-sm:h-[50px]"
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"

@@ -2,6 +2,7 @@ import mysql from 'mysql2/promise';
 import { db } from './index';
 import { users } from './schema';
 import { seedDatabase } from './seed';
+import { hashPassword } from '@/lib/password';
 
 async function runMigrationAndSeed() {
   console.log('Connecting to MySQL and ensuring database tables exist...');
@@ -32,6 +33,8 @@ async function runMigrationAndSeed() {
         \`password_hash\` varchar(255) NOT NULL,
         \`role\` enum('super_admin','admin','content_editor','enquiry_manager','seo_manager') NOT NULL DEFAULT 'admin',
         \`active\` boolean NOT NULL DEFAULT true,
+        \`badge_bg\` varchar(32) DEFAULT '#0F766E',
+        \`badge_text_color\` varchar(32) DEFAULT '#FFFFFF',
         \`created_at\` timestamp DEFAULT (now()),
         \`updated_at\` timestamp DEFAULT (now()) ON UPDATE CURRENT_TIMESTAMP,
         CONSTRAINT \`users_id\` PRIMARY KEY(\`id\`),
@@ -129,20 +132,39 @@ async function runMigrationAndSeed() {
     for (const sql of tableStatements) {
       await connection.query(sql);
     }
+
+    const alterStatements = [
+      "ALTER TABLE `users` ADD COLUMN `badge_bg` varchar(32) DEFAULT '#0F766E';",
+      "ALTER TABLE `users` ADD COLUMN `badge_text_color` varchar(32) DEFAULT '#FFFFFF';",
+    ];
+    for (const alterSql of alterStatements) {
+      try {
+        await connection.query(alterSql);
+      } catch (alterErr) {
+        // Ignore if column already exists
+      }
+    }
+
     await connection.end();
     console.log('All MySQL tables created successfully!');
 
     // Seed default admin user
     console.log('Ensuring default admin user exists...');
+    const seedEmail = (process.env.INITIAL_ADMIN_EMAIL || 'hassan@kingtravelcan.com').trim().toLowerCase();
+    const seedPwd = process.env.INITIAL_ADMIN_PASSWORD || 'KingTravel2026!';
+    const seedHash = hashPassword(seedPwd);
+
     await db.insert(users)
       .values({
-        name: 'King Travel Admin',
-        email: 'admin@kingtravel.ca',
-        passwordHash: 'KingTravel2026!',
+        name: 'Hassan',
+        email: seedEmail,
+        passwordHash: seedHash,
         role: 'super_admin',
         active: true,
+        badgeBg: '#64F900',
+        badgeTextColor: '#000000',
       })
-      .onDuplicateKeyUpdate({ set: { passwordHash: 'KingTravel2026!' } });
+      .onDuplicateKeyUpdate({ set: { passwordHash: seedHash } });
 
     // Run data seeder
     await seedDatabase();

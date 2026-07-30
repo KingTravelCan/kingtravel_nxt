@@ -1,11 +1,10 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { getOrganizationJsonLd } from "@/lib/jsonLd";
-
-export const metadata = {
-  title: "King Travel — Your Trusted Partner for Pilgrimage & Global Travel",
-  description: "Perform your sacred obligation of Umrah in 2026 with comfort, organization, and spiritual focus. King Travel proudly offers premium Umrah Packages from Canada 2026.",
-};
+import PageBanner from "@/components/PageBanner";
+import { getPageBySlug } from "@/actions/pageActions";
 
 const umrahCardsData = [
   {
@@ -74,35 +73,24 @@ const umrahCardsData = [
 ];
 
 export default function UmrahPackagesPage() {
+  const [pageData, setPageData] = useState<any>(null);
+
+  useEffect(() => {
+    getPageBySlug('/umrah-packages').then(p => {
+      if (p) setPageData(p);
+    });
+  }, []);
+
   return (
-    <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(getOrganizationJsonLd()) }}
+    <div className="bg-[#f4f6f5] min-h-screen text-slate-800 font-sans pb-24 w-full">
+      {/* ================= DYNAMIC HERO BANNER ================= */}
+      <PageBanner
+        title={pageData?.bannerTitle || pageData?.title || "Umrah Packages from Canada 2026 <br /><span className=\"text-[#CBA25F]\">Travel with Confidence</span> by King Travel"}
+        description={pageData?.bannerDescription || "Perform your sacred obligation of Umrah in 2026 with comfort, organization, and spiritual focus. King Travel proudly offers premium Umrah Packages from Canada 2026, designed to provide Canadian Muslims with a smooth and well-managed pilgrimage experience."}
+        bgImage={pageData?.bannerBgImage}
+        position={pageData?.bannerPosition}
+        size={pageData?.bannerSize}
       />
-      <div className="bg-[#f4f6f5] min-h-screen text-slate-800 font-sans pb-24 w-full">
-        {/* ================= HERO SECTION ================= */}
-        <section
-          style={{
-            background: "linear-gradient(rgba(10, 66, 45, 0.85), rgba(10, 66, 45, 0.85)), url('https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg') no-repeat center center/cover",
-            padding: "100px 20px 140px 20px",
-            textAlign: "center",
-            color: "#ffffff",
-            position: "relative",
-          }}
-          className="w-full"
-        >
-          <div className="mx-auto text-center">
-            <h1 className="text-4xl md:text-5xl font-normal font-serif mb-5 tracking-tight text-white leading-tight">
-              Umrah Packages from Canada 2026
-              <br />
-              <span className="text-[#CBA25F] font-serif">Travel with Confidence</span> by King Travel
-            </h1>
-            <p className="text-slate-100 text-base md:text-lg max-w-3xl mx-auto leading-relaxed font-light opacity-90">
-              Perform your sacred obligation of Umrah in 2026 with comfort, organization, and spiritual focus. King Travel proudly offers premium Umrah Packages from Canada 2026, designed to provide Canadian Muslims with a smooth and well-managed pilgrimage experience.
-            </p>
-          </div>
-        </section>
 
         {/* ================= 4 WHITE CARDS OVERLAPPING (LUCIDE SVG ICONS) ================= */}
         <div className="max-w-6xl mx-auto px-4 -mt-20 relative z-20">
@@ -327,6 +315,5 @@ export default function UmrahPackagesPage() {
           </main>
         </section>
       </div>
-    </>
   );
 }
