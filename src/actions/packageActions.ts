@@ -142,15 +142,103 @@ const defaultFallbackPackages = [
     createdAt: new Date(),
     updatedAt: new Date(),
   },
+  {
+    id: 5,
+    title: 'Deluxe Hajj Package 2027',
+    slug: 'deluxe-hajj-package-2027',
+    type: 'hajj' as const,
+    month: 'June 2027 (21 Days)',
+    startingPrice: '12995.00',
+    starRating: '5 Star',
+    status: 'available' as const,
+    featuredImage: 'https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80',
+    shortDescription: 'VIP Non-Shifting 5-Star Deluxe Hajj Package with Mina VIP Air-Conditioned Tents.',
+    fullDescription: 'Comprehensive VIP Hajj package departing from Toronto with complete guidance by experienced Canadian Imams.',
+    inclusions: JSON.stringify([
+      'Swissotel Makkah (5★ Non-Shifting)',
+      'Dar Al Iman InterContinental Madinah (5★)',
+      'Mina VIP Air-Conditioned Tents (Category A)',
+      'Private High-Speed Train & Bus Transfers',
+      'Daily Full Board Buffet Meals Included',
+      '24/7 Canadian Medical & Religious Staff',
+    ]),
+    departureCity: 'Toronto (YYZ)',
+    destination: 'Makkah, Mina, Arafat & Madinah',
+    departureDate: '2027-06-01',
+    returnDate: '2027-06-22',
+    durationDays: 21,
+    airline: 'Saudi Airlines',
+    availableSeats: 10,
+    totalCapacity: 25,
+    bookingDeadline: '2027-04-15',
+    isFeatured: true,
+    displayOrder: 5,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 6,
+    title: 'Economy Hajj Package 2027',
+    slug: 'economy-hajj-package-2027',
+    type: 'hajj' as const,
+    month: 'June 2027 (18 Days)',
+    startingPrice: '9995.00',
+    starRating: '4 Star',
+    status: 'available' as const,
+    featuredImage: 'https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80',
+    shortDescription: 'Affordable 18-Day Shifting Hajj package with Canadian group leadership.',
+    fullDescription: 'Affordable and spiritual Hajj package designed for pilgrims seeking complete Hajj rituals at budget rates.',
+    inclusions: JSON.stringify([
+      'Standard Shifting Hotel in Makkah & Madinah',
+      'Air-Conditioned Tents in Mina & Arafat',
+      'Saudi Airlines Round-trip Flights',
+      'Complete Hajj Visa & Permit Processing',
+      'Group Imam Guidance throughout rituals',
+    ]),
+    departureCity: 'Toronto (YYZ)',
+    destination: 'Makkah, Mina & Madinah',
+    departureDate: '2027-06-03',
+    returnDate: '2027-06-21',
+    durationDays: 18,
+    airline: 'Saudia',
+    availableSeats: 15,
+    totalCapacity: 35,
+    bookingDeadline: '2027-04-20',
+    isFeatured: true,
+    displayOrder: 6,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
 ];
 
 export async function getAllPackages() {
   try {
-    const list = await db.select().from(packages).orderBy(desc(packages.createdAt));
-    if (list && list.length > 0) {
-      return list;
+    let list = await db.select().from(packages).orderBy(desc(packages.createdAt));
+    if (!list || list.length === 0) {
+      for (const p of defaultFallbackPackages) {
+        try {
+          await db.insert(packages).values({
+            title: p.title,
+            slug: p.slug,
+            type: p.type,
+            month: p.month,
+            startingPrice: p.startingPrice,
+            starRating: p.starRating,
+            status: p.status,
+            featuredImage: p.featuredImage,
+            shortDescription: p.shortDescription,
+            fullDescription: p.fullDescription,
+            inclusions: p.inclusions,
+            departureCity: p.departureCity,
+            destination: p.destination,
+            durationDays: p.durationDays,
+            isFeatured: p.isFeatured,
+          });
+        } catch (seedErr) {}
+      }
+      list = await db.select().from(packages).orderBy(desc(packages.createdAt));
     }
-    return defaultFallbackPackages;
+    return list || defaultFallbackPackages;
   } catch {
     return defaultFallbackPackages;
   }
@@ -181,16 +269,18 @@ export async function getPackageBySlug(slug: string) {
   }
 }
 
-export async function createPackage(formData: FormData): Promise<void> {
+export async function createPackage(formData: FormData): Promise<{ success: boolean; error?: string }> {
   try {
     const title = formData.get('title') as string;
     const type = (formData.get('type') as 'umrah' | 'hajj') || 'umrah';
-    const month = formData.get('month') as string;
+    const month = formData.get('month') as string || 'Flexible 2026';
     const startingPrice = (formData.get('startingPrice') as string) || '1995.00';
     const starRating = (formData.get('starRating') as string) || '5 Star';
     const status = (formData.get('status') as any) || 'available';
+    const shortDescription = formData.get('shortDescription') as string || '';
+    const fullDescription = formData.get('fullDescription') as string || '';
 
-    if (!title) return;
+    if (!title) return { success: false, error: 'Package title is required.' };
 
     const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now().toString().slice(-4);
 
@@ -202,6 +292,8 @@ export async function createPackage(formData: FormData): Promise<void> {
       startingPrice,
       starRating,
       status,
+      shortDescription,
+      fullDescription,
       inclusions: JSON.stringify([
         'Return Flights from Toronto',
         'Luxury Ground Transportation',
@@ -217,8 +309,56 @@ export async function createPackage(formData: FormData): Promise<void> {
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah/packages');
     revalidatePath('/hajj/packages');
-  } catch (error) {
+    revalidatePath('/');
+    return { success: true };
+  } catch (error: any) {
     console.error('Error creating package:', error);
+    return { success: false, error: error.message || 'Failed to create package in database.' };
+  }
+}
+
+export async function updatePackageAction(
+  id: number,
+  data: {
+    title: string;
+    type: 'umrah' | 'hajj';
+    month?: string;
+    startingPrice?: string;
+    starRating?: string;
+    status?: 'available' | 'sold_out' | 'coming_soon' | 'draft';
+    shortDescription?: string;
+    fullDescription?: string;
+    featuredImage?: string;
+    departureCity?: string;
+    destination?: string;
+  }
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await db.update(packages).set({
+      title: data.title,
+      type: data.type,
+      month: data.month,
+      startingPrice: data.startingPrice,
+      starRating: data.starRating,
+      status: data.status,
+      shortDescription: data.shortDescription,
+      fullDescription: data.fullDescription,
+      featuredImage: data.featuredImage,
+      departureCity: data.departureCity,
+      destination: data.destination,
+      updatedAt: new Date(),
+    }).where(eq(packages.id, id));
+
+    revalidatePath('/admin/packages');
+    revalidatePath('/umrah-packages');
+    revalidatePath('/hajj-packages');
+    revalidatePath('/umrah/packages');
+    revalidatePath('/hajj/packages');
+    revalidatePath('/');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error updating package:', error);
+    return { success: false, error: error.message || 'Failed to update package in database.' };
   }
 }
 
@@ -236,6 +376,7 @@ export async function deletePackage(id: number): Promise<void> {
   try {
     await db.delete(packages).where(eq(packages.id, id));
     revalidatePath('/admin/packages');
+    revalidatePath('/');
   } catch (error) {
     console.error('Error deleting package:', error);
   }

@@ -113,7 +113,7 @@ export const visaServices = mysqlTable('visa_services', {
 export const enquiries = mysqlTable('enquiries', {
   id: int('id').autoincrement().primaryKey(),
   enquiryNumber: varchar('enquiry_number', { length: 128 }).notNull().unique(),
-  type: mysqlEnum('type', ['quote_request', 'package_enquiry', 'visa_enquiry', 'general_contact'])
+  type: mysqlEnum('type', ['quote_request', 'package_enquiry', 'visa_enquiry', 'general_contact', 'flight_enquiry'])
     .notNull()
     .default('quote_request'),
   fullName: varchar('full_name', { length: 255 }).notNull(),
@@ -145,6 +145,89 @@ export const enquiries = mysqlTable('enquiries', {
     .default('new'),
   internalNotes: text('internal_notes'),
   assignedStaff: varchar('assigned_staff', { length: 255 }),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+
+// 7a. Dedicated Table: Get a Free Quote Form
+export const quoteEnquiries = mysqlTable('quote_enquiries', {
+  id: int('id').autoincrement().primaryKey(),
+  enquiryNumber: varchar('enquiry_number', { length: 128 }).notNull().unique(),
+  fullName: varchar('full_name', { length: 255 }).notNull(),
+  phone: varchar('phone', { length: 50 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  packageType: varchar('package_type', { length: 100 }).default('Umrah Package'),
+  departureDate: varchar('departure_date', { length: 100 }),
+  adults: int('adults').default(1),
+  status: varchar('status', { length: 50 }).default('new'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+
+// 7b. Dedicated Table: Package Detail Sidebar Booking Form
+export const packageBookingEnquiries = mysqlTable('package_booking_enquiries', {
+  id: int('id').autoincrement().primaryKey(),
+  bookingNumber: varchar('booking_number', { length: 128 }).notNull().unique(),
+  packageId: int('package_id'),
+  packageName: varchar('package_name', { length: 255 }),
+  fullName: varchar('full_name', { length: 255 }).notNull(),
+  phone: varchar('phone', { length: 50 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  adults: int('adults').default(1),
+  children: int('children').default(0),
+  infants: int('infants').default(0),
+  startDate: varchar('start_date', { length: 100 }),
+  totalPrice: varchar('total_price', { length: 50 }),
+  status: varchar('status', { length: 50 }).default('new'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+
+// 7c. Dedicated Table: Contact Us & Get In Touch Forms
+export const contactEnquiries = mysqlTable('contact_enquiries', {
+  id: int('id').autoincrement().primaryKey(),
+  ticketNumber: varchar('ticket_number', { length: 128 }).notNull().unique(),
+  fullName: varchar('full_name', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  phone: varchar('phone', { length: 50 }).notNull(),
+  website: varchar('website', { length: 255 }),
+  packageType: varchar('package_type', { length: 100 }),
+  message: text('message'),
+  status: varchar('status', { length: 50 }).default('new'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+
+// 7d. Dedicated Table: Saudi Visa Consultations Form
+export const visaEnquiries = mysqlTable('visa_enquiries', {
+  id: int('id').autoincrement().primaryKey(),
+  enquiryNumber: varchar('enquiry_number', { length: 128 }).notNull().unique(),
+  visaServiceId: int('visa_service_id'),
+  visaTitle: varchar('visa_title', { length: 255 }),
+  fullName: varchar('full_name', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  phone: varchar('phone', { length: 50 }).notNull(),
+  travelersCount: int('travelers_count').default(1),
+  nationality: varchar('nationality', { length: 100 }).default('Canadian'),
+  message: text('message'),
+  status: varchar('status', { length: 50 }).default('new'),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+
+// 7e. Dedicated Table: Flight Inquiries Form
+export const flightEnquiries = mysqlTable('flight_enquiries', {
+  id: int('id').autoincrement().primaryKey(),
+  enquiryNumber: varchar('enquiry_number', { length: 128 }).notNull().unique(),
+  fullName: varchar('full_name', { length: 255 }).notNull(),
+  email: varchar('email', { length: 255 }).notNull(),
+  phone: varchar('phone', { length: 50 }).notNull(),
+  originCity: varchar('origin_city', { length: 100 }).default('Toronto (YYZ)'),
+  destinationCity: varchar('destination_city', { length: 100 }).default('Jeddah (JED)'),
+  departureDate: varchar('departure_date', { length: 100 }),
+  returnDate: varchar('return_date', { length: 100 }),
+  passengers: int('passengers').default(1),
+  status: varchar('status', { length: 50 }).default('new'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
 });

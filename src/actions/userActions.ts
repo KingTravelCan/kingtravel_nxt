@@ -27,7 +27,7 @@ export async function getUsersList() {
     // If database table is empty, seed default admin user into database
     if (!list || list.length === 0) {
       const initEmail = (process.env.INITIAL_ADMIN_EMAIL || 'hassan@kingtravelcan.com').trim().toLowerCase();
-      const initPwd = process.env.INITIAL_ADMIN_PASSWORD || 'KingTravel2026!';
+      const initPwd = process.env.INITIAL_ADMIN_PASSWORD || 'Kingtravel$@hassan';
       const defaultUser = {
         name: 'Hassan',
         email: initEmail,

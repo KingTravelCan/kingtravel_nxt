@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import PageBanner from "@/components/PageBanner";
 import { getPageBySlug, getFormsSettings } from "@/actions/pageActions";
+import { submitContactEnquiryAction } from "@/actions/enquiryActions";
 
 function ContactInfoCardsSection({ data }: { data?: any }) {
   return (
@@ -147,21 +148,18 @@ function ContactFormSection({ data }: { data?: any }) {
     }
 
     setErrors({});
-    setContactStatus("Sending...");
+    setContactStatus("Sending message to database...");
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          fullName: contactForm.name,
-          email: contactForm.email,
-          phone: contactForm.phone,
-          message: contactForm.website ? `[Website: ${contactForm.website}] ${contactForm.message}` : contactForm.message,
-        }),
+      const resData = await submitContactEnquiryAction({
+        fullName: contactForm.name,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        website: contactForm.website,
+        message: contactForm.message,
       });
-      const resData = await res.json();
-      if (res.ok) {
-        setContactStatus(formConfig?.successMessage || "Thank you! Your message has been sent.");
+
+      if (resData.success) {
+        setContactStatus(formConfig?.successMessage || resData.message || "Thank you! Your message has been logged in our database.");
         setContactForm({
           name: "",
           email: "",

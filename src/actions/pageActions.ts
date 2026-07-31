@@ -694,6 +694,24 @@ export async function getFormsSettings() {
 
   return {
     formsData: {
+      quoteForm: {
+        title: 'Get a Free Quote Form',
+        subtitle: 'Homepage & landing page Get a Free Quote banner form.',
+        recipientEmail: 'info@kingtravelcan.com',
+        successMessage: 'Thank you! Your quote request has been received.',
+        enabled: true,
+        buttonText: 'Submit Quote',
+        fieldsCount: 6,
+      },
+      packageDetailForm: {
+        title: 'Package Detail Page Booking Form',
+        subtitle: 'Dedicated package detail page booking & reservation form.',
+        recipientEmail: 'booking@kingtravelcan.com',
+        successMessage: 'Your package booking request has been submitted.',
+        enabled: true,
+        buttonText: 'Book Package',
+        fieldsCount: 7,
+      },
       contact: {
         title: 'Get In Touch With Us',
         subtitle: 'Have questions about Umrah, Hajj or Saudi Visa? Our travel experts are here 24/7.',

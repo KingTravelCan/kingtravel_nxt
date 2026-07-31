@@ -6,6 +6,7 @@ import Image from "next/image";
 import MarqueeTrack from "@/components/MarqueeTrack";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import { getPageBySlug } from "@/actions/pageActions";
+import { submitQuoteEnquiryAction, submitContactEnquiryAction } from "@/actions/enquiryActions";
 
 const partnerLogos = [
   { src: "/img/t-3.png", alt: "Trust Partner 3" },
@@ -117,16 +118,19 @@ export default function Home() {
     }
 
     setQuoteErrors({});
-    setQuoteStatus("Submitting...");
+    setQuoteStatus("Submitting to database...");
     try {
-      const res = await fetch("/api/quote", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(quoteForm),
+      const res = await submitQuoteEnquiryAction({
+        fullName: quoteForm.fullName,
+        phone: quoteForm.phone,
+        email: quoteForm.email,
+        packageType: quoteForm.packageType,
+        departureDate: quoteForm.departureDate,
+        adults: quoteForm.adults,
       });
-      const data = await res.json();
-      if (res.ok) {
-        setQuoteStatus("Thank you! Your quote request has been received.");
+
+      if (res.success) {
+        setQuoteStatus(res.message || "Thank you! Your quote request has been saved in the database.");
         setQuoteForm({
           fullName: "",
           phone: "",
@@ -136,7 +140,7 @@ export default function Home() {
           adults: 1,
         });
       } else {
-        setQuoteStatus(data.error || "Submission failed.");
+        setQuoteStatus(res.error || "Submission failed.");
       }
     } catch {
       setQuoteStatus("Failed to submit request.");
@@ -159,16 +163,18 @@ export default function Home() {
     }
 
     setContactErrors({});
-    setContactStatus("Sending...");
+    setContactStatus("Sending message to database...");
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(contactForm),
+      const res = await submitContactEnquiryAction({
+        fullName: contactForm.fullName,
+        email: contactForm.email,
+        phone: contactForm.phone,
+        packageType: contactForm.packageType,
+        message: contactForm.message,
       });
-      const data = await res.json();
-      if (res.ok) {
-        setContactStatus("Thank you! Your message has been sent.");
+
+      if (res.success) {
+        setContactStatus(res.message || "Thank you! Your message has been logged in our database.");
         setContactForm({
           fullName: "",
           email: "",
@@ -177,7 +183,7 @@ export default function Home() {
           message: "",
         });
       } else {
-        setContactStatus(data.error || "Submission failed.");
+        setContactStatus(res.error || "Submission failed.");
       }
     } catch {
       setContactStatus("Failed to send message.");

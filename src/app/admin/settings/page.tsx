@@ -177,6 +177,23 @@ export default function AdminSettingsPage() {
       { id: '5', label: 'Phone Number', type: 'tel', placeholder: '+1 (555) 000-0000', required: true },
       { id: '6', label: 'Consultation Details', type: 'textarea', placeholder: 'Describe your visa needs...', required: false },
     ],
+    quoteForm: [
+      { id: '1', label: 'Your Name', type: 'text', placeholder: 'Enter your full name', required: true },
+      { id: '2', label: 'Phone Number', type: 'tel', placeholder: '+1 905 624 8344', required: true },
+      { id: '3', label: 'Email Address', type: 'email', placeholder: 'Enter your email', required: true },
+      { id: '4', label: 'Select Your Package', type: 'select', placeholder: 'Select your package choice', required: true },
+      { id: '5', label: 'Departure Date', type: 'date', placeholder: 'mm/dd/yyyy', required: true },
+      { id: '6', label: 'Number of Adults', type: 'number', placeholder: '1', required: true },
+    ],
+    packageDetailForm: [
+      { id: '1', label: 'Full Name', type: 'text', placeholder: 'Enter your full name', required: true },
+      { id: '2', label: 'Phone Number', type: 'tel', placeholder: '+1 905 624 8344', required: true },
+      { id: '3', label: 'Email Address', type: 'email', placeholder: 'Enter your email', required: true },
+      { id: '4', label: 'Adults', type: 'select', placeholder: '1', required: true },
+      { id: '5', label: 'Children', type: 'select', placeholder: '0', required: true },
+      { id: '6', label: 'Infants', type: 'select', placeholder: '0', required: true },
+      { id: '7', label: 'Select Start Date', type: 'date', placeholder: 'mm/dd/yyyy', required: true },
+    ],
     flightInquiry: [
       { id: '1', label: 'Passenger Name', type: 'text', placeholder: 'Full name', required: true },
       { id: '2', label: 'Departure City', type: 'text', placeholder: 'e.g. Toronto (YYZ)', required: true },
@@ -195,6 +212,11 @@ export default function AdminSettingsPage() {
     replyTo: 'no-reply@kingtravelcan.com',
     successHeading: 'Message Sent Successfully!',
     successDescription: 'Thank you for contacting King Travel Canada. We will respond within 24 hours.',
+    smtpHost: '',
+    smtpPort: '587',
+    smtpUsername: '',
+    smtpPassword: '',
+    smtpEncryption: 'tls',
   });
 
   const [emailTemplateHtml, setEmailTemplateHtml] = useState<string>(`<!DOCTYPE html>
@@ -218,6 +240,8 @@ export default function AdminSettingsPage() {
 </html>`);
 
   const [formsData, setFormsData] = useState<any>({
+    quoteForm: { title: 'Get a Free Quote Form', subtitle: 'Homepage & landing page Get a Free Quote banner form.', recipientEmail: 'info@kingtravelcan.com', successMessage: 'Thank you! Your quote request has been received.', enabled: true, buttonText: 'Submit Quote' },
+    packageDetailForm: { title: 'Package Detail Page Booking Form', subtitle: 'Dedicated package detail page booking & reservation form.', recipientEmail: 'booking@kingtravelcan.com', successMessage: 'Your package booking request has been submitted.', enabled: true, buttonText: 'Book Package' },
     contact: { title: 'Get In Touch With Us', subtitle: 'Have questions about Umrah, Hajj or Saudi Visa?', recipientEmail: 'info@kingtravelcan.com', successMessage: 'Thank you! Your message has been received.', enabled: true, buttonText: 'Send Message' },
     packageInquiry: { title: 'Inquire About Pilgrimage Packages', subtitle: 'Fill in your details below and our team will craft a customized package for you.', recipientEmail: 'booking@kingtravelcan.com', successMessage: 'Package inquiry submitted successfully!', enabled: true, buttonText: 'Submit Package Inquiry' },
     visaConsultation: { title: 'Apply For Saudi Visa Consultation', subtitle: 'Fast, authorized & reliable Saudi eVisa and Pilgrimage visa processing.', recipientEmail: 'visas@kingtravelcan.com', successMessage: 'Visa application submitted!', enabled: true, buttonText: 'Submit Visa Request' },
@@ -256,8 +280,12 @@ export default function AdminSettingsPage() {
     });
     getFormsSettings().then(data => {
       if (data) {
-        if (data.formsData) setFormsData(data.formsData);
-        else setFormsData(data);
+        const loadedData = data.formsData || data;
+        setFormsData((prev: any) => ({
+          ...prev,
+          ...loadedData,
+        }));
+        if (data.formFieldsState) setFormFieldsState(data.formFieldsState);
         if (data.emailConfigs) setEmailConfigs(data.emailConfigs);
         if (data.emailTemplateHtml) setEmailTemplateHtml(data.emailTemplateHtml);
       }
@@ -269,6 +297,7 @@ export default function AdminSettingsPage() {
     setFormsSaveMsg(null);
     const fullPayload = {
       formsData,
+      formFieldsState,
       emailConfigs,
       emailTemplateHtml,
     };
@@ -279,6 +308,50 @@ export default function AdminSettingsPage() {
       setTimeout(() => setFormsSaveMsg(null), 3000);
     } else {
       alert(res.error || 'Failed to save forms configuration.');
+    }
+  };
+
+  const handleInitiateRemoveForm = (formKey: string, formTitle: string) => {
+    setConfirmConfig({
+      title: `Remove ${formTitle}?`,
+      message: `Are you sure you want to completely remove "${formTitle}"? This will permanently delete this form configuration from the database.`,
+      icon: '🗑️',
+      confirmText: 'Yes, Delete Form',
+      cancelText: 'Cancel',
+      variant: 'danger',
+      onConfirm: () => handleRemoveFormCompletely(formKey),
+    });
+  };
+
+  const handleRemoveFormCompletely = async (formKey: string) => {
+    const updatedFormsData = { ...formsData };
+    delete updatedFormsData[formKey];
+
+    const updatedFormFieldsState = { ...formFieldsState };
+    delete updatedFormFieldsState[formKey];
+
+    setFormsData(updatedFormsData);
+    setFormFieldsState(updatedFormFieldsState);
+
+    if (editingFormKey === formKey) {
+      setEditingFormKey(null);
+    }
+
+    setSavingForms(true);
+    const fullPayload = {
+      formsData: updatedFormsData,
+      formFieldsState: updatedFormFieldsState,
+      emailConfigs,
+      emailTemplateHtml,
+    };
+    const res = await saveFormsSettingsAction(fullPayload);
+    setSavingForms(false);
+
+    if (res.success) {
+      setFormsSaveMsg('Form completely removed from database!');
+      setTimeout(() => setFormsSaveMsg(null), 3500);
+    } else {
+      alert(res.error || 'Failed to remove form from database.');
     }
   };
 
@@ -2551,62 +2624,91 @@ export default function AdminSettingsPage() {
                       <p className="text-xs text-slate-500 mt-1 mb-0">Overview of active forms, field inputs count, recipient routing, and field manager.</p>
                     </div>
                     <span className="text-xs font-bold bg-emerald-50 text-emerald-700 px-3 py-1 rounded-full border border-emerald-200">
-                      4 Active Forms
+                      {Object.keys(formsData).length} Active Forms
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {[
-                      { key: 'contact', title: 'Contact Us Form', icon: '💬', desc: 'Main public contact page form for general inquiries & support.' },
-                      { key: 'packageInquiry', title: 'Package Inquiry Form', icon: '', desc: 'Custom Umrah & Hajj package booking inquiry form.' },
-                      { key: 'visaConsultation', title: 'Visa Consultation Form', icon: '📜', desc: 'Saudi eVisa & Pilgrimage visa application form.' },
-                      { key: 'flightInquiry', title: 'Flight Booking Form', icon: '✈️', desc: 'Direct flight quote assistance request form.' },
-                    ].map((f) => {
-                      const cfg = formsData[f.key] || {};
-                      const fieldsList = formFieldsState[f.key] || [];
-                      const isEditingThisForm = editingFormKey === f.key;
+                    {Object.keys(formsData).map((formKey) => {
+                      const DEFAULT_META: Record<string, { title: string; icon: string; desc: string }> = {
+                        quoteForm: { title: 'Get a Free Quote Form', icon: '📋', desc: 'Homepage & landing page Get a Free Quote banner form.' },
+                        packageDetailForm: { title: 'Package Detail Page Booking Form', icon: '🛍️', desc: 'Dedicated package detail page booking & reservation form.' },
+                        contact: { title: 'Contact Us Form', icon: '💬', desc: 'Main public contact page form for general inquiries & support.' },
+                        packageInquiry: { title: 'Package Inquiry Form', icon: '🕋', desc: 'Custom Umrah & Hajj package booking inquiry form.' },
+                        visaConsultation: { title: 'Visa Consultation Form', icon: '📜', desc: 'Saudi eVisa & Pilgrimage visa application form.' },
+                        flightInquiry: { title: 'Flight Booking Form', icon: '✈️', desc: 'Direct flight quote assistance request form.' },
+                      };
+
+                      const cfg = formsData[formKey] || {};
+                      const meta = DEFAULT_META[formKey] || {
+                        title: cfg.title || formKey,
+                        icon: '📝',
+                        desc: cfg.subtitle || 'Custom dynamic form.',
+                      };
+                      const fieldsList = formFieldsState[formKey] || [];
+                      const isEditingThisForm = editingFormKey === formKey;
+                      const f = { key: formKey, title: meta.title, icon: meta.icon, desc: meta.desc };
 
                       return (
-                        <div key={f.key} className="bg-white rounded-3xl p-6 border border-slate-100 shadow-2xs flex flex-col justify-between hover:border-slate-200 transition-all">
+                        <div
+                          key={f.key}
+                          className={`rounded-3xl p-6 border transition-all flex flex-col justify-between ${
+                            isEditingThisForm
+                              ? 'bg-[#DB9E30]/50 border-[#DB9E30] shadow-md'
+                              : 'bg-white border-slate-100 shadow-2xs hover:border-slate-200'
+                          }`}
+                        >
                           <div>
-                            <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center justify-between mb-3 gap-2">
                               <div className="flex items-center gap-2.5">
                                 <span className="text-xl">{f.icon}</span>
-                                <h4 className="text-base font-extrabold text-slate-900 m-0">{f.title}</h4>
+                                <div>
+                                  <h4 className="text-base font-extrabold text-slate-900 m-0">{f.title}</h4>
+                                  <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full inline-block mt-0.5">
+                                    🗄️ DB Table: {
+                                      formKey === 'quoteForm' ? 'quote_enquiries' :
+                                      formKey === 'packageDetailForm' ? 'package_booking_enquiries' :
+                                      formKey === 'contact' ? 'contact_enquiries' :
+                                      formKey === 'visaConsultation' ? 'visa_enquiries' :
+                                      formKey === 'flightInquiry' ? 'flight_enquiries' : 'enquiries'
+                                    }
+                                  </span>
+                                </div>
                               </div>
 
-                              {/* Interactive Status Dropdown (Active vs Disabled) */}
-                              <select
-                                value={cfg.enabled ?? true ? 'active' : 'disabled'}
-                                onChange={(e) => {
-                                  const isAct = e.target.value === 'active';
-                                  setFormsData((prev: any) => ({
-                                    ...prev,
-                                    [f.key]: { ...prev[f.key], enabled: isAct },
-                                  }));
-                                }}
-                                className={`px-3 py-1.5 rounded-full text-xs font-extrabold outline-none cursor-pointer border transition-colors ${cfg.enabled ?? true
-                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                                  : 'bg-amber-50 text-[#DB9E30] border-[#DB9E30]/50 font-bold'
-                                  }`}
-                              >
-                                <option value="active">● Active</option>
-                                <option value="disabled">● Disabled</option>
-                              </select>
+                              <div className="flex items-center gap-2">
+                                {/* Interactive Status Dropdown (Active vs Disabled) */}
+                                <select
+                                  value={cfg.enabled ?? true ? 'active' : 'disabled'}
+                                  onChange={(e) => {
+                                    const isAct = e.target.value === 'active';
+                                    setFormsData((prev: any) => ({
+                                      ...prev,
+                                      [f.key]: { ...prev[f.key], enabled: isAct },
+                                    }));
+                                  }}
+                                  className={`px-3 py-1.5 rounded-full text-xs font-extrabold outline-none cursor-pointer border transition-colors ${cfg.enabled ?? true
+                                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                                    : 'bg-amber-50 text-[#DB9E30] border-[#DB9E30]/50 font-bold'
+                                    }`}
+                                >
+                                  <option value="active">● Active</option>
+                                  <option value="disabled">● Disabled</option>
+                                </select>
+
+                                {/* X Remove Button (Rounded Red) */}
+                                <button
+                                  type="button"
+                                  onClick={() => handleInitiateRemoveForm(f.key, f.title)}
+                                  title={`Remove ${f.title}`}
+                                  className="w-7 h-7 rounded-full bg-red-600 hover:bg-red-200 text-white hover:text-red-600 flex items-center justify-center transition-all cursor-pointer shadow-xs shrink-0"
+                                >
+                                  <X className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
                             </div>
 
                             <p className="text-xs text-slate-500 leading-relaxed mb-4">{f.desc}</p>
-
-                            <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-100 mb-4 flex flex-col gap-2">
-                              <div className="flex justify-between items-center text-xs">
-                                <span className="font-bold text-slate-500">Universal Recipient:</span>
-                                <span className="font-mono font-bold text-slate-800">{emailConfigs.sendToEmail || 'info@kingtravelcan.com'}</span>
-                              </div>
-                              <div className="flex justify-between items-center text-xs">
-                                <span className="font-bold text-slate-500">Sender From:</span>
-                                <span className="font-mono font-semibold text-slate-800">{emailConfigs.fromEmail || 'no-reply@kingtravelcan.com'}</span>
-                              </div>
-                            </div>
 
                             <div className="mb-4">
                               <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">
@@ -2639,22 +2741,28 @@ export default function AdminSettingsPage() {
                             </button>
                           </div>
 
-                          {/* Inline Field Inputs & Real-Time Form UI Manager */}
+                          {/* Inline Field Inputs & Real-Time Form UI Manager (Wrapped inside clean inner container) */}
                           {isEditingThisForm && (
-                            <div className="mt-5 pt-5 border-t border-slate-200 flex flex-col gap-6 animate-in fade-in">
-                              <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex justify-between items-center">
-                                <div>
-                                  <h5 className="text-xs font-extrabold text-slate-900 m-0 uppercase tracking-wider">
-                                    ⚙️ Manage Input Fields for {f.title}
-                                  </h5>
-                                  <p className="text-[11px] text-slate-500 m-0 mt-0.5">Reorder fields, add new inputs, or change field labels.</p>
+                            <div className="mt-5 p-5 rounded-2xl bg-white/95 backdrop-blur-md border border-[#DB9E30]/40 shadow-sm flex flex-col gap-5 animate-in fade-in">
+                              {/* Header Banner */}
+                              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                                <div className="flex items-center gap-3">
+                                  <div className="w-8 h-8 rounded-xl bg-white border border-slate-200/80 flex items-center justify-center text-slate-700 text-sm shadow-2xs font-bold">
+                                    ⚙️
+                                  </div>
+                                  <div>
+                                    <h5 className="text-xs font-extrabold text-slate-900 m-0 uppercase tracking-wider">
+                                      MANAGE INPUT FIELDS FOR {f.title}
+                                    </h5>
+                                    <p className="text-[11px] text-slate-500 m-0 mt-0.5">Reorder fields, add new inputs, or change field labels.</p>
+                                  </div>
                                 </div>
                                 <button
                                   type="button"
                                   onClick={() => {
                                     const newField = {
                                       id: Date.now().toString(),
-                                      label: 'New Field',
+                                      label: 'New Field Input',
                                       type: 'text',
                                       placeholder: 'Enter details...',
                                       required: false,
@@ -2664,20 +2772,24 @@ export default function AdminSettingsPage() {
                                       [f.key]: [...(prev[f.key] || []), newField],
                                     }));
                                   }}
-                                  className="bg-[#004B39] hover:bg-[#00382B] text-white px-3.5 py-1.5 rounded-xl text-xs font-extrabold border-none cursor-pointer flex items-center gap-1.5 shadow-xs"
+                                  className="bg-[#004B39] hover:bg-[#00382B] text-white px-4 py-2 rounded-xl text-xs font-extrabold border-none cursor-pointer flex items-center gap-1.5 shadow-xs transition-all hover:shadow-md shrink-0"
                                 >
                                   <Plus className="w-3.5 h-3.5" />
                                   Add Field Input
                                 </button>
                               </div>
 
-                              {/* Draggable/Reorderable Field Inputs List */}
+                              {/* Clean Row-by-Row Field Inputs List */}
                               <div className="flex flex-col gap-3">
                                 {fieldsList.map((field, idx) => (
-                                  <div key={field.id} className="bg-white p-3.5 rounded-2xl border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-3">
-                                    <div className="flex items-center gap-2">
-                                      {/* Move Up/Down controls */}
-                                      <div className="flex flex-col gap-0.5">
+                                  <div
+                                    key={field.id}
+                                    className="bg-white p-3.5 sm:p-4 rounded-2xl border border-slate-200 shadow-2xs hover:shadow-xs flex flex-wrap sm:flex-nowrap items-center justify-between gap-3 overflow-hidden w-full"
+                                  >
+                                    {/* Left Controls: Move arrows + Label + Type dropdown */}
+                                    <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                                      {/* Move Up/Down Controls */}
+                                      <div className="flex flex-col gap-0.5 bg-slate-50 p-1 rounded-xl border border-slate-200/80 shrink-0">
                                         <button
                                           type="button"
                                           disabled={idx === 0}
@@ -2689,7 +2801,8 @@ export default function AdminSettingsPage() {
                                             updated[idx] = temp;
                                             setFormFieldsState((prev) => ({ ...prev, [f.key]: updated }));
                                           }}
-                                          className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 disabled:opacity-30 border-none cursor-pointer"
+                                          className="p-1 rounded-lg hover:bg-white text-slate-600 disabled:opacity-20 border-none cursor-pointer transition-colors"
+                                          title="Move Up"
                                         >
                                           <MoveUp className="w-3 h-3" />
                                         </button>
@@ -2704,46 +2817,48 @@ export default function AdminSettingsPage() {
                                             updated[idx] = temp;
                                             setFormFieldsState((prev) => ({ ...prev, [f.key]: updated }));
                                           }}
-                                          className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 disabled:opacity-30 border-none cursor-pointer"
+                                          className="p-1 rounded-lg hover:bg-white text-slate-600 disabled:opacity-20 border-none cursor-pointer transition-colors"
+                                          title="Move Down"
                                         >
                                           <MoveDown className="w-3 h-3" />
                                         </button>
                                       </div>
 
-                                      <div className="flex flex-col sm:flex-row gap-2 flex-1">
-                                        <input
-                                          type="text"
-                                          value={field.label}
-                                          onChange={(e) => {
-                                            const updated = [...fieldsList];
-                                            updated[idx].label = e.target.value;
-                                            setFormFieldsState((prev) => ({ ...prev, [f.key]: updated }));
-                                          }}
-                                          className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] font-bold text-slate-800"
-                                          placeholder="Field Label"
-                                        />
+                                      {/* Editable Field Label */}
+                                      <input
+                                        type="text"
+                                        value={field.label}
+                                        onChange={(e) => {
+                                          const updated = [...fieldsList];
+                                          updated[idx].label = e.target.value;
+                                          setFormFieldsState((prev) => ({ ...prev, [f.key]: updated }));
+                                        }}
+                                        className="flex-1 min-w-[100px] px-3.5 py-2 border border-slate-200 rounded-full text-xs font-bold text-slate-800 outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 transition-all bg-slate-50/40 focus:bg-white truncate"
+                                        placeholder="Field Label"
+                                      />
 
-                                        <select
-                                          value={field.type}
-                                          onChange={(e) => {
-                                            const updated = [...fieldsList];
-                                            updated[idx].type = e.target.value;
-                                            setFormFieldsState((prev) => ({ ...prev, [f.key]: updated }));
-                                          }}
-                                          className="px-3 py-1.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] font-medium text-slate-700 bg-white"
-                                        >
-                                          <option value="text">Text Input</option>
-                                          <option value="email">Email Input</option>
-                                          <option value="tel">Phone / Tel Input</option>
-                                          <option value="select">Dropdown Select</option>
-                                          <option value="textarea">Textarea (Long Text)</option>
-                                        </select>
-                                      </div>
+                                      {/* Field Type Dropdown Selector */}
+                                      <select
+                                        value={field.type}
+                                        onChange={(e) => {
+                                          const updated = [...fieldsList];
+                                          updated[idx].type = e.target.value;
+                                          setFormFieldsState((prev) => ({ ...prev, [f.key]: updated }));
+                                        }}
+                                        className="px-3 py-2 border border-slate-200 rounded-full text-xs font-medium text-slate-700 bg-slate-50/50 outline-none focus:border-[#004B39] focus:bg-white cursor-pointer transition-all shrink-0 max-w-[140px]"
+                                      >
+                                        <option value="text">Text Input</option>
+                                        <option value="email">Email Input</option>
+                                        <option value="tel">Phone / Tel Input</option>
+                                        <option value="select">Dropdown Select</option>
+                                        <option value="textarea">Textarea</option>
+                                      </select>
                                     </div>
 
-                                    <div className="flex items-center gap-4">
-                                      <div className="flex items-center gap-2">
-                                        <span className="text-xs font-semibold text-slate-600">Required</span>
+                                    {/* Right Controls: Required Switch & Trash Icon */}
+                                    <div className="flex items-center gap-3 shrink-0">
+                                      <div className="flex items-center gap-1.5 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200/80">
+                                        <span className="text-[11px] font-semibold text-slate-600">Required</span>
                                         <Switch
                                           checked={field.required}
                                           onChange={(checked: boolean) => {
@@ -2760,7 +2875,8 @@ export default function AdminSettingsPage() {
                                           const updated = fieldsList.filter((_, i) => i !== idx);
                                           setFormFieldsState((prev) => ({ ...prev, [f.key]: updated }));
                                         }}
-                                        className="p-1.5 text-rose-600 hover:bg-rose-50 rounded-lg border-none cursor-pointer"
+                                        className="w-8 h-8 rounded-full bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all shrink-0"
+                                        title="Delete Field Input"
                                       >
                                         <Trash2 className="w-3.5 h-3.5" />
                                       </button>
@@ -2769,33 +2885,53 @@ export default function AdminSettingsPage() {
                                 ))}
                               </div>
 
-                              {/* Real-Time Live Form UI Preview */}
-                              <div className="bg-slate-900 p-5 rounded-2xl text-white">
-                                <div className="text-[11px] font-extrabold uppercase tracking-wider text-emerald-400 mb-3 flex items-center gap-2">
-                                  👁 REAL-TIME FRONTEND FORM UI PREVIEW ({f.title})
-                                </div>
-                                <div className="bg-white p-5 rounded-xl text-slate-900 border border-slate-200 shadow-sm flex flex-col gap-4">
-                                  <h4 className="text-sm font-extrabold text-slate-900 m-0">{f.title}</h4>
-                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    {fieldsList.map((fd) => (
-                                      <div key={fd.id} className={fd.type === 'textarea' ? 'sm:col-span-2' : ''}>
-                                        <label className="text-[11px] font-bold text-slate-700 block mb-1">
-                                          {fd.label} {fd.required && <span className="text-red-500">*</span>}
-                                        </label>
-                                        {fd.type === 'textarea' ? (
-                                          <textarea rows={2} readOnly placeholder={fd.placeholder} className="w-full p-2 border border-slate-200 rounded-lg text-xs bg-slate-50" />
-                                        ) : fd.type === 'select' ? (
-                                          <select disabled className="w-full p-2 border border-slate-200 rounded-lg text-xs bg-slate-50"><option>{fd.placeholder}</option></select>
-                                        ) : (
-                                          <input type={fd.type} readOnly placeholder={fd.placeholder} className="w-full p-2 border border-slate-200 rounded-lg text-xs bg-slate-50" />
-                                        )}
-                                      </div>
-                                    ))}
+                              {/* Clean Live Frontend Form UI Preview */}
+                              <div className="mt-3 bg-white p-6 rounded-3xl border border-slate-200/90 shadow-xs flex flex-col gap-4">
+                                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                                  <div className="text-xs font-extrabold uppercase tracking-wider text-slate-800 flex items-center gap-2">
+                                    <span>👁</span> LIVE FRONTEND FORM PREVIEW ({f.title})
                                   </div>
-                                  <button type="button" disabled className="w-full py-2.5 bg-[#004B39] text-white rounded-lg text-xs font-bold opacity-90 cursor-not-allowed">
-                                    {cfg.buttonText || 'Submit Inquiry'}
-                                  </button>
+                                  <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                                    ● Live Sync
+                                  </span>
                                 </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+                                  {fieldsList.map((fd) => (
+                                    <div key={fd.id} className={fd.type === 'textarea' ? 'sm:col-span-2' : ''}>
+                                      <label className="text-xs font-extrabold text-slate-700 block mb-1">
+                                        {fd.label} {fd.required && <span className="text-red-500 font-bold">*</span>}
+                                      </label>
+                                      {fd.type === 'textarea' ? (
+                                        <textarea
+                                          rows={2}
+                                          readOnly
+                                          placeholder={fd.placeholder || `Enter ${fd.label.toLowerCase()}...`}
+                                          className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium"
+                                        />
+                                      ) : fd.type === 'select' ? (
+                                        <select disabled className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium">
+                                          <option>{fd.placeholder || `Select ${fd.label.toLowerCase()}...`}</option>
+                                        </select>
+                                      ) : (
+                                        <input
+                                          type={fd.type}
+                                          readOnly
+                                          placeholder={fd.placeholder || `Enter ${fd.label.toLowerCase()}...`}
+                                          className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium"
+                                        />
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+
+                                <button
+                                  type="button"
+                                  disabled
+                                  className="w-full py-3 bg-[#004B39] text-white rounded-xl text-xs font-black tracking-wide uppercase opacity-90 cursor-not-allowed shadow-xs mt-1"
+                                >
+                                  {cfg.buttonText || 'Submit Inquiry'}
+                                </button>
                               </div>
                             </div>
                           )}
@@ -2806,78 +2942,163 @@ export default function AdminSettingsPage() {
                 </div>
               )}
 
-              {/* ── 2. EMAIL CONFIGS SUB-TAB (Matching Screenshot 1) ── */}
+              {/* ── 2. EMAIL CONFIGS SUB-TAB (Redesigned Executive UI) ── */}
               {formsSubTab === 'emailConfigs' && (
                 <div className="bg-white rounded-3xl p-6 lg:p-8 border border-slate-100 shadow-2xs flex flex-col gap-6">
-                  {/* Notification Settings Box */}
-                  <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col gap-6">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-600 shadow-2xs">
-                        ✉️
+                    {/* Notification & Email Routing Settings Box */}
+                    <div className="p-6 lg:p-7 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-6">
+                      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-[#004B39] border border-emerald-100 flex items-center justify-center text-xl shadow-2xs font-bold">
+                            ✉️
+                          </div>
+                          <div>
+                            <h4 className="text-base font-extrabold text-slate-900 uppercase tracking-wider m-0">NOTIFICATION &amp; EMAIL ROUTING SETTINGS</h4>
+                            <p className="text-xs text-slate-500 mt-0.5 mb-0">Where website form submissions are delivered and how outgoing email notifications appear to recipients.</p>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider m-0">NOTIFICATION SETTINGS</h4>
-                        <p className="text-xs text-slate-500 mt-0.5 mb-0">Where form submissions are delivered and how outgoing emails appear to recipients.</p>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {/* Send To Email Address */}
+                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+                          <div className="flex items-center justify-between">
+                            <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                              <span className="w-2 h-2 rounded-full bg-emerald-500" /> SEND TO EMAIL ADDRESS
+                            </label>
+                            <span className="text-[10px] font-bold bg-emerald-100/80 text-emerald-800 px-2 py-0.5 rounded-full">Admin Recipient</span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 m-0">Admin email address that receives all website form submissions.</p>
+                          <input
+                            type="email"
+                            value={emailConfigs.sendToEmail}
+                            onChange={(e) => setEmailConfigs({ ...emailConfigs, sendToEmail: e.target.value })}
+                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
+                          />
+                        </div>
+
+                        {/* Email Subject Line */}
+                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+                          <div className="flex items-center justify-between">
+                            <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                              <span className="w-2 h-2 rounded-full bg-blue-500" /> EMAIL SUBJECT LINE
+                            </label>
+                            <span className="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">Smart Tags Enabled</span>
+                          </div>
+                          <p className="text-[11px] text-slate-500 m-0">Use [subject] or [name] as dynamic smart tags in subject.</p>
+                          <input
+                            type="text"
+                            value={emailConfigs.emailSubjectLine}
+                            onChange={(e) => setEmailConfigs({ ...emailConfigs, emailSubjectLine: e.target.value })}
+                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-bold text-slate-800 shadow-2xs mt-1"
+                          />
+                        </div>
+
+                        {/* From Name */}
+                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+                          <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">FROM NAME</label>
+                          <p className="text-[11px] text-slate-500 m-0">Display sender name shown to email recipients.</p>
+                          <input
+                            type="text"
+                            value={emailConfigs.fromName}
+                            onChange={(e) => setEmailConfigs({ ...emailConfigs, fromName: e.target.value })}
+                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-bold text-slate-800 shadow-2xs mt-1"
+                          />
+                        </div>
+
+                        {/* From Email */}
+                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+                          <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">FROM EMAIL</label>
+                          <p className="text-[11px] text-slate-500 m-0">Must match authenticated sender address.</p>
+                          <input
+                            type="email"
+                            value={emailConfigs.fromEmail}
+                            onChange={(e) => setEmailConfigs({ ...emailConfigs, fromEmail: e.target.value })}
+                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
+                          />
+                        </div>
+
+                        {/* Reply-To Email */}
+                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors md:col-span-2">
+                          <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">REPLY-TO EMAIL ADDRESS</label>
+                          <p className="text-[11px] text-slate-500 m-0">When admin clicks Reply in their inbox, email goes here. Leave blank to use submitter&apos;s email address.</p>
+                          <input
+                            type="email"
+                            value={emailConfigs.replyTo}
+                            onChange={(e) => setEmailConfigs({ ...emailConfigs, replyTo: e.target.value })}
+                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
+                          />
+                        </div>
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <Field>
-                        <FieldLabel className="font-bold text-xs text-slate-700 uppercase">SEND TO EMAIL ADDRESS</FieldLabel>
-                        <p className="text-[11px] text-slate-400 mt-0.5 mb-1.5">Admin email that receives all form submissions.</p>
-                        <input
-                          type="email"
-                          value={emailConfigs.sendToEmail}
-                          onChange={(e) => setEmailConfigs({ ...emailConfigs, sendToEmail: e.target.value })}
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] font-mono font-semibold"
-                        />
-                      </Field>
+                    {/* ── SMTP Environment Connection (.env Configured) Card ── */}
+                    <div className="p-6 lg:p-7 rounded-3xl bg-gradient-to-r from-[#071814] via-[#0E2C24] to-[#004B39] text-white border border-[#DB9E30]/30 shadow-xl relative overflow-hidden">
+                      <div className="absolute top-0 right-0 w-64 h-64 bg-[#DB9E30] opacity-10 rounded-full blur-3xl pointer-events-none" />
 
-                      <Field>
-                        <FieldLabel className="font-bold text-xs text-slate-700 uppercase">EMAIL SUBJECT LINE</FieldLabel>
-                        <p className="text-[11px] text-slate-400 mt-0.5 mb-1.5">Use [subject] or [name] as smart tags.</p>
-                        <input
-                          type="text"
-                          value={emailConfigs.emailSubjectLine}
-                          onChange={(e) => setEmailConfigs({ ...emailConfigs, emailSubjectLine: e.target.value })}
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] font-semibold"
-                        />
-                      </Field>
+                      <div className="relative z-10 flex flex-col gap-5">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-500/20 pb-4">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-2xl bg-[#DB9E30]/20 border border-[#DB9E30]/40 flex items-center justify-center text-xl shadow-xs">
+                              ⚡
+                            </div>
+                            <div>
+                              <h4 className="text-base font-extrabold text-white uppercase tracking-wider m-0 flex items-center gap-2">
+                                SMTP MAIL SERVER CONNECTION (.env CONFIGURED)
+                              </h4>
+                              <p className="text-xs text-emerald-100/70 mt-0.5 mb-0">Real-time email dispatch engine powered securely via server environment variables.</p>
+                            </div>
+                          </div>
 
-                      <Field>
-                        <FieldLabel className="font-bold text-xs text-slate-700 uppercase">FROM NAME</FieldLabel>
-                        <p className="text-[11px] text-slate-400 mt-0.5 mb-1.5">Display name shown to recipients.</p>
-                        <input
-                          type="text"
-                          value={emailConfigs.fromName}
-                          onChange={(e) => setEmailConfigs({ ...emailConfigs, fromName: e.target.value })}
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] font-semibold"
-                        />
-                      </Field>
+                          <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1.5 shadow-2xs">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> ● Active via .env File
+                          </span>
+                        </div>
 
-                      <Field>
-                        <FieldLabel className="font-bold text-xs text-slate-700 uppercase">FROM EMAIL</FieldLabel>
-                        <p className="text-[11px] text-slate-400 mt-0.5 mb-1.5">Must match authenticated sender address.</p>
-                        <input
-                          type="email"
-                          value={emailConfigs.fromEmail}
-                          onChange={(e) => setEmailConfigs({ ...emailConfigs, fromEmail: e.target.value })}
-                          className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] font-mono font-semibold"
-                        />
-                      </Field>
+                        {/* Active .env Configuration Parameters Grid */}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+                          <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
+                            <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                              SMTP SERVER HOST
+                            </span>
+                            <span className="text-xs font-mono font-bold text-white block truncate">
+                              smtp.kingtravelcan.com
+                            </span>
+                            <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_HOST</span>
+                          </div>
+
+                          <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
+                            <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                              PORT &amp; ENCRYPTION
+                            </span>
+                            <span className="text-xs font-mono font-bold text-emerald-300 block">
+                              Port 587 (STARTTLS)
+                            </span>
+                            <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_PORT</span>
+                          </div>
+
+                          <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
+                            <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                              AUTHENTICATED ACCOUNT
+                            </span>
+                            <span className="text-xs font-mono font-bold text-white block truncate">
+                              no-reply@kingtravelcan.com
+                            </span>
+                            <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_USER</span>
+                          </div>
+
+                          <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
+                            <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                              SECURITY MODE
+                            </span>
+                            <span className="text-xs font-mono font-bold text-emerald-300 block">
+                              🔒 Environment Protected
+                            </span>
+                            <span className="text-[10px] text-slate-400 mt-0.5 block">Password secured in .env</span>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-
-                    <Field>
-                      <FieldLabel className="font-bold text-xs text-slate-700 uppercase">REPLY-TO</FieldLabel>
-                      <p className="text-[11px] text-slate-400 mt-0.5 mb-1.5">When admin clicks Reply, email goes here. Leave blank to use submitter&apos;s address.</p>
-                      <input
-                        type="email"
-                        value={emailConfigs.replyTo}
-                        onChange={(e) => setEmailConfigs({ ...emailConfigs, replyTo: e.target.value })}
-                        className="w-full md:w-1/2 px-4 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] font-mono font-semibold"
-                      />
-                    </Field>
-                  </div>
 
                   {/* Success Message Box */}
                   <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col gap-6">

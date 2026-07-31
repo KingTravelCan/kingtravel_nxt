@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, AlertCircle, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
+import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, TicketPercent, AlertCircle, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
 import { getPackageDetailsAction } from "@/actions/pageActions";
+import { submitPackageBookingEnquiryAction } from "@/actions/enquiryActions";
 
 const DEFAULT_HAJJ_UMRAH_PACKAGES = [
   {
@@ -190,6 +191,49 @@ export default function StandalonePackageDetailPage() {
     });
   }, [rawSlug]);
 
+  const [bookingStatus, setBookingStatus] = useState<string | null>(null);
+
+  const handleBookingSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const newErrors: { [key: string]: boolean } = {};
+    if (!fullName.trim()) newErrors.fullName = true;
+    if (!phone.trim()) newErrors.phone = true;
+    if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) newErrors.email = true;
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({});
+    setBookingStatus("Submitting booking to database...");
+    try {
+      const res = await submitPackageBookingEnquiryAction({
+        packageId: pkg?.id ? parseInt(pkg.id, 10) || undefined : undefined,
+        packageName: pkg?.title || "Umrah Package",
+        fullName,
+        phone,
+        email,
+        adults: parseInt(adults, 10),
+        children: parseInt(childrenCount, 10),
+        infants: parseInt(infantsCount, 10),
+        startDate: selectedDate,
+        totalPrice: pkg?.price || "7,499",
+      });
+
+      if (res.success) {
+        setBookingStatus(res.message || "Your package booking request has been saved in our database!");
+        setFullName("");
+        setEmail("");
+        setSelectedDate("");
+      } else {
+        setBookingStatus(res.error || "Submission failed.");
+      }
+    } catch {
+      setBookingStatus("Failed to submit booking.");
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-[#faf7f2] flex flex-col justify-center items-center p-8">
@@ -298,24 +342,6 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
     }
   ];
   const faqs = (pkg.faqs && pkg.faqs.length > 0) ? pkg.faqs : defaultFaqs;
-
-  const handleBookingSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    const newErrors: { [key: string]: boolean } = {};
-    if (!fullName.trim()) newErrors.fullName = true;
-    if (!phone.trim()) newErrors.phone = true;
-    if (!email.trim()) newErrors.email = true;
-    if (!selectedDate.trim()) newErrors.selectedDate = true;
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    setErrors({});
-    const msg = `Hi King Travel! I want to book: ${title} (${currencyCode} ${price}). Name: ${fullName}, Phone: ${phone}, Email: ${email}, Travelers - Adults: ${adults}, Children: ${childrenCount}, Infants: ${infantsCount}, Date: ${selectedDate}.`;
-    window.open(`https://wa.me/19056248344?text=${encodeURIComponent(msg)}`, "_blank");
-  };
 
   return (
     <div className="bg-[#faf7f2] min-h-screen text-slate-800">
@@ -582,7 +608,12 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 
               {/* Booking Input Form */}
               <form onSubmit={handleBookingSubmit} noValidate className="space-y-4">
-                
+                {bookingStatus && (
+                  <p className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-center">
+                    {bookingStatus}
+                  </p>
+                )}
+
                 {/* Full Name */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1">
@@ -596,11 +627,10 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                       setFullName(e.target.value);
                       if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: false }));
                     }}
-                    className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                      errors.fullName
-                        ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                        : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                    }`}
+                    className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.fullName
+                      ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
+                      : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+                      }`}
                   />
                   {errors.fullName && (
                     <span className="text-[10px] font-bold text-red-600 mt-1 block">Please fill out this field.</span>
@@ -621,11 +651,10 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                         setPhone(e.target.value);
                         if (errors.phone) setErrors((prev) => ({ ...prev, phone: false }));
                       }}
-                      className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                        errors.phone
-                          ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                          : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                      }`}
+                      className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.phone
+                        ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
+                        : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+                        }`}
                     />
                     {errors.phone && (
                       <span className="text-[10px] font-bold text-red-600 mt-1 block">Please fill out this field.</span>
@@ -643,11 +672,10 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                         setEmail(e.target.value);
                         if (errors.email) setErrors((prev) => ({ ...prev, email: false }));
                       }}
-                      className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                        errors.email
-                          ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                          : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                      }`}
+                      className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.email
+                        ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
+                        : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+                        }`}
                     />
                     {errors.email && (
                       <span className="text-[10px] font-bold text-red-600 mt-1 block">Please fill out this field.</span>
@@ -721,11 +749,10 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                       setSelectedDate(e.target.value);
                       if (errors.selectedDate) setErrors((prev) => ({ ...prev, selectedDate: false }));
                     }}
-                    className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                      errors.selectedDate
-                        ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                        : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                    }`}
+                    className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.selectedDate
+                      ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
+                      : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+                      }`}
                   />
                   {errors.selectedDate && (
                     <span className="text-[10px] font-bold text-red-600 mt-1 block">Please select a valid start date.</span>
@@ -745,8 +772,8 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                   type="submit"
                   className="w-full bg-[#004B39] hover:bg-[#00382B] text-white font-extrabold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 group cursor-pointer"
                 >
+                  <TicketPercent className="w-4 h-4" />
                   <span>Book {pkg.badgeTag || "Package"}</span>
-                  <span className="group-hover:translate-x-1 transition-transform">➔</span>
                 </button>
 
                 <p className="text-[10px] text-slate-400 text-center leading-normal pt-1">
