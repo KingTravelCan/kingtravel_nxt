@@ -472,7 +472,9 @@ export async function getShareTools() {
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'share_tools')).limit(1);
     if (res && res.length > 0) {
-      return JSON.parse(res[0].value);
+      const parsed = JSON.parse(res[0].value);
+      shareToolsMemoryCache = parsed;
+      return parsed;
     }
   } catch (err) {
     console.error('getShareTools DB query failed:', err);
@@ -481,8 +483,8 @@ export async function getShareTools() {
 }
 
 export async function saveShareToolsAction(data: any) {
+  shareToolsMemoryCache = data;
   try {
-    shareToolsMemoryCache = data;
     const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'share_tools')).limit(1);
     if (existing && existing.length > 0) {
       await db.update(siteSettings).set({ value: JSON.stringify(data), updatedAt: new Date() }).where(eq(siteSettings.key, 'share_tools'));
@@ -493,7 +495,6 @@ export async function saveShareToolsAction(data: any) {
     return { success: true };
   } catch (err: any) {
     console.warn('saveShareToolsAction DB query failed, saving to cache fallback:', err);
-    shareToolsMemoryCache = data;
     revalidatePath('/', 'layout');
     return { success: true, warning: 'Saved to session memory cache.' };
   }
@@ -584,7 +585,9 @@ export async function getLoginAuthSettings() {
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'login_auth_settings')).limit(1);
     if (res && res.length > 0) {
-      return JSON.parse(res[0].value);
+      const parsed = JSON.parse(res[0].value);
+      loginAuthMemoryCache = parsed;
+      return parsed;
     }
   } catch (err) {
     console.error('getLoginAuthSettings DB query failed:', err);
@@ -593,8 +596,8 @@ export async function getLoginAuthSettings() {
 }
 
 export async function saveLoginAuthSettingsAction(data: any) {
+  loginAuthMemoryCache = data;
   try {
-    loginAuthMemoryCache = data;
     const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'login_auth_settings')).limit(1);
     if (existing && existing.length > 0) {
       await db.update(siteSettings).set({ value: JSON.stringify(data), updatedAt: new Date() }).where(eq(siteSettings.key, 'login_auth_settings'));
@@ -605,7 +608,6 @@ export async function saveLoginAuthSettingsAction(data: any) {
     return { success: true };
   } catch (err: any) {
     console.warn('saveLoginAuthSettingsAction DB query failed:', err);
-    loginAuthMemoryCache = data;
     revalidatePath('/letstravel');
     return { success: true };
   }
@@ -623,7 +625,9 @@ export async function getDisclaimerSettings(): Promise<DisclaimerSettings> {
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'disclaimer_settings')).limit(1);
     if (res && res.length > 0) {
-      return JSON.parse(res[0].value);
+      const parsed = JSON.parse(res[0].value);
+      disclaimerMemoryCache = parsed;
+      return parsed;
     }
   } catch (err) {
     console.error('getDisclaimerSettings DB query failed:', err);
@@ -632,8 +636,8 @@ export async function getDisclaimerSettings(): Promise<DisclaimerSettings> {
 }
 
 export async function saveDisclaimerSettingsAction(data: DisclaimerSettings) {
+  disclaimerMemoryCache = data;
   try {
-    disclaimerMemoryCache = data;
     const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'disclaimer_settings')).limit(1);
     if (existing && existing.length > 0) {
       await db.update(siteSettings).set({ value: JSON.stringify(data), updatedAt: new Date() }).where(eq(siteSettings.key, 'disclaimer_settings'));
@@ -644,7 +648,6 @@ export async function saveDisclaimerSettingsAction(data: DisclaimerSettings) {
     return { success: true };
   } catch (err: any) {
     console.warn('saveDisclaimerSettingsAction DB query failed:', err);
-    disclaimerMemoryCache = data;
     revalidatePath('/', 'layout');
     return { success: true };
   }

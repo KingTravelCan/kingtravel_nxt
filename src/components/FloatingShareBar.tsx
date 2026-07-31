@@ -16,6 +16,14 @@ export default function FloatingShareBar() {
   }
 
   const fetchConfig = () => {
+    if (typeof window !== 'undefined') {
+      const local = localStorage.getItem('king_travel_share_tools');
+      if (local) {
+        try {
+          setShareConfig(JSON.parse(local));
+        } catch (e) {}
+      }
+    }
     getShareTools().then((data) => {
       if (data) setShareConfig(data);
     });

@@ -266,6 +266,14 @@ export default function AdminSettingsPage() {
     getShareTools().then(data => {
       if (data) setShareData(data);
     });
+    if (typeof window !== 'undefined') {
+      const localShare = localStorage.getItem('king_travel_share_tools');
+      if (localShare) {
+        try {
+          setShareData(JSON.parse(localShare));
+        } catch (e) {}
+      }
+    }
     getGlobalCss().then(css => {
       if (css) setCustomCss(css);
     });
@@ -522,6 +530,9 @@ export default function AdminSettingsPage() {
 
   const handleSaveShareTools = async () => {
     setSavingShare(true);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('king_travel_share_tools', JSON.stringify(shareData));
+    }
     const res = await saveShareToolsAction(shareData);
     setSavingShare(false);
     if (res.success) {
