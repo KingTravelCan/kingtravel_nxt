@@ -15,10 +15,16 @@ export async function adminLogin(formData: FormData) {
     return { success: false, error: 'Email and password are required.' };
   }
 
+  let userList: any[] = [];
   try {
-    const userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
+  } catch (dbErr) {
+    console.warn('Users table query fallback:', dbErr);
+    userList = [];
+  }
 
-    // Initial setup fallback if database table is empty
+  try {
+    // Initial setup fallback if database table is empty or not yet created
     if (!userList.length) {
       const envEmail = (process.env.INITIAL_ADMIN_EMAIL || 'hassan@kingtravelcan.com').trim().toLowerCase();
       const envPassword = process.env.INITIAL_ADMIN_PASSWORD || 'KingTravel2026!';
