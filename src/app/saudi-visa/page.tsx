@@ -162,24 +162,30 @@ export default function SaudiVisaPage() {
       />
 
       {/* ================= DYNAMIC OR FALLBACK SECTIONS ================= */}
-      {sections.length > 0 ? (
-        sections.map((sec: any, idx: number) => {
-          if (sec.type === "Visa Solutions Grid" || sec.type === "Visa Cards") {
-            return <VisaSolutionsSection key={idx} data={sec.data} />;
-          }
+      {(() => {
+        const hasVisaSolutions = sections.some((s: any) => s.type === "Visa Solutions Grid" || s.type === "Visa Cards");
+        const hasVisaSteps = sections.some((s: any) => s.type === "Visa Process Steps" || s.type === "3 Easy Steps");
 
-          if (sec.type === "Visa Process Steps" || sec.type === "3 Easy Steps") {
-            return <VisaProcessStepsSection key={idx} data={sec.data} />;
-          }
+        return (
+          <>
+            {hasVisaSolutions ? (
+              sections
+                .filter((s: any) => s.type === "Visa Solutions Grid" || s.type === "Visa Cards")
+                .map((sec: any, idx: number) => <VisaSolutionsSection key={idx} data={sec.data} />)
+            ) : (
+              <VisaSolutionsSection />
+            )}
 
-          return null;
-        })
-      ) : (
-        <>
-          <VisaSolutionsSection />
-          <VisaProcessStepsSection />
-        </>
-      )}
+            {hasVisaSteps ? (
+              sections
+                .filter((s: any) => s.type === "Visa Process Steps" || s.type === "3 Easy Steps")
+                .map((sec: any, idx: number) => <VisaProcessStepsSection key={idx} data={sec.data} />)
+            ) : (
+              <VisaProcessStepsSection />
+            )}
+          </>
+        );
+      })()}
     </main>
   );
 }

@@ -37,7 +37,14 @@ export default function DynamicPage() {
     fetchData();
   }, [slugPath]);
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <main className="bg-[#f2f5f3] min-h-[60vh] flex flex-col items-center justify-center p-8">
+        <div className="w-10 h-10 border-4 border-[#004B39] border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-xs font-extrabold text-[#004B39] uppercase tracking-widest">Loading Page Content...</p>
+      </main>
+    );
+  }
   if (!page) notFound();
 
   let sections: any[] = [];

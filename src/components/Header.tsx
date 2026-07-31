@@ -6,10 +6,20 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { getNavItems, getSiteIdentity } from "@/actions/pageActions";
 
+const DEFAULT_NAV_ITEMS = [
+  { id: '1', label: 'Home', url: '/', level: 1, children: [] },
+  { id: '2', label: 'About', url: '/about', level: 1, children: [] },
+  { id: '3', label: 'Umrah Packages', url: '/umrah/packages', level: 1, children: [] },
+  { id: '4', label: 'Hajj Packages', url: '/hajj/packages', level: 1, children: [] },
+  { id: '5', label: 'Saudi Visa', url: '/saudi-visa', level: 1, children: [] },
+  { id: '6', label: 'Flights', url: '/airlines', level: 1, children: [] },
+  { id: '7', label: 'Contact', url: '/contact', level: 1, children: [] },
+];
+
 export default function Header() {
   const [menuActive, setMenuActive] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [navItems, setNavItems] = useState<any[]>([]);
+  const [navItems, setNavItems] = useState<any[]>(DEFAULT_NAV_ITEMS);
   const [identityData, setIdentityData] = useState<any>(null);
   const pathname = usePathname();
 

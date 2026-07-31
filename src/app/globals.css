@@ -1417,13 +1417,17 @@ section#flights {
 .reveal {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity .8s ease, transform .8s ease;
+  transition: opacity .6s ease-out, transform .6s ease-out;
 }
 
 @media (prefers-reduced-motion: no-preference) {
   .js-reveal .reveal:not(.in) {
     opacity: 0;
-    transform: translateY(24px);
+    transform: translateY(16px);
+  }
+  .js-reveal .reveal.in {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
   }
 }
 
