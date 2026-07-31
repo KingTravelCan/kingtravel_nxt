@@ -32,9 +32,18 @@ export default function FloatingShareBar() {
     return () => window.removeEventListener('share_tools_updated', handleUpdate);
   }, [pathname]);
 
+  const isShareEnabled = Boolean(
+    shareConfig &&
+    shareConfig.enabled !== false &&
+    shareConfig.enabled !== 'false' &&
+    shareConfig.enabled !== 0 &&
+    shareConfig.enabled !== '0' &&
+    (shareConfig.enabled === true || shareConfig.enabled === 'true' || shareConfig.enabled === 1 || shareConfig.enabled === '1')
+  );
+
   // Handle Delay Before Showing
   useEffect(() => {
-    if (!shareConfig || !shareConfig.enabled) {
+    if (!shareConfig || !isShareEnabled) {
       setDelayedShow(false);
       return;
     }
@@ -47,7 +56,7 @@ export default function FloatingShareBar() {
     } else {
       setDelayedShow(true);
     }
-  }, [shareConfig]);
+  }, [shareConfig, isShareEnabled]);
 
   // Handle Hide on Scroll Down
   useEffect(() => {
@@ -72,7 +81,7 @@ export default function FloatingShareBar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [shareConfig?.hideOnScrollDown]);
 
-  if (!shareConfig || !shareConfig.enabled || !delayedShow) {
+  if (!shareConfig || !isShareEnabled || !delayedShow) {
     return null;
   }
 

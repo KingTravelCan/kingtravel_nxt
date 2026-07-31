@@ -1564,7 +1564,7 @@ export default function AdminSettingsPage() {
                         <div className="text-[11px] text-slate-500">Turn the floating share tools on or off globally.</div>
                       </div>
                       <Switch
-                        checked={shareData.enabled ?? true}
+                        checked={shareData.enabled === true || shareData.enabled === 'true'}
                         onChange={(val) => setShareData({ ...shareData, enabled: val })}
                       />
                     </div>
