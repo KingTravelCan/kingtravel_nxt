@@ -56,7 +56,7 @@ export default function Header() {
                     <img
                       src={identityData.logo}
                       alt={identityData.logoAlt || identityData.siteName || "King Travel Logo"}
-                      style={{ width: '100%', height: 'auto', maxHeight: '60px', objectFit: 'contain' }}
+                      className="w-full h-auto max-h-[60px] object-contain"
                     />
                   ) : (
                     <Image
@@ -65,7 +65,7 @@ export default function Header() {
                       width={250}
                       height={60}
                       priority
-                      style={{ width: '100%', height: 'auto' }}
+                      className="w-full h-auto"
                       unoptimized
                     />
                   )
@@ -76,7 +76,7 @@ export default function Header() {
                     width={250}
                     height={60}
                     priority
-                    style={{ width: '100%', height: 'auto' }}
+                    className="w-full h-auto"
                   />
                 )}
               </Link>

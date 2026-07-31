@@ -6,10 +6,10 @@ export default function HajjPackagesPage() {
     <main>
       <section className="hero packages">
         <div className="wrap">
-          <h1 style={{ color: "#fff", fontSize: "3rem", marginBottom: "20px" }}>
-            Luxury <span style={{ color: "var(--gold)" }}>Hajj Packages 2027</span>
+          <h1 className="text-white text-5xl mb-5">
+            Luxury <span className="text-[#DB9E30]">Hajj Packages 2027</span>
           </h1>
-          <p style={{ color: "#fff", fontSize: "1.2rem", maxWidth: "700px", margin: "0 auto 30px auto", opacity: 0.9 }}>
+          <p className="text-white text-lg max-w-[700px] mx-auto mb-7.5 opacity-90">
             Luxury Hajj 2027 Packages with 5-Star Hotels, VIP Services &amp; Complete Spiritual Guidance.
           </p>
         </div>
@@ -22,7 +22,7 @@ export default function HajjPackagesPage() {
               <div className="eyebrow">Luxury Hajj Packages</div>
               <h2>Hajj Packages 2027</h2>
             </div>
-            <p style={{ maxWidth: "480px" }}>
+            <p className="max-w-[480px]">
               Luxury Hajj 2027 Packages with 5-Star Hotels, VIP Services &amp; Complete Spiritual Guidance.
             </p>
           </div>
@@ -30,7 +30,7 @@ export default function HajjPackagesPage() {
             {/* Card 1 */}
             <article className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl border border-slate-100 flex flex-col transition-all duration-300 group">
               <div className="relative h-64 overflow-hidden shrink-0">
-                <Image src="https://images.unsplash.com/photo-1553755088-ef1973c7b4a1?auto=format&fit=crop&w=700&q=80" alt="Makkah & Madinah" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={700} height={256} style={{ width: "100%", height: "100%" }} unoptimized />
+                <Image src="https://images.unsplash.com/photo-1553755088-ef1973c7b4a1?auto=format&fit=crop&w=700&q=80" alt="Makkah & Madinah" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={700} height={256} unoptimized />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30"></div>
                 <div className="absolute top-4 inset-x-4 flex justify-between items-center">
                   <span className="bg-brand-900/90 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 backdrop-blur-sm"><i className="fa-solid fa-kaaba text-brand-gold"></i> HAJJ 2027</span>

@@ -165,7 +165,7 @@ export default function UmrahPackagesPage() {
                     alt={card.title}
                     fill
                     sizes="(max-width: 768px) 100vw, 33vw"
-                    style={{ objectFit: "cover" }}
+                    className="object-cover"
                     unoptimized
                   />
                   <div className="card-hero-overlay" />
@@ -173,7 +173,7 @@ export default function UmrahPackagesPage() {
                   {/* Top Bar Tags */}
                   <div className="card-hero-tags">
                     <div className="tag-black">
-                      <i className="fa-solid fa-kaaba" style={{ color: "#DB9E30" }}></i>
+                      <i className="fa-solid fa-kaaba text-[#DB9E30]"></i>
                       <span>Umrah 2026</span>
                     </div>
                     <div className="tag-gold">
@@ -203,7 +203,7 @@ export default function UmrahPackagesPage() {
                           src={card.makkahHotel.image}
                           alt={card.makkahHotel.name}
                           fill
-                          style={{ objectFit: "cover" }}
+                          className="object-cover"
                           unoptimized
                         />
                         <span className="city-badge-overlay mk">Makkah</span>
@@ -211,12 +211,12 @@ export default function UmrahPackagesPage() {
                       <div className="hotel-details">
                         <div className="hotel-name">{card.makkahHotel.name}</div>
                         <div className="hotel-location">
-                          <i className="fa-solid fa-location-dot" style={{ color: "#004B39" }}></i>
+                          <i className="fa-solid fa-location-dot text-[#004B39]"></i>
                           <span>{card.makkahHotel.location}</span>
                         </div>
                         <div className="hotel-tags">
                           <span className="tag-pill-dark">
-                            <i className="fa-solid fa-utensils" style={{ fontSize: "8px" }}></i>
+                            <i className="fa-solid fa-utensils text-[8px]"></i>
                             <span>{card.makkahHotel.badge}</span>
                           </span>
                           <span className="tag-pill-light">{card.makkahHotel.nights}</span>
@@ -231,7 +231,7 @@ export default function UmrahPackagesPage() {
                           src={card.madinahHotel.image}
                           alt={card.madinahHotel.name}
                           fill
-                          style={{ objectFit: "cover" }}
+                          className="object-cover"
                           unoptimized
                         />
                         <span className="city-badge-overlay md">Madinah</span>
@@ -239,12 +239,12 @@ export default function UmrahPackagesPage() {
                       <div className="hotel-details">
                         <div className="hotel-name">{card.madinahHotel.name}</div>
                         <div className="hotel-location">
-                          <i className="fa-solid fa-location-dot" style={{ color: "#DB9E30" }}></i>
+                          <i className="fa-solid fa-location-dot text-[#DB9E30]"></i>
                           <span>{card.madinahHotel.location}</span>
                         </div>
                         <div className="hotel-tags">
                           <span className="tag-pill-dark">
-                            <i className="fa-solid fa-utensils" style={{ fontSize: "8px" }}></i>
+                            <i className="fa-solid fa-utensils text-[8px]"></i>
                             <span>{card.madinahHotel.badge}</span>
                           </span>
                           <span className="tag-pill-light">{card.madinahHotel.nights}</span>

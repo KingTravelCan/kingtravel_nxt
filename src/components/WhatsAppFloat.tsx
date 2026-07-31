@@ -23,7 +23,7 @@ export default function WhatsAppFloat() {
         alt="WhatsApp"
         width={60}
         height={60}
-        style={{ width: "auto", height: "auto" }}
+        className="w-auto h-auto"
       />
     </a>
   );

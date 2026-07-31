@@ -31,7 +31,7 @@ export default function MarqueeTrack({ type, images, speedMs = 35000, direction 
                 <img
                   src={img.src}
                   alt={img.alt || "Partner logo"}
-                  style={{ width: "auto", height: "auto", maxHeight: "60px", maxWidth: "100%", objectFit: "contain" }}
+                  className="w-auto h-auto max-h-[60px] max-w-full object-contain"
                 />
               ) : (
                 <Image
@@ -39,7 +39,7 @@ export default function MarqueeTrack({ type, images, speedMs = 35000, direction 
                   alt={img.alt || "Partner logo"}
                   width={200}
                   height={80}
-                  style={{ width: "auto", height: "auto", maxWidth: "100%" }}
+                  className="w-auto h-auto max-w-full"
                 />
               )}
             </div>

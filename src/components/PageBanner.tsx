@@ -25,30 +25,21 @@ export default function PageBanner({
 
   return (
     <section
-      className="relative text-center text-white py-20 px-5 overflow-hidden"
+      className="relative text-center text-white py-20 px-5 overflow-hidden h-[360px] min-h-[360px] flex flex-col items-center justify-center bg-no-repeat"
       style={{
         backgroundImage: `linear-gradient(rgba(10, 66, 45, 0.45), rgba(10, 66, 45, 0.45)), url("${cleanBg}")`,
         backgroundPosition: activePos,
         backgroundSize: activeSize,
-        backgroundRepeat: 'no-repeat',
-        height: '360px',
-        minHeight: '360px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
       }}
     >
       <div className="max-w-[850px] mx-auto w-full z-10">
         <h1
           className="text-3xl md:text-5xl font-serif font-normal text-white mb-3 tracking-wide [&>span]:text-[#DB9E30] [&>em]:text-[#DB9E30] [&>em]:not-italic"
-          style={{ fontFamily: "var(--serif, 'Marcellus', serif)" }}
           dangerouslySetInnerHTML={{ __html: title }}
         />
         {description && (
           <p
             className="text-sm md:text-base opacity-90 max-w-2xl mx-auto font-light leading-relaxed text-white/90"
-            style={{ fontFamily: "var(--sans, 'Plus Jakarta Sans', sans-serif)" }}
           >
             {description}
           </p>

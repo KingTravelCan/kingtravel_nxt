@@ -31,14 +31,14 @@ export default function Footer() {
               <Link href="/">
                 {footerData.logo ? (
                   footerData.logo.startsWith('data:') ? (
-                    <img src={footerData.logo} alt="King Travel Logo" style={{ width: 210, height: "auto" }} />
+                    <img src={footerData.logo} alt="King Travel Logo" className="w-[210px] h-auto" />
                   ) : (
                     <Image
                       src={footerData.logo}
                       alt="King Travel Logo"
                       width={210}
                       height={50}
-                      style={{ width: 210, height: "auto" }}
+                      className="w-[210px] h-auto"
                       unoptimized
                     />
                   )

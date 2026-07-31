@@ -188,7 +188,7 @@ export default function AboutPage() {
                       alt={sec.data?.title || "Why Choose Us"}
                       width={800}
                       height={450}
-                      style={{ width: "100%", height: "auto" }}
+                      className="w-full h-auto"
                       unoptimized
                     />
                   </div>
@@ -394,7 +394,7 @@ export default function AboutPage() {
                           alt={img.alt}
                           width={140}
                           height={60}
-                          style={{ width: "auto", height: "40px", objectFit: "contain" }}
+                          className="w-auto h-[40px] object-contain"
                         />
                       </div>
                     ))}

@@ -388,8 +388,8 @@ export default function Home() {
       {/* ================= TRUST Travel ================= */}
       <section className="travels-section">
         <div className="wrap section-head center reveal">
-          <div className="eyebrow" style={{ justifyContent: "center" }}>Licensed &amp; Accredited</div>
-          <h2 style={{ fontSize: "32px" }}>Trusted travel Organization</h2>
+          <div className="eyebrow justify-center">Licensed &amp; Accredited</div>
+          <h2 className="text-[32px]">Trusted travel Organization</h2>
         </div>
         <MarqueeTrack type="travel" images={partnerLogos} />
       </section>
@@ -404,7 +404,7 @@ export default function Home() {
                 alt="The Kaaba, Masjid al-Haram, Makkah"
                 width={1000}
                 height={1000}
-                style={{ width: "100%", height: "100%" }}
+                className="w-full h-full"
                 unoptimized
               />
             </div>
@@ -421,7 +421,7 @@ export default function Home() {
           </div>
           <div className="about-copy">
             <div className="eyebrow">Who We Are</div>
-            <h2 style={{ marginTop: "16px", fontSize: "clamp(28px,3.2vw,38px)" }}>
+            <h2 className="mt-4 text-[clamp(28px,3.2vw,38px)]">
               We provide and offer<br />Hajj &amp; Umrah packages
             </h2>
             <p>
@@ -459,7 +459,7 @@ export default function Home() {
               <div className="eyebrow">Exclusive Upcoming</div>
               <h2>Umrah Packages<br />from Canada</h2>
             </div>
-            <p style={{ maxWidth: "480px" }}>
+            <p className="max-w-[480px]">
               Departures from CAD 2,595 per person. Availability and accommodations are confirmed
               with every booking — contact us before reserving.
             </p>

@@ -478,8 +478,7 @@ export default function DynamicPage() {
                               alt={title}
                               fill
                               sizes="(max-width: 768px) 100vw, 33vw"
-                              style={{ objectFit: "cover" }}
-                              className="group-hover:scale-105 transition-transform duration-500"
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
                               unoptimized
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30" />
@@ -517,7 +516,7 @@ export default function DynamicPage() {
                                     src={makkahImg}
                                     alt={makkahName}
                                     fill
-                                    style={{ objectFit: "cover" }}
+                                    className="object-cover"
                                     unoptimized
                                   />
                                 </div>
@@ -544,7 +543,7 @@ export default function DynamicPage() {
                                     src={madinahImg}
                                     alt={madinahName}
                                     fill
-                                    style={{ objectFit: "cover" }}
+                                    className="object-cover"
                                     unoptimized
                                   />
                                 </div>

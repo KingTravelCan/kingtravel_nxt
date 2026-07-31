@@ -70,12 +70,12 @@ export default function LetsTravelPage() {
               width={210}
               height={50}
               priority
-              style={{ width: "210px", height: "auto" }}
+              className="w-[210px] h-auto"
             />
           </div>
 
           <div className="inline-flex items-center gap-1.5 bg-[#DB9E30]/10 border border-[#DB9E30]/30 px-3 py-1 rounded-full text-[10px] font-bold text-[#DB9E30] uppercase tracking-widest mb-3">
-            <span className="star" style={{ width: 10, height: 10 }}></span>
+            <span className="star w-2.5 h-2.5"></span>
             Management Portal
           </div>
           <h1 className="text-2xl font-serif font-normal text-[#FBF8F1] tracking-wide">
