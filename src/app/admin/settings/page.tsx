@@ -264,7 +264,21 @@ export default function AdminSettingsPage() {
       if (data) setIdentityData(data);
     });
     getShareTools().then(data => {
-      if (data) setShareData(data);
+      if (data) {
+        let finalData = { ...data };
+        if (typeof window !== 'undefined') {
+          const localShare = localStorage.getItem('king_travel_share_tools');
+          if (localShare) {
+            try {
+              const parsedLocal = JSON.parse(localShare);
+              if (parsedLocal && parsedLocal.enabled !== undefined) {
+                finalData.enabled = parsedLocal.enabled;
+              }
+            } catch (e) {}
+          }
+        }
+        setShareData(finalData);
+      }
     });
     if (typeof window !== 'undefined') {
       const localShare = localStorage.getItem('king_travel_share_tools');

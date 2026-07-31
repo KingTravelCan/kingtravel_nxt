@@ -16,16 +16,24 @@ export default function FloatingShareBar() {
   }
 
   const fetchConfig = () => {
+    let localData: any = null;
     if (typeof window !== 'undefined') {
       const local = localStorage.getItem('king_travel_share_tools');
       if (local) {
         try {
-          setShareConfig(JSON.parse(local));
+          localData = JSON.parse(local);
+          setShareConfig(localData);
         } catch (e) {}
       }
     }
     getShareTools().then((data) => {
-      if (data) setShareConfig(data);
+      if (data) {
+        let finalData = { ...data };
+        if (localData && localData.enabled !== undefined) {
+          finalData.enabled = localData.enabled;
+        }
+        setShareConfig(finalData);
+      }
     });
   };
 
