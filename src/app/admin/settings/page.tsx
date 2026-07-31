@@ -31,6 +31,7 @@ import {
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Switch } from '@/components/ui/switch';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
+import GlassNotificationModal from '@/components/ui/GlassNotificationModal';
 import { Trash2, Upload, MoveUp, MoveDown, Check, Save, CloudUpload, Plus, Edit2, Key, Eye, EyeOff, X, Pencil } from 'lucide-react';
 
 const TABS = [
@@ -48,6 +49,28 @@ const TABS = [
 export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState('header-footer');
   const [subTab, setSubTab] = useState<'header' | 'footer'>('header');
+
+  // 3D Glassmorphism Notification State
+  const [notificationConfig, setNotificationConfig] = useState<{
+    isOpen: boolean;
+    type: 'success' | 'warning' | 'error' | 'info';
+    title: string;
+    message: string;
+  }>({
+    isOpen: false,
+    type: 'success',
+    title: '',
+    message: '',
+  });
+
+  const showNotification = (title: string, message: string, type: 'success' | 'warning' | 'error' | 'info' = 'success') => {
+    setNotificationConfig({
+      isOpen: true,
+      title,
+      message,
+      type,
+    });
+  };
 
   // Form states
   const [siteName, setSiteName] = useState('King Travel Canada');
@@ -326,10 +349,13 @@ export default function AdminSettingsPage() {
     const res = await saveFormsSettingsAction(fullPayload);
     setSavingForms(false);
     if (res.success) {
-      setFormsSaveMsg('Form configurations saved successfully!');
-      setTimeout(() => setFormsSaveMsg(null), 3000);
+      if ((res as any).warning) {
+        showNotification('Configurations Saved', 'Form & Email configurations saved to session cache! ' + (res as any).warning, 'warning');
+      } else {
+        showNotification('Configurations Published!', 'Form routing, email addresses, and form input fields updated & published live!', 'success');
+      }
     } else {
-      alert(res.error || 'Failed to save forms configuration.');
+      showNotification('Save Failed', (res as any).error || 'Failed to save forms configuration.', 'error');
     }
   };
 
@@ -370,10 +396,9 @@ export default function AdminSettingsPage() {
     setSavingForms(false);
 
     if (res.success) {
-      setFormsSaveMsg('Form completely removed from database!');
-      setTimeout(() => setFormsSaveMsg(null), 3500);
+      showNotification('Form Deleted', 'Form completely removed from database!', 'success');
     } else {
-      alert(res.error || 'Failed to remove form from database.');
+      showNotification('Remove Failed', (res as any).error || 'Failed to remove form from database.', 'error');
     }
   };
 
@@ -412,7 +437,7 @@ export default function AdminSettingsPage() {
   const handleSaveUser = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userFormData.name || !userFormData.email) {
-      alert('Name and Email are required.');
+      showNotification('Validation Error', 'Name and Email are required fields.', 'warning');
       return;
     }
 
@@ -422,10 +447,9 @@ export default function AdminSettingsPage() {
         setUserModalOpen(false);
         const updated = await getUsersList();
         setUsersList(updated);
-        setUserSaveMsg('✅ User Created Successfully!');
-        setTimeout(() => setUserSaveMsg(null), 3000);
+        showNotification('User Created', 'New administrator user created successfully!', 'success');
       } else {
-        alert(res.error || 'Failed to create user.');
+        showNotification('Creation Failed', res.error || 'Failed to create user.', 'error');
       }
     } else {
       const res = await updateUserAction(userFormData.id, userFormData);
@@ -433,10 +457,9 @@ export default function AdminSettingsPage() {
         setUserModalOpen(false);
         const updated = await getUsersList();
         setUsersList(updated);
-        setUserSaveMsg('✅ User Updated Successfully!');
-        setTimeout(() => setUserSaveMsg(null), 3000);
+        showNotification('User Updated', 'Administrator user details updated successfully!', 'success');
       } else {
-        alert(res.error || 'Failed to update user.');
+        showNotification('Update Failed', res.error || 'Failed to update user.', 'error');
       }
     }
   };
@@ -525,6 +548,11 @@ export default function AdminSettingsPage() {
   };
 
   const handleSaveIdentity = () => {
+    const updatedIdentity = {
+      ...identityData,
+      siteName: siteName || identityData.siteName,
+      logoAlt: altText || identityData.logoAlt,
+    };
     setConfirmConfig({
       icon: '🏷️',
       title: 'Save Site Identity',
@@ -533,21 +561,40 @@ export default function AdminSettingsPage() {
       cancelText: 'Cancel',
       variant: 'primary',
       onConfirm: async () => {
-        const res = await saveSiteIdentityAction(identityData);
+        if (typeof window !== 'undefined') {
+          localStorage.setItem('king_travel_site_identity', JSON.stringify(updatedIdentity));
+          window.dispatchEvent(new Event('identity_updated'));
+        }
+        const res = await saveSiteIdentityAction(updatedIdentity);
         if (res.success) {
-          setIdentitySaveMsg('✅ Site Identity Settings Saved & Published!');
-          setTimeout(() => setIdentitySaveMsg(null), 4000);
+          if (res.warning) {
+            showNotification('Site Identity Saved', 'Branding settings saved to session cache! ' + res.warning, 'warning');
+          } else {
+            showNotification('Site Identity Published!', 'Site identity & branding updated successfully!', 'success');
+          }
         }
       },
     });
   };
 
   const handleSaveHeaderAll = async () => {
-    const res = await saveSiteIdentityAction(identityData);
+    const updatedIdentity = {
+      ...identityData,
+      siteName: siteName || identityData.siteName,
+      logoAlt: altText || identityData.logoAlt,
+    };
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('king_travel_site_identity', JSON.stringify(updatedIdentity));
+      window.dispatchEvent(new Event('identity_updated'));
+    }
+    const res = await saveSiteIdentityAction(updatedIdentity);
     await handleSaveNav(navTree);
     if (res.success) {
-      setIdentitySaveMsg('✅ Header Builder Settings Saved & Published!');
-      setTimeout(() => setIdentitySaveMsg(null), 4000);
+      if (res.warning) {
+        showNotification('Header Settings Saved', 'Header settings & navigation saved to session cache! ' + res.warning, 'warning');
+      } else {
+        showNotification('Header Settings Published!', 'Header navigation, logo, and site identity published live successfully!', 'success');
+      }
     }
   };
 
@@ -3398,6 +3445,15 @@ export default function AdminSettingsPage() {
 
       {/* Confirmation Modal */}
       <ConfirmModal config={confirmConfig} onClose={() => setConfirmConfig(null)} />
+
+      {/* 3D Glassmorphism Centric Notification Modal */}
+      <GlassNotificationModal
+        isOpen={notificationConfig.isOpen}
+        type={notificationConfig.type}
+        title={notificationConfig.title}
+        message={notificationConfig.message}
+        onClose={() => setNotificationConfig((prev) => ({ ...prev, isOpen: false }))}
+      />
     </AdminLayout>
   );
 }

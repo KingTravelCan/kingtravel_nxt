@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { AlertCircle, Trash2, CheckCircle2, ShieldAlert, X } from 'lucide-react';
 
 export interface ConfirmModalConfig {
   title: string;
@@ -23,9 +24,9 @@ export default function ConfirmModal({ config, onClose }: ConfirmModalProps) {
   const {
     title,
     message,
-    icon = '🔒',
+    icon,
     confirmText = 'Confirm',
-    cancelText = 'Not now',
+    cancelText = 'Cancel',
     variant = 'primary',
     onConfirm,
   } = config;
@@ -35,142 +36,104 @@ export default function ConfirmModal({ config, onClose }: ConfirmModalProps) {
     onClose();
   };
 
-  const getVariantStyles = () => {
+  const getTheme = () => {
     switch (variant) {
       case 'danger':
         return {
-          iconBg: 'rgba(220, 38, 38, 0.1)', // bg-red-600/10
-          iconBorder: 'rgba(220, 38, 38, 0.2)',
-          buttonBg: '#dc2626',
+          bgGradient: 'from-[#1F0707]/95 via-[#330A0A]/95 to-[#4B0000]/95',
+          border: 'border-red-500/40',
+          glow: 'shadow-[0_0_60px_rgba(239,68,68,0.35)]',
+          iconBg: 'bg-red-500/20 border-red-400/40 text-red-400',
+          defaultIcon: <Trash2 className="w-8 h-8 text-red-400 animate-pulse" />,
+          buttonBg: 'bg-red-600 hover:bg-red-500 text-white',
+          titleColor: 'text-red-300',
         };
       case 'warning':
         return {
-          iconBg: 'rgba(217, 119, 6, 0.1)', // bg-amber-600/10
-          iconBorder: 'rgba(217, 119, 6, 0.2)',
-          buttonBg: '#d97706',
+          bgGradient: 'from-[#1F1707]/95 via-[#33260A]/95 to-[#4B3900]/95',
+          border: 'border-amber-500/40',
+          glow: 'shadow-[0_0_60px_rgba(245,158,11,0.35)]',
+          iconBg: 'bg-amber-500/20 border-amber-400/40 text-amber-400',
+          defaultIcon: <AlertCircle className="w-8 h-8 text-amber-400 animate-bounce" />,
+          buttonBg: 'bg-[#DB9E30] hover:bg-amber-400 text-slate-950 font-black',
+          titleColor: 'text-amber-300',
         };
       case 'success':
+        return {
+          bgGradient: 'from-[#071F19]/95 via-[#0A3328]/95 to-[#004B39]/95',
+          border: 'border-emerald-500/40',
+          glow: 'shadow-[0_0_60px_rgba(16,185,129,0.35)]',
+          iconBg: 'bg-emerald-500/20 border-emerald-400/40 text-emerald-400',
+          defaultIcon: <CheckCircle2 className="w-8 h-8 text-emerald-400 animate-pulse" />,
+          buttonBg: 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black',
+          titleColor: 'text-emerald-300',
+        };
       case 'primary':
       default:
         return {
-          iconBg: 'rgba(16, 185, 129, 0.1)', // bg-emerald-600/10
-          iconBorder: 'rgba(16, 185, 129, 0.2)',
-          buttonBg: '#004B39',
+          bgGradient: 'from-[#071814]/95 via-[#0E2C24]/95 to-[#004B39]/95',
+          border: 'border-emerald-500/40',
+          glow: 'shadow-[0_0_60px_rgba(0,75,57,0.45)]',
+          iconBg: 'bg-emerald-500/20 border-emerald-400/40 text-emerald-300',
+          defaultIcon: <ShieldAlert className="w-8 h-8 text-emerald-300 animate-pulse" />,
+          buttonBg: 'bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black',
+          titleColor: 'text-emerald-200',
         };
     }
   };
 
-  const styles = getVariantStyles();
+  const theme = getTheme();
 
   return (
     <div
       onClick={onClose}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 99999,
-        background: 'rgba(0, 0, 0, 0.45)',
-        backdropFilter: 'blur(4px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 20,
-      }}
+      className="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-md animate-in fade-in duration-200"
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{
-          background: '#ffffff',
-          borderRadius: 24,
-          padding: '28px 28px 24px 28px',
-          maxWidth: 380,
-          width: '100%',
-          boxShadow: '0 20px 50px rgba(0,0,0,0.18), 0 4px 12px rgba(0,0,0,0.08)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-          border: '1px solid #f1f5f9',
-        }}
+        className={`relative w-full max-w-md bg-gradient-to-b ${theme.bgGradient} ${theme.border} ${theme.glow} border rounded-3xl p-7 shadow-2xl backdrop-blur-2xl text-white transform transition-all scale-100 flex flex-col items-center text-center overflow-hidden`}
       >
-        {/* Top Icon Badge with themed 10% opacity background */}
-        <div
-          style={{
-            width: 48,
-            height: 48,
-            borderRadius: '50%',
-            background: styles.iconBg,
-            border: `1px solid ${styles.iconBorder}`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 22,
-            marginBottom: 16,
-          }}
+        {/* Background ambient light */}
+        <div className="absolute -top-16 -left-16 w-36 h-36 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+        <div className="absolute -bottom-16 -right-16 w-36 h-36 bg-white/10 rounded-full blur-2xl pointer-events-none" />
+
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white/50 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors cursor-pointer border-none"
         >
-          {icon}
+          <X className="w-4 h-4" />
+        </button>
+
+        {/* 3D Floating Icon Badge */}
+        <div
+          className={`w-16 h-16 rounded-2xl ${theme.iconBg} border flex items-center justify-center mb-4 shadow-lg backdrop-blur-md transform hover:scale-105 transition-transform text-2xl`}
+        >
+          {icon || theme.defaultIcon}
         </div>
 
         {/* Title */}
-        <h3
-          style={{
-            fontSize: 18,
-            fontWeight: 800,
-            color: '#0f172a',
-            margin: '0 0 8px 0',
-            fontFamily: 'inherit',
-          }}
-        >
+        <h3 className={`text-xl font-bold font-serif ${theme.titleColor} mb-2`}>
           {title}
         </h3>
 
-        {/* Message Subtext */}
-        <p
-          style={{
-            fontSize: 13,
-            color: '#64748b',
-            lineHeight: 1.5,
-            margin: '0 0 24px 0',
-            fontWeight: 400,
-          }}
-        >
+        {/* Message */}
+        <p className="text-xs text-white/80 leading-relaxed mb-6 font-light max-w-sm">
           {message}
         </p>
 
         {/* Action Buttons Row */}
-        <div style={{ display: 'flex', gap: 10, width: '100%' }}>
+        <div className="flex gap-3 w-full">
           <button
             type="button"
             onClick={onClose}
-            style={{
-              flex: 1,
-              padding: '12px 18px',
-              borderRadius: 99,
-              background: '#f1f5f9',
-              border: 'none',
-              color: '#334155',
-              fontWeight: 700,
-              fontSize: 13,
-              cursor: 'pointer',
-            }}
+            className="flex-1 py-3 px-4 rounded-2xl text-xs font-extrabold uppercase tracking-wider bg-white/10 hover:bg-white/20 text-white border border-white/20 transition-all cursor-pointer"
           >
             {cancelText}
           </button>
           <button
             type="button"
             onClick={handleConfirm}
-            style={{
-              flex: 1,
-              padding: '12px 18px',
-              borderRadius: 99,
-              background: styles.buttonBg,
-              border: 'none',
-              color: '#ffffff',
-              fontWeight: 700,
-              fontSize: 13,
-              cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(15,23,42,0.15)',
-            }}
+            className={`flex-1 py-3 px-4 rounded-2xl text-xs font-black uppercase tracking-wider ${theme.buttonBg} transition-all shadow-md transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer border-none`}
           >
             {confirmText}
           </button>
