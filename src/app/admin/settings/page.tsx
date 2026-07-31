@@ -542,6 +542,15 @@ export default function AdminSettingsPage() {
     });
   };
 
+  const handleSaveHeaderAll = async () => {
+    const res = await saveSiteIdentityAction(identityData);
+    await handleSaveNav(navTree);
+    if (res.success) {
+      setIdentitySaveMsg('✅ Header Builder Settings Saved & Published!');
+      setTimeout(() => setIdentitySaveMsg(null), 4000);
+    }
+  };
+
   const handleSaveShareTools = async () => {
     setSavingShare(true);
     if (typeof window !== 'undefined') {
@@ -610,37 +619,48 @@ export default function AdminSettingsPage() {
 
         {/* ── Header & Footer Sub-Tabs ── */}
         {activeTab === 'header-footer' && (
-          <div style={{ display: 'flex', gap: 10 }}>
-            <button
-              onClick={() => setSubTab('header')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: 10,
-                border: subTab === 'header' ? '1px solid #004B39' : '1px solid #e2e8f0',
-                background: subTab === 'header' ? '#e6f4f1' : '#fff',
-                color: subTab === 'header' ? '#004B39' : '#64748b',
-                fontWeight: 700,
-                fontSize: 12,
-                cursor: 'pointer',
-              }}
-            >
-              📋 Header Builder
-            </button>
-            <button
-              onClick={() => setSubTab('footer')}
-              style={{
-                padding: '8px 16px',
-                borderRadius: 10,
-                border: subTab === 'footer' ? '1px solid #004B39' : '1px solid #e2e8f0',
-                background: subTab === 'footer' ? '#e6f4f1' : '#fff',
-                color: subTab === 'footer' ? '#004B39' : '#64748b',
-                fontWeight: 700,
-                fontSize: 12,
-                cursor: 'pointer',
-              }}
-            >
-              👣 Footer Builder
-            </button>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                onClick={() => setSubTab('header')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: 10,
+                  border: subTab === 'header' ? '1px solid #004B39' : '1px solid #e2e8f0',
+                  background: subTab === 'header' ? '#e6f4f1' : '#fff',
+                  color: subTab === 'header' ? '#004B39' : '#64748b',
+                  fontWeight: 700,
+                  fontSize: 12,
+                  cursor: 'pointer',
+                }}
+              >
+                📋 Header Builder
+              </button>
+              <button
+                onClick={() => setSubTab('footer')}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: 10,
+                  border: subTab === 'footer' ? '1px solid #004B39' : '1px solid #e2e8f0',
+                  background: subTab === 'footer' ? '#e6f4f1' : '#fff',
+                  color: subTab === 'footer' ? '#004B39' : '#64748b',
+                  fontWeight: 700,
+                  fontSize: 12,
+                  cursor: 'pointer',
+                }}
+              >
+                👣 Footer Builder
+              </button>
+            </div>
+            {subTab === 'header' && (
+              <button
+                type="button"
+                onClick={handleSaveHeaderAll}
+                className="bg-[#004B39] text-white hover:bg-[#00382B] px-5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 cursor-pointer border-none"
+              >
+                <Save className="w-4 h-4 text-emerald-300" /> Save Header Settings
+              </button>
+            )}
           </div>
         )}
 
@@ -661,9 +681,18 @@ export default function AdminSettingsPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
               {/* Logo & Identity Panel */}
               <div style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: 24 }}>
-                <h3 style={{ fontSize: 13, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>
-                  🖼 LOGO &amp; IDENTITY
-                </h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 style={{ fontSize: 13, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+                    🖼 LOGO &amp; IDENTITY
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={handleSaveIdentity}
+                    className="bg-[#004B39] text-white hover:bg-[#00382B] px-4 py-1.5 rounded-lg text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer border-none"
+                  >
+                    <Save className="w-3.5 h-3.5 text-emerald-300" /> Save Logo &amp; Identity
+                  </button>
+                </div>
                 <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: 24, alignItems: 'center' }}>
                   <div style={{
                     background: '#f8fafc',
@@ -887,6 +916,20 @@ export default function AdminSettingsPage() {
                     </Field>
                   </div>
                 </div>
+              </div>
+
+              {/* Bottom Action Save Bar */}
+              <div className="flex justify-between items-center pt-4 border-t border-slate-100 mt-2">
+                <div>
+                  {identitySaveMsg && <span className="text-xs font-bold text-emerald-600">{identitySaveMsg}</span>}
+                </div>
+                <button
+                  type="button"
+                  onClick={handleSaveHeaderAll}
+                  className="bg-[#004B39] text-white hover:bg-[#00382B] px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md flex items-center gap-2 cursor-pointer border-none"
+                >
+                  <Save className="w-4 h-4 text-emerald-300" /> Save Header Settings
+                </button>
               </div>
             </div>
           )}
