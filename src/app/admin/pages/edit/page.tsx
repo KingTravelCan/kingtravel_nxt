@@ -8,9 +8,14 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Switch } from '@/components/ui/switch';
 import { getPageById, savePageAction } from '@/actions/pageActions';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
-import { Trash2, Upload } from 'lucide-react';
+import { Trash2, Upload, Settings } from 'lucide-react';
+import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
 
 const SECTION_OPTIONS = [
+  'Who We Are (Intro & Stats)',
+  'Exclusive Upcoming Umrah Packages',
+  'Select Preferred Travel Service',
+  'What We Provide (Numbered Features)',
   'Hero Slider',
   'Intro',
   'Stats Grid',
@@ -61,6 +66,17 @@ function PageBuilderContent() {
   const [bannerTitle, setBannerTitle] = useState<string>('');
   const [bannerDescription, setBannerDescription] = useState<string>('');
 
+  // Homepage Hero Banner Specific Fields
+  const [heroEyebrow, setHeroEyebrow] = useState('Est. in Canada · Licensed Pilgrimage Operator');
+  const [primaryBtnLabel, setPrimaryBtnLabel] = useState('View Umrah Packages →');
+  const [primaryBtnLink, setPrimaryBtnLink] = useState('#packages');
+  const [secondaryBtnLabel, setSecondaryBtnLabel] = useState('Speak With an Advisor');
+  const [secondaryBtnLink, setSecondaryBtnLink] = useState('/contact');
+  const [badge1Top, setBadge1Top] = useState('10,000+');
+  const [badge1Sub, setBadge1Sub] = useState('Pilgrims Guided');
+  const [badge2Top, setBadge2Top] = useState('5★ Hotels');
+  const [badge2Sub, setBadge2Sub] = useState('Every Package, Every Time');
+
   const [editingSectionId, setEditingSectionId] = useState<string | null>(null);
 
   const [activeTab, setActiveTab] = useState<'sections' | 'richtext' | 'seo'>('sections');
@@ -76,6 +92,7 @@ function PageBuilderContent() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [activeDetailPopupModal, setActiveDetailPopupModal] = useState<{ secId: string; pIdx: number; pkg: any } | null>(null);
 
   const updateSectionField = (id: string, field: string, value: any) => {
     setSections(sections.map(s => s.id === id ? { ...s, [field]: value } : s));
@@ -316,15 +333,68 @@ function PageBuilderContent() {
   }, [pageId]);
 
   const addSection = (type: string) => {
+    let defaultData: Record<string, any> = {
+      eyebrow: type.toUpperCase(),
+      title: `Heading for ${type}`,
+      description: 'Add section content description here...',
+    };
+
+    if (type === 'Who We Are (Intro & Stats)' || type === 'Who We Are') {
+      defaultData = {
+        eyebrow: 'WHO WE ARE',
+        title: 'We provide and offer Hajj & Umrah packages',
+        description: 'King Travel proudly provides reliable and professional Hajj and Umrah services across Canada. With years of experience serving the Muslim community, we are committed to making your sacred journey smooth, comfortable, and spiritually fulfilling. Whether you are traveling for Hajj, Umrah, or Saudi Visa services, our expert team is here to guide you every step of the way.',
+        image: 'https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80',
+        quoteBadgeText: '"Every detail handled — from Visa to hotel, steps from the Haram."',
+        stat1Num: '25+',
+        stat1Label: 'Years Serving Canada',
+        stat2Num: '10,000+',
+        stat2Label: 'Pilgrims Guided',
+        stat3Num: '5★',
+        stat3Label: 'Hotels, Every Package',
+      };
+    } else if (type === 'Exclusive Upcoming Umrah Packages') {
+      defaultData = {
+        eyebrow: 'EXCLUSIVE UPCOMING',
+        title: 'Umrah Packages from Canada',
+        subtext: 'Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking — contact us before reserving.',
+        btnText: 'SEE ALL PACKAGES →',
+        btnLink: '/umrah/packages',
+      };
+    } else if (type === 'Select Preferred Travel Service') {
+      defaultData = {
+        eyebrow: 'SERVICES WE OFFER',
+        title: 'Select your preferred travel service',
+        services: [
+          { icon: 'star', title: 'Umrah Packages', description: 'Flexible departures with flights, stays, & guidance included.', link: '/umrah/packages' },
+          { icon: 'kaaba', title: 'Hajj Packages', description: 'Fully accredited pilgrimage packages, curated end to end.', link: '/hajj/packages' },
+          { icon: 'plane', title: 'Airline Tickets', description: 'Best-fare flights sourced from every route into Jeddah.', link: '/airlines' },
+          { icon: 'visa', title: 'Saudi Visa Services', description: 'Full visa processing, handled and confirmed before departure.', link: '/saudi-visa' },
+          { icon: 'hotel', title: 'Hotel Booking', description: '5-star stays within walking distance of the Haram.', link: '/contact' },
+          { icon: 'globe', title: 'Global Flight Reservations', description: 'Worldwide reliable flight bookings for any itinerary.', link: '/airlines' },
+          { icon: 'file', title: 'Travel Documentation', description: 'Guidance on every document your journey requires.', link: '/contact' },
+          { icon: 'users', title: 'Group & Private Tours', description: 'Private, guided, and fully customizable itineraries.', link: '/contact' },
+        ],
+      };
+    } else if (type === 'What We Provide (Numbered Features)') {
+      defaultData = {
+        eyebrow: 'WHAT WE PROVIDE',
+        title: 'Lowest fares, exclusive travel deals, real trust',
+        image: 'https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?auto=format&fit=crop&w=800&q=80',
+        features: [
+          { num: '01', title: 'Lowest Fares', description: 'We offer the lowest rates on the market, sourced across every route into Jeddah.' },
+          { num: '02', title: 'Special Deals', description: 'Fixed-price Umrah packages with hotels, meals and transport included.' },
+          { num: '03', title: 'Trusted & Certified', description: 'A fully accredited travel agency you can rely on, licensed across Canada.' },
+          { num: '04', title: 'Pilgrimage Services', description: 'Visa processing, group support — the full spiritual journey, arranged.' },
+        ],
+      };
+    }
+
     const newSec: SectionItem = {
       id: String(Date.now()),
       type,
-      title: `New ${type}`,
-      data: {
-        eyebrow: type.toUpperCase(),
-        title: `Heading for ${type}`,
-        description: 'Add section content description here...'
-      }
+      title: `${type}`,
+      data: defaultData,
     };
     setSections([...sections, newSec]);
     setEditingSectionId(newSec.id);
@@ -356,8 +426,37 @@ function PageBuilderContent() {
       cancelText: 'Not now',
       variant: 'primary',
       onConfirm: async () => {
-        setSaving(true);
-        setMessage(null);
+        const updatedSections = [...sections];
+        if (slug === '/' || pageId === 1) {
+          const heroSecData = {
+            heroEyebrow,
+            title: bannerTitle || title || 'Your journey to <span>Makkah & Madinah</span>, guided with care.',
+            description: bannerDescription || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail...",
+            primaryBtnLabel,
+            primaryBtnLink,
+            secondaryBtnLabel,
+            secondaryBtnLink,
+            badge1Top,
+            badge1Sub,
+            badge2Top,
+            badge2Sub,
+            bannerBgImage,
+            bannerPosition,
+            bannerSize,
+          };
+          const heroIdx = updatedSections.findIndex(s => s.type === 'Homepage Hero Banner' || s.type === 'Hero Slider');
+          if (heroIdx >= 0) {
+            updatedSections[heroIdx].data = heroSecData;
+          } else {
+            updatedSections.unshift({
+              id: 'home-hero-1',
+              type: 'Homepage Hero Banner',
+              title: 'Homepage Hero Banner (1920px x 640px)',
+              data: heroSecData,
+            });
+          }
+        }
+
         const fd = new FormData();
         if (pageId) fd.append('id', String(pageId));
         fd.append('title', title);
@@ -365,7 +464,7 @@ function PageBuilderContent() {
         fd.append('status', draft ? 'draft' : status);
         fd.append('showInMenu', String(showInMenu));
         fd.append('parentPage', parentPage);
-        fd.append('sections', JSON.stringify(sections));
+        fd.append('sections', JSON.stringify(updatedSections));
         fd.append('richText', richText);
         fd.append('metaTitle', metaTitle);
         fd.append('metaDescription', metaDescription);
@@ -472,8 +571,324 @@ function PageBuilderContent() {
         </div>
       </div>
 
-      {/* Page Banner Management & Real-Time Preview (Excluded on Homepage) */}
-      {slug !== '/' && (
+      {/* Page Banner Management & Real-Time Preview */}
+      {slug === '/' || pageId === 1 ? (
+        /* HOMEPAGE HERO BANNER EDITOR (1920px x 640px, MIN-HEIGHT 640px) */
+        <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col gap-6">
+          <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+            <div className="flex items-center gap-2">
+              <h3 className="text-xs font-extrabold text-slate-800 tracking-wider uppercase m-0 flex items-center gap-1.5">
+                👑 HOMEPAGE HERO BANNER BACKGROUND IMAGE & CONTENT (1920PX X 640PX)
+              </h3>
+              <span className="text-[11px] text-slate-400 font-medium">Recommended 1920px x 640px (min-height: 640px)</span>
+            </div>
+            {bannerBgImage && (
+              <button
+                type="button"
+                onClick={() => setBannerBgImage('')}
+                className="bg-red-50 text-red-500 hover:bg-red-100 border border-red-200 px-3 py-1 rounded-full text-xs font-bold cursor-pointer transition-colors flex items-center gap-1"
+              >
+                ⊗ Remove Image
+              </button>
+            )}
+          </div>
+
+          {/* Split Desktop Grid: Image Upload & Dropzone (Left) + Live 640px Hero Preview Card (Right) */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+            {/* Left 5-Col Upload & Main Banner Settings */}
+            <div className="lg:col-span-5 flex flex-col gap-4">
+              <div
+                onClick={() => document.getElementById('hero-banner-file-input')?.click()}
+                className="bg-slate-50/80 hover:bg-emerald-50/40 border-2 border-dashed border-slate-300 hover:border-[#004B39] rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all min-h-[160px]"
+              >
+                <input
+                  type="file"
+                  id="hero-banner-file-input"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const reader = new FileReader();
+                      reader.onload = (evt) => {
+                        if (evt.target?.result) setBannerBgImage(String(evt.target.result));
+                      };
+                      reader.readAsDataURL(file);
+                    }
+                  }}
+                />
+                <div className="w-12 h-12 rounded-full bg-white shadow-sm border border-slate-200 flex items-center justify-center text-[#004B39] mb-2 text-xl">
+                  ⇧
+                </div>
+                <span className="text-xs font-extrabold text-slate-800">
+                  {bannerBgImage ? 'Click to replace hero background image' : 'Click to upload homepage hero image'}
+                </span>
+                <span className="text-[10px] text-slate-400 mt-1 font-medium">
+                  Recommended 1920px x 640px (aspect ratio ~ 3:1, min-height 640px)
+                </span>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                    POSITION
+                  </label>
+                  <select
+                    value={bannerPosition}
+                    onChange={(e) => setBannerPosition(e.target.value)}
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 text-xs font-semibold outline-none focus:border-[#004B39]"
+                  >
+                    <option value="center center">Center Center</option>
+                    <option value="top center">Top Center</option>
+                    <option value="bottom center">Bottom Center</option>
+                    <option value="left center">Left Center</option>
+                    <option value="right center">Right Center</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                    SIZE
+                  </label>
+                  <select
+                    value={bannerSize}
+                    onChange={(e) => setBannerSize(e.target.value)}
+                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 bg-slate-50 text-xs font-semibold outline-none focus:border-[#004B39]"
+                  >
+                    <option value="cover">Cover (Default)</option>
+                    <option value="contain">Contain</option>
+                    <option value="auto">Auto / Original</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Right 7-Col Real-Time Live 640px Hero Preview Box */}
+            <div className="lg:col-span-7 relative rounded-2xl overflow-hidden shadow-lg border border-slate-900/20 p-6 flex flex-col justify-between text-white min-h-[260px]">
+              <div
+                className="absolute inset-0 z-0 transition-all duration-300"
+                style={{
+                  backgroundImage: `linear-gradient(100deg, rgba(10, 20, 18, .92) 0%, rgba(10, 20, 18, .72) 38%, rgba(10, 20, 18, .15) 68%), url("${(bannerBgImage || '/img/hero.png').replace(/"/g, "'")}")`,
+                  backgroundPosition: bannerPosition || 'center center',
+                  backgroundSize: bannerSize || 'cover',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              />
+
+              <div className="relative z-10 space-y-2">
+                <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#DB9E30]">
+                  {heroEyebrow || 'Est. in Canada · Licensed Pilgrimage Operator'}
+                </div>
+                <h1
+                  className="text-lg md:text-2xl font-serif text-white m-0 font-normal tracking-wide leading-tight [&>span]:text-[#DB9E30] [&>em]:text-[#DB9E30] [&>em]:not-italic"
+                  style={{ fontFamily: "var(--serif, 'Marcellus', serif)" }}
+                  dangerouslySetInnerHTML={{ __html: bannerTitle || title || 'Your journey to <span>Makkah & Madinah</span>, guided with care.' }}
+                />
+                <p className="text-[11px] text-white/90 max-w-md leading-relaxed font-light">
+                  {bannerDescription || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail..."}
+                </p>
+              </div>
+
+              <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10 mt-4">
+                <div className="flex gap-2">
+                  <span className="bg-[#DB9E30] text-[#004B39] font-extrabold text-[10px] px-3 py-1.5 rounded-lg shadow-sm">
+                    {primaryBtnLabel || 'View Packages'}
+                  </span>
+                  <span className="bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg backdrop-blur-sm">
+                    {secondaryBtnLabel || 'Speak With Advisor'}
+                  </span>
+                </div>
+
+                <div className="flex gap-2">
+                  <div className="bg-white/90 text-slate-900 rounded-xl px-2.5 py-1 text-[9px] font-bold text-center border border-white">
+                    <div className="text-[#DB9E30] font-black">{badge1Top}</div>
+                    <div className="text-slate-500 font-semibold">{badge1Sub}</div>
+                  </div>
+                  <div className="bg-white/90 text-slate-900 rounded-xl px-2.5 py-1 text-[9px] font-bold text-center border border-white">
+                    <div className="text-[#DB9E30] font-black">{badge2Top}</div>
+                    <div className="text-slate-500 font-semibold">{badge2Sub}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Form Fields Grid for Banner Content Editing */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                EYEBROW TAGLINE
+              </label>
+              <input
+                type="text"
+                value={heroEyebrow}
+                onChange={(e) => setHeroEyebrow(e.target.value)}
+                placeholder="e.g. Est. in Canada · Licensed Pilgrimage Operator"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider">
+                  TITLE (H1)
+                </label>
+                <button
+                  type="button"
+                  onMouseDown={(e) => e.preventDefault()}
+                  onClick={() => {
+                    const inputEl = document.getElementById('hero-banner-title-input') as HTMLInputElement;
+                    const fullText = bannerTitle || 'Your journey to <span>Makkah & Madinah</span>, guided with care.';
+                    if (inputEl && inputEl.selectionStart !== null && inputEl.selectionEnd !== null && inputEl.selectionStart !== inputEl.selectionEnd) {
+                      const start = inputEl.selectionStart;
+                      const end = inputEl.selectionEnd;
+                      const selectedText = fullText.substring(start, end);
+                      const newText = fullText.substring(0, start) + `<span>${selectedText}</span>` + fullText.substring(end);
+                      setBannerTitle(newText);
+                    } else {
+                      if (!fullText.includes('<span>')) {
+                        setBannerTitle(fullText.replace(/([A-Z][a-z0-9\s&]+)$/i, '<span>$1</span>'));
+                      } else {
+                        setBannerTitle(fullText.replace(/<\/?span>/g, ''));
+                      }
+                    }
+                  }}
+                  className="text-[10px] font-bold text-[#DB9E30] hover:bg-amber-100 bg-amber-50 px-2 py-0.5 rounded cursor-pointer border border-[#DB9E30]/30 transition-colors"
+                  title="Highlight text and click to make it Gold"
+                >
+                  ✨ Gold Words
+                </button>
+              </div>
+              <input
+                id="hero-banner-title-input"
+                type="text"
+                value={bannerTitle}
+                onChange={(e) => setBannerTitle(e.target.value)}
+                placeholder="Headline Title..."
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div className="lg:col-span-2">
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                SUBTEXT / DESCRIPTION
+              </label>
+              <input
+                type="text"
+                value={bannerDescription}
+                onChange={(e) => setBannerDescription(e.target.value)}
+                placeholder="Description paragraph..."
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                PRIMARY CTA BUTTON LABEL
+              </label>
+              <input
+                type="text"
+                value={primaryBtnLabel}
+                onChange={(e) => setPrimaryBtnLabel(e.target.value)}
+                placeholder="View Umrah Packages →"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                PRIMARY CTA LINK
+              </label>
+              <input
+                type="text"
+                value={primaryBtnLink}
+                onChange={(e) => setPrimaryBtnLink(e.target.value)}
+                placeholder="#packages or /umrah-packages"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                SECONDARY CTA BUTTON LABEL
+              </label>
+              <input
+                type="text"
+                value={secondaryBtnLabel}
+                onChange={(e) => setSecondaryBtnLabel(e.target.value)}
+                placeholder="Speak With an Advisor"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                SECONDARY CTA LINK
+              </label>
+              <input
+                type="text"
+                value={secondaryBtnLink}
+                onChange={(e) => setSecondaryBtnLink(e.target.value)}
+                placeholder="/contact"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                BADGE 1 TOP TEXT
+              </label>
+              <input
+                type="text"
+                value={badge1Top}
+                onChange={(e) => setBadge1Top(e.target.value)}
+                placeholder="10,000+"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                BADGE 1 SUBTEXT
+              </label>
+              <input
+                type="text"
+                value={badge1Sub}
+                onChange={(e) => setBadge1Sub(e.target.value)}
+                placeholder="Pilgrims Guided"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                BADGE 2 TOP TEXT
+              </label>
+              <input
+                type="text"
+                value={badge2Top}
+                onChange={(e) => setBadge2Top(e.target.value)}
+                placeholder="5★ Hotels"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-extrabold text-slate-500 uppercase tracking-wider mb-1">
+                BADGE 2 SUBTEXT
+              </label>
+              <input
+                type="text"
+                value={badge2Sub}
+                onChange={(e) => setBadge2Sub(e.target.value)}
+                placeholder="Every Package, Every Time"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* STANDARD INNER PAGE BANNER EDITOR */
         <div className="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col gap-4">
           <div className="flex items-center justify-between border-b border-slate-100 pb-3">
             <div className="flex items-center gap-2">
@@ -516,7 +931,7 @@ function PageBuilderContent() {
                   }
                 }}
               />
-              <div className="w-10 h-10 rounded-full bg-white shadow-xs border border-slate-200 flex items-center justify-center text-[#004B39] mb-2 text-lg">
+              <div className="w-10 h-10 rounded-full bg-white shadow-xs border border-[#004B39]/20 flex items-center justify-center text-[#004B39] mb-2 text-lg">
                 ⇧
               </div>
               <span className="text-xs font-extrabold text-slate-800">
@@ -1493,7 +1908,7 @@ function PageBuilderContent() {
                                         />
                                       </div>
                                       <div>
-                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>PRICE ($)</label>
+                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>PRICE (CAD)</label>
                                         <input
                                           type="text"
                                           value={fl.price || ''}
@@ -2364,36 +2779,45 @@ function PageBuilderContent() {
                             )}
 
                             {(sec.type === 'Hajj Packages Grid' || sec.type === 'Hajj Cards') && (
-                              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12, display: 'flex', flexDirection: 'column', gap: 12, marginTop: 4 }}>
+                              <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 12, padding: 16, display: 'flex', flexDirection: 'column', gap: 14, marginTop: 4 }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                  <span style={{ fontSize: 11, fontWeight: 800, color: '#DB9E30', textTransform: 'uppercase' }}>
-                                    🕋 Dynamic Hajj Packages Cards Manager (Hajj 2027 Style)
+                                  <span style={{ fontSize: 12, fontWeight: 800, color: '##DB9E30', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    DYNAMIC HAJJ PACKAGES CARDS MANAGER (HAJJ 2027 STYLE)
                                   </span>
                                   <button
                                     onClick={() => {
-                                      const currentPkgs = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
-                                        {
-                                          id: "hajj-1",
-                                          title: "Economy Hajj Package 2027",
-                                          duration: "14Days",
-                                          heroImage: "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg",
-                                          price: "12,995",
-                                          makkahHotel: { name: "5 Star Hotel in Makkah", location: "Near to Haram" },
-                                          madinahHotel: { name: "5 Star Hotel in Madinah", location: "Near to Masjid Nabawi" }
-                                        }
-                                      ])];
+                                      const currentPkgs = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
                                       currentPkgs.push({
                                         id: `hajj-${Date.now()}`,
-                                        title: `Deluxe Hajj Package ${currentPkgs.length + 1}`,
-                                        duration: "15 Days",
-                                        heroImage: "https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=800&q=80",
-                                        price: "17,995",
-                                        makkahHotel: { name: "5 Star Fairmont Makkah", location: "Near to Haram" },
-                                        madinahHotel: { name: "5 Star Dar Al Eman Madinah", location: "Near to Masjid Nabawi" }
+                                        title: `Economy Hajj Package 2027`,
+                                        badgeTag: "HAJJ 2027",
+                                        duration: "14Days",
+                                        flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                        heroImage: "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg",
+                                        price: "12,995",
+                                        priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                        operatorName: "King Travel",
+                                        operatorRating: "4.4/5",
+                                        btnLabel: "Book Hajj 2027",
+                                        btnLink: "/contact",
+                                        makkahHotel: {
+                                          name: "5 Star Hotel in Makkah",
+                                          location: "Near to Haram",
+                                          badge: "Breakfast",
+                                          nights: "6 Nights",
+                                          image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg"
+                                        },
+                                        madinahHotel: {
+                                          name: "5 Star Hotel in Madinah",
+                                          location: "Near to Masjid Nabawi",
+                                          badge: "Breakfast",
+                                          nights: "6 Nights",
+                                          image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                        }
                                       });
                                       updateSectionData(sec.id, 'items', currentPkgs);
                                     }}
-                                    style={{ background: '#DB9E30', color: '#000', border: 'none', borderRadius: 6, padding: '4px 10px', fontSize: 11, fontWeight: 800, cursor: 'pointer' }}
+                                    style={{ background: '#DB9E30', color: '#000', border: 'none', borderRadius: 8, padding: '6px 14px', fontSize: 11, fontWeight: 800, cursor: 'pointer' }}
                                   >
                                     + Add New Hajj Package Card
                                   </button>
@@ -2403,111 +2827,579 @@ function PageBuilderContent() {
                                   {
                                     id: "hajj-1",
                                     title: "Economy Hajj Package 2027",
+                                    badgeTag: "HAJJ 2027",
                                     duration: "14Days",
+                                    flightRoute: "FROM CANADA ➔ TO SAUDIA",
                                     heroImage: "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg",
                                     price: "12,995",
-                                    makkahHotel: { name: "5 Star Hotel in Makkah", location: "Near to Haram" },
-                                    madinahHotel: { name: "5 Star Hotel in Madinah", location: "Near to Masjid Nabawi" }
-                                  },
-                                  {
-                                    id: "hajj-2",
-                                    title: "Deluxe Hajj 2027",
-                                    duration: "15 Days",
-                                    heroImage: "https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=800&q=80",
-                                    price: "17,995",
-                                    makkahHotel: { name: "5 Star Hotel Fairmont Makkah", location: "Near to Haram" },
-                                    madinahHotel: { name: "5 Star Hotel Dar Al Eman Madinah", location: "Near to Masjid Nabawi" }
+                                    priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                    operatorName: "King Travel",
+                                    operatorRating: "4.4/5",
+                                    btnLabel: "Book Hajj 2027",
+                                    btnLink: "/contact",
+                                    makkahHotel: {
+                                      name: "5 Star Hotel in Makkah",
+                                      location: "Near to Haram",
+                                      badge: "Breakfast",
+                                      nights: "6 Nights",
+                                      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg"
+                                    },
+                                    madinahHotel: {
+                                      name: "5 Star Hotel in Madinah",
+                                      location: "Near to Masjid Nabawi",
+                                      badge: "Breakfast",
+                                      nights: "6 Nights",
+                                      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                    }
                                   }
-                                ]).map((pkg: any, pIdx: number) => (
-                                  <div key={pkg.id || pIdx} style={{ background: '#fcf8f2', border: '1px solid #fcd34d', borderRadius: 8, padding: 10, display: 'flex', flexDirection: 'column', gap: 8, position: 'relative' }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                      <span style={{ fontSize: 10, fontWeight: 800, color: '#b45309' }}>HAJJ PACKAGE CARD #{pIdx + 1}</span>
+                                ]).map((pkg: any, pIdx: number, allPkgs: any[]) => (
+                                  <div key={pkg.id || pIdx} style={{ background: '#125c40', border: '1px solid #055f4d', borderRadius: 12, padding: 14, display: 'flex', flexDirection: 'column', gap: 12, position: 'relative' }}>
+                                    {/* Card Top Title & Remove Button */}
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #fef3c7', paddingBottom: 8 }}>
+                                      <span style={{ fontSize: 11, fontWeight: 800, color: '#fff', textTransform: 'uppercase' }}>
+                                        HAJJ PACKAGE CARD #{pIdx + 1}: {pkg.title || 'Untitled Package'}
+                                      </span>
                                       <button
+                                        type="button"
                                         onClick={() => {
-                                          const pkgs = [...sec.data?.items];
+                                          const pkgs = [...allPkgs];
                                           pkgs.splice(pIdx, 1);
                                           updateSectionData(sec.id, 'items', pkgs);
                                         }}
-                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        className="border-0 bg-red-100 text-red-600 rounded px-2 py-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-bold"
                                         title="Remove Card"
                                       >
-                                        <Trash2 className="w-3 h-3" /> Card
+                                        <Trash2 className="w-3.5 h-3.5" /> Remove Package
                                       </button>
                                     </div>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 8 }}>
+
+                                    {/* Section 1: Hero Featured Image & Top Meta (Header Block) */}
+                                    <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12, display: 'grid', gridTemplateColumns: '120px 1fr', gap: 12, alignItems: 'center' }}>
+                                      {/* Hero Image Thumbnail with Overlay 'X' Badge */}
+                                      <div style={{ position: 'relative', width: 120, height: 75, borderRadius: 8, overflow: 'hidden', border: '1px solid #cbd5e1', background: '#071310', flexShrink: 0 }}>
+                                        {pkg.heroImage ? (
+                                          <>
+                                            <img src={pkg.heroImage} alt="Hero" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                            <button
+                                              type="button"
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], heroImage: '' };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{
+                                                position: 'absolute',
+                                                top: 4,
+                                                left: 4,
+                                                width: 22,
+                                                height: 22,
+                                                borderRadius: '50%',
+                                                background: '#ef4444',
+                                                color: '#ffffff',
+                                                border: 'none',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontSize: 11,
+                                                fontWeight: 900,
+                                                cursor: 'pointer',
+                                                boxShadow: '0 2px 5px rgba(0,0,0,0.4)',
+                                                zIndex: 10
+                                              }}
+                                              title="Remove Hero Image"
+                                            >
+                                              ✕
+                                            </button>
+                                          </>
+                                        ) : (
+                                          <label style={{ height: '100%', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#004B39', background: '#f0fdf4', border: '1px dashed #86efac', borderRadius: 8, cursor: 'pointer', gap: 2 }}>
+                                            <Upload className="w-4 h-4" />
+                                            <span style={{ fontSize: 9, fontWeight: 700 }}>Upload Hero</span>
+                                            <input
+                                              type="file"
+                                              accept="image/*"
+                                              style={{ display: 'none' }}
+                                              onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                  const reader = new FileReader();
+                                                  reader.onload = (ev) => {
+                                                    const pkgs = [...allPkgs];
+                                                    pkgs[pIdx] = { ...pkgs[pIdx], heroImage: ev.target?.result as string };
+                                                    updateSectionData(sec.id, 'items', pkgs);
+                                                  };
+                                                  reader.readAsDataURL(file);
+                                                }
+                                              }}
+                                            />
+                                          </label>
+                                        )}
+                                      </div>
+
+                                      {/* Right Column: Title & Header Badges Grid */}
+                                      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: 8 }}>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>PACKAGE TITLE</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.title || ''}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], title: e.target.value };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 12, fontWeight: 700 }}
+                                            />
+                                          </div>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>TOP LEFT BADGE</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.badgeTag || 'HAJJ 2027'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], badgeTag: e.target.value };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                        </div>
+
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', gap: 8 }}>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>DURATION BADGE</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.duration || '14Days'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], duration: e.target.value };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '5px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>FLIGHT ROUTE TAGLINE</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.flightRoute || 'FROM CANADA ➔ TO SAUDIA'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], flightRoute: e.target.value };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '5px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {/* Section 2: Side-by-Side Accommodations Grid (Makkah & Madinah) */}
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                                      {/* Makkah Accommodation Box */}
+                                      <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 10, padding: 10, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                        <span style={{ fontSize: 10, fontWeight: 800, color: '#15803d', textTransform: 'uppercase' }}>
+                                          🏨 Makkah Hotel & Details
+                                        </span>
+
+                                        <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: 8, alignItems: 'center' }}>
+                                          {/* Makkah Image Thumbnail with Overlay 'X' */}
+                                          <div style={{ position: 'relative', width: 80, height: 50, borderRadius: 6, overflow: 'hidden', border: '1px solid #cbd5e1', background: '#e2e8f0', flexShrink: 0 }}>
+                                            {pkg.makkahHotel?.image ? (
+                                              <>
+                                                <img src={pkg.makkahHotel.image} alt="Makkah Hotel" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                <button
+                                                  type="button"
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const pkgs = [...allPkgs];
+                                                    pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: '' } };
+                                                    updateSectionData(sec.id, 'items', pkgs);
+                                                  }}
+                                                  style={{
+                                                    position: 'absolute',
+                                                    top: 2,
+                                                    left: 2,
+                                                    width: 18,
+                                                    height: 18,
+                                                    borderRadius: '50%',
+                                                    background: '#ef4444',
+                                                    color: '#ffffff',
+                                                    border: 'none',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: 9,
+                                                    fontWeight: 900,
+                                                    cursor: 'pointer',
+                                                    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                                                    zIndex: 10
+                                                  }}
+                                                  title="Remove Makkah Image"
+                                                >
+                                                  ✕
+                                                </button>
+                                              </>
+                                            ) : (
+                                              <label style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#15803d', background: '#fff', border: '1px dashed #86efac', borderRadius: 6, cursor: 'pointer' }}>
+                                                <Upload className="w-3 h-3" />
+                                                <input
+                                                  type="file"
+                                                  accept="image/*"
+                                                  style={{ display: 'none' }}
+                                                  onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                      const reader = new FileReader();
+                                                      reader.onload = (ev) => {
+                                                        const pkgs = [...allPkgs];
+                                                        pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: ev.target?.result as string } };
+                                                        updateSectionData(sec.id, 'items', pkgs);
+                                                      };
+                                                      reader.readAsDataURL(file);
+                                                    }
+                                                  }}
+                                                />
+                                              </label>
+                                            )}
+                                          </div>
+
+                                          <label style={{ background: '#15803d', color: '#fff', borderRadius: 6, padding: '5px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                                            <Upload className="w-3 h-3" /> Upload Photo
+                                            <input
+                                              type="file"
+                                              accept="image/*"
+                                              style={{ display: 'none' }}
+                                              onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                  const reader = new FileReader();
+                                                  reader.onload = (ev) => {
+                                                    const pkgs = [...allPkgs];
+                                                    pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: ev.target?.result as string } };
+                                                    updateSectionData(sec.id, 'items', pkgs);
+                                                  };
+                                                  reader.readAsDataURL(file);
+                                                }
+                                              }}
+                                            />
+                                          </label>
+                                        </div>
+
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>MAKKAH HOTEL NAME</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.makkahHotel?.name || '5 Star Hotel in Makkah'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), name: e.target.value } };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>LOCATION SUBTEXT</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.makkahHotel?.location || 'Near to Haram'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), location: e.target.value } };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>MEAL BADGE</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.makkahHotel?.badge || 'Breakfast'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), badge: e.target.value } };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>DAY/NIGHTS BADGE</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.makkahHotel?.nights || '6 Nights'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), nights: e.target.value } };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      {/* Madinah Accommodation Box */}
+                                      <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 10, padding: 10, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                                        <span style={{ fontSize: 10, fontWeight: 800, color: '#b45309', textTransform: 'uppercase' }}>
+                                          🕌 Madinah Hotel & Details
+                                        </span>
+
+                                        <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr', gap: 8, alignItems: 'center' }}>
+                                          {/* Madinah Image Thumbnail with Overlay 'X' */}
+                                          <div style={{ position: 'relative', width: 80, height: 50, borderRadius: 6, overflow: 'hidden', border: '1px solid #cbd5e1', background: '#e2e8f0', flexShrink: 0 }}>
+                                            {pkg.madinahHotel?.image ? (
+                                              <>
+                                                <img src={pkg.madinahHotel.image} alt="Madinah Hotel" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                <button
+                                                  type="button"
+                                                  onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    const pkgs = [...allPkgs];
+                                                    pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: '' } };
+                                                    updateSectionData(sec.id, 'items', pkgs);
+                                                  }}
+                                                  style={{
+                                                    position: 'absolute',
+                                                    top: 2,
+                                                    left: 2,
+                                                    width: 18,
+                                                    height: 18,
+                                                    borderRadius: '50%',
+                                                    background: '#ef4444',
+                                                    color: '#ffffff',
+                                                    border: 'none',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: 9,
+                                                    fontWeight: 900,
+                                                    cursor: 'pointer',
+                                                    boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
+                                                    zIndex: 10
+                                                  }}
+                                                  title="Remove Madinah Image"
+                                                >
+                                                  ✕
+                                                </button>
+                                              </>
+                                            ) : (
+                                              <label style={{ height: '100%', width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#b45309', background: '#fff', border: '1px dashed #fcd34d', borderRadius: 6, cursor: 'pointer' }}>
+                                                <Upload className="w-3 h-3" />
+                                                <input
+                                                  type="file"
+                                                  accept="image/*"
+                                                  style={{ display: 'none' }}
+                                                  onChange={(e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                      const reader = new FileReader();
+                                                      reader.onload = (ev) => {
+                                                        const pkgs = [...allPkgs];
+                                                        pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: ev.target?.result as string } };
+                                                        updateSectionData(sec.id, 'items', pkgs);
+                                                      };
+                                                      reader.readAsDataURL(file);
+                                                    }
+                                                  }}
+                                                />
+                                              </label>
+                                            )}
+                                          </div>
+
+                                          <label style={{ background: '#b45309', color: '#fff', borderRadius: 6, padding: '5px 10px', fontSize: 10, fontWeight: 700, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
+                                            <Upload className="w-3 h-3" /> Upload Photo
+                                            <input
+                                              type="file"
+                                              accept="image/*"
+                                              style={{ display: 'none' }}
+                                              onChange={(e) => {
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                  const reader = new FileReader();
+                                                  reader.onload = (ev) => {
+                                                    const pkgs = [...allPkgs];
+                                                    pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: ev.target?.result as string } };
+                                                    updateSectionData(sec.id, 'items', pkgs);
+                                                  };
+                                                  reader.readAsDataURL(file);
+                                                }
+                                              }}
+                                            />
+                                          </label>
+                                        </div>
+
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>MADINAH HOTEL NAME</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.madinahHotel?.name || '5 Star Hotel in Madinah'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), name: e.target.value } };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>LOCATION SUBTEXT</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.madinahHotel?.location || 'Near to Masjid Nabawi'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), location: e.target.value } };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>MEAL BADGE</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.madinahHotel?.badge || 'Breakfast'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), badge: e.target.value } };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                          <div>
+                                            <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>DAY/NIGHTS BADGE</label>
+                                            <input
+                                              type="text"
+                                              value={pkg.madinahHotel?.nights || '6 Nights'}
+                                              onChange={(e) => {
+                                                const pkgs = [...allPkgs];
+                                                pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), nights: e.target.value } };
+                                                updateSectionData(sec.id, 'items', pkgs);
+                                              }}
+                                              style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                            />
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    {/* Section 3: Pricing & Operator Footer Row (6-Grid Row) */}
+                                    <div style={{ background: '#fff', border: '1px solid #cbd5e1', borderRadius: 8, padding: 10, display: 'grid', gridTemplateColumns: '1.2fr 1.5fr 1fr 1fr 1fr 1fr', gap: 6 }}>
                                       <div>
-                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>PACKAGE TITLE</label>
+                                        <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>OPERATOR</label>
                                         <input
                                           type="text"
-                                          value={pkg.title || ''}
+                                          value={pkg.operatorName || 'King Travel'}
                                           onChange={(e) => {
-                                            const pkgs = [...sec.data?.items];
-                                            pkgs[pIdx] = { ...pkgs[pIdx], title: e.target.value };
+                                            const pkgs = [...allPkgs];
+                                            pkgs[pIdx] = { ...pkgs[pIdx], operatorName: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 12, fontWeight: 700 }}
+                                          style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
                                         />
                                       </div>
                                       <div>
-                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>DURATION</label>
+                                        <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>RATING</label>
                                         <input
                                           type="text"
-                                          value={pkg.duration || ''}
-                                          placeholder="14Days"
+                                          value={pkg.operatorRating || '4.4/5'}
                                           onChange={(e) => {
-                                            const pkgs = [...sec.data?.items];
-                                            pkgs[pIdx] = { ...pkgs[pIdx], duration: e.target.value };
+                                            const pkgs = [...allPkgs];
+                                            pkgs[pIdx] = { ...pkgs[pIdx], operatorRating: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 11 }}
+                                          style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
                                         />
                                       </div>
                                       <div>
-                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>PRICE ($)</label>
+                                        <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>PRICE SUBTEXT</label>
+                                        <input
+                                          type="text"
+                                          value={pkg.priceSubtext || 'FROM CAD / QUAD OCCUPANCY'}
+                                          onChange={(e) => {
+                                            const pkgs = [...allPkgs];
+                                            pkgs[pIdx] = { ...pkgs[pIdx], priceSubtext: e.target.value };
+                                            updateSectionData(sec.id, 'items', pkgs);
+                                          }}
+                                          style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                        />
+                                      </div>
+                                      <div>
+                                        <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#b45309', marginBottom: 2 }}>PRICE (CAD)</label>
                                         <input
                                           type="text"
                                           value={pkg.price || ''}
-                                          placeholder="12,995"
                                           onChange={(e) => {
-                                            const pkgs = [...sec.data?.items];
+                                            const pkgs = [...allPkgs];
                                             pkgs[pIdx] = { ...pkgs[pIdx], price: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 12, fontWeight: 800, color: '#b45309' }}
+                                          style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #fcd34d', fontSize: 11, fontWeight: 800, color: '#b45309' }}
+                                        />
+                                      </div>
+                                      <div>
+                                        <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>BTN LABEL</label>
+                                        <input
+                                          type="text"
+                                          value={pkg.btnLabel || 'Book Hajj 2027'}
+                                          onChange={(e) => {
+                                            const pkgs = [...allPkgs];
+                                            pkgs[pIdx] = { ...pkgs[pIdx], btnLabel: e.target.value };
+                                            updateSectionData(sec.id, 'items', pkgs);
+                                          }}
+                                          style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
+                                        />
+                                      </div>
+                                      <div>
+                                        <label style={{ display: 'block', fontSize: 8, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>BTN LINK</label>
+                                        <input
+                                          type="text"
+                                          value={pkg.btnLink || '/contact'}
+                                          onChange={(e) => {
+                                            const pkgs = [...allPkgs];
+                                            pkgs[pIdx] = { ...pkgs[pIdx], btnLink: e.target.value };
+                                            updateSectionData(sec.id, 'items', pkgs);
+                                          }}
+                                          style={{ width: '100%', padding: '4px 8px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 10 }}
                                         />
                                       </div>
                                     </div>
 
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                                      <div>
-                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>MAKKAH HOTEL</label>
-                                        <input
-                                          type="text"
-                                          value={pkg.makkahHotel?.name || ''}
-                                          placeholder="Hotel name..."
-                                          onChange={(e) => {
-                                            const pkgs = [...sec.data?.items];
-                                            pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), name: e.target.value } };
-                                            updateSectionData(sec.id, 'items', pkgs);
-                                          }}
-                                          style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 11 }}
-                                        />
-                                      </div>
-                                      <div>
-                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>MADINAH HOTEL</label>
-                                        <input
-                                          type="text"
-                                          value={pkg.madinahHotel?.name || ''}
-                                          placeholder="Hotel name..."
-                                          onChange={(e) => {
-                                            const pkgs = [...sec.data?.items];
-                                            pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), name: e.target.value } };
-                                            updateSectionData(sec.id, 'items', pkgs);
-                                          }}
-                                          style={{ width: '100%', padding: '6px 10px', borderRadius: 6, border: '1px solid #cbd5e1', fontSize: 11 }}
-                                        />
-                                      </div>
-                                    </div>
+                                    {/* Section 4: Package Detail Page Popup Editor Button */}
+                                    <button
+                                      type="button"
+                                      onClick={() => setActiveDetailPopupModal({ secId: sec.id, pIdx, pkg })}
+                                      style={{
+                                        width: '100%',
+                                        background: 'linear-gradient(135deg, #004B39 0%, #064e3b 100%)',
+                                        color: '#ffffff',
+                                        border: 'none',
+                                        borderRadius: 8,
+                                        padding: '10px 14px',
+                                        fontSize: 11,
+                                        fontWeight: 800,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: 8,
+                                        boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                                      }}
+                                    >
+                                      <Settings className="w-4 h-4 text-[#DB9E30]" />
+                                      <span>⚙️ MANAGE FULL PACKAGE DETAIL PAGE CONTENT (POPUP)</span>
+                                    </button>
                                   </div>
                                 ))}
                               </div>
@@ -2517,7 +3409,7 @@ function PageBuilderContent() {
                               <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: 10, padding: 12, display: 'flex', flexDirection: 'column', gap: 12, marginTop: 4 }}>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                   <span style={{ fontSize: 11, fontWeight: 800, color: '#004B39', textTransform: 'uppercase' }}>
-                                    🕋 Dynamic Umrah Packages Cards Manager
+                                    Dynamic Umrah Packages Cards Manager
                                   </span>
                                   <button
                                     onClick={() => {
@@ -2613,7 +3505,7 @@ function PageBuilderContent() {
                                         />
                                       </div>
                                       <div>
-                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>PRICE ($)</label>
+                                        <label style={{ display: 'block', fontSize: 9, fontWeight: 700, color: '#64748b', marginBottom: 2 }}>PRICE (CAD)</label>
                                         <input
                                           type="text"
                                           value={pkg.price || ''}
@@ -2658,6 +3550,31 @@ function PageBuilderContent() {
                                         />
                                       </div>
                                     </div>
+
+                                    {/* Section: Package Detail Page Popup Editor Button */}
+                                    <button
+                                      type="button"
+                                      onClick={() => setActiveDetailPopupModal({ secId: sec.id, pIdx, pkg })}
+                                      style={{
+                                        width: '100%',
+                                        background: 'linear-gradient(135deg, #004B39 0%, #064e3b 100%)',
+                                        color: '#ffffff',
+                                        border: 'none',
+                                        borderRadius: 8,
+                                        padding: '9px 14px',
+                                        fontSize: 11,
+                                        fontWeight: 800,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: 8,
+                                        boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
+                                      }}
+                                    >
+                                      <Settings className="w-4 h-4 text-[#DB9E30]" />
+                                      <span>⚙️ MANAGE FULL PACKAGE DETAIL PAGE CONTENT (POPUP)</span>
+                                    </button>
                                   </div>
                                 ))}
                               </div>
@@ -2753,6 +3670,21 @@ function PageBuilderContent() {
 
       </div>
       <ConfirmModal config={confirmConfig} onClose={() => setConfirmConfig(null)} />
+      <AdminPackageDetailModal
+        isOpen={!!activeDetailPopupModal}
+        onClose={() => setActiveDetailPopupModal(null)}
+        pkg={activeDetailPopupModal?.pkg}
+        onSave={(updatedPkg) => {
+          if (!activeDetailPopupModal) return;
+          const { secId, pIdx } = activeDetailPopupModal;
+          const sec = sections.find((s) => s.id === secId);
+          if (sec) {
+            const pkgs = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
+            pkgs[pIdx] = updatedPkg;
+            updateSectionData(secId, 'items', pkgs);
+          }
+        }}
+      />
     </div>
   );
 }

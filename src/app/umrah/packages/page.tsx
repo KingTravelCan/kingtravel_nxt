@@ -13,7 +13,7 @@ const umrahCardsData = [
     duration: "10, 15 Days",
     heroImage:
       "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg",
-    price: "$7,499",
+    price: "CAD 7,499",
     makkahHotel: {
       name: "5 Star Hotel in Makkah",
       location: "Near to Haram",
@@ -37,7 +37,7 @@ const umrahCardsData = [
     duration: "15 Days",
     heroImage:
       "https://images.unsplash.com/photo-1745775759814-9b60ed1718ed?q=80&w=1159&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: "$10,950",
+    price: "CAD 10,950",
     makkahHotel: {
       name: "Fairmont Clock Royal Tower",
       location: "Zero distance (In Front)",
@@ -61,7 +61,7 @@ const umrahCardsData = [
     duration: "10 Days",
     heroImage:
       "https://images.unsplash.com/photo-1586811388230-21835e10b83d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-    price: "$5,850",
+    price: "CAD 5,850",
     makkahHotel: {
       name: "Hyatt Regency Makkah",
       location: "2 Mins Walk",
@@ -81,8 +81,12 @@ const umrahCardsData = [
   },
 ];
 
+import PackageDetailModal, { PackageDetailData } from "@/components/PackageDetailModal";
+
 export default function UmrahPackagesPage() {
   const [pageData, setPageData] = useState<any>(null);
+  const [selectedDetailPkg, setSelectedDetailPkg] = useState<PackageDetailData | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   useEffect(() => {
     getPageBySlug('/umrah/packages').then(p => {
@@ -90,8 +94,23 @@ export default function UmrahPackagesPage() {
     });
   }, []);
 
+  const openDetailModal = (card: any) => {
+    setSelectedDetailPkg({
+      ...card,
+      badgeTag: card.badgeTag || "UMRAH 2026",
+      departure: card.departure || "CANADA",
+      destination: card.destination || "SAUDIA"
+    });
+    setIsDetailOpen(true);
+  };
+
   return (
-    <div className="umrah-page-wrapper">
+    <div className="umrah-page-wrapper" suppressHydrationWarning>
+      <PackageDetailModal
+        isOpen={isDetailOpen}
+        onClose={() => setIsDetailOpen(false)}
+        pkg={selectedDetailPkg}
+      />
       {/* ================= DYNAMIC HERO BANNER ================= */}
       <PageBanner
         title={pageData?.bannerTitle || pageData?.title || "Umrah Packages from Canada 2026 <br /><span>Travel with Confidence</span> by King Travel"}
@@ -246,27 +265,17 @@ export default function UmrahPackagesPage() {
                       </div>
                       <div>
                         <div className="price-title">From CAD / Quad Occupancy</div>
-                        <div className="price-val">{card.price}</div>
+                        <div className="text-[24px] font-black text-[#004B39] text-right leading-none">{card.price}</div>
                       </div>
                     </div>
 
-                    <div className="btn-actions-grid">
-                      <Link href="/contact" className="btn-outline-custom">
-                        <i className="fa-solid fa-circle-info"></i>
-                        <span>View Details</span>
-                      </Link>
-                      <a
-                        href={`https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20${encodeURIComponent(
-                          card.title
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="btn-gold-custom"
+                      <Link
+                        href={`/package/${card.id || card.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                        className="w-full bg-[#DB9E30] hover:bg-[#b88222] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer mt-2"
                       >
                         <i className="fa-solid fa-passport"></i>
                         <span>Book Umrah 2026</span>
-                      </a>
-                    </div>
+                      </Link>
                   </div>
                 </div>
               </article>

@@ -39,7 +39,7 @@ export default function PageBanner({
         justifyContent: 'center',
       }}
     >
-      <div className="max-w-[1280px] mx-auto w-full z-10">
+      <div className="max-w-[850px] mx-auto w-full z-10">
         <h1
           className="text-3xl md:text-5xl font-serif font-normal text-white mb-3 tracking-wide [&>span]:text-[#DB9E30] [&>em]:text-[#DB9E30] [&>em]:not-italic"
           style={{ fontFamily: "var(--serif, 'Marcellus', serif)" }}

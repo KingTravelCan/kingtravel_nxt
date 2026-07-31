@@ -928,7 +928,7 @@ export default function AdminSettingsPage() {
                             />
                           </div>
                           <div className="flex gap-2 items-center justify-between">
-                            <label className="bg-slate-200 text-slate-800 px-2 py-1 rounded text-[10px] font-bold cursor-pointer">
+                            <label className="flex bg-slate-200 text-slate-800 px-2 py-1 rounded text-[10px] font-bold cursor-pointer gap-2">
                               <CloudUpload className="w-3 h-3" /> Upload Icon
                               <input
                                 type="file"
@@ -1187,6 +1187,13 @@ export default function AdminSettingsPage() {
                     + Add Support Row
                   </button>
                 </div>
+
+                <input
+                  type="text"
+                  value={footerData.supportTitle || '24/7 CUSTOMER SUPPORT'}
+                  onChange={(e) => setFooterData({ ...footerData, supportTitle: e.target.value })}
+                  className="p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#004B39]"
+                />
 
                 <div className="flex flex-col gap-2.5">
                   {(footerData.supportItems || []).map((item: any, cIdx: number) => (
@@ -2524,11 +2531,10 @@ export default function AdminSettingsPage() {
                       setFormsSubTab(st.id as any);
                       setEditingFormKey(null);
                     }}
-                    className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all border border-transparent cursor-pointer flex items-center gap-2 whitespace-nowrap ${
-                      formsSubTab === st.id
-                        ? 'bg-[#004B39] text-white border-[#004B39] shadow-sm'
-                        : 'bg-white text-slate-700 hover:text-slate-900 border-slate-200'
-                    }`}
+                    className={`px-5 py-2.5 rounded-full text-xs font-bold transition-all border border-transparent cursor-pointer flex items-center gap-2 whitespace-nowrap ${formsSubTab === st.id
+                      ? 'bg-[#004B39] text-white border-[#004B39] shadow-sm'
+                      : 'bg-white text-slate-700 hover:text-slate-900 border-slate-200'
+                      }`}
                   >
                     <span>{st.icon}</span>
                     <span>{st.label}</span>
@@ -2552,7 +2558,7 @@ export default function AdminSettingsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {[
                       { key: 'contact', title: 'Contact Us Form', icon: '💬', desc: 'Main public contact page form for general inquiries & support.' },
-                      { key: 'packageInquiry', title: 'Package Inquiry Form', icon: '🕋', desc: 'Custom Umrah & Hajj package booking inquiry form.' },
+                      { key: 'packageInquiry', title: 'Package Inquiry Form', icon: '', desc: 'Custom Umrah & Hajj package booking inquiry form.' },
                       { key: 'visaConsultation', title: 'Visa Consultation Form', icon: '📜', desc: 'Saudi eVisa & Pilgrimage visa application form.' },
                       { key: 'flightInquiry', title: 'Flight Booking Form', icon: '✈️', desc: 'Direct flight quote assistance request form.' },
                     ].map((f) => {
@@ -2579,11 +2585,10 @@ export default function AdminSettingsPage() {
                                     [f.key]: { ...prev[f.key], enabled: isAct },
                                   }));
                                 }}
-                                className={`px-3 py-1.5 rounded-full text-xs font-extrabold outline-none cursor-pointer border transition-colors ${
-                                  cfg.enabled ?? true
-                                    ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                                    : 'bg-amber-50 text-[#DB9E30] border-[#DB9E30]/50 font-bold'
-                                }`}
+                                className={`px-3 py-1.5 rounded-full text-xs font-extrabold outline-none cursor-pointer border transition-colors ${cfg.enabled ?? true
+                                  ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                                  : 'bg-amber-50 text-[#DB9E30] border-[#DB9E30]/50 font-bold'
+                                  }`}
                               >
                                 <option value="active">● Active</option>
                                 <option value="disabled">● Disabled</option>
@@ -2619,11 +2624,10 @@ export default function AdminSettingsPage() {
                           </div>
 
                           <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
-                            <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${
-                              cfg.enabled ?? true
-                                ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
-                                : 'text-[#DB9E30] bg-amber-50 border-[#DB9E30]/30'
-                            }`}>
+                            <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${cfg.enabled ?? true
+                              ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                              : 'text-[#DB9E30] bg-amber-50 border-[#DB9E30]/30'
+                              }`}>
                               ● {cfg.enabled ?? true ? 'Active on Frontend' : 'Disabled (Blurred Overlay)'}
                             </span>
                             <button

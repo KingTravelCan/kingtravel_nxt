@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MarqueeTrack from "@/components/MarqueeTrack";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
+import { getPageBySlug } from "@/actions/pageActions";
 
 const partnerLogos = [
   { src: "/img/t-3.png", alt: "Trust Partner 3" },
@@ -28,6 +29,56 @@ const airlineLogos = [
 ];
 
 export default function Home() {
+  const [heroData, setHeroData] = useState({
+    heroEyebrow: "Est. in Canada · Licensed Pilgrimage Operator",
+    title: "Your journey to<br /><em>Makkah &amp; Madinah</em>,<br />guided with care.",
+    description: "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights, five‑star stays walking distance from the Haram, visas, and guides who've made this journey themselves.",
+    primaryBtnLabel: "View Umrah Packages →",
+    primaryBtnLink: "#packages",
+    secondaryBtnLabel: "Speak With an Advisor",
+    secondaryBtnLink: "/contact",
+    badge1Top: "10,000+",
+    badge1Sub: "Pilgrims Guided",
+    badge2Top: "5★ Hotels",
+    badge2Sub: "Every Package, Every Time",
+    bgImage: "/img/hero.png",
+    position: "center center",
+    size: "cover",
+  });
+
+  useEffect(() => {
+    getPageBySlug("/").then((p) => {
+      if (p) {
+        let secData: any = {};
+        if (p.sections) {
+          try {
+            const parsed = JSON.parse(p.sections);
+            const foundHero = parsed.find(
+              (s: any) => s.type === "Homepage Hero Banner" || s.type === "Hero Slider"
+            );
+            if (foundHero && foundHero.data) secData = foundHero.data;
+          } catch {}
+        }
+        setHeroData({
+          heroEyebrow: secData.heroEyebrow || "Est. in Canada · Licensed Pilgrimage Operator",
+          title: p.bannerTitle || secData.title || "Your journey to<br /><em>Makkah &amp; Madinah</em>,<br />guided with care.",
+          description: p.bannerDescription || secData.description || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights, five‑star stays walking distance from the Haram, visas, and guides who've made this journey themselves.",
+          primaryBtnLabel: secData.primaryBtnLabel || "View Umrah Packages →",
+          primaryBtnLink: secData.primaryBtnLink || "#packages",
+          secondaryBtnLabel: secData.secondaryBtnLabel || "Speak With an Advisor",
+          secondaryBtnLink: secData.secondaryBtnLink || "/contact",
+          badge1Top: secData.badge1Top || "10,000+",
+          badge1Sub: secData.badge1Sub || "Pilgrims Guided",
+          badge2Top: secData.badge2Top || "5★ Hotels",
+          badge2Sub: secData.badge2Sub || "Every Package, Every Time",
+          bgImage: p.bannerBgImage || secData.bannerBgImage || "/img/hero.png",
+          position: p.bannerPosition || secData.bannerPosition || "center center",
+          size: p.bannerSize || secData.bannerSize || "cover",
+        });
+      }
+    });
+  }, []);
+
   const [quoteForm, setQuoteForm] = useState({
     fullName: "",
     phone: "",
@@ -138,28 +189,29 @@ export default function Home() {
       {/* ================= HERO ================= */}
       <section className="hero">
         <div className="hero-inner">
-          <div className="hero-media">
+          <div
+            className="hero-media min-h-[640px]"
+            style={{
+              backgroundImage: `linear-gradient(100deg, rgba(10, 20, 18, .92) 0%, rgba(10, 20, 18, .72) 38%, rgba(10, 20, 18, .15) 68%), url("${(heroData.bgImage || '/img/hero.png').replace(/"/g, "'")}")`,
+              backgroundPosition: heroData.position || 'center center',
+              backgroundSize: heroData.size || 'cover',
+              backgroundRepeat: 'no-repeat',
+            }}
+          >
             <div className="hero-pattern"></div>
             <div className="hero-content">
-              <div className="eyebrow">Est. in Canada · Licensed Pilgrimage Operator</div>
-              <h1>
-                Your journey to<br />
-                <em>Makkah &amp; Madinah</em>,<br />
-                guided with care.
-              </h1>
-              <p className="lead">
-                King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights,
-                five‑star stays walking distance from the Haram, visas, and guides who've made this journey themselves.
-              </p>
+              <div className="eyebrow">{heroData.heroEyebrow}</div>
+              <h1 dangerouslySetInnerHTML={{ __html: heroData.title }} />
+              <p className="lead">{heroData.description}</p>
               <div className="hero-cta">
-                <a className="btn" href="#packages">
-                  View Umrah Packages{" "}
+                <a className="btn" href={heroData.primaryBtnLink || '#packages'}>
+                  {heroData.primaryBtnLabel || 'View Umrah Packages →'}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                     <path d="M5 12h14M13 6l6 6-6 6"></path>
                   </svg>
                 </a>
-                <Link className="btn ghost-light" href="/contact">
-                  Speak With an Advisor
+                <Link className="btn ghost-light" href={heroData.secondaryBtnLink || '/contact'}>
+                  {heroData.secondaryBtnLabel || 'Speak With an Advisor'}
                 </Link>
               </div>
             </div>
@@ -171,8 +223,8 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <div className="n">10,000+</div>
-                  <div className="l">Pilgrims Guided</div>
+                  <div className="n">{heroData.badge1Top}</div>
+                  <div className="l">{heroData.badge1Sub}</div>
                 </div>
               </div>
               <div className="float-badge badge-2">
@@ -183,8 +235,8 @@ export default function Home() {
                   </svg>
                 </div>
                 <div>
-                  <div className="n">5★ Hotels</div>
-                  <div className="l">Every Package, Every Time</div>
+                  <div className="n">{heroData.badge2Top}</div>
+                  <div className="l">{heroData.badge2Sub}</div>
                 </div>
               </div>
             </div>

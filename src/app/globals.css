@@ -2401,14 +2401,6 @@ section#flights {
   margin-bottom: 2px;
 }
 
-.price-val {
-  font-size: 24px;
-  font-weight: 900;
-  color: #004B39;
-  text-align: right;
-  line-height: 1;
-}
-
 /* Buttons Grid */
 .btn-actions-grid {
   display: grid;

@@ -126,7 +126,7 @@ export default function Footer() {
 
           {/* ── Column 4: Customer Support ── */}
           <div>
-            <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.supportTitle || 'CUSTOMER SUPPORT'}</h5>
+            <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.supportTitle || '24/7 CUSTOMER SUPPORT'}</h5>
             <ul className="list-none p-0 m-0">
               {(footerData.supportItems || []).map((item: any, cIdx: number) => (
                 <li key={cIdx} className="mb-[10px] font-light">

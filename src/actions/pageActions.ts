@@ -325,7 +325,7 @@ export async function getDefaultFooterData() {
       { label: 'Contact', url: '/contact' },
       { label: 'Terms of Use', url: '#' },
     ],
-    supportTitle: 'CUSTOMER SUPPORT',
+    supportTitle: '24/7 CUSTOMER SUPPORT',
     supportItems: [
       { text: '24/7 customer support', url: '', openInNewTab: false },
       { text: '+1800-844-5464', url: 'tel:+18008445464', openInNewTab: false },
@@ -776,6 +776,51 @@ export async function saveFormsSettingsAction(settingsData: any) {
   } catch (err: any) {
     console.error('saveFormsSettingsAction failed:', err);
     return { success: false, error: err.message };
+  }
+}
+
+export async function slugifyPackageTitle(title: string): Promise<string> {
+  if (!title) return '';
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9 -]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
+
+export async function getPackageDetailsAction(packageSlug: string) {
+  try {
+    const cleanSlug = packageSlug.toLowerCase().trim();
+    
+    // 1. Search database sitePages
+    const pages = await getPagesList();
+    for (const page of pages) {
+      if (page.sections) {
+        let parsedSections: any[] = [];
+        try {
+          parsedSections = typeof page.sections === 'string' ? JSON.parse(page.sections) : page.sections;
+        } catch (e) {}
+
+        if (Array.isArray(parsedSections)) {
+          for (const sec of parsedSections) {
+            if (sec.data?.items && Array.isArray(sec.data.items)) {
+              for (const item of sec.data.items) {
+                const itemSlug = await slugifyPackageTitle(item.title || '');
+                const itemId = String(item.id || '').toLowerCase();
+                if (itemSlug === cleanSlug || itemId === cleanSlug || itemSlug.includes(cleanSlug)) {
+                  return item;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return null;
+  } catch (err: any) {
+    console.error('getPackageDetailsAction failed:', err);
+    return null;
   }
 }
 
