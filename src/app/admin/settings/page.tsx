@@ -2649,8 +2649,14 @@ export default function AdminSettingsPage() {
                     disabled={savingForms}
                     className="bg-[#004B39] hover:bg-[#00382B] text-white px-6 py-2.5 rounded-full text-xs font-extrabold transition-colors cursor-pointer border-none shadow-md flex items-center gap-2"
                   >
-                    <Save className="w-4 h-4" />
-                    {savingForms ? 'Saving Form...' : 'Save Form'}
+                    <Save className="w-4 h-4 text-emerald-300" />
+                    {savingForms
+                      ? 'Saving Settings...'
+                      : formsSubTab === 'emailConfigs'
+                      ? 'Save Email Configs'
+                      : formsSubTab === 'emailTemplate'
+                      ? 'Save Email Template'
+                      : 'Save Forms'}
                   </button>
                 </div>
               </div>
@@ -3025,6 +3031,15 @@ export default function AdminSettingsPage() {
                             <p className="text-xs text-slate-500 mt-0.5 mb-0">Where website form submissions are delivered and how outgoing email notifications appear to recipients.</p>
                           </div>
                         </div>
+                        <button
+                          type="button"
+                          onClick={handleSaveFormsSettings}
+                          disabled={savingForms}
+                          className="bg-[#004B39] hover:bg-[#00382B] text-white px-5 py-2.5 rounded-xl text-xs font-extrabold transition-colors cursor-pointer border-none shadow-md flex items-center gap-2"
+                        >
+                          <Save className="w-4 h-4 text-emerald-300" />
+                          {savingForms ? 'Saving Email Configs...' : 'Save Email Configs'}
+                        </button>
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -3200,6 +3215,22 @@ export default function AdminSettingsPage() {
                           className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] font-semibold"
                         />
                       </Field>
+                    </div>
+
+                    {/* Bottom Action Save Bar for Email Configs */}
+                    <div className="flex justify-between items-center pt-4 border-t border-slate-100 mt-2">
+                      <div>
+                        {formsSaveMsg && <span className="text-xs font-bold text-emerald-600">{formsSaveMsg}</span>}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleSaveFormsSettings}
+                        disabled={savingForms}
+                        className="bg-[#004B39] hover:bg-[#00382B] text-white px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md flex items-center gap-2 cursor-pointer border-none"
+                      >
+                        <Save className="w-4 h-4 text-emerald-300" />
+                        {savingForms ? 'Saving Email Configs...' : 'Save Email Configs'}
+                      </button>
                     </div>
                   </div>
                 </div>
