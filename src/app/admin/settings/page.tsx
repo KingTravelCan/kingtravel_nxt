@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/admin/AdminLayout';
+import { uploadFileToFtp } from '@/lib/uploadClient';
 import {
   getNavItems,
   saveNavItemsAction,
@@ -987,16 +988,13 @@ export default function AdminSettingsPage() {
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (ev) => {
-                                  setFooterData({ ...footerData, logo: ev.target?.result as string });
-                                };
-                                reader.readAsDataURL(file);
-                              }
-                            }}
+                            onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const url = await uploadFileToFtp(file, 'footer');
+                                  if (url) setFooterData({ ...footerData, logo: url });
+                                }
+                              }}
                           />
                         </label>
                       </div>
@@ -1089,18 +1087,17 @@ export default function AdminSettingsPage() {
                                 type="file"
                                 accept="image/*"
                                 className="hidden"
-                                onChange={(e) => {
-                                  const file = e.target.files?.[0];
-                                  if (file) {
-                                    const reader = new FileReader();
-                                    reader.onload = (ev) => {
-                                      const updated = [...footerData.socialLinks];
-                                      updated[sIdx] = { ...updated[sIdx], icon: ev.target?.result as string };
-                                      setFooterData({ ...footerData, socialLinks: updated });
-                                    };
-                                    reader.readAsDataURL(file);
-                                  }
-                                }}
+                                onChange={async (e) => {
+                                   const file = e.target.files?.[0];
+                                   if (file) {
+                                     const url = await uploadFileToFtp(file, 'social');
+                                     if (url) {
+                                       const updated = [...footerData.socialLinks];
+                                       updated[sIdx] = { ...updated[sIdx], icon: url };
+                                       setFooterData({ ...footerData, socialLinks: updated });
+                                     }
+                                   }
+                                 }}
                               />
                             </label>
                             <div className="flex items-center gap-2">
@@ -1166,16 +1163,15 @@ export default function AdminSettingsPage() {
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => {
+                            onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (ev) => {
+                                const url = await uploadFileToFtp(file, 'badges');
+                                if (url) {
                                   const updated = [...footerData.trustBadges];
-                                  updated[bIdx] = { ...updated[bIdx], icon: ev.target?.result as string };
+                                  updated[bIdx] = { ...updated[bIdx], icon: url };
                                   setFooterData({ ...footerData, trustBadges: updated });
-                                };
-                                reader.readAsDataURL(file);
+                                }
                               }
                             }}
                           />
@@ -1516,14 +1512,11 @@ export default function AdminSettingsPage() {
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => {
+                            onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (ev) => {
-                                  setIdentityData({ ...identityData, logo: ev.target?.result as string });
-                                };
-                                reader.readAsDataURL(file);
+                                const url = await uploadFileToFtp(file, 'branding');
+                                if (url) setIdentityData({ ...identityData, logo: url });
                               }
                             }}
                           />
@@ -1569,14 +1562,11 @@ export default function AdminSettingsPage() {
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => {
+                            onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (ev) => {
-                                  setIdentityData({ ...identityData, favicon: ev.target?.result as string });
-                                };
-                                reader.readAsDataURL(file);
+                                const url = await uploadFileToFtp(file, 'branding');
+                                if (url) setIdentityData({ ...identityData, favicon: url });
                               }
                             }}
                           />
@@ -2436,14 +2426,11 @@ export default function AdminSettingsPage() {
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={(e) => {
+                            onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (file) {
-                                const reader = new FileReader();
-                                reader.onload = (ev) => {
-                                  setLoginAuthData({ ...loginAuthData, backgroundImage: ev.target?.result as string });
-                                };
-                                reader.readAsDataURL(file);
+                                const url = await uploadFileToFtp(file, 'login');
+                                if (url) setLoginAuthData({ ...loginAuthData, backgroundImage: url });
                               }
                             }}
                           />
@@ -2541,16 +2528,13 @@ export default function AdminSettingsPage() {
                               type="file"
                               accept="image/*"
                               className="hidden"
-                              onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  const reader = new FileReader();
-                                  reader.onload = (ev) => {
-                                    setDisclaimerData({ ...disclaimerData, image: ev.target?.result as string });
-                                  };
-                                  reader.readAsDataURL(file);
-                                }
-                              }}
+                              onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const url = await uploadFileToFtp(file, 'disclaimer');
+                                if (url) setDisclaimerData({ ...disclaimerData, image: url });
+                              }
+                            }}
                             />
                           </label>
                           <button
@@ -2573,16 +2557,13 @@ export default function AdminSettingsPage() {
                           type="file"
                           accept="image/*"
                           className="hidden"
-                          onChange={(e) => {
-                            const file = e.target.files?.[0];
-                            if (file) {
-                              const reader = new FileReader();
-                              reader.onload = (ev) => {
-                                setDisclaimerData({ ...disclaimerData, image: ev.target?.result as string });
-                              };
-                              reader.readAsDataURL(file);
-                            }
-                          }}
+                          onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const url = await uploadFileToFtp(file, 'disclaimer');
+                                if (url) setDisclaimerData({ ...disclaimerData, image: url });
+                              }
+                            }}
                         />
                       </label>
                     )}

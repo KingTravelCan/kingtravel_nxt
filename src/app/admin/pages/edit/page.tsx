@@ -10,6 +10,7 @@ import { getPageById, savePageAction } from '@/actions/pageActions';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
 import { Trash2, Upload, Settings } from 'lucide-react';
 import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
+import { uploadFileToFtp } from '@/lib/uploadClient';
 
 const SECTION_OPTIONS = [
   'Who We Are (Intro & Stats)',
@@ -567,14 +568,11 @@ function PageBuilderContent() {
                   id="hero-banner-file-input"
                   accept="image/*"
                   className="hidden"
-                  onChange={(e) => {
+                  onChange={async (e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      const reader = new FileReader();
-                      reader.onload = (evt) => {
-                        if (evt.target?.result) setBannerBgImage(String(evt.target.result));
-                      };
-                      reader.readAsDataURL(file);
+                      const url = await uploadFileToFtp(file, 'banners');
+                      if (url) setBannerBgImage(url);
                     }
                   }}
                 />
@@ -884,16 +882,13 @@ function PageBuilderContent() {
                 id="banner-file-input"
                 accept="image/*"
                 className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (file) {
-                    const reader = new FileReader();
-                    reader.onload = (evt) => {
-                      if (evt.target?.result) setBannerBgImage(String(evt.target.result));
-                    };
-                    reader.readAsDataURL(file);
-                  }
-                }}
+                onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'banners');
+                      if (url) setBannerBgImage(url);
+                    }
+                  }}
               />
               <div className="w-10 h-10 rounded-full bg-white shadow-xs border border-[#004B39]/20 flex items-center justify-center text-[#004B39] mb-2 text-lg">
                 ⇧
@@ -1254,18 +1249,13 @@ function PageBuilderContent() {
                                         type="file"
                                         accept="image/*"
                                         className="hidden"
-                                        onChange={(e) => {
-                                          const file = e.target.files?.[0];
-                                          if (file) {
-                                            const reader = new FileReader();
-                                            reader.onload = (evt) => {
-                                              if (evt.target?.result) {
-                                                updateSectionData(sec.id, 'image', String(evt.target.result));
-                                              }
-                                            };
-                                            reader.readAsDataURL(file);
-                                          }
-                                        }}
+                                        onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'sections');
+                      if (url) updateSectionData(sec.id, 'image', url);
+                    }
+                  }}
                                       />
                                       <span className="text-xs font-bold text-[#004B39] flex items-center gap-1.5">
                                         <Upload className="w-4 h-4" /> {sec.data?.image ? 'Click to Change Image File' : 'Click to Upload Image File'}
@@ -1950,17 +1940,15 @@ function PageBuilderContent() {
                                               { src: '/img/a-9.png', alt: 'Air Canada' },
                                             ];
 
-                                            files.forEach((file) => {
-                                              const reader = new FileReader();
-                                              reader.onload = (uploadEvent) => {
-                                                const newSrc = uploadEvent.target?.result as string;
-                                                if (newSrc) {
-                                                  currentLogos.push({ src: newSrc, alt: file.name.replace(/\.[^/.]+$/, "") });
+                                            (async () => {
+                                              for (const file of files) {
+                                                const url = await uploadFileToFtp(file, 'logos');
+                                                if (url) {
+                                                  currentLogos.push({ src: url, alt: file.name.replace(/\.[^/.]+$/, "") });
                                                   updateSectionData(sec.id, 'logos', [...currentLogos]);
                                                 }
-                                              };
-                                              reader.readAsDataURL(file);
-                                            });
+                                              }
+                                            })();
                                           }}
                                         />
                                       </label>
@@ -2137,16 +2125,13 @@ function PageBuilderContent() {
                                             type="file"
                                             accept="image/*"
                                             className="hidden"
-                                            onChange={(e) => {
-                                              const file = e.target.files?.[0];
-                                              if (file) {
-                                                const reader = new FileReader();
-                                                reader.onload = (ev) => {
-                                                  updateSectionData(sec.id, 'bgImage', ev.target?.result as string);
-                                                };
-                                                reader.readAsDataURL(file);
-                                              }
-                                            }}
+                                            onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'backgrounds');
+                      if (url) updateSectionData(sec.id, 'bgImage', url);
+                    }
+                  }}
                                           />
                                         </label>
                                       </div>
@@ -2257,18 +2242,13 @@ function PageBuilderContent() {
                                                 type="file"
                                                 accept="image/*"
                                                 className="hidden"
-                                                onChange={(e) => {
-                                                  const file = e.target.files?.[0];
-                                                  if (file) {
-                                                    const reader = new FileReader();
-                                                    reader.onload = (ev) => {
-                                                      const current = [...allCards];
-                                                      current[cIdx] = { ...current[cIdx], logo: ev.target?.result as string };
-                                                      updateSectionData(sec.id, 'items', current);
-                                                    };
-                                                    reader.readAsDataURL(file);
-                                                  }
-                                                }}
+                                                onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'uploads');
+                      if (url) updateSectionData(sec.id, 'image', url);
+                    }
+                  }}
                                               />
                                             </label>
                                           </div>
@@ -2749,18 +2729,13 @@ function PageBuilderContent() {
                                               type="file"
                                               accept="image/*"
                                               className="hidden"
-                                              onChange={(e) => {
-                                                const file = e.target.files?.[0];
-                                                if (file) {
-                                                  const reader = new FileReader();
-                                                  reader.onload = (ev) => {
-                                                    const pkgs = [...allPkgs];
-                                                    pkgs[pIdx] = { ...pkgs[pIdx], heroImage: ev.target?.result as string };
-                                                    updateSectionData(sec.id, 'items', pkgs);
-                                                  };
-                                                  reader.readAsDataURL(file);
-                                                }
-                                              }}
+                                              onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'uploads');
+                      if (url) updateSectionData(sec.id, 'image', url);
+                    }
+                  }}
                                             />
                                           </label>
                                         )}
@@ -2863,18 +2838,13 @@ function PageBuilderContent() {
                                                   type="file"
                                                   accept="image/*"
                                                   className="hidden"
-                                                  onChange={(e) => {
-                                                    const file = e.target.files?.[0];
-                                                    if (file) {
-                                                      const reader = new FileReader();
-                                                      reader.onload = (ev) => {
-                                                        const pkgs = [...allPkgs];
-                                                        pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: ev.target?.result as string } };
-                                                        updateSectionData(sec.id, 'items', pkgs);
-                                                      };
-                                                      reader.readAsDataURL(file);
-                                                    }
-                                                  }}
+                                                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'uploads');
+                      if (url) updateSectionData(sec.id, 'image', url);
+                    }
+                  }}
                                                 />
                                               </label>
                                             )}
@@ -2886,18 +2856,13 @@ function PageBuilderContent() {
                                               type="file"
                                               accept="image/*"
                                               className="hidden"
-                                              onChange={(e) => {
-                                                const file = e.target.files?.[0];
-                                                if (file) {
-                                                  const reader = new FileReader();
-                                                  reader.onload = (ev) => {
-                                                    const pkgs = [...allPkgs];
-                                                    pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: ev.target?.result as string } };
-                                                    updateSectionData(sec.id, 'items', pkgs);
-                                                  };
-                                                  reader.readAsDataURL(file);
-                                                }
-                                              }}
+                                              onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'uploads');
+                      if (url) updateSectionData(sec.id, 'image', url);
+                    }
+                  }}
                                             />
                                           </label>
                                         </div>
@@ -2991,18 +2956,13 @@ function PageBuilderContent() {
                                                   type="file"
                                                   accept="image/*"
                                                   className="hidden"
-                                                  onChange={(e) => {
-                                                    const file = e.target.files?.[0];
-                                                    if (file) {
-                                                      const reader = new FileReader();
-                                                      reader.onload = (ev) => {
-                                                        const pkgs = [...allPkgs];
-                                                        pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: ev.target?.result as string } };
-                                                        updateSectionData(sec.id, 'items', pkgs);
-                                                      };
-                                                      reader.readAsDataURL(file);
-                                                    }
-                                                  }}
+                                                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'uploads');
+                      if (url) updateSectionData(sec.id, 'image', url);
+                    }
+                  }}
                                                 />
                                               </label>
                                             )}
@@ -3014,18 +2974,13 @@ function PageBuilderContent() {
                                               type="file"
                                               accept="image/*"
                                               className="hidden"
-                                              onChange={(e) => {
-                                                const file = e.target.files?.[0];
-                                                if (file) {
-                                                  const reader = new FileReader();
-                                                  reader.onload = (ev) => {
-                                                    const pkgs = [...allPkgs];
-                                                    pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: ev.target?.result as string } };
-                                                    updateSectionData(sec.id, 'items', pkgs);
-                                                  };
-                                                  reader.readAsDataURL(file);
-                                                }
-                                              }}
+                                              onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await uploadFileToFtp(file, 'uploads');
+                      if (url) updateSectionData(sec.id, 'image', url);
+                    }
+                  }}
                                             />
                                           </label>
                                         </div>
