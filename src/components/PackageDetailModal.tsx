@@ -216,7 +216,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                       src={makkahImg}
                       alt={makkahName}
                       fill
-                      style={{ objectFit: "cover" }}
+                      className="object-cover"
                       unoptimized
                     />
                     <span className="absolute top-3 left-3 bg-[#004B39] text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
@@ -249,7 +249,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                       src={madinahImg}
                       alt={madinahName}
                       fill
-                      style={{ objectFit: "cover" }}
+                      className="object-cover"
                       unoptimized
                     />
                     <span className="absolute top-3 left-3 bg-[#DB9E30] text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">

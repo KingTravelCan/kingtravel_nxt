@@ -107,12 +107,7 @@ function Cinematic3DPieChart({
 
           {/* 3D Perspective Container */}
           <div
-            className="relative w-48 h-48 flex items-center justify-center transition-transform duration-500 hover:scale-105"
-            style={{
-              perspective: '1000px',
-              transform: 'perspective(1000px) rotateX(25deg) rotateZ(-6deg)',
-              transformStyle: 'preserve-3d',
-            }}
+            className="relative w-48 h-48 flex items-center justify-center transition-transform duration-500 hover:scale-105 [perspective:1000px] [transform:perspective(1000px)_rotateX(25deg)_rotateZ(-6deg)] [transform-style:preserve-3d]"
           >
             {/* 3D Shadow Layer Below */}
             <svg
@@ -164,11 +159,13 @@ function Cinematic3DPieChart({
                     strokeLinecap="round"
                     onMouseEnter={() => setHoveredIdx(idx)}
                     onMouseLeave={() => setHoveredIdx(null)}
-                    className="transition-all duration-500 ease-out cursor-pointer"
-                    style={{
-                      transform: isHovered ? 'scale(1.04)' : 'scale(1)',
-                      transformOrigin: '96px 96px',
+                    ref={(el) => {
+                      if (el) {
+                        el.style.transform = isHovered ? 'scale(1.04)' : 'scale(1)';
+                        el.style.transformOrigin = '96px 96px';
+                      }
                     }}
+                    className="transition-all duration-500 ease-out cursor-pointer"
                   />
                 );
               })}
@@ -176,8 +173,7 @@ function Cinematic3DPieChart({
 
             {/* Elevated 3D Center Core Badge */}
             <div
-              className="absolute inset-0 m-auto w-24 h-24 rounded-full bg-white/95 backdrop-blur-md shadow-xl border border-slate-100 flex flex-col items-center justify-center text-center pointer-events-none transition-transform duration-300 group-hover:translate-z-6"
-              style={{ transform: 'translateZ(20px)' }}
+              className="absolute inset-0 m-auto w-24 h-24 rounded-full bg-white/95 backdrop-blur-md shadow-xl border border-slate-100 flex flex-col items-center justify-center text-center pointer-events-none transition-transform duration-300 group-hover:translate-z-6 [transform:translateZ(20px)]"
             >
               <span className="text-[9px] font-extrabold uppercase tracking-widest text-slate-400">
                 {totalLabel}
@@ -211,11 +207,13 @@ function Cinematic3DPieChart({
               >
                 <div className="flex items-center gap-2.5">
                   <span
-                    className="w-3 h-3 rounded-full shadow-xs transition-transform"
-                    style={{
-                      background: `linear-gradient(135deg, ${s.gradientColors[0]}, ${s.gradientColors[1]})`,
-                      transform: isHovered ? 'scale(1.25)' : 'scale(1)',
+                    ref={(el) => {
+                      if (el) {
+                        el.style.background = `linear-gradient(135deg, ${s.gradientColors[0]}, ${s.gradientColors[1]})`;
+                        el.style.transform = isHovered ? 'scale(1.25)' : 'scale(1)';
+                      }
                     }}
+                    className="w-3 h-3 rounded-full shadow-xs transition-transform"
                   />
                   <div>
                     <div className="text-xs font-extrabold text-slate-900">{s.label}</div>
@@ -628,10 +626,21 @@ export default function DashboardClient({
               {Object.entries(TYPE_CONFIG).map(([key, cfg]) => (
                 <span
                   key={key}
+                  ref={(el) => {
+                    if (el) {
+                      el.style.backgroundColor = cfg.bg;
+                      el.style.color = cfg.text;
+                      el.style.borderColor = cfg.border;
+                    }
+                  }}
                   className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border"
-                  style={{ backgroundColor: cfg.bg, color: cfg.text, borderColor: cfg.border }}
                 >
-                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: cfg.dot }} />
+                  <span
+                    ref={(dot) => {
+                      if (dot) dot.style.backgroundColor = cfg.dot;
+                    }}
+                    className="w-1.5 h-1.5 rounded-full"
+                  />
                   {cfg.label}
                 </span>
               ))}
@@ -644,16 +653,24 @@ export default function DashboardClient({
                 return (
                   <div key={act.id} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/90 border border-slate-200/60 shadow-2xs">
                     <span
+                      ref={(dot) => {
+                        if (dot) dot.style.backgroundColor = cfg.dot;
+                      }}
                       className="w-2.5 h-2.5 rounded-full mt-1 shrink-0"
-                      style={{ backgroundColor: cfg.dot }}
                       title={cfg.label}
                     />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-1">
                         <span className="font-bold text-xs text-slate-900 truncate">{act.action}</span>
                         <span
+                          ref={(badge) => {
+                            if (badge) {
+                              badge.style.backgroundColor = cfg.bg;
+                              badge.style.color = cfg.text;
+                              badge.style.borderColor = cfg.border;
+                            }
+                          }}
                           className="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shrink-0 border"
-                          style={{ backgroundColor: cfg.bg, color: cfg.text, borderColor: cfg.border }}
                         >
                           {cfg.label}
                         </span>

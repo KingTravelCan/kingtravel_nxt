@@ -212,15 +212,23 @@ export default function FloatingShareBar() {
 
   return (
     <div
+      ref={(el) => {
+        if (el) {
+          if (isRight) {
+            el.style.right = `${edgeGap}px`;
+            el.style.left = 'auto';
+          } else {
+            el.style.left = `${edgeGap}px`;
+            el.style.right = 'auto';
+          }
+          el.style.top = topStyle;
+          el.style.bottom = bottomStyle;
+          el.style.transform = transformStyle;
+        }
+      }}
       className={`fixed z-[9999] flex flex-col gap-2 p-2 rounded-2xl bg-white/90 backdrop-blur-md shadow-2xl border border-slate-200/80 transition-all duration-300 ${
         isVisible ? 'opacity-100 translate-x-0' : isRight ? 'opacity-0 translate-x-12' : 'opacity-0 -translate-x-12'
       }`}
-      style={{
-        [isRight ? 'right' : 'left']: `${edgeGap}px`,
-        top: topStyle,
-        bottom: bottomStyle,
-        transform: transformStyle,
-      }}
     >
       {activePlatforms.map((p: any) => {
         let bg = p.color || '#004B39';
@@ -241,19 +249,27 @@ export default function FloatingShareBar() {
             type="button"
             onClick={() => handleShareClick(p.id, p.name)}
             title={`Share on ${p.name}`}
-            className={`flex items-center gap-2 cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border-none p-1.5 ${getStyleRadius()}`}
-            style={{
-              backgroundColor: bg,
-              color: txtColor,
-              minWidth: shareConfig.showLabels ? 'auto' : `${iconSize}px`,
-              minHeight: `${iconSize}px`,
-              paddingLeft: shareConfig.showLabels ? '12px' : '6px',
-              paddingRight: shareConfig.showLabels ? '14px' : '6px',
+            ref={(btn) => {
+              if (btn) {
+                btn.style.backgroundColor = bg;
+                btn.style.color = txtColor;
+                btn.style.minWidth = shareConfig.showLabels ? 'auto' : `${iconSize}px`;
+                btn.style.minHeight = `${iconSize}px`;
+                btn.style.paddingLeft = shareConfig.showLabels ? '12px' : '6px';
+                btn.style.paddingRight = shareConfig.showLabels ? '14px' : '6px';
+              }
             }}
+            className={`flex items-center gap-2 cursor-pointer transition-all duration-200 hover:scale-105 hover:shadow-md border-none p-1.5 ${getStyleRadius()}`}
           >
             <div
+              ref={(ic) => {
+                if (ic) {
+                  const sz = Math.max(16, iconSize - 16);
+                  ic.style.width = `${sz}px`;
+                  ic.style.height = `${sz}px`;
+                }
+              }}
               className="flex items-center justify-center font-bold text-xs"
-              style={{ width: `${Math.max(16, iconSize - 16)}px`, height: `${Math.max(16, iconSize - 16)}px` }}
             >
               {p.id === 'facebook' && <i className="fa-brands fa-facebook-f text-sm"></i>}
               {p.id === 'whatsapp' && <i className="fa-brands fa-whatsapp text-base"></i>}

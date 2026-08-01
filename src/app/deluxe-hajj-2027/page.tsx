@@ -62,7 +62,7 @@ export default function DeluxeHajj2027Page() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Makkah Hotel Card */}
                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col hover:-translate-y-1 transition duration-200">
-                  <div className="relative h-48 bg-cover bg-center" style={{ backgroundImage: "url('/img/fairmount.jpg')" }}>
+                  <div className="relative h-48 bg-cover bg-center bg-[url('/img/fairmount.jpg')]">
                     <span className="absolute top-4 left-4 bg-[#0b4a3a] text-white text-xs font-semibold px-4 py-1.5 rounded-full border-2 border-white">
                       Makkah
                     </span>
@@ -85,7 +85,7 @@ export default function DeluxeHajj2027Page() {
 
                 {/* Madinah Hotel Card */}
                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col hover:-translate-y-1 transition duration-200">
-                  <div className="relative h-48 bg-cover bg-center" style={{ backgroundImage: "url('/img/dar-al-eman.jpg')" }}>
+                  <div className="relative h-48 bg-cover bg-center bg-[url('/img/dar-al-eman.jpg')]">
                     <span className="absolute top-4 left-4 bg-[#d4af37] text-slate-900 text-xs font-bold px-4 py-1.5 rounded-full border-2 border-white">
                       Madinah
                     </span>

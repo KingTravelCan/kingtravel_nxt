@@ -25,12 +25,14 @@ export default function PageBanner({
 
   return (
     <section
-      className="relative text-center text-white py-20 px-5 overflow-hidden h-[360px] min-h-[360px] flex flex-col items-center justify-center bg-no-repeat"
-      style={{
-        backgroundImage: `linear-gradient(rgba(10, 66, 45, 0.45), rgba(10, 66, 45, 0.45)), url("${cleanBg}")`,
-        backgroundPosition: activePos,
-        backgroundSize: activeSize,
+      ref={(el) => {
+        if (el) {
+          el.style.backgroundImage = `linear-gradient(rgba(10, 66, 45, 0.45), rgba(10, 66, 45, 0.45)), url("${cleanBg}")`;
+          el.style.backgroundPosition = activePos;
+          el.style.backgroundSize = activeSize;
+        }
       }}
+      className="relative text-center text-white py-20 px-5 overflow-hidden h-[360px] min-h-[360px] flex flex-col items-center justify-center bg-no-repeat"
     >
       <div className="max-w-[850px] mx-auto w-full z-10">
         <h1

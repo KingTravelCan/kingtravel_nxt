@@ -139,6 +139,15 @@ export default function TestimonialsCarousel() {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : totalOriginal - 1));
   };
 
+  const trackRef = useState<HTMLDivElement | null>(null)[1];
+  const [trackEl, setTrackEl] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (trackEl) {
+      trackEl.style.transform = `translateX(calc(-${currentIndex} * ((100% + 16px) / ${visibleItems})))`;
+    }
+  }, [currentIndex, visibleItems, trackEl]);
+
   return (
     <div
       className="relative w-full mx-auto max-w-[884px]"
@@ -157,10 +166,8 @@ export default function TestimonialsCarousel() {
 
       <div className="overflow-hidden w-full rounded-3xl">
         <div
+          ref={setTrackEl}
           className={`flex gap-4 ${enableTransition ? "transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]" : ""}`}
-          style={{
-            transform: `translateX(calc(-${currentIndex} * ((100% + 16px) / ${visibleItems})))`,
-          }}
         >
           {extendedReviews.map((review, idx) => {
             const isExpanded = !!expandedCards[review.id];

@@ -634,7 +634,7 @@ export default function AdminSettingsPage() {
 
   return (
     <AdminLayout user={{ name: 'Admin User', role: 'Super Admin' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24, fontFamily: 'inherit', color: '#1e293b' }}>
+      <div className="flex flex-col gap-6 font-sans text-slate-800">
 
         {/* ── Page Header ── */}
         <div>
@@ -666,35 +666,17 @@ export default function AdminSettingsPage() {
 
         {/* ── Header & Footer Sub-Tabs ── */}
         {activeTab === 'header-footer' && (
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: 10 }}>
+          <div className="flex justify-between items-center">
+            <div className="flex gap-2.5">
               <button
                 onClick={() => setSubTab('header')}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: 10,
-                  border: subTab === 'header' ? '1px solid #004B39' : '1px solid #e2e8f0',
-                  background: subTab === 'header' ? '#e6f4f1' : '#fff',
-                  color: subTab === 'header' ? '#004B39' : '#64748b',
-                  fontWeight: 700,
-                  fontSize: 12,
-                  cursor: 'pointer',
-                }}
+                className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all border ${subTab === 'header' ? 'border-[#004B39] bg-[#e6f4f1] text-[#004B39]' : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300'}`}
               >
                 📋 Header Builder
               </button>
               <button
                 onClick={() => setSubTab('footer')}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: 10,
-                  border: subTab === 'footer' ? '1px solid #004B39' : '1px solid #e2e8f0',
-                  background: subTab === 'footer' ? '#e6f4f1' : '#fff',
-                  color: subTab === 'footer' ? '#004B39' : '#64748b',
-                  fontWeight: 700,
-                  fontSize: 12,
-                  cursor: 'pointer',
-                }}
+                className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer transition-all border ${subTab === 'footer' ? 'border-[#004B39] bg-[#e6f4f1] text-[#004B39]' : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300'}`}
               >
                 👣 Footer Builder
               </button>
@@ -703,7 +685,7 @@ export default function AdminSettingsPage() {
               <button
                 type="button"
                 onClick={handleSaveHeaderAll}
-                className="bg-[#004B39] text-white hover:bg-[#00382B] px-5 py-2 rounded-xl text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 cursor-pointer border-none"
+                className="bg-[#004B39] text-white hover:bg-[#00382B] px-5 py-2 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center gap-1.5 cursor-pointer border-none"
               >
                 <Save className="w-4 h-4 text-emerald-300" /> Save Header Settings
               </button>
@@ -712,24 +694,15 @@ export default function AdminSettingsPage() {
         )}
 
         {/* ── Main Tab Content Box ── */}
-        <div style={{
-          background: '#fff',
-          borderRadius: 16,
-          padding: 28,
-          border: '1px solid #f1f5f9',
-          boxShadow: '0 1px 8px rgba(0,0,0,0.04)',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 28,
-        }}>
+        <div className="bg-white rounded-2xl p-7 border border-slate-100 shadow-xs flex flex-col gap-7">
 
           {/* ================= TAB 1: HEADER & FOOTER ================= */}
           {activeTab === 'header-footer' && subTab === 'header' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <div className="flex flex-col gap-6">
               {/* Logo & Identity Panel */}
-              <div style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: 24 }}>
+              <div className="border-b border-slate-100 pb-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 style={{ fontSize: 13, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', margin: 0 }}>
+                  <h3 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider m-0">
                     🖼 LOGO &amp; IDENTITY
                   </h3>
                   <button
@@ -740,40 +713,34 @@ export default function AdminSettingsPage() {
                     <Save className="w-3.5 h-3.5 text-emerald-300" /> Save Logo &amp; Identity
                   </button>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: 24, alignItems: 'center' }}>
-                  <div style={{
-                    background: '#f8fafc',
-                    border: '2px dashed #cbd5e1',
-                    borderRadius: 14,
-                    padding: 20,
-                    textAlign: 'center',
-                  }}>
-                    <img src="/img/logo.png" alt="Logo Preview" style={{ maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto' }} />
-                    <span style={{ fontSize: 10, color: '#94a3b8', marginTop: 8, display: 'block' }}>PNG, SVG or WEBP</span>
+                <div className="grid grid-cols-[180px_1fr] gap-6 items-center">
+                  <div className="bg-slate-50 border-2 border-dashed border-slate-300 rounded-2xl p-5 text-center">
+                    <img src="/img/logo.png" alt="Logo Preview" className="max-w-full h-auto block mx-auto" />
+                    <span className="text-[10px] text-slate-400 mt-2 block">PNG, SVG or WEBP</span>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+                  <div className="flex flex-col gap-3.5">
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 800, color: '#64748b', marginBottom: 6 }}>
+                      <label className="block text-[11px] font-extrabold text-slate-500 mb-1.5">
                         SITE NAME (TEXT FALLBACK)
                       </label>
                       <input
                         type="text"
                         value={siteName}
                         onChange={(e) => setSiteName(e.target.value)}
-                        style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #cbd5e1', background: '#f8fafc', fontSize: 13, outline: 'none' }}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs outline-none focus:border-[#004B39]"
                       />
                     </div>
 
                     <div>
-                      <label style={{ display: 'block', fontSize: 11, fontWeight: 800, color: '#64748b', marginBottom: 6 }}>
+                      <label className="block text-[11px] font-extrabold text-slate-500 mb-1.5">
                         ALTERNATIVE TEXT
                       </label>
                       <input
                         type="text"
                         value={altText}
                         onChange={(e) => setAltText(e.target.value)}
-                        style={{ width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #cbd5e1', background: '#f8fafc', fontSize: 13, outline: 'none' }}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs outline-none focus:border-[#004B39]"
                       />
                     </div>
                   </div>
@@ -948,15 +915,15 @@ export default function AdminSettingsPage() {
               </div>
 
               {/* Visibility Toggles */}
-              <div style={{ borderBottom: '1px solid #f1f5f9', paddingBottom: 24 }}>
-                <h3 style={{ fontSize: 13, fontWeight: 800, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 16 }}>
+              <div className="border-b border-slate-100 pb-6">
+                <h3 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-4">
                   👁 VISIBILITY TOGGLES
                 </h3>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div className="flex flex-col gap-3.5">
+                  <div className="flex justify-between items-center">
                     <div>
-                      <div style={{ fontSize: 13, fontWeight: 700 }}>Search Bar</div>
-                      <div style={{ fontSize: 11, color: '#94a3b8' }}>Show the search input in the header</div>
+                      <div className="text-xs font-bold">Search Bar</div>
+                      <div className="text-[11px] text-slate-400">Show the search input in the header</div>
                     </div>
                     <Field orientation="horizontal">
                       <Switch id="switch-search-bar" checked={showSearchBar} onChange={setShowSearchBar} />
@@ -983,7 +950,7 @@ export default function AdminSettingsPage() {
 
           {/* ================= FOOTER BUILDER PANEL ================= */}
           {activeTab === 'header-footer' && subTab === 'footer' && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+            <div className="flex flex-col gap-6">
               <div className="flex justify-between items-center border-b border-slate-100 pb-3">
                 <h3 className="text-xs font-extrabold text-slate-600 uppercase tracking-wider m-0">
                   👣 FOOTER BRANDING, COLUMNS &amp; SWITCHES
@@ -1985,7 +1952,7 @@ export default function AdminSettingsPage() {
                               }}
                               className="accent-[#004B39] w-4 h-4 rounded cursor-pointer"
                             />
-                            <div className="w-6 h-6 rounded-md flex items-center justify-center text-white text-xs font-bold" style={{ backgroundColor: p.color || '#004B39' }}>
+                            <div className="w-6 h-6 rounded-md flex items-center justify-center text-white text-xs font-bold" ref={(el) => { if (el) el.style.backgroundColor = p.color || '#004B39'; }}>
                               {p.name.charAt(0)}
                             </div>
                             <span className="text-xs font-bold text-slate-800">{p.name}</span>
@@ -2047,11 +2014,21 @@ export default function AdminSettingsPage() {
                     {shareData.enabled && (
                       <div
                         className="absolute flex flex-col gap-2 p-2 rounded-xl bg-white/90 backdrop-blur-md shadow-2xl border border-slate-200 transition-all duration-300"
-                        style={{
-                          [shareData.sidebarEdge === 'left' ? 'left' : 'right']: `${Math.max(6, (shareData.gapFromEdge || 20) / 2)}px`,
-                          top: shareData.verticalPosition === 'top' ? '20px' : shareData.verticalPosition === 'bottom' ? 'auto' : '50%',
-                          bottom: shareData.verticalPosition === 'bottom' ? '20px' : 'auto',
-                          transform: shareData.verticalPosition === 'center' ? 'translateY(-50%)' : 'none',
+                        ref={(el) => {
+                          if (el) {
+                            const isLeft = shareData.sidebarEdge === 'left';
+                            const edgePx = `${Math.max(6, (shareData.gapFromEdge || 20) / 2)}px`;
+                            if (isLeft) {
+                              el.style.left = edgePx;
+                              el.style.right = 'auto';
+                            } else {
+                              el.style.right = edgePx;
+                              el.style.left = 'auto';
+                            }
+                            el.style.top = shareData.verticalPosition === 'top' ? '20px' : shareData.verticalPosition === 'bottom' ? 'auto' : '50%';
+                            el.style.bottom = shareData.verticalPosition === 'bottom' ? '20px' : 'auto';
+                            el.style.transform = shareData.verticalPosition === 'center' ? 'translateY(-50%)' : 'none';
+                          }
                         }}
                       >
                         {(shareData.activePlatforms || [])
@@ -2079,17 +2056,19 @@ export default function AdminSettingsPage() {
                               <div
                                 key={p.id}
                                 className={`flex items-center gap-1.5 cursor-pointer shadow-xs transition-transform hover:scale-105 ${radiusClass}`}
-                                style={{
-                                  backgroundColor: bg,
-                                  color: txtColor,
-                                  padding: shareData.showLabels ? '4px 8px' : '6px',
+                                ref={(el) => {
+                                  if (el) {
+                                    el.style.backgroundColor = bg;
+                                    el.style.color = txtColor;
+                                    el.style.padding = shareData.showLabels ? '4px 8px' : '6px';
+                                  }
                                 }}
                               >
-                                <span className="text-[11px] font-extrabold flex items-center justify-center w-4 h-4" style={{ color: txtColor }}>
+                                <span className="text-[11px] font-extrabold flex items-center justify-center w-4 h-4" ref={(el) => { if (el) el.style.color = txtColor; }}>
                                   {p.name.charAt(0)}
                                 </span>
                                 {shareData.showLabels && (
-                                  <span className="text-[9px] font-bold pr-1" style={{ color: txtColor }}>{p.name}</span>
+                                  <span className="text-[9px] font-bold pr-1" ref={(el) => { if (el) el.style.color = txtColor; }}>{p.name}</span>
                                 )}
                               </div>
                             );
@@ -2157,9 +2136,11 @@ export default function AdminSettingsPage() {
                                   <span className="font-extrabold text-slate-900">{u.name}</span>
                                   <span
                                     className="px-2 py-0.5 rounded-md text-[10px] font-extrabold inline-block"
-                                    style={{
-                                      backgroundColor: u.badgeBg || '#0F766E',
-                                      color: u.badgeTextColor || '#FFFFFF',
+                                    ref={(el) => {
+                                      if (el) {
+                                        el.style.backgroundColor = u.badgeBg || '#0F766E';
+                                        el.style.color = u.badgeTextColor || '#FFFFFF';
+                                      }
                                     }}
                                   >
                                     Badge
@@ -2337,9 +2318,11 @@ export default function AdminSettingsPage() {
                             <span>Preview:</span>
                             <span
                               className="px-2.5 py-0.5 rounded-md text-xs font-bold transition-colors"
-                              style={{
-                                backgroundColor: userFormData.badgeBg || '#0F766E',
-                                color: userFormData.badgeTextColor || '#FFFFFF',
+                              ref={(el) => {
+                                if (el) {
+                                  el.style.backgroundColor = userFormData.badgeBg || '#0F766E';
+                                  el.style.color = userFormData.badgeTextColor || '#FFFFFF';
+                                }
                               }}
                             >
                               {userFormData.name || 'User'}

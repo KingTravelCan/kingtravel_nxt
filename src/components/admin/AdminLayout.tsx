@@ -116,13 +116,12 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                style={{ color: isActive ? '#004B39' : '#ffffff' }}
                 className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs transition-all ${isActive
-                  ? 'font-bold bg-white shadow-md border-l-4 border-[#DB9E30] pl-2.5'
-                  : 'font-medium hover:bg-white/15'
+                  ? 'text-[#004B39] font-bold bg-white shadow-md border-l-4 border-[#DB9E30] pl-2.5'
+                  : 'text-white font-medium hover:bg-white/15'
                   }`}
               >
-                <span className="shrink-0" style={{ color: isActive ? '#004B39' : '#ffffff' }}>
+                <span className={`shrink-0 ${isActive ? 'text-[#004B39]' : 'text-white'}`}>
                   {item.icon}
                 </span>
                 {item.label}

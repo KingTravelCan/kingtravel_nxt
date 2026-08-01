@@ -88,12 +88,23 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
           <span
             key={key}
             onClick={() => setSelectedType(selectedType === key ? 'all' : key)}
+            ref={(el) => {
+              if (el) {
+                el.style.backgroundColor = cfg.bg;
+                el.style.color = cfg.text;
+                el.style.borderColor = cfg.border;
+              }
+            }}
             className={`inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full cursor-pointer transition-transform hover:scale-105 border ${
               selectedType === key ? 'ring-2 ring-emerald-500' : ''
             }`}
-            style={{ backgroundColor: cfg.bg, color: cfg.text, borderColor: cfg.border }}
           >
-            <span className="w-2 h-2 rounded-full" style={{ backgroundColor: cfg.dot }} />
+            <span
+              ref={(dot) => {
+                if (dot) dot.style.backgroundColor = cfg.dot;
+              }}
+              className="w-2 h-2 rounded-full"
+            />
             {cfg.label}
           </span>
         ))}
@@ -125,8 +136,10 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
                   <tr key={act.id} className="hover:bg-slate-50/50 transition-colors">
                     <td className="py-3 px-4 text-center">
                       <span
+                        ref={(dot) => {
+                          if (dot) dot.style.backgroundColor = cfg.dot;
+                        }}
                         className="inline-block w-2.5 h-2.5 rounded-full"
-                        style={{ backgroundColor: cfg.dot }}
                         title={cfg.label}
                       />
                     </td>
@@ -134,8 +147,13 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
                       <div className="flex items-center gap-2">
                         <span className="font-bold text-slate-900">{act.action}</span>
                         <span
+                          ref={(badge) => {
+                            if (badge) {
+                              badge.style.backgroundColor = cfg.bg;
+                              badge.style.color = cfg.text;
+                            }
+                          }}
                           className="text-[10px] font-bold px-2 py-0.5 rounded-full uppercase"
-                          style={{ backgroundColor: cfg.bg, color: cfg.text }}
                         >
                           {cfg.label}
                         </span>

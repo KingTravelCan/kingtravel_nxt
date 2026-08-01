@@ -326,8 +326,12 @@ export default function DynamicPage() {
               return (
                 <section
                   key={idx}
+                  ref={(el) => {
+                    if (el) {
+                      el.style.backgroundImage = `linear-gradient(rgba(7, 19, 16, 0.85), rgba(7, 19, 16, 0.85)), url("${bgImg}")`;
+                    }
+                  }}
                   className="!w-full relative py-16 overflow-hidden bg-cover bg-center shadow-xl"
-                  style={{ backgroundImage: `linear-gradient(rgba(7, 19, 16, 0.85), rgba(7, 19, 16, 0.85)), url("${bgImg}")` }}
                 >
                   <div className="max-w-6xl mx-auto text-center mb-12">
                     <div className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] mb-2">

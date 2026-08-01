@@ -196,13 +196,16 @@ export default function Home() {
       <section className="hero">
         <div className="hero-inner">
           <div
-            className="hero-media min-h-[640px]"
-            style={{
-              backgroundImage: `linear-gradient(100deg, rgba(10, 20, 18, .92) 0%, rgba(10, 20, 18, .72) 38%, rgba(10, 20, 18, .15) 68%), url("${(heroData.bgImage || '/img/hero.png').replace(/"/g, "'")}")`,
-              backgroundPosition: heroData.position || 'center center',
-              backgroundSize: heroData.size || 'cover',
-              backgroundRepeat: 'no-repeat',
+            ref={(el) => {
+              if (el) {
+                const bg = (heroData.bgImage || '/img/hero.png').replace(/"/g, "'");
+                el.style.backgroundImage = `linear-gradient(100deg, rgba(10, 20, 18, .92) 0%, rgba(10, 20, 18, .72) 38%, rgba(10, 20, 18, .15) 68%), url("${bg}")`;
+                el.style.backgroundPosition = heroData.position || 'center center';
+                el.style.backgroundSize = heroData.size || 'cover';
+                el.style.backgroundRepeat = 'no-repeat';
+              }
             }}
+            className="hero-media min-h-[640px]"
           >
             <div className="hero-pattern"></div>
             <div className="hero-content">
@@ -474,7 +477,7 @@ export default function Home() {
                   alt="Makkah"
                   width={700}
                   height={200}
-                  style={{ width: "100%", height: "100%" }}
+                  className="w-full h-full object-cover"
                   unoptimized
                 />
                 <span className="tag">5 Star</span>
@@ -519,7 +522,7 @@ export default function Home() {
                   alt="Madinah"
                   width={700}
                   height={200}
-                  style={{ width: "100%", height: "100%" }}
+                  className="w-full h-full object-cover"
                   unoptimized
                 />
                 <span className="tag">5 Star</span>
@@ -564,7 +567,7 @@ export default function Home() {
                   alt="Masjid Nabawi green dome"
                   width={700}
                   height={200}
-                  style={{ width: "100%", height: "100%" }}
+                  className="w-full h-full object-cover"
                   unoptimized
                 />
                 <span className="tag">5 Star</span>
@@ -609,7 +612,7 @@ export default function Home() {
                   alt="Masjid Nabawi green dome"
                   width={700}
                   height={200}
-                  style={{ width: "100%", height: "100%" }}
+                  className="w-full h-full object-cover"
                   unoptimized
                 />
                 <span className="tag">5 Star</span>
@@ -648,7 +651,7 @@ export default function Home() {
           </div>
 
           <div className="more-wrap reveal">
-            <Link className="btn outline" style={{ borderColor: "var(--ink)" }} href="/contact">
+            <Link className="btn outline border-[var(--ink)]" href="/contact">
               See All Packages{" "}
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                 <path d="M5 12h14M13 6l6 6-6 6" />
@@ -662,7 +665,7 @@ export default function Home() {
       <section id="services" className="tint">
         <div className="wrap">
           <div className="section-head center reveal">
-            <div className="eyebrow" style={{ justifyContent: "center" }}>Services We Offer</div>
+            <div className="eyebrow justify-center">Services We Offer</div>
             <h2>Select your preferred travel service</h2>
           </div>
           <div className="svc-grid reveal">
@@ -757,16 +760,16 @@ export default function Home() {
               alt="Masjid al-Haram at night"
               width={900}
               height={900}
-              style={{ width: "100%", height: "100%" }}
+              className="w-full h-full object-cover"
               unoptimized
             />
           </div>
           <div>
             <div className="eyebrow">What We Provide</div>
-            <h2 style={{ marginTop: "16px", fontSize: "clamp(28px,3.2vw,38px)" }}>
+            <h2 className="mt-4 text-[clamp(28px,3.2vw,38px)]">
               Lowest fares, exclusive<br />travel deals, real trust
             </h2>
-            <div className="provide-list" style={{ marginTop: "26px" }}>
+            <div className="provide-list mt-[26px]">
               <div className="item">
                 <div className="num">01</div>
                 <div>
@@ -808,7 +811,7 @@ export default function Home() {
               <div className="eyebrow">Luxury Hajj Packages</div>
               <h2>Hajj Packages 2027</h2>
             </div>
-            <p style={{ maxWidth: "480px" }}>
+            <p className="max-w-[480px]">
               Luxury Hajj 2027 Packages with 5-Star Hotels, VIP Services &amp; Complete Spiritual Guidance.
             </p>
           </div>
@@ -822,7 +825,6 @@ export default function Home() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   width={700}
                   height={256}
-                  style={{ width: "100%", height: "100%" }}
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30"></div>
@@ -921,7 +923,6 @@ export default function Home() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   width={900}
                   height={256}
-                  style={{ width: "100%", height: "100%" }}
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30"></div>
@@ -1002,7 +1003,6 @@ export default function Home() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   width={800}
                   height={256}
-                  style={{ width: "100%", height: "100%" }}
                   unoptimized
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30"></div>
@@ -1085,7 +1085,7 @@ export default function Home() {
               <div className="eyebrow">Luxury Hajj Packages</div>
               <h2>Packages Officially<br />Sold Out</h2>
             </div>
-            <p style={{ maxWidth: "480px" }}>
+            <p className="max-w-[480px]">
               We sincerely thank everyone for the incredible trust and response. Our Hajj 2026
               packages are now fully sold out. May Allah (SWT) grant all pilgrims a safe and accepted Hajj. For Hajj 2027
               inquiries or to join the priority list, please get in touch with our team.
@@ -1096,7 +1096,7 @@ export default function Home() {
             <div className="pkg-card sold">
               <div className="soldout"><span className="tag sold">Sold Out</span></div>
               <div className="pkg-media">
-                <Image src="https://images.unsplash.com/photo-1553755088-ef1973c7b4a1?auto=format&fit=crop&w=700&q=80" alt="Makkah, Hajj" width={700} height={200} style={{ width: "100%", height: "100%" }} unoptimized />
+                <Image src="https://images.unsplash.com/photo-1553755088-ef1973c7b4a1?auto=format&fit=crop&w=700&q=80" alt="Makkah, Hajj" width={700} height={200} className="w-full h-full object-cover" unoptimized />
               </div>
               <div className="pkg-top">
                 <div className="pkg-month">May · 2026</div>
@@ -1120,7 +1120,7 @@ export default function Home() {
             <div className="pkg-card sold">
               <div className="soldout"><span className="tag sold">Sold Out</span></div>
               <div className="pkg-media">
-                <Image src="https://images.unsplash.com/photo-1513072064285-240f87fa81e8?auto=format&fit=crop&w=700&q=80" alt="Masjid al-Haram, Hajj" width={700} height={200} style={{ width: "100%", height: "100%" }} unoptimized />
+                <Image src="https://images.unsplash.com/photo-1513072064285-240f87fa81e8?auto=format&fit=crop&w=700&q=80" alt="Masjid al-Haram, Hajj" width={700} height={200} className="w-full h-full object-cover" unoptimized />
               </div>
               <div className="pkg-top">
                 <div className="pkg-month">May · 2026</div>
@@ -1144,7 +1144,7 @@ export default function Home() {
             <div className="pkg-card sold">
               <div className="soldout"><span className="tag sold">Sold Out</span></div>
               <div className="pkg-media">
-                <Image src="https://images.unsplash.com/photo-1577295605163-132e25c3c914?auto=format&fit=crop&w=700&q=80" alt="Madinah, Hajj" width={700} height={200} style={{ width: "100%", height: "100%" }} unoptimized />
+                <Image src="https://images.unsplash.com/photo-1577295605163-132e25c3c914?auto=format&fit=crop&w=700&q=80" alt="Madinah, Hajj" width={700} height={200} className="w-full h-full object-cover" unoptimized />
               </div>
               <div className="pkg-top">
                 <div className="pkg-month">May · 2026</div>

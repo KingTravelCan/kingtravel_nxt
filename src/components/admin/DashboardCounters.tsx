@@ -40,8 +40,13 @@ function CounterCard({ label, targetValue, icon: Icon, iconBg, iconColor, badge 
     <div className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-xs rounded-2xl p-4 border border-slate-100 dark:border-slate-800 shadow-2xs hover:shadow-md transition-all group flex flex-col justify-between">
       <div className="flex items-center justify-between mb-3">
         <div
+          ref={(el) => {
+            if (el) {
+              el.style.backgroundColor = iconBg;
+              el.style.color = iconColor;
+            }
+          }}
           className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
-          style={{ backgroundColor: iconBg, color: iconColor }}
         >
           <Icon className="w-5 h-5" />
         </div>

@@ -47,8 +47,12 @@ export default function LetsTravelPage() {
       {/* Dynamic Background Image overlay if configured */}
       {bgImage ? (
         <div
+          ref={(el) => {
+            if (el && bgImage) {
+              el.style.backgroundImage = `url(${bgImage})`;
+            }
+          }}
           className="absolute inset-0 bg-cover bg-center opacity-30 pointer-events-none"
-          style={{ backgroundImage: `url(${bgImage})` }}
         />
       ) : (
         <>

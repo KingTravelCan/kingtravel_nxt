@@ -90,65 +90,35 @@ export default function AdminPagesListPage() {
 
   return (
     <AdminLayout user={{ name: 'Admin User', role: 'Super Admin' }}>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
+      <div className="flex flex-col gap-6">
         {/* Top Header Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+        <div className="flex items-center justify-between flex-wrap gap-4">
           <div>
-            <h1 style={{ fontSize: 24, fontWeight: 800, color: '#0f172a', margin: 0 }}>Pages</h1>
-            <p style={{ fontSize: 12, color: '#94a3b8', marginTop: 3, marginBottom: 0 }}>Manage live website pages, titles, slugs, dynamic page sections &amp; order</p>
+            <h1 className="text-2xl font-extrabold text-slate-900 m-0">Pages</h1>
+            <p className="text-xs text-slate-400 mt-0.5 mb-0">Manage live website pages, titles, slugs, dynamic page sections &amp; order</p>
           </div>
           <Link
             href="/admin/pages/edit"
-            style={{
-              background: '#004B39',
-              color: '#fff',
-              padding: '10px 20px',
-              borderRadius: 12,
-              fontWeight: 700,
-              fontSize: 13,
-              textDecoration: 'none',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: 8,
-              boxShadow: '0 4px 14px rgba(0,75,57,0.25)',
-            }}
+            className="bg-[#004B39] text-white px-5 py-2.5 rounded-xl font-bold text-xs no-underline inline-flex items-center gap-2 shadow-lg shadow-emerald-900/20"
           >
             + Create New Page
           </Link>
         </div>
 
         {/* Filter / Search Bar */}
-        <div style={{
-          background: '#fff',
-          borderRadius: 16,
-          padding: '16px 20px',
-          border: '1px solid #f1f5f9',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 16,
-          boxShadow: '0 1px 6px rgba(0,0,0,0.03)',
-        }}>
+        <div className="bg-white rounded-2xl p-5 border border-slate-100 flex items-center justify-between gap-4 shadow-xs">
           <input
             type="text"
             placeholder="Search pages by title or slug..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{
-              flex: 1,
-              maxWidth: 400,
-              padding: '10px 16px',
-              border: '1px solid #e2e8f0',
-              borderRadius: 10,
-              fontSize: 13,
-              outline: 'none',
-            }}
+            className="flex-1 max-w-md px-4 py-2.5 border border-slate-200 rounded-xl text-xs outline-none"
           />
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div className="flex gap-2.5">
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              style={{ padding: '9px 14px', borderRadius: 10, border: '1px solid #e2e8f0', fontSize: 12, background: '#fff', outline: 'none' }}
+              className="px-3.5 py-2 rounded-xl border border-slate-200 text-xs bg-white outline-none"
             >
               <option value="all">All Status</option>
               <option value="published">Published</option>
@@ -158,22 +128,16 @@ export default function AdminPagesListPage() {
         </div>
 
         {/* Pages Table — Dynamic & Draggable */}
-        <div style={{
-          background: '#fff',
-          borderRadius: 16,
-          border: '1px solid #f1f5f9',
-          overflow: 'hidden',
-          boxShadow: '0 1px 8px rgba(0,0,0,0.04)',
-        }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: 13 }}>
+        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-xs">
+          <table className="w-full border-collapse text-left text-xs">
             <thead>
-              <tr style={{ background: '#f8fafc', borderBottom: '1px solid #e2e8f0', color: '#64748b', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                <th style={{ padding: '14px 12px', width: 40, textAlign: 'center' }}>⋮⋮</th>
-                <th style={{ padding: '14px 20px', fontWeight: 700 }}>Title</th>
-                <th style={{ padding: '14px 20px', fontWeight: 700 }}>Slug</th>
-                <th style={{ padding: '14px 20px', fontWeight: 700 }}>Status</th>
-                <th style={{ padding: '14px 20px', fontWeight: 700 }}>Updated</th>
-                <th style={{ padding: '14px 20px', fontWeight: 700, textAlign: 'right' }}>Actions</th>
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[11px] uppercase tracking-wider">
+                <th className="py-3 px-3 w-10 text-center">⋮⋮</th>
+                <th className="py-3 px-5 font-bold">Title</th>
+                <th className="py-3 px-5 font-bold">Slug</th>
+                <th className="py-3 px-5 font-bold">Status</th>
+                <th className="py-3 px-5 font-bold">Updated</th>
+                <th className="py-3 px-5 font-bold text-right">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -184,18 +148,13 @@ export default function AdminPagesListPage() {
                   onDragStart={(e) => handleDragStart(e, idx)}
                   onDragOver={(e) => handleDragOver(e, idx)}
                   onDragEnd={handleDragEnd}
-                  style={{
-                    borderBottom: '1px solid #f1f5f9',
-                    background: draggedIndex === idx ? '#f0fdf4' : '#fff',
-                    cursor: 'grab',
-                    transition: 'background 0.15s ease',
-                  }}
+                  className={`border-b border-slate-100 cursor-grab transition-colors ${draggedIndex === idx ? 'bg-emerald-50' : 'bg-white'}`}
                 >
-                  <td style={{ padding: '16px 12px', textAlign: 'center', color: '#94a3b8', fontSize: 16, cursor: 'grab' }} title="Drag to reorder">
+                  <td className="py-4 px-3 text-center text-slate-400 text-base cursor-grab" title="Drag to reorder">
                     ⋮⋮
                   </td>
-                  <td style={{ padding: '16px 20px', fontWeight: 700, color: '#0f172a' }}>{p.title}</td>
-                  <td style={{ padding: '16px 20px', color: '#64748b', fontFamily: 'monospace', fontSize: 12 }}>
+                  <td className="py-4 px-5 font-bold text-slate-900">{p.title}</td>
+                  <td className="py-4 px-5 text-slate-500 font-mono text-xs">
                     <div className="flex items-center gap-2 group">
                       <span>{p.slug}</span>
                       <button
@@ -212,17 +171,14 @@ export default function AdminPagesListPage() {
                       </button>
                     </div>
                   </td>
-                  <td style={{ padding: '16px 20px' }}>
+                  <td className="py-4 px-5">
                     <div className="relative inline-block">
                       <select
                         value={p.status || 'published'}
                         onChange={(e) => handleStatusChange(p.id, e.target.value as 'published' | 'draft')}
-                        className="appearance-none font-bold text-[11px] px-3 py-1 pr-4 rounded-full cursor-pointer transition-colors border outline-none shadow-2xs uppercase tracking-normal"
-                        style={{
-                          backgroundColor: p.status === 'published' ? '#ecfdf5' : '#fffbe0',
-                          color: p.status === 'published' ? '#059669' : '#d97706',
-                          borderColor: p.status === 'published' ? '#a7f3d0' : '#fde68a',
-                        }}
+                        className={`appearance-none font-bold text-[11px] px-3 py-1 pr-4 rounded-full cursor-pointer transition-colors border outline-none shadow-2xs uppercase tracking-normal ${
+                          p.status === 'published' ? 'bg-emerald-50 text-emerald-600 border-emerald-200' : 'bg-amber-50 text-amber-600 border-amber-200'
+                        }`}
                       >
                         <option value="published" className="bg-white text-emerald-800 font-bold py-1">
                           • Published
@@ -231,19 +187,16 @@ export default function AdminPagesListPage() {
                           • Draft
                         </option>
                       </select>
-                      <span
-                        className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[8px]"
-                        style={{ color: p.status === 'published' ? '#059669' : '#d97706' }}
-                      >
+                      <span className={`pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-[8px] ${p.status === 'published' ? 'text-emerald-600' : 'text-amber-600'}`}>
                         ▼
                       </span>
                     </div>
                   </td>
-                  <td style={{ padding: '16px 20px', color: '#94a3b8', fontSize: 12 }}>
+                  <td className="py-4 px-5 text-slate-400 text-xs">
                     {p.updatedAt ? new Date(p.updatedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Recently'}
                   </td>
-                  <td style={{ padding: '16px 20px', textAlign: 'right' }}>
-                    <div style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}>
+                  <td className="py-4 px-5 text-right">
+                    <div className="inline-flex gap-2 items-center">
                       <Link href={`/admin/pages/edit?id=${p.id}`} className="flex gap-1 px-3 py-1.5 rounded-lg bg-gold/50 text-primary no-underline text-[11px] font-bold hover:bg-gold transition-colors">
                         <Pencil className='w-3 h-3' />
                       </Link>

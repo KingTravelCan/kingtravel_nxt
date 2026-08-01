@@ -62,11 +62,7 @@ export default function EconomyHajj2027Page() {
                 {/* Makkah Hotel Card */}
                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col hover:-translate-y-1 transition duration-200">
                   <div
-                    className="relative h-48 bg-cover bg-center"
-                    style={{
-                      backgroundImage:
-                        "url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1170&auto=format&fit=crop')",
-                    }}
+                    className="relative h-48 bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1618773928121-c32242e63f39?q=80&w=1170&auto=format&fit=crop')]"
                   >
                     <span className="absolute top-4 left-4 bg-[#0b4a3a] text-white text-xs font-semibold px-4 py-1.5 rounded-full border-2 border-white">
                       Makkah
@@ -91,11 +87,7 @@ export default function EconomyHajj2027Page() {
                 {/* Madinah Hotel Card */}
                 <div className="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100 flex flex-col hover:-translate-y-1 transition duration-200">
                   <div
-                    className="relative h-48 bg-cover bg-center"
-                    style={{
-                      backgroundImage:
-                        "url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=600&q=80')",
-                    }}
+                    className="relative h-48 bg-cover bg-center bg-[url('https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=600&q=80')]"
                   >
                     <span className="absolute top-4 left-4 bg-[#d4af37] text-slate-900 text-xs font-bold px-4 py-1.5 rounded-full border-2 border-white">
                       Madinah

@@ -19,11 +19,13 @@ export default function MarqueeTrack({ type, images, speedMs = 35000, direction 
     <div className="marquee-widget">
       <div className="marquee-wrapper">
         <div
-          className={`marquee-track ${type}`}
-          style={{
-            animationDuration,
-            animationDirection,
+          ref={(el) => {
+            if (el) {
+              el.style.animationDuration = animationDuration;
+              el.style.animationDirection = animationDirection;
+            }
           }}
+          className={`marquee-track ${type}`}
         >
           {displayImages.map((img, idx) => (
             <div className="marquee-item" key={idx}>

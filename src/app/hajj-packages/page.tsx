@@ -46,7 +46,7 @@ export default function HajjPackagesPage() {
                   <h3 className="text-xs font-bold uppercase tracking-widest text-ink mb-2">Accommodations</h3>
                   <div className="flex gap-4 items-center p-3 rounded-2xl bg-emerald-50/50 border border-emerald-100/50">
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                      <Image src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg?k=13b36d624d683462058664c3aa31641cbb4c53cf07ca581f02f127e198029575&o=" alt="Makkah Hotel" className="w-full h-full object-cover" width={64} height={64} style={{ width: "100%", height: "100%" }} unoptimized />
+                      <Image src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg?k=13b36d624d683462058664c3aa31641cbb4c53cf07ca581f02f127e198029575&o=" alt="Makkah Hotel" className="w-full h-full object-cover" width={64} height={64} unoptimized />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-bold text-slate-800 truncate">5 Star Hotel in Makkah</h4>
@@ -59,7 +59,7 @@ export default function HajjPackagesPage() {
                   </div>
                   <div className="flex gap-4 items-center p-3 rounded-2xl bg-amber-50/30 border border-amber-100/40">
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                      <Image src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg?k=2d6dfd51cd0bb767e33d6cc5dc4d3f8d76da0c17140158b7b43366dc7cf66a36&o=" alt="Madinah Hotel" className="w-full h-full object-cover" width={64} height={64} style={{ width: "100%", height: "100%" }} unoptimized />
+                      <Image src="https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg?k=2d6dfd51cd0bb767e33d6cc5dc4d3f8d76da0c17140158b7b43366dc7cf66a36&o=" alt="Madinah Hotel" className="w-full h-full object-cover" width={64} height={64} unoptimized />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-bold text-slate-800 truncate">5 Star Hotel in Madinah</h4>
@@ -97,7 +97,7 @@ export default function HajjPackagesPage() {
             {/* Card 2 */}
             <article className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl border border-slate-100 flex flex-col transition-all duration-300 group">
               <div className="relative h-64 overflow-hidden shrink-0">
-                <Image src="https://images.unsplash.com/photo-1577295605163-132e25c3c914?auto=format&fit=crop&w=900&q=80" alt="Makkah Clock Tower" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={900} height={256} style={{ width: "100%", height: "100%" }} unoptimized />
+                <Image src="https://images.unsplash.com/photo-1577295605163-132e25c3c914?auto=format&fit=crop&w=900&q=80" alt="Makkah Clock Tower" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={900} height={256} unoptimized />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30"></div>
                 <div className="absolute top-4 inset-x-4 flex justify-between items-center">
                   <span className="bg-brand-900/90 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 backdrop-blur-sm"><i className="fa-solid fa-kaaba text-brand-gold"></i> HAJJ 2027</span>
@@ -113,7 +113,7 @@ export default function HajjPackagesPage() {
                   <h3 className="text-xs font-bold uppercase tracking-widest text-ink mb-2">Accommodations</h3>
                   <div className="flex gap-4 items-center p-3 rounded-2xl bg-emerald-50/50 border border-emerald-100/50">
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                      <Image src="/img/fairmount.jpg" alt="Makkah Fairmont" className="w-full h-full object-cover" width={64} height={64} style={{ width: "100%", height: "100%" }} />
+                      <Image src="/img/fairmount.jpg" alt="Makkah Fairmont" className="w-full h-full object-cover" width={64} height={64} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-bold text-slate-800 truncate">5 Star Hotel Fairmont Makkah</h4>
@@ -126,7 +126,7 @@ export default function HajjPackagesPage() {
                   </div>
                   <div className="flex gap-4 items-center p-3 rounded-2xl bg-amber-50/30 border border-amber-100/40">
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                      <Image src="/img/dar-al-eman.jpg" alt="Madinah Oberoi" className="w-full h-full object-cover" width={64} height={64} style={{ width: "100%", height: "100%" }} />
+                      <Image src="/img/dar-al-eman.jpg" alt="Madinah Oberoi" className="w-full h-full object-cover" width={64} height={64} />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-bold text-slate-800 truncate">5 Star Hotel Dar Al Eman Madinah</h4>
@@ -164,7 +164,7 @@ export default function HajjPackagesPage() {
             {/* Card 3 */}
             <article className="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl border border-slate-100 flex flex-col transition-all duration-300 group">
               <div className="relative h-64 overflow-hidden shrink-0">
-                <Image src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80" alt="Hajj Tent City" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={800} height={256} style={{ width: "100%", height: "100%" }} unoptimized />
+                <Image src="https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80" alt="Hajj Tent City" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" width={800} height={256} unoptimized />
                 <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30"></div>
                 <div className="absolute top-4 inset-x-4 flex justify-between items-center">
                   <span className="bg-brand-900/90 text-white text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 backdrop-blur-sm"><i className="fa-solid fa-kaaba text-brand-gold"></i> HAJJ 2027</span>
@@ -180,7 +180,7 @@ export default function HajjPackagesPage() {
                   <h3 className="text-xs font-bold uppercase tracking-widest text-ink mb-2">Accommodations</h3>
                   <div className="flex gap-4 items-center p-3 rounded-2xl bg-emerald-50/50 border border-emerald-100/50">
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                      <Image src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=300&q=80" alt="Makkah Hyatt" className="w-full h-full object-cover" width={64} height={64} style={{ width: "100%", height: "100%" }} unoptimized />
+                      <Image src="https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=300&q=80" alt="Makkah Hyatt" className="w-full h-full object-cover" width={64} height={64} unoptimized />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-bold text-slate-800 truncate">Hyatt Regency Makkah</h4>
@@ -193,7 +193,7 @@ export default function HajjPackagesPage() {
                   </div>
                   <div className="flex gap-4 items-center p-3 rounded-2xl bg-amber-50/30 border border-amber-100/40">
                     <div className="relative w-16 h-16 rounded-xl overflow-hidden shrink-0">
-                      <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIMH3qB9RTiBkL_HJ1Ud2v3EUkitmSkKqpCuxjwQcnJNlt6DQcGjUrYoo&s=10" alt="Madinah Pullman" className="w-full h-full object-cover" width={64} height={64} style={{ width: "100%", height: "100%" }} unoptimized />
+                      <Image src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRIMH3qB9RTiBkL_HJ1Ud2v3EUkitmSkKqpCuxjwQcnJNlt6DQcGjUrYoo&s=10" alt="Madinah Pullman" className="w-full h-full object-cover" width={64} height={64} unoptimized />
                     </div>
                     <div className="flex-1 min-w-0">
                       <h4 className="text-sm font-bold text-slate-800 truncate">Pullman Zamzam Madinah</h4>
