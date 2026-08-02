@@ -23,57 +23,66 @@ export default function PageSeoHead({
   noIndex,
   seoData,
 }: PageSeoHeadProps) {
-  // Extract values from seoData if provided, otherwise fallback
-  const finalMetaTitle =
-    metaTitle ||
-    seoData?.metaTitle ||
-    (pageTitle
-      ? `${pageTitle} | King Travel Canada — Hajj & Umrah, Guided With Care`
-      : 'King Travel Canada — Hajj & Umrah, Guided With Care');
+  /**
+   * PRIORITY ORDER ENFORCEMENT:
+   * 1. Priority 1: Custom Dynamic SEO Page Settings from DB (metaTitle / metaDescription)
+   * 2. Priority 2: Dynamic Page Title / Details from Page Content
+   * 3. Priority 3: Fallback ONLY if Dynamic data is not fetched or empty
+   */
 
-  const finalMetaDescription =
-    metaDescription ||
-    seoData?.metaDescription ||
-    'King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights, 5-star hotel bookings walking distance from the Haram, visas, and dedicated guides.';
+  // Determine Title according to strict Priority Order
+  let finalTitle = metaTitle || seoData?.metaTitle;
 
-  const finalCanonicalUrl =
-    canonicalUrl || seoData?.canonicalUrl || 'https://kingtravelcan.com';
+  if (!finalTitle && pageTitle) {
+    // Priority 2: Use Dynamic Page Title directly
+    finalTitle = pageTitle.includes('King Travel') ? pageTitle : `${pageTitle} | King Travel Canada`;
+  }
 
-  const finalOgImageUrl =
-    ogImageUrl ||
-    seoData?.ogImageUrl ||
-    'https://media.kingtravelcan.com/uploads/branding/logo.png';
+  if (!finalTitle) {
+    // Priority 3: Fallback ONLY if no dynamic title exists
+    finalTitle = 'King Travel Canada';
+  }
 
+  // Determine Meta Description according to strict Priority Order
+  let finalDescription = metaDescription || seoData?.metaDescription;
+
+  if (!finalDescription) {
+    // Priority 3: Fallback description ONLY if dynamic SEO description is missing
+    finalDescription = 'Licensed Hajj & Umrah pilgrimage operator in Canada offering 5-star packages, visa consultation, and direct flights.';
+  }
+
+  const finalCanonicalUrl = canonicalUrl || seoData?.canonicalUrl || 'https://kingtravelcan.com';
+  const finalOgImageUrl = ogImageUrl || seoData?.ogImageUrl || 'https://media.kingtravelcan.com/uploads/branding/logo.png';
   const finalJsonLdPayload = jsonLdPayload || seoData?.jsonLdPayload;
   const finalNoIndex = noIndex ?? seoData?.noIndex ?? false;
 
-  // Set document.title on client mount & whenever metaTitle changes
+  // Real-time Browser Tab & View-Source Title sync
   useEffect(() => {
-    if (finalMetaTitle) {
-      document.title = finalMetaTitle;
+    if (finalTitle) {
+      document.title = finalTitle;
     }
-  }, [finalMetaTitle]);
+  }, [finalTitle]);
 
   return (
     <>
-      <title>{finalMetaTitle}</title>
-      <meta name="description" content={finalMetaDescription} />
+      <title>{finalTitle}</title>
+      <meta name="description" content={finalDescription} />
       {finalCanonicalUrl && <link rel="canonical" href={finalCanonicalUrl} />}
-      
-      {/* Open Graph Tags */}
-      <meta property="og:title" content={finalMetaTitle} />
-      <meta property="og:description" content={finalMetaDescription} />
+
+      {/* Open Graph Metadata */}
+      <meta property="og:title" content={finalTitle} />
+      <meta property="og:description" content={finalDescription} />
       <meta property="og:image" content={finalOgImageUrl} />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={finalCanonicalUrl} />
 
-      {/* Twitter Cards */}
+      {/* Twitter Cards Metadata */}
       <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={finalMetaTitle} />
-      <meta name="twitter:description" content={finalMetaDescription} />
+      <meta name="twitter:title" content={finalTitle} />
+      <meta name="twitter:description" content={finalDescription} />
       <meta name="twitter:image" content={finalOgImageUrl} />
 
-      {/* Indexing Robots */}
+      {/* Robots Indexing Directive */}
       {finalNoIndex && <meta name="robots" content="noindex, nofollow" />}
 
       {/* JSON-LD Knowledge Graph Schema */}

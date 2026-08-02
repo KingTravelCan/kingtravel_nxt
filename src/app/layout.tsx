@@ -12,8 +12,8 @@ import "./globals.css";
 export async function generateMetadata(): Promise<Metadata> {
   const identity = await getSiteIdentity();
   return {
-    title: identity?.siteName ? `${identity.siteName} — Hajj & Umrah, Guided With Care` : "King Travel — Hajj & Umrah, Guided With Care",
-    description: identity?.tagline || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights, five-star stays walking distance from the Haram, visas, and guides.",
+    title: identity?.siteName || "King Travel Canada",
+    description: identity?.tagline || "Licensed Hajj & Umrah pilgrimage operator in Canada offering 5-star packages, visa consultation, and direct flights.",
     icons: {
       icon: identity?.favicon || "/img/favicon.ico",
     },

@@ -11,6 +11,7 @@ import {
 } from '@/db/schema';
 import { eq, desc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { dispatchFormEmails } from '@/lib/emailService';
 
 export async function submitQuoteEnquiryAction(data: {
   fullName: string;
@@ -52,6 +53,17 @@ export async function submitQuoteEnquiryAction(data: {
       departureMonth: departureDate,
       adults,
       status: 'new',
+    });
+
+    // Dispatch Dual Emails (Admin Notification + User Confirmation)
+    dispatchFormEmails('Get a Free Quote Form', {
+      enquiryNumber,
+      fullName,
+      email,
+      phone,
+      packageType,
+      departureDate,
+      adults,
     });
 
     revalidatePath('/admin/enquiries');
@@ -133,6 +145,21 @@ export async function submitPackageBookingEnquiryAction(data: {
       status: 'new',
     });
 
+    // Dispatch Dual Emails (Admin Notification + User Confirmation)
+    dispatchFormEmails('Package Detail Page Booking Form', {
+      bookingNumber,
+      packageName,
+      fullName,
+      email,
+      phone,
+      adults,
+      children,
+      infants,
+      startDate,
+      totalPrice,
+      message,
+    });
+
     revalidatePath('/admin/enquiries');
     revalidatePath('/admin/dashboard');
     return {
@@ -185,6 +212,17 @@ export async function submitContactEnquiryAction(data: {
       preferredPackageType: packageType || 'General Contact',
       message,
       status: 'new',
+    });
+
+    // Dispatch Dual Emails (Admin Notification + User Confirmation)
+    dispatchFormEmails('Contact Us Form', {
+      ticketNumber,
+      fullName,
+      email,
+      phone,
+      packageType,
+      website,
+      message,
     });
 
     revalidatePath('/admin/enquiries');
@@ -254,6 +292,18 @@ export async function submitVisaEnquiryAction(data: {
       status: 'new',
     });
 
+    // Dispatch Dual Emails (Admin Notification + User Confirmation)
+    dispatchFormEmails('Visa Consultation Form', {
+      enquiryNumber,
+      visaTitle,
+      fullName,
+      email,
+      phone,
+      travelersCount,
+      nationality,
+      message,
+    });
+
     revalidatePath('/admin/enquiries');
     revalidatePath('/admin/dashboard');
     return { success: true, enquiryNumber, message: 'Visa consultation request received!' };
@@ -311,6 +361,89 @@ export async function getPackageBookingEnquiriesList() {
 export async function getContactEnquiriesList() {
   try {
     return await db.select().from(contactEnquiries).orderBy(desc(contactEnquiries.createdAt));
+  } catch {
+    return [];
+  }
+}
+
+export async function submitFlightEnquiryAction(data: {
+  fullName: string;
+  email: string;
+  phone: string;
+  originCity?: string;
+  destinationCity?: string;
+  departureDate?: string;
+  returnDate?: string;
+  passengers?: number;
+}) {
+  try {
+    const {
+      fullName,
+      email,
+      phone,
+      originCity = 'Toronto (YYZ)',
+      destinationCity = 'Jeddah (JED)',
+      departureDate = '',
+      returnDate = '',
+      passengers = 1,
+    } = data;
+
+    if (!fullName || !email || !phone) {
+      return { success: false, error: 'Full Name, Email, and Phone are required.' };
+    }
+
+    const enquiryNumber = `FLT-${Date.now().toString().slice(-6)}`;
+
+    await db.insert(flightEnquiries).values({
+      enquiryNumber,
+      fullName,
+      email,
+      phone,
+      originCity,
+      destinationCity,
+      departureDate,
+      returnDate,
+      passengers,
+      status: 'new',
+    });
+
+    await db.insert(enquiries).values({
+      enquiryNumber,
+      type: 'flight_enquiry',
+      fullName,
+      email,
+      phone,
+      preferredPackageType: `Flight: ${originCity} to ${destinationCity}`,
+      adults: passengers,
+      departureMonth: departureDate,
+      status: 'new',
+    });
+
+    // Dispatch Dual Emails (Admin Notification + User Confirmation)
+    dispatchFormEmails('Flight Booking Form', {
+      enquiryNumber,
+      fullName,
+      email,
+      phone,
+      originCity,
+      destinationCity,
+      departureDate,
+      returnDate,
+      passengers,
+    });
+
+    revalidatePath('/admin/enquiries');
+    revalidatePath('/admin/dashboard');
+    return { success: true, enquiryNumber, message: 'Flight booking request received!' };
+  } catch (error: any) {
+    console.error('Error submitting flight enquiry:', error);
+    return { success: false, error: 'Failed to submit flight enquiry.' };
+  }
+}
+
+export async function getFlightEnquiriesList() {
+  try {
+    return await db.select().from(flightEnquiries).orderBy(desc(flightEnquiries.createdAt));
   } catch {
     return [];
   }

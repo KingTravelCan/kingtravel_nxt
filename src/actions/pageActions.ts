@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { sitePages, siteSettings } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { getResponsiveEmailTemplateHtml } from '@/lib/emailTemplate';
 
 const INITIAL_FRONTEND_PAGES = [
   { title: 'Home Page', slug: '/' },
@@ -775,25 +776,14 @@ export async function getFormsSettings() {
       successHeading: 'Message Sent Successfully!',
       successDescription: 'Thank you for contacting King Travel Canada. We will respond within 24 hours.',
     },
-    emailTemplateHtml: `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><title>Inquiry Notification</title></head>
-<body style="font-family: sans-serif; background: #f8fafc; padding: 20px;">
-  <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">
-    <h2 style="color: #004B39; margin-top: 0;">King Travel Canada</h2>
-    <h3 style="color: #0f172a;">New Form Submission Received</h3>
-    <table width="100%" style="border-collapse: collapse; font-size: 13px;">
-      <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Full Name:</td><td>[name]</td></tr>
-      <tr><td style="padding: 8px; font-weight: bold;">Email Address:</td><td>[email]</td></tr>
-      <tr><td style="padding: 8px; font-weight: bold;">Phone Number:</td><td>[phone]</td></tr>
-      <tr><td style="padding: 8px; font-weight: bold;">Subject:</td><td>[subject]</td></tr>
-      <tr><td style="padding: 8px; font-weight: bold;">Message:</td><td>[msg]</td></tr>
-    </table>
-    <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 20px 0;" />
-    <p style="font-size: 11px; color: #94a3b8; text-align: center;">© 2026 King Travel Canada Ltd. All Rights Reserved.</p>
-  </div>
-</body>
-</html>`,
+    emailTemplateHtml: getResponsiveEmailTemplateHtml('Sample Form Submission', {
+      fullName: 'John Doe',
+      email: 'john.doe@example.com',
+      phone: '+1 905-624-8555',
+      packageType: 'Deluxe Hajj Package 2027',
+      departureDate: 'Flexible 2027',
+      message: 'Looking for quad occupancy options and flight schedules from Toronto.',
+    }),
   };
 }
 

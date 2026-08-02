@@ -23,6 +23,7 @@ import {
   getFormsSettings,
   saveFormsSettingsAction,
 } from '@/actions/pageActions';
+import { getResponsiveEmailTemplateHtml } from '@/lib/emailTemplate';
 import {
   getUsersList,
   createUserAction,
@@ -3257,7 +3258,17 @@ export default function AdminSettingsPage() {
                     </div>
                     <button
                       type="button"
-                      onClick={() => setEmailTemplateHtml(`<!DOCTYPE html>\n<html lang="en">\n<head><meta charset="UTF-8"><title>Inquiry Notification</title></head>\n<body style="font-family: sans-serif; background: #f8fafc; padding: 20px;">\n  <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0;">\n    <h2 style="color: #004B39; margin-top: 0;">King Travel Canada</h2>\n    <h3 style="color: #0f172a;">New Form Submission Received</h3>\n    <table width="100%" style="border-collapse: collapse; font-size: 13px;">\n      <tr><td style="padding: 8px; font-weight: bold; width: 120px;">Full Name:</td><td>[name]</td></tr>\n      <tr><td style="padding: 8px; font-weight: bold;">Email Address:</td><td>[email]</td></tr>\n      <tr><td style="padding: 8px; font-weight: bold;">Phone Number:</td><td>[phone]</td></tr>\n      <tr><td style="padding: 8px; font-weight: bold;">Subject:</td><td>[subject]</td></tr>\n      <tr><td style="padding: 8px; font-weight: bold;">Message:</td><td>[msg]</td></tr>\n    </table>\n    <hr style="border: none; border-top: 1px solid #f1f5f9; margin: 20px 0;" />\n    <p style="font-size: 11px; color: #94a3b8; text-align: center;">© 2026 King Travel Canada Ltd. All Rights Reserved.</p>\n  </div>\n</body>\n</html>`)}
+                      onClick={() => {
+                        const html = getResponsiveEmailTemplateHtml('Sample Form Submission', {
+                          fullName: 'John Doe',
+                          email: 'john.doe@example.com',
+                          phone: '+1 905-624-8555',
+                          packageType: 'Deluxe Hajj Package 2027',
+                          departureDate: 'Flexible 2027',
+                          message: 'Looking for quad occupancy options and flight schedules from Toronto.',
+                        });
+                        setEmailTemplateHtml(html);
+                      }}
                       className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl border border-slate-200 transition-colors cursor-pointer"
                     >
                       🔄 Reset to Default
