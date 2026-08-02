@@ -6,7 +6,8 @@ import { getPagesList, deletePageAction, updatePageOrderAction, updatePageStatus
 import Link from 'next/link';
 
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
-import { Trash2, Pencil, Copy, Check } from 'lucide-react';
+import { Trash2, Pencil, Copy, Check, Sliders } from 'lucide-react';
+import SeoCenterModal from '@/components/admin/SeoCenterModal';
 
 export default function AdminPagesListPage() {
   const [pages, setPages] = useState<any[]>([]);
@@ -16,6 +17,10 @@ export default function AdminPagesListPage() {
   const [deletingId, setDeletingId] = useState<number | null>(null);
   const [confirmConfig, setConfirmConfig] = useState<ConfirmModalConfig | null>(null);
   const [copiedId, setCopiedId] = useState<number | null>(null);
+
+  // SEO Modal State
+  const [seoModalOpen, setSeoModalOpen] = useState(false);
+  const [selectedSeoPage, setSelectedSeoPage] = useState<any>(null);
 
   useEffect(() => {
     getPagesList().then((res) => {
@@ -197,6 +202,18 @@ export default function AdminPagesListPage() {
                   </td>
                   <td className="py-4 px-5 text-right">
                     <div className="inline-flex gap-2 items-center">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedSeoPage(p);
+                          setSeoModalOpen(true);
+                        }}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-50 text-[#004B39] border border-emerald-300 text-[11px] font-extrabold hover:bg-[#004B39] hover:text-white transition-all cursor-pointer shadow-xs"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <Sliders className="w-3 h-3" />
+                        <span>Page SEO</span>
+                      </button>
                       <Link href={`/admin/pages/edit?id=${p.id}`} className="flex gap-1 px-3 py-1.5 rounded-lg bg-gold/50 text-primary no-underline text-[11px] font-bold hover:bg-gold transition-colors">
                         <Pencil className='w-3 h-3' />
                       </Link>
@@ -216,6 +233,19 @@ export default function AdminPagesListPage() {
         </div>
       </div>
       <ConfirmModal config={confirmConfig} onClose={() => setConfirmConfig(null)} />
+      <SeoCenterModal
+        isOpen={seoModalOpen}
+        onClose={() => {
+          setSeoModalOpen(false);
+          setSelectedSeoPage(null);
+        }}
+        pageData={selectedSeoPage}
+        onSaveSuccess={() => {
+          getPagesList().then((res) => {
+            if (res && Array.isArray(res)) setPages(res);
+          });
+        }}
+      />
     </AdminLayout>
   );
 }

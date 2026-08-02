@@ -5,15 +5,22 @@ export interface UserSession {
   email: string;
   name: string;
   role: 'super_admin' | 'admin' | 'content_editor' | 'enquiry_manager' | 'seo_manager';
+  loginTime?: number;
 }
 
 const COOKIE_NAME = 'king_travel_session';
+const EIGHT_HOURS_MS = 8 * 60 * 60 * 1000;
+const EIGHT_HOURS_SEC = 8 * 60 * 60;
 
-export async function createSessionCookie(user: UserSession): Promise<void> {
+export async function createSessionCookie(user: Omit<UserSession, 'loginTime'> & { loginTime?: number }): Promise<void> {
   const cookieStore = await cookies();
+  const loginTime = user.loginTime || Date.now();
+  const expiresAt = loginTime + EIGHT_HOURS_MS;
+
   const sessionData = JSON.stringify({
     ...user,
-    expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000, // 7 days
+    loginTime,
+    expiresAt,
   });
 
   cookieStore.set(COOKIE_NAME, Buffer.from(sessionData).toString('base64'), {
@@ -21,7 +28,7 @@ export async function createSessionCookie(user: UserSession): Promise<void> {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: 7 * 24 * 60 * 60,
+    maxAge: EIGHT_HOURS_SEC,
   });
 }
 
@@ -34,7 +41,10 @@ export async function getCurrentSession(): Promise<UserSession | null> {
     const decoded = Buffer.from(cookie.value, 'base64').toString('utf-8');
     const session = JSON.parse(decoded);
 
-    if (session.expiresAt < Date.now()) {
+    const loginTime = session.loginTime || (session.expiresAt ? session.expiresAt - EIGHT_HOURS_MS : Date.now());
+    const sessionEndTime = loginTime + EIGHT_HOURS_MS;
+
+    if (Date.now() >= sessionEndTime) {
       return null;
     }
 
@@ -43,6 +53,7 @@ export async function getCurrentSession(): Promise<UserSession | null> {
       email: session.email,
       name: session.name,
       role: session.role,
+      loginTime,
     };
   } catch {
     return null;

@@ -89,7 +89,12 @@ export async function getPagesList() {
 export async function getPageById(id: number) {
   try {
     const pages = await db.select().from(sitePages).where(eq(sitePages.id, id)).limit(1);
-    if (pages && pages.length > 0) return pages[0];
+    if (pages && pages.length > 0) {
+      const p = pages[0];
+      const seoRes = await db.select().from(siteSettings).where(eq(siteSettings.key, `page_seo_${id}`)).limit(1);
+      const seoData = seoRes && seoRes.length > 0 ? JSON.parse(seoRes[0].value) : null;
+      return { ...p, seoData };
+    }
   } catch (err) {
     console.error('getPageById DB query failed, checking memory cache:', err);
   }
@@ -99,7 +104,12 @@ export async function getPageById(id: number) {
 export async function getPageBySlug(slug: string) {
   try {
     const pages = await db.select().from(sitePages).where(eq(sitePages.slug, slug)).limit(1);
-    if (pages && pages.length > 0) return pages[0];
+    if (pages && pages.length > 0) {
+      const p = pages[0];
+      const seoRes = await db.select().from(siteSettings).where(eq(siteSettings.key, `page_seo_${p.id}`)).limit(1);
+      const seoData = seoRes && seoRes.length > 0 ? JSON.parse(seoRes[0].value) : null;
+      return { ...p, seoData };
+    }
   } catch (err) {
     console.error('getPageBySlug DB query failed, checking memory cache:', err);
   }
@@ -848,6 +858,51 @@ export async function getPackageDetailsAction(packageSlug: string) {
     return null;
   } catch (err: any) {
     console.error('getPackageDetailsAction failed:', err);
+    return null;
+  }
+}
+
+export async function savePageSeoAction(pageId: number | string, seoData: any) {
+  try {
+    const key = `page_seo_${pageId}`;
+    const value = JSON.stringify(seoData);
+
+    const numId = typeof pageId === 'number' ? pageId : parseInt(String(pageId), 10);
+    // Save to sitePages metaTitle and metaDescription if numeric
+    if (!isNaN(numId) && numId > 0) {
+      await db.update(sitePages).set({
+        metaTitle: seoData.metaTitle || null,
+        metaDescription: seoData.metaDescription || null,
+        updatedAt: new Date(),
+      }).where(eq(sitePages.id, numId));
+    }
+
+    // Save full JSON payload to siteSettings
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value, updatedAt: new Date() }).where(eq(siteSettings.key, key));
+    } else {
+      await db.insert(siteSettings).values({ key, value });
+    }
+
+    revalidatePath('/admin/pages');
+    revalidatePath('/admin/dashboard');
+    return { success: true };
+  } catch (err: any) {
+    console.error('savePageSeoAction error:', err);
+    return { success: false, error: err.message };
+  }
+}
+
+export async function getPageSeoAction(pageId: number | string) {
+  try {
+    const key = `page_seo_${pageId}`;
+    const rows = await db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1);
+    if (rows && rows.length > 0) {
+      return JSON.parse(rows[0].value);
+    }
+    return null;
+  } catch (err) {
     return null;
   }
 }

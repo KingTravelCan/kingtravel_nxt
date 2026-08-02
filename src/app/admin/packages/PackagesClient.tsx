@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { createPackage, updatePackageAction, deletePackage, updatePackageStatus } from '@/actions/packageActions';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
-import { Trash2, Edit2, Plus, Sparkles } from 'lucide-react';
+import { Trash2, Edit2, Plus, Sparkles, Sliders } from 'lucide-react';
+import SeoCenterModal from '@/components/admin/SeoCenterModal';
 
 interface PackagesClientProps {
   initialPackages: any[];
@@ -12,6 +13,7 @@ interface PackagesClientProps {
 export default function PackagesClient({ initialPackages }: PackagesClientProps) {
   const [packagesList, setPackagesList] = useState<any[]>(initialPackages);
   const [editingPkg, setEditingPkg] = useState<any | null>(null);
+  const [selectedSeoPkg, setSelectedSeoPkg] = useState<any | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
   const [confirmConfig, setConfirmConfig] = useState<ConfirmModalConfig | null>(null);
@@ -376,6 +378,15 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
                       <div className="flex items-center justify-end gap-1.5">
                         <button
                           type="button"
+                          onClick={() => setSelectedSeoPkg(pkg)}
+                          title="Package SEO Center"
+                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-[#004B39] border border-emerald-200 text-[10px] font-extrabold hover:bg-[#004B39] hover:text-white transition-all cursor-pointer shadow-2xs"
+                        >
+                          <Sliders className="w-3 h-3" />
+                          <span>SEO</span>
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => setEditingPkg(pkg)}
                           title="Edit Package"
                           className="w-7 h-7 rounded-full bg-slate-100 hover:bg-[#004B39] text-slate-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all"
@@ -401,6 +412,22 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
       </div>
 
       <ConfirmModal config={confirmConfig} onClose={() => setConfirmConfig(null)} />
+
+      <SeoCenterModal
+        isOpen={!!selectedSeoPkg}
+        onClose={() => setSelectedSeoPkg(null)}
+        pageData={
+          selectedSeoPkg
+            ? {
+                id: `pkg_${selectedSeoPkg.id}`,
+                title: selectedSeoPkg.title,
+                slug: `/package/${selectedSeoPkg.id}`,
+                metaTitle: `${selectedSeoPkg.title} | King Travel Canada`,
+                metaDescription: `Book official ${selectedSeoPkg.title} from Canada. Starting at CAD $${selectedSeoPkg.startingPrice}. ${selectedSeoPkg.shortDescription || 'Verified visa, luxury hotel stays, flights included.'}`,
+              }
+            : null
+        }
+      />
     </div>
   );
 }

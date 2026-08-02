@@ -8,6 +8,7 @@ import { getPageBySlug } from '@/actions/pageActions';
 import PageBanner from '@/components/PageBanner';
 import MarqueeTrack from '@/components/MarqueeTrack';
 import PackageDetailModal, { PackageDetailData } from "@/components/PackageDetailModal";
+import PageSeoHead from "@/components/PageSeoHead";
 
 export default function DynamicPage() {
   const params = useParams();
@@ -58,6 +59,7 @@ export default function DynamicPage() {
 
   return (
     <main className="bg-[#f2f5f3] min-h-screen pb-16">
+      <PageSeoHead pageTitle={page.title} seoData={page.seoData} />
       <PackageDetailModal
         isOpen={isDetailOpen}
         onClose={() => setIsDetailOpen(false)}

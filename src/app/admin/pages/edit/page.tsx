@@ -11,6 +11,7 @@ import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
 import { Trash2, Upload, Settings } from 'lucide-react';
 import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
 import { uploadFileToFtp } from '@/lib/uploadClient';
+import SeoCenterModal from '@/components/admin/SeoCenterModal';
 
 const SECTION_OPTIONS = [
   'Who We Are (Intro & Stats)',
@@ -403,6 +404,7 @@ function PageBuilderContent() {
   };
 
   const [confirmConfig, setConfirmConfig] = useState<ConfirmModalConfig | null>(null);
+  const [seoModalOpen, setSeoModalOpen] = useState(false);
 
   const removeSection = (id: string, title?: string) => {
     setConfirmConfig({
@@ -506,6 +508,15 @@ function PageBuilderContent() {
               {message}
             </span>
           )}
+
+          <button
+            type="button"
+            onClick={() => setSeoModalOpen(true)}
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 text-[#004B39] border border-emerald-300 text-xs font-extrabold hover:bg-[#004B39] hover:text-white transition-all cursor-pointer shadow-xs"
+          >
+            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span>Page SEO</span>
+          </button>
 
           <Link
             href={slug || '/'}
@@ -3380,6 +3391,29 @@ function PageBuilderContent() {
             const pkgs = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
             pkgs[pIdx] = updatedPkg;
             updateSectionData(secId, 'items', pkgs);
+          }
+        }}
+      />
+      <SeoCenterModal
+        isOpen={seoModalOpen}
+        onClose={() => setSeoModalOpen(false)}
+        pageData={{
+          id: pageId || 1,
+          title: title || 'Page',
+          slug: slug || '/',
+          metaTitle,
+          metaDescription,
+          bannerBgImage,
+          sections,
+        }}
+        onSaveSuccess={() => {
+          if (pageId) {
+            getPageById(pageId).then((p) => {
+              if (p) {
+                if (p.metaTitle) setMetaTitle(p.metaTitle);
+                if (p.metaDescription) setMetaDescription(p.metaDescription);
+              }
+            });
           }
         }}
       />

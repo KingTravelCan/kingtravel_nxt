@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
+import DashboardSeoCenterSection from '@/components/admin/DashboardSeoCenterSection';
 import { ActivityItem } from '@/actions/activityActions';
 import {
   ClipboardList,
@@ -432,6 +434,9 @@ export default function DashboardClient({
           <div className="text-xs text-slate-500 font-semibold mt-0.5">CMS Pages</div>
         </div>
       </div>
+
+      {/* ── SEO Center Global Audit Dashboard with Monthly Bar Graph ── */}
+      <DashboardSeoCenterSection pages={initialPages} />
 
       {/* ── Main Dashboard 2-Column Grid (Left: 7/12, Right: 5/12) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">

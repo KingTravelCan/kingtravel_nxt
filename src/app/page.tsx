@@ -7,6 +7,7 @@ import MarqueeTrack from "@/components/MarqueeTrack";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import { getPageBySlug } from "@/actions/pageActions";
 import { submitQuoteEnquiryAction, submitContactEnquiryAction } from "@/actions/enquiryActions";
+import PageSeoHead from "@/components/PageSeoHead";
 
 const partnerLogos = [
   { src: "/img/t-3.png", alt: "Trust Partner 3" },
@@ -47,9 +48,12 @@ export default function Home() {
     size: "cover",
   });
 
+  const [homeSeo, setHomeSeo] = useState<any>(null);
+
   useEffect(() => {
     getPageBySlug("/").then((p) => {
       if (p) {
+        if (p.seoData) setHomeSeo(p.seoData);
         let secData: any = {};
         if (p.sections) {
           try {
@@ -192,6 +196,7 @@ export default function Home() {
 
   return (
     <main>
+      <PageSeoHead pageTitle="Home" seoData={homeSeo} />
       {/* ================= HERO ================= */}
       <section className="hero">
         <div className="hero-inner">

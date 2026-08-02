@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, TicketPercent, AlertCircle, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
-import { getPackageDetailsAction } from "@/actions/pageActions";
+import { getPackageDetailsAction, getPageSeoAction } from "@/actions/pageActions";
 import { submitPackageBookingEnquiryAction } from "@/actions/enquiryActions";
+import PageSeoHead from "@/components/PageSeoHead";
 
 const DEFAULT_HAJJ_UMRAH_PACKAGES = [
   {
@@ -187,10 +188,16 @@ export default function StandalonePackageDetailPage() {
       }
 
       setPkg(targetPkg);
+      if (targetPkg?.id) {
+        getPageSeoAction(`pkg_${targetPkg.id}`).then((dbSeo) => {
+          if (dbSeo) setPkgSeo(dbSeo);
+        });
+      }
       setLoading(false);
     });
   }, [rawSlug]);
 
+  const [pkgSeo, setPkgSeo] = useState<any>(null);
   const [bookingStatus, setBookingStatus] = useState<string | null>(null);
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
@@ -345,6 +352,47 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 
   return (
     <div className="bg-[#faf7f2] min-h-screen text-slate-800">
+      <PageSeoHead
+        pageTitle={title}
+        metaTitle={pkgSeo?.metaTitle || `${title} Canada | King Travel`}
+        metaDescription={
+          pkgSeo?.metaDescription ||
+          `Book official ${title} packages with King Travel Canada. ${durationText}, departure from ${departure}, starting price CAD $${price}. Authorized visa, 5-star hotels & flight options.`
+        }
+        canonicalUrl={pkgSeo?.canonicalUrl || `https://kingtravelcan.com/package/${rawSlug}`}
+        ogImageUrl={pkgSeo?.ogImageUrl || pkg.heroImage || 'https://media.kingtravelcan.com/uploads/branding/logo.png'}
+        jsonLdPayload={
+          pkgSeo?.jsonLdPayload ||
+          JSON.stringify(
+            {
+              '@context': 'https://schema.org/',
+              '@type': 'Product',
+              name: title,
+              image: pkg.heroImage || 'https://media.kingtravelcan.com/uploads/branding/logo.png',
+              description: `Official ${title} travel package provided by King Travel Canada. Includes flights, 5-star accommodations, and verified visa processing.`,
+              brand: {
+                '@type': 'Brand',
+                name: 'King Travel Canada',
+              },
+              offers: {
+                '@type': 'Offer',
+                url: `https://kingtravelcan.com/package/${rawSlug}`,
+                priceCurrency: 'CAD',
+                price: (pkg.price || price || '12995').replace(/,/g, ''),
+                priceValidUntil: '2027-12-31',
+                availability: 'https://schema.org/InStock',
+                seller: {
+                  '@type': 'Organization',
+                  name: 'King Travel Canada',
+                },
+              },
+            },
+            null,
+            2
+          )
+        }
+        seoData={pkgSeo}
+      />
       {/* ================= FULL-WIDTH HEADER BANNER ================= */}
       <div className="w-full bg-[#004B39] text-white py-10 sm:py-14 shadow-lg border-b border-emerald-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-10 relative">
@@ -770,13 +818,13 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                 {/* Submit CTA Button */}
                 <button
                   type="submit"
-                  className="w-full bg-[#004B39] hover:bg-[#00382B] text-white font-extrabold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 group cursor-pointer"
+                  className="w-full bg-gold hover:bg-primary text-black hover:text-white font-semibold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 group cursor-pointer"
                 >
                   <TicketPercent className="w-4 h-4" />
                   <span>Book {pkg.badgeTag || "Package"}</span>
                 </button>
 
-                <p className="text-[10px] text-slate-400 text-center leading-normal pt-1">
+                <p className="text-[10px] text-slate-600 text-center leading-normal pt-1">
                   *Hajj & Umrah Packages are subject to seat availability. Visa processing is included. Comprehensive medical insurance and Ahram Kit provided upon arrival.
                 </p>
               </form>
