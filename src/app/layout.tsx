@@ -6,16 +6,20 @@ import FloatingShareBar from "@/components/FloatingShareBar";
 import RevealOnScroll from "@/components/RevealOnScroll";
 import FrontendMaintenanceWrapper from "@/components/FrontendMaintenanceWrapper";
 import DisclaimerPopupModal from "@/components/DisclaimerPopupModal";
+import FaviconSync from "@/components/FaviconSync";
 import { getSiteIdentity, getLoginAuthSettings } from "@/actions/pageActions";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const identity = await getSiteIdentity();
+  const faviconUrl = identity?.favicon || "/img/favicon.ico";
   return {
     title: identity?.siteName || "King Travel Canada",
     description: identity?.tagline || "Licensed Hajj & Umrah pilgrimage operator in Canada offering 5-star packages, visa consultation, and direct flights.",
     icons: {
-      icon: identity?.favicon || "/img/favicon.ico",
+      icon: faviconUrl,
+      shortcut: faviconUrl,
+      apple: faviconUrl,
     },
   };
 }
@@ -35,6 +39,7 @@ export default async function RootLayout({
       <head>
         <link rel="icon" href={faviconUrl} />
         <link rel="shortcut icon" href={faviconUrl} />
+        <link rel="apple-touch-icon" href={faviconUrl} />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
@@ -52,6 +57,7 @@ export default async function RootLayout({
       </head>
 
       <body suppressHydrationWarning>
+        <FaviconSync faviconUrl={faviconUrl} />
         <FrontendMaintenanceWrapper initialMaintenanceMode={initialMaintenanceMode}>
           <Header />
           {children}

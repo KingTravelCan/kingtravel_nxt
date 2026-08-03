@@ -31,7 +31,7 @@ export async function uploadToFtp(
   const ftpUser = process.env.FTP_USER;
   const ftpPassword = process.env.FTP_PASSWORD;
   const ftpRootDir = process.env.FTP_ROOT_DIR || '/public_html/media';
-  const publicBaseUrl = (process.env.NEXT_PUBLIC_MEDIA_URL || 'https://media.kingtravelcan.com').replace(/\/$/, '');
+  const publicBaseUrl = (process.env.NEXT_PUBLIC_MEDIA_URL || '/media').replace(/\/$/, '');
 
   if (!ftpHost || !ftpUser || !ftpPassword) {
     return {

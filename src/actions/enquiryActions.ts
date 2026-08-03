@@ -31,16 +31,20 @@ export async function submitQuoteEnquiryAction(data: {
     const enquiryNumber = `QT-${Date.now().toString().slice(-6)}`;
 
     // 1. Insert into dedicated quote_enquiries table
-    await db.insert(quoteEnquiries).values({
-      enquiryNumber,
-      fullName,
-      phone,
-      email,
-      packageType,
-      departureDate,
-      adults,
-      status: 'new',
-    });
+    try {
+      await db.insert(quoteEnquiries).values({
+        enquiryNumber,
+        fullName,
+        phone,
+        email,
+        packageType,
+        departureDate,
+        adults,
+        status: 'new',
+      });
+    } catch (subErr) {
+      console.warn('Quote sub-table insert warning:', subErr);
+    }
 
     // 2. Aggregate in unified enquiries table
     await db.insert(enquiries).values({
@@ -114,20 +118,24 @@ export async function submitPackageBookingEnquiryAction(data: {
     const bookingNumber = `BK-${Date.now().toString().slice(-6)}`;
 
     // 1. Insert into dedicated package_booking_enquiries table
-    await db.insert(packageBookingEnquiries).values({
-      bookingNumber,
-      packageId,
-      packageName,
-      fullName,
-      phone,
-      email,
-      adults,
-      children,
-      infants,
-      startDate,
-      totalPrice,
-      status: 'new',
-    });
+    try {
+      await db.insert(packageBookingEnquiries).values({
+        bookingNumber,
+        packageId,
+        packageName,
+        fullName,
+        phone,
+        email,
+        adults,
+        children,
+        infants,
+        startDate,
+        totalPrice,
+        status: 'new',
+      });
+    } catch (subErr) {
+      console.warn('Booking sub-table insert warning:', subErr);
+    }
 
     // 2. Aggregate in unified enquiries table
     await db.insert(enquiries).values({
@@ -191,16 +199,20 @@ export async function submitContactEnquiryAction(data: {
     const ticketNumber = `TKT-${Date.now().toString().slice(-6)}`;
 
     // 1. Insert into dedicated contact_enquiries table
-    await db.insert(contactEnquiries).values({
-      ticketNumber,
-      fullName,
-      email,
-      phone: phone || 'N/A',
-      website,
-      packageType,
-      message,
-      status: 'new',
-    });
+    try {
+      await db.insert(contactEnquiries).values({
+        ticketNumber,
+        fullName,
+        email,
+        phone: phone || 'N/A',
+        website,
+        packageType,
+        message,
+        status: 'new',
+      });
+    } catch (subErr) {
+      console.warn('Contact sub-table insert warning:', subErr);
+    }
 
     // 2. Aggregate in unified enquiries table
     await db.insert(enquiries).values({
@@ -266,18 +278,22 @@ export async function submitVisaEnquiryAction(data: {
 
     const enquiryNumber = `VSA-${Date.now().toString().slice(-6)}`;
 
-    await db.insert(visaEnquiries).values({
-      enquiryNumber,
-      visaServiceId,
-      visaTitle,
-      fullName,
-      email,
-      phone,
-      travelersCount,
-      nationality,
-      message,
-      status: 'new',
-    });
+    try {
+      await db.insert(visaEnquiries).values({
+        enquiryNumber,
+        visaServiceId,
+        visaTitle,
+        fullName,
+        email,
+        phone,
+        travelersCount,
+        nationality,
+        message,
+        status: 'new',
+      });
+    } catch (subErr) {
+      console.warn('Visa sub-table insert warning:', subErr);
+    }
 
     await db.insert(enquiries).values({
       enquiryNumber,
@@ -394,18 +410,22 @@ export async function submitFlightEnquiryAction(data: {
 
     const enquiryNumber = `FLT-${Date.now().toString().slice(-6)}`;
 
-    await db.insert(flightEnquiries).values({
-      enquiryNumber,
-      fullName,
-      email,
-      phone,
-      originCity,
-      destinationCity,
-      departureDate,
-      returnDate,
-      passengers,
-      status: 'new',
-    });
+    try {
+      await db.insert(flightEnquiries).values({
+        enquiryNumber,
+        fullName,
+        email,
+        phone,
+        originCity,
+        destinationCity,
+        departureDate,
+        returnDate,
+        passengers,
+        status: 'new',
+      });
+    } catch (subErr) {
+      console.warn('Flight sub-table insert warning:', subErr);
+    }
 
     await db.insert(enquiries).values({
       enquiryNumber,

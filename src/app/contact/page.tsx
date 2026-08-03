@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import PageBanner from "@/components/PageBanner";
 import { getPageBySlug, getFormsSettings } from "@/actions/pageActions";
 import { submitContactEnquiryAction } from "@/actions/enquiryActions";
+import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
 
 function ContactInfoCardsSection({ data }: { data?: any }) {
   return (
@@ -119,6 +120,10 @@ function ContactFormSection({ data }: { data?: any }) {
   const [formConfig, setFormConfig] = useState<any>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [successMsg, setSuccessMsg] = useState('');
+  const [ticketRef, setTicketRef] = useState('');
+
   useEffect(() => {
     getFormsSettings().then((res) => {
       if (res && res.formsData && res.formsData.contact) {
@@ -159,7 +164,11 @@ function ContactFormSection({ data }: { data?: any }) {
       });
 
       if (resData.success) {
-        setContactStatus(formConfig?.successMessage || resData.message || "Thank you! Your message has been logged in our database.");
+        const finalMsg = formConfig?.successMessage || resData.message || "Thank you! Your message has been received. Our team will contact you shortly.";
+        setSuccessMsg(finalMsg);
+        if (resData.ticketNumber) setTicketRef(resData.ticketNumber);
+        setModalOpen(true);
+        setContactStatus(null);
         setContactForm({
           name: "",
           email: "",
@@ -320,6 +329,12 @@ function ContactFormSection({ data }: { data?: any }) {
           </form>
         </div>
       </div>
+      <SubmissionSuccessModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        message={successMsg}
+        referenceNumber={ticketRef}
+      />
     </div>
   );
 }

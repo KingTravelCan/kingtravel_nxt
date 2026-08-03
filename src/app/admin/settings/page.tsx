@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
+import { updateBrowserFavicon } from '@/components/FaviconSync';
+import { uploadFileToFtp, generateAutoAltText, sanitizeMediaUrl } from '@/lib/uploadClient';
 import {
   getNavItems,
   saveNavItemsAction,
@@ -34,7 +35,7 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Switch } from '@/components/ui/switch';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
 import GlassNotificationModal from '@/components/ui/GlassNotificationModal';
-import { Trash2, Upload, MoveUp, MoveDown, Check, Save, CloudUpload, Plus, Edit2, Key, Eye, EyeOff, X, Pencil } from 'lucide-react';
+import { Trash2, Upload, MoveUp, MoveDown, Check, Save, CloudUpload, Plus, Edit2, Key, Eye, EyeOff, X, Pencil, Globe } from 'lucide-react';
 
 const TABS = [
   { id: 'header-footer', label: 'Header & Footer', icon: '🎨' },
@@ -102,6 +103,14 @@ export default function AdminSettingsPage() {
     faviconAlt: 'King Travel Favicon',
   });
   const [identitySaveMsg, setIdentitySaveMsg] = useState<string | null>(null);
+
+
+
+  useEffect(() => {
+    if (identityData?.favicon) {
+      updateBrowserFavicon(identityData.favicon);
+    }
+  }, [identityData?.favicon]);
 
   // Share Tools State
   const [shareData, setShareData] = useState<any>({
@@ -286,7 +295,13 @@ export default function AdminSettingsPage() {
       if (data) setFooterData(data);
     });
     getSiteIdentity().then(data => {
-      if (data) setIdentityData(data);
+      if (data) {
+        setIdentityData({
+          ...data,
+          logo: sanitizeMediaUrl(data.logo),
+          favicon: sanitizeMediaUrl(data.favicon),
+        });
+      }
     });
     getShareTools().then(data => {
       if (data) {
@@ -299,7 +314,7 @@ export default function AdminSettingsPage() {
               if (parsedLocal && parsedLocal.enabled !== undefined) {
                 finalData.enabled = parsedLocal.enabled;
               }
-            } catch (e) {}
+            } catch (e) { }
           }
         }
         setShareData(finalData);
@@ -310,7 +325,7 @@ export default function AdminSettingsPage() {
       if (localShare) {
         try {
           setShareData(JSON.parse(localShare));
-        } catch (e) {}
+        } catch (e) { }
       }
     }
     getGlobalCss().then(css => {
@@ -333,24 +348,51 @@ export default function AdminSettingsPage() {
           ...loadedData,
         }));
         if (data.formFieldsState) setFormFieldsState(data.formFieldsState);
-        if (data.emailConfigs) setEmailConfigs(data.emailConfigs);
+        if (data.emailConfigs) {
+          setEmailConfigs(data.emailConfigs);
+        } else if (typeof window !== 'undefined') {
+          const localEmailCfg = localStorage.getItem('king_travel_email_configs');
+          if (localEmailCfg) {
+            try { setEmailConfigs(JSON.parse(localEmailCfg)); } catch (e) { }
+          }
+        }
         if (data.emailTemplateHtml) setEmailTemplateHtml(data.emailTemplateHtml);
       }
     });
+    if (typeof window !== 'undefined') {
+      const localEmailCfg = localStorage.getItem('king_travel_email_configs');
+      if (localEmailCfg) {
+        try { setEmailConfigs(JSON.parse(localEmailCfg)); } catch (e) { }
+      }
+    }
   }, []);
 
   const handleSaveFormsSettings = async () => {
     setSavingForms(true);
     setFormsSaveMsg(null);
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('king_travel_email_configs', JSON.stringify(emailConfigs));
+      localStorage.setItem('king_travel_forms_settings', JSON.stringify({
+        formsData,
+        formFieldsState,
+        emailConfigs,
+        emailTemplateHtml,
+      }));
+    }
+
     const fullPayload = {
       formsData,
       formFieldsState,
       emailConfigs,
       emailTemplateHtml,
     };
+
     const res = await saveFormsSettingsAction(fullPayload);
     setSavingForms(false);
     if (res.success) {
+      setFormsSaveMsg('✅ Email & Form Configurations Saved Successfully!');
+      setTimeout(() => setFormsSaveMsg(null), 4000);
       if ((res as any).warning) {
         showNotification('Configurations Saved', 'Form & Email configurations saved to session cache! ' + (res as any).warning, 'warning');
       } else {
@@ -531,6 +573,52 @@ export default function AdminSettingsPage() {
     }
   };
 
+  const handleSaveNavItem = (updatedItem: any) => {
+    if (!updatedItem || !updatedItem.label) return;
+
+    let found = false;
+    const recursiveUpdate = (items: any[]): any[] => {
+      return items.map((item) => {
+        if (item.id === updatedItem.id) {
+          found = true;
+          return { ...item, label: updatedItem.label, url: updatedItem.url };
+        }
+        if (item.children && item.children.length > 0) {
+          return { ...item, children: recursiveUpdate(item.children) };
+        }
+        return item;
+      });
+    };
+
+    let newTree = recursiveUpdate(navTree);
+
+    if (!found) {
+      if (updatedItem.parentId) {
+        const addSub = (items: any[]): any[] => {
+          return items.map((item) => {
+            if (item.id === updatedItem.parentId) {
+              return {
+                ...item,
+                children: [...(item.children || []), { id: updatedItem.id, label: updatedItem.label, url: updatedItem.url, level: updatedItem.level, children: [] }]
+              };
+            }
+            if (item.children && item.children.length > 0) {
+              return { ...item, children: addSub(item.children) };
+            }
+            return item;
+          });
+        };
+        newTree = addSub(navTree);
+      } else {
+        newTree = [...navTree, { id: updatedItem.id, label: updatedItem.label, url: updatedItem.url, level: 1, children: [] }];
+      }
+    }
+
+    handleSaveNav(newTree);
+    setIsModalOpen(false);
+    setEditingItem(null);
+  };
+
   const handleSaveFooter = () => {
     setConfirmConfig({
       icon: '💾',
@@ -566,6 +654,9 @@ export default function AdminSettingsPage() {
         if (typeof window !== 'undefined') {
           localStorage.setItem('king_travel_site_identity', JSON.stringify(updatedIdentity));
           window.dispatchEvent(new Event('identity_updated'));
+          if (updatedIdentity.favicon) {
+            updateBrowserFavicon(updatedIdentity.favicon);
+          }
         }
         const res = await saveSiteIdentityAction(updatedIdentity);
         if (res.success) {
@@ -990,12 +1081,12 @@ export default function AdminSettingsPage() {
                             accept="image/*"
                             className="hidden"
                             onChange={async (e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                  const url = await uploadFileToFtp(file, 'footer');
-                                  if (url) setFooterData({ ...footerData, logo: url });
-                                }
-                              }}
+                              const file = e.target.files?.[0];
+                              if (file) {
+                                const url = await uploadFileToFtp(file, 'footer');
+                                if (url) setFooterData({ ...footerData, logo: url });
+                              }
+                            }}
                           />
                         </label>
                       </div>
@@ -1089,16 +1180,16 @@ export default function AdminSettingsPage() {
                                 accept="image/*"
                                 className="hidden"
                                 onChange={async (e) => {
-                                   const file = e.target.files?.[0];
-                                   if (file) {
-                                     const url = await uploadFileToFtp(file, 'social');
-                                     if (url) {
-                                       const updated = [...footerData.socialLinks];
-                                       updated[sIdx] = { ...updated[sIdx], icon: url };
-                                       setFooterData({ ...footerData, socialLinks: updated });
-                                     }
-                                   }
-                                 }}
+                                  const file = e.target.files?.[0];
+                                  if (file) {
+                                    const url = await uploadFileToFtp(file, 'social');
+                                    if (url) {
+                                      const updated = [...footerData.socialLinks];
+                                      updated[sIdx] = { ...updated[sIdx], icon: url };
+                                      setFooterData({ ...footerData, socialLinks: updated });
+                                    }
+                                  }
+                                }}
                               />
                             </label>
                             <div className="flex items-center gap-2">
@@ -1529,48 +1620,59 @@ export default function AdminSettingsPage() {
                           <button
                             type="button"
                             onClick={() => setIdentityData({ ...identityData, logo: '' })}
-                            className="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-200 cursor-pointer flex items-center gap-1.5 transition-colors"
+                            className="px-3 py-1 text-xs text-rose-600 hover:text-rose-700 font-semibold"
                           >
-                            <Trash2 className="w-3.5 h-3.5" /> Remove
+                            Remove Logo
                           </button>
                         )}
                       </div>
                     </div>
                   </div>
 
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">ALTERNATIVE TEXT</label>
-                    <input
-                      type="text"
-                      value={identityData.logoAlt || ''}
-                      onChange={(e) => setIdentityData({ ...identityData, logoAlt: e.target.value })}
-                      className="w-full p-2.5 rounded-xl border border-slate-300 bg-emerald-50/30 text-xs outline-none"
-                      placeholder="Describe this image for accessibility..."
-                    />
-                  </div>
-
-                  {/* Favicon Uploader & Preview */}
-                  <div className="flex flex-col gap-2 pt-2 border-t border-slate-200">
-                    <label className="block text-xs font-bold text-slate-700">Favicon</label>
-                    <div className="p-5 rounded-2xl border-2 border-dashed border-slate-300 bg-emerald-950 flex flex-col items-center justify-center relative min-h-[120px]">
+                  {/* Site Favicon Uploader & Preview */}
+                  <div className="flex flex-col gap-2 pt-4 border-t border-slate-200/60">
+                    <label className="block text-xs font-bold text-slate-700">Site Favicon</label>
+                    <div className="p-5 rounded-2xl border-2 border-dashed border-slate-300 bg-white flex flex-col items-center justify-center relative min-h-[110px] text-center">
                       {identityData.favicon ? (
-                        <img src={identityData.favicon} alt="Favicon" className="max-h-16 max-w-full object-contain bg-white/10 p-2 rounded-lg" />
+                        <div className="flex items-center gap-3 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 shadow-xs max-w-full">
+                          <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
+                            <img
+                              key={identityData.favicon}
+                              src={identityData.favicon}
+                              alt=""
+                              className="max-w-full max-h-full object-contain"
+                            />
+                          </div>
+                          <div className="flex flex-col text-left overflow-hidden">
+                            <span className="text-[11px] font-bold text-slate-700">Active Favicon</span>
+                            <span className="text-[10px] text-slate-500 font-mono truncate max-w-[220px]" title={identityData.favicon}>
+                              {identityData.favicon}
+                            </span>
+                          </div>
+                        </div>
                       ) : (
-                        <span className="text-xs text-emerald-200 font-bold">Upload Favicon (.ico, .png)</span>
+                        <span className="text-xs text-slate-400 font-bold">Click to upload site favicon (.ico, .png, .svg)</span>
                       )}
                       <div className="flex gap-2 items-center mt-3">
-
-                        <label className="bg-emerald-900 hover:bg-emerald-800 text-white px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer flex items-center gap-1.5">
-                          <Upload className="w-3.5 h-3.5" /> {identityData.favicon ? 'Change Favicon' : 'Upload Favicon'}
+                        <label className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer border border-slate-300 flex items-center gap-1.5 transition-colors">
+                          <Upload className="w-3.5 h-3.5" /> {identityData.favicon ? 'Change Favicon Image' : 'Upload Favicon Image'}
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="image/*,.ico"
                             className="hidden"
                             onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (file) {
+                                const localPreviewUrl = URL.createObjectURL(file);
+                                setIdentityData((prev: any) => ({ ...prev, favicon: localPreviewUrl }));
+                                updateBrowserFavicon(localPreviewUrl);
+
                                 const url = await uploadFileToFtp(file, 'branding');
-                                if (url) setIdentityData({ ...identityData, favicon: url });
+                                if (url) {
+                                  const autoAlt = generateAutoAltText(file, identityData.siteName || 'Favicon');
+                                  setIdentityData((prev: any) => ({ ...prev, favicon: url, faviconAlt: autoAlt }));
+                                  updateBrowserFavicon(url);
+                                }
                               }
                             }}
                           />
@@ -1578,26 +1680,17 @@ export default function AdminSettingsPage() {
                         {identityData.favicon && (
                           <button
                             type="button"
-                            onClick={() => setIdentityData({ ...identityData, favicon: '' })}
-                            className="bg-red-950/80 hover:bg-red-900 text-red-200 px-3 py-1.5 rounded-lg text-xs font-bold border border-red-700/50 cursor-pointer flex items-center gap-1.5 transition-colors"
+                            onClick={() => {
+                              setIdentityData({ ...identityData, favicon: '' });
+                              updateBrowserFavicon('/img/favicon.ico');
+                            }}
+                            className="px-3 py-1 text-xs text-rose-600 hover:text-rose-700 font-semibold cursor-pointer border-none bg-transparent"
                           >
-                            <Trash2 className="w-3.5 h-3.5" /> Remove
+                            Remove Favicon
                           </button>
                         )}
                       </div>
                     </div>
-                  </div>
-
-
-                  <div>
-                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">ALTERNATIVE TEXT</label>
-                    <input
-                      type="text"
-                      value={identityData.faviconAlt || ''}
-                      onChange={(e) => setIdentityData({ ...identityData, faviconAlt: e.target.value })}
-                      className="w-full p-2.5 rounded-xl border border-slate-300 bg-emerald-50/30 text-xs outline-none"
-                      placeholder="Describe this image for accessibility..."
-                    />
                   </div>
                 </div>
               </div>
@@ -2242,7 +2335,7 @@ export default function AdminSettingsPage() {
                           value={userFormData.email}
                           onChange={(e) => setUserFormData({ ...userFormData, email: e.target.value })}
                           className="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs font-semibold"
-                          placeholder="user@tanzeem.org"
+                          placeholder="user@kingtravelcan.com"
                         />
                       </div>
 
@@ -2533,12 +2626,12 @@ export default function AdminSettingsPage() {
                               accept="image/*"
                               className="hidden"
                               onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                const url = await uploadFileToFtp(file, 'disclaimer');
-                                if (url) setDisclaimerData({ ...disclaimerData, image: url });
-                              }
-                            }}
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const url = await uploadFileToFtp(file, 'disclaimer');
+                                  if (url) setDisclaimerData({ ...disclaimerData, image: url });
+                                }
+                              }}
                             />
                           </label>
                           <button
@@ -2562,12 +2655,12 @@ export default function AdminSettingsPage() {
                           accept="image/*"
                           className="hidden"
                           onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                const url = await uploadFileToFtp(file, 'disclaimer');
-                                if (url) setDisclaimerData({ ...disclaimerData, image: url });
-                              }
-                            }}
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              const url = await uploadFileToFtp(file, 'disclaimer');
+                              if (url) setDisclaimerData({ ...disclaimerData, image: url });
+                            }
+                          }}
                         />
                       </label>
                     )}
@@ -2668,10 +2761,10 @@ export default function AdminSettingsPage() {
                     {savingForms
                       ? 'Saving Settings...'
                       : formsSubTab === 'emailConfigs'
-                      ? 'Save Email Configs'
-                      : formsSubTab === 'emailTemplate'
-                      ? 'Save Email Template'
-                      : 'Save Forms'}
+                        ? 'Save Email Configs'
+                        : formsSubTab === 'emailTemplate'
+                          ? 'Save Email Template'
+                          : 'Save Forms'}
                   </button>
                 </div>
               </div>
@@ -2741,11 +2834,10 @@ export default function AdminSettingsPage() {
                       return (
                         <div
                           key={f.key}
-                          className={`rounded-3xl p-6 border transition-all flex flex-col justify-between ${
-                            isEditingThisForm
-                              ? 'bg-[#DB9E30]/50 border-[#DB9E30] shadow-md'
-                              : 'bg-white border-slate-100 shadow-2xs hover:border-slate-200'
-                          }`}
+                          className={`rounded-3xl p-6 border transition-all flex flex-col justify-between ${isEditingThisForm
+                            ? 'bg-[#DB9E30]/50 border-[#DB9E30] shadow-md'
+                            : 'bg-white border-slate-100 shadow-2xs hover:border-slate-200'
+                            }`}
                         >
                           <div>
                             <div className="flex items-center justify-between mb-3 gap-2">
@@ -2756,10 +2848,10 @@ export default function AdminSettingsPage() {
                                   <span className="text-[10px] font-mono font-bold text-slate-400 bg-slate-100 border border-slate-200 px-2 py-0.5 rounded-full inline-block mt-0.5">
                                     🗄️ DB Table: {
                                       formKey === 'quoteForm' ? 'quote_enquiries' :
-                                      formKey === 'packageDetailForm' ? 'package_booking_enquiries' :
-                                      formKey === 'contact' ? 'contact_enquiries' :
-                                      formKey === 'visaConsultation' ? 'visa_enquiries' :
-                                      formKey === 'flightInquiry' ? 'flight_enquiries' : 'enquiries'
+                                        formKey === 'packageDetailForm' ? 'package_booking_enquiries' :
+                                          formKey === 'contact' ? 'contact_enquiries' :
+                                            formKey === 'visaConsultation' ? 'visa_enquiries' :
+                                              formKey === 'flightInquiry' ? 'flight_enquiries' : 'enquiries'
                                     }
                                   </span>
                                 </div>
@@ -3034,18 +3126,24 @@ export default function AdminSettingsPage() {
               {/* ── 2. EMAIL CONFIGS SUB-TAB (Redesigned Executive UI) ── */}
               {formsSubTab === 'emailConfigs' && (
                 <div className="bg-white rounded-3xl p-6 lg:p-8 border border-slate-100 shadow-2xs flex flex-col gap-6">
-                    {/* Notification & Email Routing Settings Box */}
-                    <div className="p-6 lg:p-7 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-6">
-                      <div className="flex items-center justify-between border-b border-slate-100 pb-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-[#004B39] border border-emerald-100 flex items-center justify-center text-xl shadow-2xs font-bold">
-                            ✉️
-                          </div>
-                          <div>
-                            <h4 className="text-base font-extrabold text-slate-900 uppercase tracking-wider m-0">NOTIFICATION &amp; EMAIL ROUTING SETTINGS</h4>
-                            <p className="text-xs text-slate-500 mt-0.5 mb-0">Where website form submissions are delivered and how outgoing email notifications appear to recipients.</p>
-                          </div>
+                  {/* Notification & Email Routing Settings Box */}
+                  <div className="p-6 lg:p-7 rounded-3xl bg-white border border-slate-200/80 shadow-xs flex flex-col gap-6">
+                    <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-11 h-11 rounded-2xl bg-emerald-50 text-[#004B39] border border-emerald-100 flex items-center justify-center text-xl shadow-2xs font-bold">
+                          ✉️
                         </div>
+                        <div>
+                          <h4 className="text-base font-extrabold text-slate-900 uppercase tracking-wider m-0">NOTIFICATION &amp; EMAIL ROUTING SETTINGS</h4>
+                          <p className="text-xs text-slate-500 mt-0.5 mb-0">Where website form submissions are delivered and how outgoing email notifications appear to recipients.</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        {formsSaveMsg && (
+                          <span className="text-xs font-bold text-emerald-600 animate-in fade-in">
+                            {formsSaveMsg}
+                          </span>
+                        )}
                         <button
                           type="button"
                           onClick={handleSaveFormsSettings}
@@ -3056,147 +3154,148 @@ export default function AdminSettingsPage() {
                           {savingForms ? 'Saving Email Configs...' : 'Save Email Configs'}
                         </button>
                       </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Send To Email Address */}
-                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
-                          <div className="flex items-center justify-between">
-                            <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
-                              <span className="w-2 h-2 rounded-full bg-emerald-500" /> SEND TO EMAIL ADDRESS
-                            </label>
-                            <span className="text-[10px] font-bold bg-emerald-100/80 text-emerald-800 px-2 py-0.5 rounded-full">Admin Recipient</span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 m-0">Admin email address that receives all website form submissions.</p>
-                          <input
-                            type="email"
-                            value={emailConfigs.sendToEmail}
-                            onChange={(e) => setEmailConfigs({ ...emailConfigs, sendToEmail: e.target.value })}
-                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
-                          />
-                        </div>
-
-                        {/* Email Subject Line */}
-                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
-                          <div className="flex items-center justify-between">
-                            <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
-                              <span className="w-2 h-2 rounded-full bg-blue-500" /> EMAIL SUBJECT LINE
-                            </label>
-                            <span className="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">Smart Tags Enabled</span>
-                          </div>
-                          <p className="text-[11px] text-slate-500 m-0">Use [subject] or [name] as dynamic smart tags in subject.</p>
-                          <input
-                            type="text"
-                            value={emailConfigs.emailSubjectLine}
-                            onChange={(e) => setEmailConfigs({ ...emailConfigs, emailSubjectLine: e.target.value })}
-                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-bold text-slate-800 shadow-2xs mt-1"
-                          />
-                        </div>
-
-                        {/* From Name */}
-                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
-                          <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">FROM NAME</label>
-                          <p className="text-[11px] text-slate-500 m-0">Display sender name shown to email recipients.</p>
-                          <input
-                            type="text"
-                            value={emailConfigs.fromName}
-                            onChange={(e) => setEmailConfigs({ ...emailConfigs, fromName: e.target.value })}
-                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-bold text-slate-800 shadow-2xs mt-1"
-                          />
-                        </div>
-
-                        {/* From Email */}
-                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
-                          <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">FROM EMAIL</label>
-                          <p className="text-[11px] text-slate-500 m-0">Must match authenticated sender address.</p>
-                          <input
-                            type="email"
-                            value={emailConfigs.fromEmail}
-                            onChange={(e) => setEmailConfigs({ ...emailConfigs, fromEmail: e.target.value })}
-                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
-                          />
-                        </div>
-
-                        {/* Reply-To Email */}
-                        <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors md:col-span-2">
-                          <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">REPLY-TO EMAIL ADDRESS</label>
-                          <p className="text-[11px] text-slate-500 m-0">When admin clicks Reply in their inbox, email goes here. Leave blank to use submitter&apos;s email address.</p>
-                          <input
-                            type="email"
-                            value={emailConfigs.replyTo}
-                            onChange={(e) => setEmailConfigs({ ...emailConfigs, replyTo: e.target.value })}
-                            className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
-                          />
-                        </div>
-                      </div>
                     </div>
 
-                    {/* ── SMTP Environment Connection (.env Configured) Card ── */}
-                    <div className="p-6 lg:p-7 rounded-3xl bg-gradient-to-r from-[#071814] via-[#0E2C24] to-[#004B39] text-white border border-[#DB9E30]/30 shadow-xl relative overflow-hidden">
-                      <div className="absolute top-0 right-0 w-64 h-64 bg-[#DB9E30] opacity-10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      {/* Send To Email Address */}
+                      <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+                        <div className="flex items-center justify-between">
+                          <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500" /> SEND TO EMAIL ADDRESS
+                          </label>
+                          <span className="text-[10px] font-bold bg-emerald-100/80 text-emerald-800 px-2 py-0.5 rounded-full">Admin Recipient</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 m-0">Admin email address that receives all website form submissions.</p>
+                        <input
+                          type="email"
+                          value={emailConfigs.sendToEmail}
+                          onChange={(e) => setEmailConfigs({ ...emailConfigs, sendToEmail: e.target.value })}
+                          className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
+                        />
+                      </div>
 
-                      <div className="relative z-10 flex flex-col gap-5">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-500/20 pb-4">
-                          <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-2xl bg-[#DB9E30]/20 border border-[#DB9E30]/40 flex items-center justify-center text-xl shadow-xs">
-                              ⚡
-                            </div>
-                            <div>
-                              <h4 className="text-base font-extrabold text-white uppercase tracking-wider m-0 flex items-center gap-2">
-                                SMTP MAIL SERVER CONNECTION (.env CONFIGURED)
-                              </h4>
-                              <p className="text-xs text-emerald-100/70 mt-0.5 mb-0">Real-time email dispatch engine powered securely via server environment variables.</p>
-                            </div>
+                      {/* Email Subject Line */}
+                      <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+                        <div className="flex items-center justify-between">
+                          <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide flex items-center gap-1.5">
+                            <span className="w-2 h-2 rounded-full bg-blue-500" /> EMAIL SUBJECT LINE
+                          </label>
+                          <span className="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">Smart Tags Enabled</span>
+                        </div>
+                        <p className="text-[11px] text-slate-500 m-0">Use [subject] or [name] as dynamic smart tags in subject.</p>
+                        <input
+                          type="text"
+                          value={emailConfigs.emailSubjectLine}
+                          onChange={(e) => setEmailConfigs({ ...emailConfigs, emailSubjectLine: e.target.value })}
+                          className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-bold text-slate-800 shadow-2xs mt-1"
+                        />
+                      </div>
+
+                      {/* From Name */}
+                      <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+                        <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">FROM NAME</label>
+                        <p className="text-[11px] text-slate-500 m-0">Display sender name shown to email recipients.</p>
+                        <input
+                          type="text"
+                          value={emailConfigs.fromName}
+                          onChange={(e) => setEmailConfigs({ ...emailConfigs, fromName: e.target.value })}
+                          className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-bold text-slate-800 shadow-2xs mt-1"
+                        />
+                      </div>
+
+                      {/* From Email */}
+                      <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
+                        <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">FROM EMAIL</label>
+                        <p className="text-[11px] text-slate-500 m-0">Must match authenticated sender address.</p>
+                        <input
+                          type="email"
+                          value={emailConfigs.fromEmail}
+                          onChange={(e) => setEmailConfigs({ ...emailConfigs, fromEmail: e.target.value })}
+                          className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
+                        />
+                      </div>
+
+                      {/* Reply-To Email */}
+                      <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors md:col-span-2">
+                        <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">REPLY-TO EMAIL ADDRESS</label>
+                        <p className="text-[11px] text-slate-500 m-0">When admin clicks Reply in their inbox, email goes here. Leave blank to use submitter&apos;s email address.</p>
+                        <input
+                          type="email"
+                          value={emailConfigs.replyTo}
+                          onChange={(e) => setEmailConfigs({ ...emailConfigs, replyTo: e.target.value })}
+                          className="w-full px-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] focus:ring-2 focus:ring-[#004B39]/10 font-mono font-bold text-slate-800 shadow-2xs mt-1"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ── SMTP Environment Connection (.env Configured) Card ── */}
+                  <div className="p-6 lg:p-7 rounded-3xl bg-gradient-to-r from-[#071814] via-[#0E2C24] to-[#004B39] text-white border border-[#DB9E30]/30 shadow-xl relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#DB9E30] opacity-10 rounded-full blur-3xl pointer-events-none" />
+
+                    <div className="relative z-10 flex flex-col gap-5">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-500/20 pb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-2xl bg-[#DB9E30]/20 border border-[#DB9E30]/40 flex items-center justify-center text-xl shadow-xs">
+                            ⚡
                           </div>
+                          <div>
+                            <h4 className="text-base font-extrabold text-white uppercase tracking-wider m-0 flex items-center gap-2">
+                              SMTP MAIL SERVER CONNECTION (.env CONFIGURED)
+                            </h4>
+                            <p className="text-xs text-emerald-100/70 mt-0.5 mb-0">Real-time email dispatch engine powered securely via server environment variables.</p>
+                          </div>
+                        </div>
 
-                          <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1.5 shadow-2xs">
-                            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> ● Active via .env File
+                        <span className="text-xs font-extrabold px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1.5 shadow-2xs">
+                          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" /> ● Active via .env File
+                        </span>
+                      </div>
+
+                      {/* Active .env Configuration Parameters Grid */}
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+                        <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
+                          <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                            SMTP SERVER HOST
                           </span>
+                          <span className="text-xs font-mono font-bold text-white block truncate">
+                            smtp.kingtravelcan.com
+                          </span>
+                          <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_HOST</span>
                         </div>
 
-                        {/* Active .env Configuration Parameters Grid */}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
-                          <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
-                            <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
-                              SMTP SERVER HOST
-                            </span>
-                            <span className="text-xs font-mono font-bold text-white block truncate">
-                              smtp.kingtravelcan.com
-                            </span>
-                            <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_HOST</span>
-                          </div>
+                        <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
+                          <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                            PORT &amp; ENCRYPTION
+                          </span>
+                          <span className="text-xs font-mono font-bold text-emerald-300 block">
+                            Port 587 (STARTTLS)
+                          </span>
+                          <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_PORT</span>
+                        </div>
 
-                          <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
-                            <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
-                              PORT &amp; ENCRYPTION
-                            </span>
-                            <span className="text-xs font-mono font-bold text-emerald-300 block">
-                              Port 587 (STARTTLS)
-                            </span>
-                            <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_PORT</span>
-                          </div>
+                        <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
+                          <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                            AUTHENTICATED ACCOUNT
+                          </span>
+                          <span className="text-xs font-mono font-bold text-white block truncate">
+                            no-reply@kingtravelcan.com
+                          </span>
+                          <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_USER</span>
+                        </div>
 
-                          <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
-                            <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
-                              AUTHENTICATED ACCOUNT
-                            </span>
-                            <span className="text-xs font-mono font-bold text-white block truncate">
-                              no-reply@kingtravelcan.com
-                            </span>
-                            <span className="text-[10px] text-slate-400 mt-0.5 block">Configured in process.env.SMTP_USER</span>
-                          </div>
-
-                          <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
-                            <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
-                              SECURITY MODE
-                            </span>
-                            <span className="text-xs font-mono font-bold text-emerald-300 block">
-                              🔒 Environment Protected
-                            </span>
-                            <span className="text-[10px] text-slate-400 mt-0.5 block">Password secured in .env</span>
-                          </div>
+                        <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
+                          <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                            SECURITY MODE
+                          </span>
+                          <span className="text-xs font-mono font-bold text-emerald-300 block">
+                            🔒 Environment Protected
+                          </span>
+                          <span className="text-[10px] text-slate-400 mt-0.5 block">Password secured in .env</span>
                         </div>
                       </div>
                     </div>
+                  </div>
 
                   {/* Success Message Box */}
                   <div className="p-6 rounded-3xl bg-slate-50 border border-slate-200/80 flex flex-col gap-6">
@@ -3420,6 +3519,88 @@ export default function AdminSettingsPage() {
 
         </div>
       </div>
+
+      {/* Navigation Item Edit Modal */}
+      {isModalOpen && editingItem && (
+        <div className="fixed inset-0 bg-slate-950/70 backdrop-blur-md z-[9999] flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full border border-slate-100 shadow-2xl flex flex-col gap-5 animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 className="text-base font-bold text-slate-900 m-0 flex items-center gap-2">
+                <Pencil className="w-4 h-4 text-[#004B39]" /> Edit Navigation Item
+              </h3>
+              <button
+                type="button"
+                onClick={() => { setIsModalOpen(false); setEditingItem(null); }}
+                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-600 flex items-center justify-center border-none cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="flex flex-col gap-4">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Page / Menu Title</label>
+                <input
+                  type="text"
+                  value={editingItem.label || ''}
+                  onChange={(e) => setEditingItem({ ...editingItem, label: e.target.value })}
+                  placeholder="e.g. About Us, Licenses, Hajj Packages"
+                  className="w-full p-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Page URL / Slug Path</label>
+                <input
+                  type="text"
+                  value={editingItem.url || ''}
+                  onChange={(e) => setEditingItem({ ...editingItem, url: e.target.value })}
+                  placeholder="e.g. /about, /certified-travel-agency-in-canada"
+                  className="w-full p-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39] font-mono"
+                />
+              </div>
+
+              {pagesList && pagesList.length > 0 && (
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1">Or Select Existing Website Page</label>
+                  <select
+                    value=""
+                    onChange={(e) => {
+                      const selected = pagesList.find(p => p.slug === e.target.value);
+                      if (selected) {
+                        setEditingItem({ ...editingItem, label: selected.title, url: selected.slug });
+                      }
+                    }}
+                    className="w-full p-2.5 rounded-xl border border-slate-200 text-xs outline-none cursor-pointer bg-slate-50"
+                  >
+                    <option value="">-- Choose Page --</option>
+                    {pagesList.map(p => (
+                      <option key={p.id} value={p.slug}>{p.title} ({p.slug})</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-end gap-3 pt-2 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => { setIsModalOpen(false); setEditingItem(null); }}
+                className="px-4 py-2.5 rounded-xl bg-slate-100 text-slate-700 text-xs font-bold hover:bg-slate-200 border-none cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSaveNavItem(editingItem)}
+                className="px-6 py-2.5 rounded-xl bg-[#004B39] hover:bg-[#00382B] text-white text-xs font-extrabold border-none cursor-pointer shadow-md"
+              >
+                Save &amp; Apply
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Confirmation Modal */}
       <ConfirmModal config={confirmConfig} onClose={() => setConfirmConfig(null)} />

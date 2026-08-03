@@ -6,6 +6,16 @@ import { eq } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { getResponsiveEmailTemplateHtml } from '@/lib/emailTemplate';
 
+function safeJsonParse<T>(jsonStr: any, fallback: T): T {
+  if (!jsonStr || typeof jsonStr !== 'string') return fallback;
+  try {
+    return JSON.parse(jsonStr) as T;
+  } catch (err) {
+    console.warn('safeJsonParse fallback applied:', err);
+    return fallback;
+  }
+}
+
 const INITIAL_FRONTEND_PAGES = [
   { title: 'Home Page', slug: '/' },
   { title: 'About Us', slug: '/about' },
@@ -57,7 +67,7 @@ export async function getPagesList() {
     // Apply stored reordering sequence if available
     try {
       const orderSetting = await db.select().from(siteSettings).where(eq(siteSettings.key, 'ordered_pages')).limit(1);
-      const orderIds: number[] = orderSetting && orderSetting.length > 0 ? JSON.parse(orderSetting[0].value) : pageOrderMemoryCache;
+      const orderIds: number[] = orderSetting && orderSetting.length > 0 ? safeJsonParse(orderSetting[0].value, pageOrderMemoryCache) : pageOrderMemoryCache;
 
       if (orderIds && orderIds.length > 0) {
         const orderMap = new Map(orderIds.map((id, index) => [id, index]));
@@ -93,7 +103,7 @@ export async function getPageById(id: number) {
     if (pages && pages.length > 0) {
       const p = pages[0];
       const seoRes = await db.select().from(siteSettings).where(eq(siteSettings.key, `page_seo_${id}`)).limit(1);
-      const seoData = seoRes && seoRes.length > 0 ? JSON.parse(seoRes[0].value) : null;
+      const seoData = seoRes && seoRes.length > 0 ? safeJsonParse(seoRes[0].value, null) : null;
       return { ...p, seoData };
     }
   } catch (err) {
@@ -108,7 +118,7 @@ export async function getPageBySlug(slug: string) {
     if (pages && pages.length > 0) {
       const p = pages[0];
       const seoRes = await db.select().from(siteSettings).where(eq(siteSettings.key, `page_seo_${p.id}`)).limit(1);
-      const seoData = seoRes && seoRes.length > 0 ? JSON.parse(seoRes[0].value) : null;
+      const seoData = seoRes && seoRes.length > 0 ? safeJsonParse(seoRes[0].value, null) : null;
       return { ...p, seoData };
     }
   } catch (err) {
@@ -203,7 +213,7 @@ export async function savePageAction(formData: FormData) {
     try {
       const navRes = await db.select().from(siteSettings).where(eq(siteSettings.key, 'nav_items')).limit(1);
       if (navRes && navRes.length > 0) {
-        let navItems = JSON.parse(navRes[0].value);
+        let navItems = safeJsonParse(navRes[0].value, []);
         let updatedNav = false;
         const syncItem = (item: any) => {
           if ((savedId && String(item.id) === String(savedId)) || item.label === title || item.url === slug) {
@@ -281,7 +291,7 @@ export async function getNavItems() {
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'nav_items')).limit(1);
     if (res && res.length > 0) {
-      return JSON.parse(res[0].value);
+      return safeJsonParse(res[0].value, getDefaultNavItems());
     }
   } catch (err) {
     console.error('getNavItems DB query failed:', err);
@@ -357,7 +367,7 @@ export async function getFooterData() {
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'footer_settings')).limit(1);
     if (res && res.length > 0) {
-      return JSON.parse(res[0].value);
+      return safeJsonParse(res[0].value, footerMemoryCache || getDefaultFooterData());
     }
   } catch (err) {
     console.error('getFooterData DB query failed:', err);
@@ -416,15 +426,26 @@ export async function getDefaultSiteIdentity() {
 let siteIdentityMemoryCache: any = null;
 
 export async function getSiteIdentity() {
+  let identityData: any = null;
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'site_identity')).limit(1);
     if (res && res.length > 0) {
-      return JSON.parse(res[0].value);
+      identityData = safeJsonParse(res[0].value, siteIdentityMemoryCache || await getDefaultSiteIdentity());
     }
   } catch (err) {
-    console.error('getSiteIdentity DB query failed:', err);
+    console.warn('getSiteIdentity DB query failed, using defaults or cache:', err);
   }
-  return siteIdentityMemoryCache || getDefaultSiteIdentity();
+  if (!identityData) identityData = siteIdentityMemoryCache || await getDefaultSiteIdentity();
+
+  if (identityData) {
+    if (identityData.favicon) {
+      identityData.favicon = identityData.favicon.replace(/^https?:\/\/media\.kingtravelcan\.com\/?/, '/media/');
+    }
+    if (identityData.logo) {
+      identityData.logo = identityData.logo.replace(/^https?:\/\/media\.kingtravelcan\.com\/?/, '/media/');
+    }
+  }
+  return identityData;
 }
 
 export async function saveSiteIdentityAction(data: any) {
@@ -483,7 +504,7 @@ export async function getShareTools() {
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'share_tools')).limit(1);
     if (res && res.length > 0) {
-      const parsed = JSON.parse(res[0].value);
+      const parsed = safeJsonParse(res[0].value, shareToolsMemoryCache || getDefaultShareTools());
       shareToolsMemoryCache = parsed;
       return parsed;
     }
@@ -596,12 +617,12 @@ export async function getLoginAuthSettings() {
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'login_auth_settings')).limit(1);
     if (res && res.length > 0) {
-      const parsed = JSON.parse(res[0].value);
+      const parsed = safeJsonParse(res[0].value, loginAuthMemoryCache || getDefaultLoginAuthSettings());
       loginAuthMemoryCache = parsed;
       return parsed;
     }
   } catch (err) {
-    console.error('getLoginAuthSettings DB query failed:', err);
+    console.warn('getLoginAuthSettings DB query failed, using defaults or cache:', err);
   }
   return loginAuthMemoryCache || getDefaultLoginAuthSettings();
 }
@@ -636,12 +657,16 @@ export async function getDisclaimerSettings(): Promise<DisclaimerSettings> {
   try {
     const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'disclaimer_settings')).limit(1);
     if (res && res.length > 0) {
-      const parsed = JSON.parse(res[0].value);
-      disclaimerMemoryCache = parsed;
-      return parsed;
+      try {
+        const parsed = JSON.parse(res[0].value);
+        disclaimerMemoryCache = parsed;
+        return parsed;
+      } catch (parseErr) {
+        console.warn('getDisclaimerSettings JSON parse error, falling back to default:', parseErr);
+      }
     }
   } catch (err) {
-    console.error('getDisclaimerSettings DB query failed:', err);
+    console.warn('getDisclaimerSettings DB query failed, falling back to default:', err);
   }
   return disclaimerMemoryCache || { enabled: false, image: '', altText: 'Disclaimer Popup Image' };
 }
@@ -671,9 +696,11 @@ export async function getFormsSettings() {
   try {
     const setting = await db.select().from(siteSettings).where(eq(siteSettings.key, 'forms_settings')).limit(1);
     if (setting && setting.length > 0) {
-      const parsed = JSON.parse(setting[0].value);
-      formsSettingsMemoryCache = parsed;
-      if (parsed.formsData) return parsed;
+      const parsed: any = safeJsonParse(setting[0].value, null);
+      if (parsed) {
+        formsSettingsMemoryCache = parsed;
+        if (parsed.formsData) return parsed;
+      }
       return {
         formsData: parsed,
         emailConfigs: {
@@ -889,7 +916,7 @@ export async function getPageSeoAction(pageId: number | string) {
     const key = `page_seo_${pageId}`;
     const rows = await db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1);
     if (rows && rows.length > 0) {
-      return JSON.parse(rows[0].value);
+      return safeJsonParse(rows[0].value, null);
     }
     return null;
   } catch (err) {

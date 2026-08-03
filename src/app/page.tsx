@@ -8,6 +8,7 @@ import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import { getPageBySlug } from "@/actions/pageActions";
 import { submitQuoteEnquiryAction, submitContactEnquiryAction } from "@/actions/enquiryActions";
 import PageSeoHead from "@/components/PageSeoHead";
+import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
 
 const partnerLogos = [
   { src: "/img/t-3.png", alt: "Trust Partner 3" },
@@ -66,7 +67,7 @@ export default function Home() {
         }
         setHeroData({
           heroEyebrow: secData.heroEyebrow || "Est. in Canada · Licensed Pilgrimage Operator",
-          title: p.bannerTitle || secData.title || "Your journey to<br /><em>Makkah &amp; Madinah</em>,<br />guided with care.",
+          title: p.bannerTitle || secData.title || "Your journey to<br /><span>Makkah &amp; Madinah</span>,<br />guided with care.",
           description: p.bannerDescription || secData.description || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights, five‑star stays walking distance from the Haram, visas, and guides who've made this journey themselves.",
           primaryBtnLabel: secData.primaryBtnLabel || "View Umrah Packages →",
           primaryBtnLink: secData.primaryBtnLink || "#packages",
@@ -105,6 +106,10 @@ export default function Home() {
   const [contactStatus, setContactStatus] = useState<string | null>(null);
   const [contactErrors, setContactErrors] = useState<Record<string, string>>({});
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMsg, setModalMsg] = useState("");
+  const [modalRef, setModalRef] = useState("");
+
   const handleQuoteSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: Record<string, string> = {};
@@ -134,7 +139,11 @@ export default function Home() {
       });
 
       if (res.success) {
-        setQuoteStatus(res.message || "Thank you! Your quote request has been saved in the database.");
+        const msg = res.message || "Thank you! Your quote request has been received. Our team will contact you shortly.";
+        setModalMsg(msg);
+        if (res.enquiryNumber) setModalRef(res.enquiryNumber);
+        setModalOpen(true);
+        setQuoteStatus(null);
         setQuoteForm({
           fullName: "",
           phone: "",
@@ -178,7 +187,11 @@ export default function Home() {
       });
 
       if (res.success) {
-        setContactStatus(res.message || "Thank you! Your message has been logged in our database.");
+        const msg = res.message || "Thank you! Your message has been received. Our team will contact you shortly.";
+        setModalMsg(msg);
+        if (res.ticketNumber) setModalRef(res.ticketNumber);
+        setModalOpen(true);
+        setContactStatus(null);
         setContactForm({
           fullName: "",
           email: "",
@@ -1471,6 +1484,13 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <SubmissionSuccessModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        message={modalMsg}
+        referenceNumber={modalRef}
+      />
     </main>
   );
 }

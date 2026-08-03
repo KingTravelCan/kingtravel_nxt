@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
@@ -92,6 +92,23 @@ function PageBuilderContent() {
   const [metaDescription, setMetaDescription] = useState('');
   const [sections, setSections] = useState<SectionItem[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [sectionSearch, setSectionSearch] = useState('');
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setDropdownOpen(false);
+      }
+    }
+    if (dropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [dropdownOpen]);
+
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [activeDetailPopupModal, setActiveDetailPopupModal] = useState<{ secId: string; pIdx: number; pkg: any } | null>(null);
@@ -493,18 +510,21 @@ function PageBuilderContent() {
     <div className="flex flex-col gap-5 font-sans text-slate-800">
 
       {/* ── Top Bar Breadcrumb & Header ── */}
-      <div className="flex items-center justify-between bg-white">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-white p-4 lg:px-6 rounded-3xl border border-slate-200/80 shadow-2xs">
         <div className="flex items-center gap-3">
-          <Link href="/admin/pages" className="text-[#004B39] border border-[#004B39] hover:border-[#DB9E30] px-4 py-2 rounded-full text-xs font-semibold hover:bg-[#DB9E30] hover:text-black transition-all">
+          <Link
+            href="/admin/pages"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border border-slate-200/90 text-slate-700 hover:border-[#004B39] hover:bg-[#004B39] hover:text-white text-xs font-bold transition-all shadow-2xs no-underline"
+          >
             ← Back to Pages
           </Link>
           <span className="text-slate-300">|</span>
-          <h1 className="text-lg font-extrabold text-slate-900 m-0">{title || 'Page Editor'}</h1>
+          <h1 className="text-lg font-black text-slate-900 m-0 tracking-tight">{title || 'Page Editor'}</h1>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        <div className="flex flex-wrap items-center gap-2.5">
           {message && (
-            <span className={`text-xs font-bold ${message.startsWith('✅') ? 'text-emerald-600' : 'text-red-600'}`}>
+            <span className={`text-xs font-bold px-3 py-1 rounded-full border ${message.startsWith('✅') ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-600 border-red-200'}`}>
               {message}
             </span>
           )}
@@ -512,32 +532,34 @@ function PageBuilderContent() {
           <button
             type="button"
             onClick={() => setSeoModalOpen(true)}
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 text-[#004B39] border border-emerald-300 text-xs font-extrabold hover:bg-[#004B39] hover:text-white transition-all cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-emerald-50 text-[#004B39] border border-emerald-300 text-xs font-extrabold hover:bg-[#004B39] hover:text-white transition-all cursor-pointer shadow-2xs"
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>Page SEO</span>
           </button>
 
           <Link
             href={slug || '/'}
             target="_blank"
-            className="font-bold bg-white"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold border border-slate-200 transition-all shadow-2xs no-underline"
           >
             👁 View Page
           </Link>
 
           <button
+            type="button"
             onClick={() => handleSave(true)}
             disabled={saving}
-            className="font-bold cursor-pointer bg-white"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-200 transition-all cursor-pointer shadow-2xs disabled:opacity-50"
           >
             📄 Save Draft
           </button>
 
           <button
+            type="button"
             onClick={() => handleSave(false)}
             disabled={saving}
-            className="font-extrabold cursor-pointer text-white bg-[#004B39]"
+            className="inline-flex items-center gap-1.5 px-5 py-2 rounded-full bg-[#004B39] hover:bg-[#00382B] text-white text-xs font-black transition-all cursor-pointer shadow-md border-none disabled:opacity-50"
           >
             {saving ? 'Saving...' : '✓ Update'}
           </button>
@@ -633,8 +655,8 @@ function PageBuilderContent() {
               </div>
             </div>
 
-            {/* Right 7-Col Real-Time Live 640px Hero Preview Box */}
-            <div className="lg:col-span-7 relative rounded-2xl overflow-hidden shadow-lg border border-slate-900/20 p-6 flex flex-col justify-between text-white min-h-[260px]">
+            {/* Right 7-Col Real-Time Live 640px Hero Preview Box (Matching Frontend Layout 100%) */}
+            <div className="lg:col-span-7 relative rounded-3xl overflow-hidden shadow-xl border border-slate-900/20 p-6 md:p-8 flex flex-col justify-between text-white min-h-[320px]">
               <div
                 className="absolute inset-0 z-0 transition-all duration-300"
                 ref={(el) => {
@@ -648,39 +670,49 @@ function PageBuilderContent() {
                 }}
               />
 
-              <div className="relative z-10 space-y-2">
-                <div className="text-[10px] font-extrabold uppercase tracking-widest text-[#DB9E30]">
+              {/* Floating Top Right Badge 1 Card (Matching Frontend) */}
+              <div className="absolute right-5 top-5 z-10 bg-white/95 text-slate-900 rounded-2xl p-2.5 px-3.5 shadow-lg border border-white flex items-center gap-2.5 backdrop-blur-xs">
+                <div className="w-8 h-8 rounded-full bg-[#DB9E30]/20 border border-[#DB9E30]/40 flex items-center justify-center text-[#DB9E30] text-xs">
+                  ★
+                </div>
+                <div>
+                  <div className="text-xs font-black text-slate-900 leading-none">{badge1Top}</div>
+                  <div className="text-[10px] text-slate-500 font-semibold mt-0.5">{badge1Sub}</div>
+                </div>
+              </div>
+
+              {/* Floating Bottom Right Badge 2 Card (Matching Frontend) */}
+              <div className="absolute right-5 bottom-5 z-10 bg-white/95 text-slate-900 rounded-2xl p-2.5 px-3.5 shadow-lg border border-white flex items-center gap-2.5 backdrop-blur-xs">
+                <div className="w-8 h-8 rounded-full bg-[#DB9E30]/20 border border-[#DB9E30]/40 flex items-center justify-center text-[#DB9E30] text-xs">
+                  🕌
+                </div>
+                <div>
+                  <div className="text-xs font-black text-slate-900 leading-none">{badge2Top}</div>
+                  <div className="text-[10px] text-slate-500 font-semibold mt-0.5">{badge2Sub}</div>
+                </div>
+              </div>
+
+              {/* Main Content Area */}
+              <div className="relative z-10 max-w-md space-y-3 my-auto">
+                <div className="text-[11px] font-extrabold uppercase tracking-widest text-[#DB9E30]">
                   {heroEyebrow || 'Est. in Canada · Licensed Pilgrimage Operator'}
                 </div>
                 <h1
-                  className="text-lg md:text-2xl font-serif text-white m-0 font-normal tracking-wide leading-tight [&>span]:text-[#DB9E30] [&>em]:text-[#DB9E30] [&>em]:not-italic"
-                  
+                  className="text-xl md:text-3xl font-serif text-white m-0 font-normal tracking-tight leading-tight [&>span]:text-[#DB9E30] [&>em]:text-[#DB9E30] [&>em]:not-italic"
                   dangerouslySetInnerHTML={{ __html: bannerTitle || title || 'Your journey to <span>Makkah & Madinah</span>, guided with care.' }}
                 />
-                <p className="text-[11px] text-white/90 max-w-md leading-relaxed font-light">
-                  {bannerDescription || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail..."}
+                <p className="text-xs text-white/80 leading-relaxed font-light">
+                  {bannerDescription || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights, five-star stays walking distance from the Haram, visas, and guides..."}
                 </p>
-              </div>
 
-              <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10 mt-4">
-                <div className="flex gap-2">
-                  <span className="bg-[#DB9E30] text-[#004B39] font-extrabold text-[10px] px-3 py-1.5 rounded-lg shadow-sm">
-                    {primaryBtnLabel || 'View Packages'}
+                {/* Primary & Secondary Buttons Matching Frontend */}
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <span className="bg-[#DB9E30] hover:bg-[#c68e27] text-[#004B39] font-black text-xs px-5 py-2.5 rounded-full shadow-md transition-all cursor-pointer">
+                    {primaryBtnLabel || 'View Umrah Packages →'}
                   </span>
-                  <span className="bg-white/20 text-white font-bold text-[10px] px-3 py-1.5 rounded-lg backdrop-blur-sm">
-                    {secondaryBtnLabel || 'Speak With Advisor'}
+                  <span className="bg-white text-slate-900 hover:bg-slate-100 font-extrabold text-xs px-5 py-2.5 rounded-full shadow-md transition-all cursor-pointer border border-white">
+                    {secondaryBtnLabel || 'Speak With an Advisor'}
                   </span>
-                </div>
-
-                <div className="flex gap-2">
-                  <div className="bg-white/90 text-slate-900 rounded-xl px-2.5 py-1 text-[9px] font-bold text-center border border-white">
-                    <div className="text-[#DB9E30] font-black">{badge1Top}</div>
-                    <div className="text-slate-500 font-semibold">{badge1Sub}</div>
-                  </div>
-                  <div className="bg-white/90 text-slate-900 rounded-xl px-2.5 py-1 text-[9px] font-bold text-center border border-white">
-                    <div className="text-[#DB9E30] font-black">{badge2Top}</div>
-                    <div className="text-slate-500 font-semibold">{badge2Sub}</div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -1113,28 +1145,61 @@ function PageBuilderContent() {
                       <p className="text-xs text-slate-400 mt-1 m-0">Build page layout with reorderable sections</p>
                     </div>
 
-                    {/* Add Section Dropdown Button */}
-                    <div className="relative">
+                    {/* Add Section Dropdown Button & Searchable Menu */}
+                    <div className="relative" ref={dropdownRef}>
                       <button
-                        onClick={() => setDropdownOpen(!dropdownOpen)}
-                        className="flex items-center font-bold cursor-pointer text-white bg-[#004B39]"
+                        type="button"
+                        onClick={() => {
+                          setDropdownOpen(!dropdownOpen);
+                          setSectionSearch('');
+                        }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#004B39] hover:bg-[#00382B] text-white text-xs font-extrabold transition-all cursor-pointer shadow-sm border-none"
                       >
-                        + Add Section ▾
+                        <span>+ Add Section</span>
+                        <span className="text-[10px]">{dropdownOpen ? '▲' : '▼'}</span>
                       </button>
 
                       {dropdownOpen && (
-                        <div className="absolute bg-white">
-                          {SECTION_OPTIONS.map((opt) => (
-                            <div
-                              key={opt}
-                              onClick={() => addSection(opt)}
-                              className="font-semibold cursor-pointer"
-                              onMouseEnter={(e) => (e.currentTarget.style.background = '#f1f5f9')}
-                              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-                            >
-                              {opt}
-                            </div>
-                          ))}
+                        <div className="absolute right-0 top-full mt-2 w-80 max-h-72 flex flex-col bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 p-2 animate-in fade-in slide-in-from-top-2">
+                          {/* Search Input Filter */}
+                          <div className="p-1 pb-2 border-b border-slate-100 mb-1">
+                            <input
+                              type="text"
+                              autoFocus
+                              placeholder="🔍 Search sections..."
+                              value={sectionSearch}
+                              onChange={(e) => setSectionSearch(e.target.value)}
+                              className="w-full px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-semibold text-slate-800 outline-none focus:border-[#004B39]"
+                            />
+                          </div>
+
+                          {/* Scrollable Options List */}
+                          <div className="overflow-y-auto max-h-52 space-y-0.5 pr-1">
+                            {SECTION_OPTIONS.filter((opt) =>
+                              opt.toLowerCase().includes(sectionSearch.toLowerCase())
+                            ).length === 0 ? (
+                              <div className="px-3 py-3 text-xs text-slate-400 font-medium text-center">
+                                No sections found matching &quot;{sectionSearch}&quot;
+                              </div>
+                            ) : (
+                              SECTION_OPTIONS.filter((opt) =>
+                                opt.toLowerCase().includes(sectionSearch.toLowerCase())
+                              ).map((opt) => (
+                                <button
+                                  key={opt}
+                                  type="button"
+                                  onClick={() => {
+                                    addSection(opt);
+                                    setDropdownOpen(false);
+                                  }}
+                                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-[#004B39] hover:bg-emerald-50/80 transition-colors border-none cursor-pointer flex items-center justify-between group"
+                                >
+                                  <span className="truncate">{opt}</span>
+                                  <span className="text-emerald-600 opacity-0 group-hover:opacity-100 text-xs font-black transition-opacity">+ Add</span>
+                                </button>
+                              ))
+                            )}
+                          </div>
                         </div>
                       )}
                     </div>
@@ -3345,35 +3410,38 @@ function PageBuilderContent() {
         </div>
 
         {/* Right Column: Status Settings */}
-        <div className="flex flex-col gap-16">
-
-          {/* Status Panel */}
-          <div className="bg-white">
-            <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-5">
+          {/* Status & Visibility Card */}
+          <div className="bg-white rounded-3xl p-5 border border-slate-200/90 shadow-2xs flex flex-col gap-4">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
-                <span className="text-xs font-bold text-slate-800">STATUS</span>
-                <div className="text-xs text-slate-500">Visible on the website</div>
+                <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider block">PAGE STATUS</span>
+                <span className="text-[11px] text-slate-500">Visibility on live website</span>
               </div>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as any)}
-                className="font-extrabold cursor-pointer"
+                className="px-3 py-1.5 rounded-xl border border-slate-200 bg-slate-50 text-xs font-bold text-slate-800 outline-none focus:border-[#004B39] cursor-pointer shadow-2xs"
               >
-                <option value="published" className="font-bold">Published</option>
-                <option value="draft" className="font-bold">Draft</option>
+                <option value="published">Published</option>
+                <option value="draft">Draft</option>
               </select>
             </div>
 
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-slate-900">Show in menu</span>
+            <div className="flex items-center justify-between pt-1">
+              <div>
+                <span className="text-xs font-extrabold text-slate-900 block">Show in menu</span>
+                <span className="text-[11px] text-slate-500 font-medium">Include link in site header nav</span>
+              </div>
               <Field orientation="horizontal">
                 <Switch id="switch-show-in-menu" checked={showInMenu} onChange={setShowInMenu} />
               </Field>
             </div>
-          </div>
 
-          <div className="text-xs text-slate-500">
-            ⏱ Auto-saves draft every 60 seconds
+            <div className="pt-3 border-t border-slate-100 flex items-center gap-2 text-[11px] text-slate-400 font-medium">
+              <span>⏱</span>
+              <span>Auto-saves draft state dynamically</span>
+            </div>
           </div>
         </div>
 

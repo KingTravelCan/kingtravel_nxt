@@ -8,6 +8,7 @@ import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, TicketPercent,
 import { getPackageDetailsAction, getPageSeoAction } from "@/actions/pageActions";
 import { submitPackageBookingEnquiryAction } from "@/actions/enquiryActions";
 import PageSeoHead from "@/components/PageSeoHead";
+import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
 
 const DEFAULT_HAJJ_UMRAH_PACKAGES = [
   {
@@ -200,6 +201,10 @@ export default function StandalonePackageDetailPage() {
   const [pkgSeo, setPkgSeo] = useState<any>(null);
   const [bookingStatus, setBookingStatus] = useState<string | null>(null);
 
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMsg, setModalMsg] = useState("");
+  const [modalRef, setModalRef] = useState("");
+
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const newErrors: { [key: string]: boolean } = {};
@@ -229,7 +234,11 @@ export default function StandalonePackageDetailPage() {
       });
 
       if (res.success) {
-        setBookingStatus(res.message || "Your package booking request has been saved in our database!");
+        const msg = res.message || "Thank you! Your package booking request has been received. Our team will contact you shortly.";
+        setModalMsg(msg);
+        if (res.bookingNumber) setModalRef(res.bookingNumber);
+        setModalOpen(true);
+        setBookingStatus(null);
         setFullName("");
         setEmail("");
         setSelectedDate("");
@@ -833,6 +842,12 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 
         </div>
       </div>
+      <SubmissionSuccessModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        message={modalMsg}
+        referenceNumber={modalRef}
+      />
     </div>
   );
 }

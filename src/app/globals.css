@@ -570,7 +570,8 @@ header {
   margin-top: 20px;
 }
 
-.hero h1 em {
+.hero h1 em,
+.hero h1 span {
   font-style: normal;
   color: var(--gold);
 }

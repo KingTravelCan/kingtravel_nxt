@@ -12,9 +12,18 @@ export async function uploadFileToFtp(file: File, subfolder: string = 'uploads')
       body: formData,
     });
 
-    const data = await res.json();
+    const text = await res.text();
+    let data: any = {};
+    try {
+      data = JSON.parse(text);
+    } catch {
+      console.error('FTP Upload response not valid JSON:', text);
+      alert('Upload failed: Server returned an invalid response. Please refresh the browser page and try again.');
+      return null;
+    }
+
     if (data.success && data.url) {
-      return data.url;
+      return sanitizeMediaUrl(data.url);
     } else {
       console.error('FTP Upload error:', data.error);
       alert(`Upload failed: ${data.error || 'Unknown error'}`);
@@ -25,6 +34,21 @@ export async function uploadFileToFtp(file: File, subfolder: string = 'uploads')
     alert(`Upload failed: ${err.message || 'Network error'}`);
     return null;
   }
+}
+
+/**
+ * Ensures any uploaded media URL is clean and replaces dead domain hostnames with valid paths.
+ */
+export function sanitizeMediaUrl(url: string): string {
+  if (!url) return '';
+  const mediaBase = (process.env.NEXT_PUBLIC_MEDIA_URL || 'https://tanzeem.dks.com.pk/media').replace(/\/$/, '');
+  if (url.startsWith('https://media.kingtravelcan.com')) {
+    return url.replace(/^https?:\/\/media\.kingtravelcan\.com\/?/, `${mediaBase}/`);
+  }
+  if (url.startsWith('/media/')) {
+    return url.replace(/^\/media\//, `${mediaBase}/`);
+  }
+  return url;
 }
 
 /**
