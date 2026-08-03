@@ -32,8 +32,8 @@ export default function ConfirmModal({ config, onClose }: ConfirmModalProps) {
   } = config;
 
   const handleConfirm = async () => {
-    await onConfirm();
     onClose();
+    await onConfirm();
   };
 
   const getTheme = () => {

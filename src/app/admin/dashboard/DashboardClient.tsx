@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
 import DashboardSeoCenterSection from '@/components/admin/DashboardSeoCenterSection';
 import { ActivityItem } from '@/actions/activityActions';
 import {

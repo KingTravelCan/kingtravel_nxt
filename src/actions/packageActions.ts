@@ -305,7 +305,6 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
     });
 
     revalidatePath('/admin/packages');
-    revalidatePath('/umrah-packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah/packages');
     revalidatePath('/hajj/packages');
@@ -350,7 +349,6 @@ export async function updatePackageAction(
     }).where(eq(packages.id, id));
 
     revalidatePath('/admin/packages');
-    revalidatePath('/umrah-packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah/packages');
     revalidatePath('/hajj/packages');

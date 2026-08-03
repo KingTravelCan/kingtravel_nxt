@@ -17,22 +17,27 @@ export function updateBrowserFavicon(url: string) {
   else if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) mimeType = 'image/jpeg';
   else if (lower.endsWith('.webp')) mimeType = 'image/webp';
 
-  // Remove existing favicon links to trigger browser repaint
+  // Update existing favicon link tags safely without breaking React DOM trees
   const existingLinks = document.querySelectorAll<HTMLLinkElement>("link[rel*='icon']");
-  existingLinks.forEach((el) => el.remove());
+  if (existingLinks.length > 0) {
+    existingLinks.forEach((el) => {
+      el.type = mimeType;
+      el.href = finalUrl;
+    });
+  } else {
+    // Create new icon links if none exist
+    const link = document.createElement('link');
+    link.type = mimeType;
+    link.rel = 'icon';
+    link.href = finalUrl;
+    document.head.appendChild(link);
 
-  // Create new icon links
-  const link = document.createElement('link');
-  link.type = mimeType;
-  link.rel = 'icon';
-  link.href = finalUrl;
-  document.head.appendChild(link);
-
-  const shortcutLink = document.createElement('link');
-  shortcutLink.type = mimeType;
-  shortcutLink.rel = 'shortcut icon';
-  shortcutLink.href = finalUrl;
-  document.head.appendChild(shortcutLink);
+    const shortcutLink = document.createElement('link');
+    shortcutLink.type = mimeType;
+    shortcutLink.rel = 'shortcut icon';
+    shortcutLink.href = finalUrl;
+    document.head.appendChild(shortcutLink);
+  }
 }
 
 export default function FaviconSync({ faviconUrl }: { faviconUrl?: string }) {
