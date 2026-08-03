@@ -10,7 +10,7 @@ import { getPageById, savePageAction } from '@/actions/pageActions';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
 import { Trash2, Upload, Settings } from 'lucide-react';
 import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
-import { uploadFileToFtp } from '@/lib/uploadClient';
+import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 
 const SECTION_OPTIONS = [

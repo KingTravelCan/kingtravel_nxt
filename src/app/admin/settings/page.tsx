@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/admin/AdminLayout';
-import { uploadFileToFtp } from '@/lib/uploadClient';
+import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import {
   getNavItems,
   saveNavItemsAction,
@@ -1517,7 +1517,10 @@ export default function AdminSettingsPage() {
                               const file = e.target.files?.[0];
                               if (file) {
                                 const url = await uploadFileToFtp(file, 'branding');
-                                if (url) setIdentityData({ ...identityData, logo: url });
+                                if (url) {
+                                  const autoAlt = generateAutoAltText(file, identityData.siteName || 'Official Logo');
+                                  setIdentityData((prev: any) => ({ ...prev, logo: url, logoAlt: autoAlt }));
+                                }
                               }
                             }}
                           />

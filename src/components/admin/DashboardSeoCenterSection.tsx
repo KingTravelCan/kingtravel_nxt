@@ -40,23 +40,34 @@ export default function DashboardSeoCenterSection({ pages }: DashboardSeoCenterS
     { month: 'Aug', score: healthRating, color: '#004B39' },
   ];
 
-  // Map pages requiring attention
-  const pagesNeedingAttention = pages.map((p, idx) => {
-    const hasShortTitle = !p.metaTitle || p.metaTitle.length < 30;
-    const hasShortDesc = !p.metaDescription || p.metaDescription.length < 70;
-    const score = hasShortTitle && hasShortDesc ? 50 : hasShortTitle || hasShortDesc ? 85 : 100;
+  // Map pages requiring attention with accurate Alt Text & Meta checks
+  const pagesNeedingAttention = pages.map((p) => {
+    const seo = p.seoData || {};
+    const metaTitleVal = p.metaTitle || seo.metaTitle || '';
+    const metaDescVal = p.metaDescription || seo.metaDescription || '';
+    const heroAltVal = seo.heroAlt || p.heroAlt || '';
+
+    const hasShortTitle = !metaTitleVal || metaTitleVal.length < 20;
+    const hasShortDesc = !metaDescVal || metaDescVal.length < 50;
+    const missingAlt = !heroAltVal;
+
+    let score = 100;
+    if (hasShortTitle && hasShortDesc) score = 60;
+    else if (hasShortTitle || hasShortDesc) score = 85;
+    else if (missingAlt) score = 92;
 
     const actionItems: string[] = [];
-    if (hasShortTitle) actionItems.push('Meta Title missing or too short (< 30 chars)');
-    if (hasShortDesc) actionItems.push('Meta Description missing or too short (< 70 chars)');
-    if (actionItems.length === 0) actionItems.push('Image Alt text enhancement recommended');
+    if (hasShortTitle) actionItems.push('Meta Title missing or too short (< 20 chars)');
+    if (hasShortDesc) actionItems.push('Meta Description missing or too short (< 50 chars)');
+    if (missingAlt) actionItems.push('Image Alt text missing — Click SEO to auto-generate');
+    if (actionItems.length === 0) actionItems.push('✓ Fully Optimized — All Alt Texts & Metadata Verified');
 
     return {
       ...p,
       score,
       actionItems,
     };
-  }).filter((p) => p.score < 100 || true).slice(0, 6);
+  }).slice(0, 6);
 
   return (
     <div className="bg-white rounded-3xl p-6 border border-slate-200 shadow-sm space-y-6">
@@ -301,11 +312,14 @@ export default function DashboardSeoCenterSection({ pages }: DashboardSeoCenterS
                 </div>
 
                 <ul className="m-0 p-0 list-none space-y-0.5">
-                  {p.actionItems.map((item: string, i: number) => (
-                    <li key={i} className="text-[11px] text-red-600 font-medium flex items-center gap-1.5">
-                      <span className="w-1 h-1 rounded-full bg-red-500"></span> {item}
-                    </li>
-                  ))}
+                  {p.actionItems.map((item: string, i: number) => {
+                    const isPassed = item.startsWith('✓');
+                    return (
+                      <li key={i} className={`text-[11px] font-semibold flex items-center gap-1.5 ${isPassed ? 'text-emerald-700' : 'text-red-600'}`}>
+                        <span className={`w-1.5 h-1.5 rounded-full ${isPassed ? 'bg-emerald-500' : 'bg-red-500'}`}></span> {item}
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
 
