@@ -13,43 +13,100 @@ import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal'
 import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 
-const SECTION_OPTIONS = [
-  'Who We Are (Intro & Stats)',
-  'Exclusive Upcoming Umrah Packages',
-  'Select Preferred Travel Service',
-  'What We Provide (Numbered Features)',
-  'Hero Slider',
-  'Intro',
-  'Stats Grid',
-  'Accreditations Bar',
-  'Umrah Packages Grid',
-  'Hajj Packages Grid',
-  'Visa Solutions Grid',
-  'Visa Process Steps',
-  'Available Flights Grid',
-  'Flight Assistance CTA',
-  'Contact Info Cards',
-  'Contact Form',
-  'Contact Maps',
-  'Services Grid',
-  'Image+Text',
-  'Airlines Marquee',
-  'Airlines Logo Carousel',
-  'Certifications Flip Cards',
-  'Intro (Text + Image)',
-  'Accordion / FAQ',
-  'Team Grid',
-  'Media Grid',
-  'Publications Grid',
-  'CTA Banner',
-  'Embed / Media',
-  'Text Block (Rich Text)',
-  'Image + Text (Side by Side)',
-  'Organization Hero Banner',
-  'Quote Banner (Full Width)',
-  'Leader Bio Card',
-  'Ideology / Feature Cards',
+type SectionMeta = {
+  type: string;
+  description: string;
+  pages: string[];
+};
+
+type SectionCategory = {
+  category: string;
+  icon: string;
+  items: SectionMeta[];
+};
+
+const SECTION_CATALOG: SectionCategory[] = [
+  {
+    category: 'Homepage',
+    icon: '🏠',
+    items: [
+      { type: 'Who We Are (Intro & Stats)', description: 'Split layout with agency intro text, trust quote badge, and animated stat counters.', pages: ['Homepage'] },
+      { type: 'Exclusive Upcoming Umrah Packages', description: 'Featured Umrah package cards with CTA button and price teaser.', pages: ['Homepage'] },
+      { type: 'Select Preferred Travel Service', description: 'Interactive service icon grid (Umrah, Hajj, Visa, Flights, Hotels…).', pages: ['Homepage'] },
+      { type: 'What We Provide (Numbered Features)', description: 'Numbered feature list alongside a full-height image — showcases key value props.', pages: ['Homepage'] },
+      { type: 'Hero Slider', description: 'Full-width hero slider with headline, subtext, and CTA buttons.', pages: ['Homepage'] },
+    ],
+  },
+  {
+    category: 'About & Trust',
+    icon: '🏛',
+    items: [
+      { type: 'Intro', description: 'Simple eyebrow + heading + body text intro block for any page.', pages: ['About', 'Any Page'] },
+      { type: 'Stats Grid', description: 'Horizontal KPI stat counters (e.g. 72K+ Travelers, 25+ Years).', pages: ['About', 'Homepage'] },
+      { type: 'Accreditations Bar', description: 'Logo bar of accreditation bodies (IATA, TICO, ACTA, Saudi Ministry).', pages: ['About', 'Homepage'] },
+      { type: 'Certifications Flip Cards', description: 'Flip-card grid showing certifications and credentials front & back.', pages: ['About'] },
+      { type: 'Team Grid', description: 'Staff profile photo grid with name and role.', pages: ['About'] },
+      { type: 'Ideology / Feature Cards', description: 'Mission, vision, values cards in a branded card grid.', pages: ['About'] },
+      { type: 'Leader Bio Card', description: 'Full-width leadership bio with portrait photo and rich text.', pages: ['About'] },
+      { type: 'Organization Hero Banner', description: 'Bold full-width banner with org name, tagline, and background image.', pages: ['About'] },
+    ],
+  },
+  {
+    category: 'Packages (Umrah & Hajj)',
+    icon: '🕋',
+    items: [
+      { type: 'Umrah Packages Grid', description: 'Database-driven Umrah package cards with price, hotel rating, and booking CTA.', pages: ['Umrah Packages', 'Homepage'] },
+      { type: 'Hajj Packages Grid', description: 'Database-driven Hajj package cards with full details and booking form.', pages: ['Hajj Packages'] },
+      { type: 'CTA Banner', description: 'Full-width conversion CTA with heading, subtext, and call-to-action button.', pages: ['Umrah Packages', 'Hajj Packages', 'Any Page'] },
+    ],
+  },
+  {
+    category: 'Visa & Saudi',
+    icon: '🪪',
+    items: [
+      { type: 'Visa Solutions Grid', description: 'Visa type cards (Tourist, Business, Umrah, Hajj) with features and apply CTA.', pages: ['Saudi Visa'] },
+      { type: 'Visa Process Steps', description: '3-step visual process block (Apply → Review → Confirmed) for visa applicants.', pages: ['Saudi Visa'] },
+    ],
+  },
+  {
+    category: 'Airlines & Flights',
+    icon: '✈️',
+    items: [
+      { type: 'Available Flights Grid', description: 'Live flight route cards with fare, airline, and availability status.', pages: ['Airlines'] },
+      { type: 'Airlines Marquee', description: 'Infinite scrolling logo marquee of airline partner brands.', pages: ['Airlines', 'About', 'Homepage'] },
+      { type: 'Airlines Logo Carousel', description: 'Interactive carousel of airline partner logos with hover effect.', pages: ['Airlines', 'About'] },
+      { type: 'Flight Assistance CTA', description: 'Full-width CTA encouraging visitors to contact the flight desk.', pages: ['Airlines'] },
+    ],
+  },
+  {
+    category: 'Contact',
+    icon: '📞',
+    items: [
+      { type: 'Contact Info Cards', description: 'Office address cards with phone, email, and map links for each location.', pages: ['Contact'] },
+      { type: 'Contact Form', description: 'Animated contact form with dual notification (admin + user confirmation email).', pages: ['Contact', 'Any Page'] },
+      { type: 'Contact Maps', description: 'Embedded dual Google Maps iframes for head office and branch locations.', pages: ['Contact'] },
+    ],
+  },
+  {
+    category: 'Content & Layout',
+    icon: '📄',
+    items: [
+      { type: 'Services Grid', description: 'Icon + heading + description service tiles in a responsive grid.', pages: ['About', 'Any Page'] },
+      { type: 'Image+Text', description: 'Split image-and-text block with eyebrow, heading, body, and optional CTA.', pages: ['Any Page'] },
+      { type: 'Intro (Text + Image)', description: 'Reversed intro block — text on left, image panel on right.', pages: ['Any Page'] },
+      { type: 'Image + Text (Side by Side)', description: 'Full-width split section with large image beside formatted text.', pages: ['Any Page'] },
+      { type: 'Text Block (Rich Text)', description: 'Free-form rich text editor block for long-form content.', pages: ['Any Page'] },
+      { type: 'Accordion / FAQ', description: 'Expandable FAQ accordion with question-answer pairs.', pages: ['Any Page'] },
+      { type: 'Quote Banner (Full Width)', description: 'Bold full-width testimonial or inspirational quote with attribution.', pages: ['Any Page'] },
+      { type: 'Media Grid', description: 'Photo / video gallery grid with lightbox support.', pages: ['Any Page'] },
+      { type: 'Publications Grid', description: 'Media coverage and press publication logo grid.', pages: ['About', 'Any Page'] },
+      { type: 'Embed / Media', description: 'Embed any iframe, YouTube video, or external media block.', pages: ['Any Page'] },
+    ],
+  },
 ];
+
+// Flat list for search compatibility
+const SECTION_OPTIONS = SECTION_CATALOG.flatMap((cat) => cat.items.map((i) => i.type));
 
 interface SectionItem {
   id: string;
@@ -1145,7 +1202,7 @@ function PageBuilderContent() {
                       <p className="text-xs text-slate-400 mt-1 m-0">Build page layout with reorderable sections</p>
                     </div>
 
-                    {/* Add Section Dropdown Button & Searchable Menu */}
+                    {/* Add Section Dropdown Button — Grouped by Page with Hover Preview */}
                     <div className="relative" ref={dropdownRef}>
                       <button
                         type="button"
@@ -1160,9 +1217,10 @@ function PageBuilderContent() {
                       </button>
 
                       {dropdownOpen && (
-                        <div className="absolute right-0 top-full mt-2 w-80 max-h-72 flex flex-col bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 p-2 animate-in fade-in slide-in-from-top-2">
-                          {/* Search Input Filter */}
-                          <div className="p-1 pb-2 border-b border-slate-100 mb-1">
+                        <div className="absolute right-0 top-full mt-2 w-80 flex flex-col bg-white rounded-2xl border border-slate-200 shadow-2xl z-50 animate-in fade-in slide-in-from-top-2 overflow-hidden">
+
+                          {/* Search */}
+                          <div className="p-2 pb-2 border-b border-slate-100">
                             <input
                               type="text"
                               autoFocus
@@ -1173,30 +1231,60 @@ function PageBuilderContent() {
                             />
                           </div>
 
-                          {/* Scrollable Options List */}
-                          <div className="overflow-y-auto max-h-52 space-y-0.5 pr-1">
-                            {SECTION_OPTIONS.filter((opt) =>
-                              opt.toLowerCase().includes(sectionSearch.toLowerCase())
-                            ).length === 0 ? (
-                              <div className="px-3 py-3 text-xs text-slate-400 font-medium text-center">
-                                No sections found matching &quot;{sectionSearch}&quot;
-                              </div>
+                          {/* Grouped / Filtered List */}
+                          <div className="overflow-y-auto max-h-[420px] p-1.5 space-y-1">
+                            {sectionSearch.trim() !== '' ? (
+                              /* Flat Search Results */
+                              (() => {
+                                const results = SECTION_CATALOG.flatMap(cat =>
+                                  cat.items
+                                    .filter(item => item.type.toLowerCase().includes(sectionSearch.toLowerCase()))
+                                    .map(item => ({ ...item, catIcon: cat.icon }))
+                                );
+                                return results.length === 0 ? (
+                                  <div className="px-3 py-4 text-xs text-slate-400 font-medium text-center">
+                                    No sections match &quot;{sectionSearch}&quot;
+                                  </div>
+                                ) : results.map(item => (
+                                  <button
+                                    key={item.type}
+                                    type="button"
+                                    onClick={() => { addSection(item.type); setDropdownOpen(false); }}
+                                    className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-[#004B39] hover:bg-emerald-50 transition-colors border-none cursor-pointer flex items-center justify-between group"
+                                  >
+                                    <span className="flex items-center gap-2">
+                                      <span className="text-base">{item.catIcon}</span>
+                                      <span className="truncate max-w-[200px]">{item.type}</span>
+                                    </span>
+                                    <span className="text-emerald-600 opacity-0 group-hover:opacity-100 text-xs font-black transition-opacity shrink-0">+ Add</span>
+                                  </button>
+                                ));
+                              })()
                             ) : (
-                              SECTION_OPTIONS.filter((opt) =>
-                                opt.toLowerCase().includes(sectionSearch.toLowerCase())
-                              ).map((opt) => (
-                                <button
-                                  key={opt}
-                                  type="button"
-                                  onClick={() => {
-                                    addSection(opt);
-                                    setDropdownOpen(false);
-                                  }}
-                                  className="w-full text-left px-3 py-2 rounded-xl text-xs font-bold text-slate-700 hover:text-[#004B39] hover:bg-emerald-50/80 transition-colors border-none cursor-pointer flex items-center justify-between group"
-                                >
-                                  <span className="truncate">{opt}</span>
-                                  <span className="text-emerald-600 opacity-0 group-hover:opacity-100 text-xs font-black transition-opacity">+ Add</span>
-                                </button>
+                              /* Grouped by Category */
+                              SECTION_CATALOG.map(cat => (
+                                <div key={cat.category}>
+                                  <div className="flex items-center gap-1.5 px-2 py-1 mt-1">
+                                    <span className="text-sm">{cat.icon}</span>
+                                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-slate-400">{cat.category}</span>
+                                  </div>
+                                  {cat.items.map(item => (
+                                    <button
+                                      key={item.type}
+                                      type="button"
+                                      onClick={() => { addSection(item.type); setDropdownOpen(false); }}
+                                      className="w-full text-left px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 hover:text-[#004B39] hover:bg-emerald-50 transition-colors border-none cursor-pointer flex items-center justify-between group"
+                                    >
+                                      <span className="truncate max-w-[210px]">{item.type}</span>
+                                      <div className="flex items-center gap-1.5 shrink-0">
+                                        {item.pages.slice(0, 1).map(pg => (
+                                          <span key={pg} className="hidden group-hover:inline-block text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-[#004B39]/10 text-[#004B39] border border-[#004B39]/20">{pg}</span>
+                                        ))}
+                                        <span className="text-emerald-600 opacity-0 group-hover:opacity-100 text-xs font-black transition-opacity">+ Add</span>
+                                      </div>
+                                    </button>
+                                  ))}
+                                </div>
                               ))
                             )}
                           </div>
