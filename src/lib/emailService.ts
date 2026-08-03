@@ -67,48 +67,59 @@ export async function dispatchFormEmails(
     // Dynamically import nodemailer server-side to prevent bundler errors in Client Components
     const nodemailer = await import('nodemailer');
 
-    // 3. Setup Nodemailer Transporter
+    // 3. Setup Nodemailer Transporter with Connection Pooling & Fast Timeouts (Forced IPv4)
     const transporter = nodemailer.createTransport({
       host: smtpHost,
       port: smtpPort,
       secure: smtpPort === 465,
+      family: 4,
+      pool: true,
+      maxConnections: 3,
+      connectionTimeout: 8000,
+      greetingTimeout: 6000,
+      socketTimeout: 10000,
       auth: {
         user: smtpUser,
         pass: smtpPass,
       },
+    } as any);
+
+    // Prepare Email #1 (Admin)
+    const adminPromise = transporter.sendMail({
+      from: `"${formName} - King Travel" <${fromEmail}>`,
+      to: adminRecipientEmail,
+      subject: adminSubject,
+      html: adminHtml,
     });
 
-    let adminSent = false;
-    let userSent = false;
-
-    // Dispatch Email #1: To Admin
-    try {
-      await transporter.sendMail({
-        from: `"${formName} - King Travel" <${fromEmail}>`,
-        to: adminRecipientEmail,
-        subject: adminSubject,
-        html: adminHtml,
-      });
-      adminSent = true;
-      console.log(`✅ [Email Dispatcher] Admin notification sent to ${adminRecipientEmail}`);
-    } catch (err: any) {
-      console.error(`❌ [Email Dispatcher] Failed to send Admin email:`, err.message);
-    }
-
-    // Dispatch Email #2: To User (if user email provided)
-    if (isValidUserEmail && userHtml) {
-      try {
-        await transporter.sendMail({
+    // Prepare Email #2 (User, if email is valid)
+    const userPromise = (isValidUserEmail && userHtml)
+      ? transporter.sendMail({
           from: `"King Travel Canada" <${fromEmail}>`,
           to: userEmail.trim(),
           subject: userSubject,
           html: userHtml,
-        });
-        userSent = true;
-        console.log(`✅ [Email Dispatcher] User confirmation sent to ${userEmail}`);
-      } catch (err: any) {
-        console.error(`❌ [Email Dispatcher] Failed to send User email to ${userEmail}:`, err.message);
-      }
+        })
+      : Promise.resolve(null);
+
+    // Dispatch both emails in parallel simultaneously
+    const [adminResult, userResult] = await Promise.allSettled([adminPromise, userPromise]);
+
+    let adminSent = false;
+    let userSent = false;
+
+    if (adminResult.status === 'fulfilled') {
+      adminSent = true;
+      console.log(`✅ [Email Dispatcher] Admin notification sent to ${adminRecipientEmail}`);
+    } else {
+      console.error(`❌ [Email Dispatcher] Failed to send Admin email:`, adminResult.reason?.message || adminResult.reason);
+    }
+
+    if (userResult.status === 'fulfilled' && userResult.value !== null) {
+      userSent = true;
+      console.log(`✅ [Email Dispatcher] User confirmation sent to ${userEmail}`);
+    } else if (userResult.status === 'rejected') {
+      console.error(`❌ [Email Dispatcher] Failed to send User email to ${userEmail}:`, userResult.reason?.message || userResult.reason);
     } else {
       console.log(`ℹ️ [Email Dispatcher] No user email entered. User confirmation email skipped.`);
     }
