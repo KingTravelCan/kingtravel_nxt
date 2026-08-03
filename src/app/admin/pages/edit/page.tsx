@@ -1609,7 +1609,7 @@ function PageBuilderContent() {
                                           currentBadges[bIdx] = { ...currentBadges[bIdx], title: e.target.value };
                                           updateSectionData(sec.id, 'items', currentBadges);
                                         }}
-                                        className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px] font-bold"
+                                        className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px] font-bold text-slate-900"
                                       />
                                     </div>
                                     <div>
@@ -1623,7 +1623,7 @@ function PageBuilderContent() {
                                           currentBadges[bIdx] = { ...currentBadges[bIdx], icon: e.target.value };
                                           updateSectionData(sec.id, 'items', currentBadges);
                                         }}
-                                        className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                        className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px] text-slate-900"
                                       />
                                     </div>
                                     <div>
@@ -1635,7 +1635,7 @@ function PageBuilderContent() {
                                           currentBadges[bIdx] = { ...currentBadges[bIdx], iconType: e.target.value };
                                           updateSectionData(sec.id, 'items', currentBadges);
                                         }}
-                                        className="w-full p-1.5 rounded-md border border-slate-300 text-[11px]"
+                                        className="w-full p-1.5 rounded-md border border-slate-300 text-[11px] text-slate-900"
                                       >
                                         <option value="fontawesome">FontAwesome</option>
                                         <option value="lucide">Lucide Icon</option>
