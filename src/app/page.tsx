@@ -9,6 +9,7 @@ import { getPageBySlug } from "@/actions/pageActions";
 import { submitQuoteEnquiryAction, submitContactEnquiryAction } from "@/actions/enquiryActions";
 import PageSeoHead from "@/components/PageSeoHead";
 import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
+import * as LucideIcons from "lucide-react";
 
 const partnerLogos = [
   { src: "/img/t-3.png", alt: "Trust Partner 3" },
@@ -50,37 +51,42 @@ export default function Home() {
   });
 
   const [homeSeo, setHomeSeo] = useState<any>(null);
+  const [dynamicSections, setDynamicSections] = useState<any[]>([]);
 
   useEffect(() => {
     getPageBySlug("/").then((p) => {
       if (p) {
         if (p.seoData) setHomeSeo(p.seoData);
-        let secData: any = {};
         if (p.sections) {
           try {
-            const parsed = JSON.parse(p.sections);
+            const parsed = typeof p.sections === 'string' ? JSON.parse(p.sections) : p.sections;
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              setDynamicSections(parsed);
+            }
             const foundHero = parsed.find(
               (s: any) => s.type === "Homepage Hero Banner" || s.type === "Hero Slider"
             );
-            if (foundHero && foundHero.data) secData = foundHero.data;
+            if (foundHero && foundHero.data) {
+              const secData = foundHero.data;
+              setHeroData({
+                heroEyebrow: secData.heroEyebrow || "Est. in Canada · Licensed Pilgrimage Operator",
+                title: p.bannerTitle || secData.title || "Your journey to<br /><span>Makkah &amp; Madinah</span>,<br />guided with care.",
+                description: p.bannerDescription || secData.description || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights, five‑star stays walking distance from the Haram, visas, and guides who've made this journey themselves.",
+                primaryBtnLabel: secData.primaryBtnLabel || "View Umrah Packages →",
+                primaryBtnLink: secData.primaryBtnLink || "#packages",
+                secondaryBtnLabel: secData.secondaryBtnLabel || "Speak With an Advisor",
+                secondaryBtnLink: secData.secondaryBtnLink || "/contact",
+                badge1Top: secData.badge1Top || "10,000+",
+                badge1Sub: secData.badge1Sub || "Pilgrims Guided",
+                badge2Top: secData.badge2Top || "5★ Hotels",
+                badge2Sub: secData.badge2Sub || "Every Package, Every Time",
+                bgImage: p.bannerBgImage || secData.bannerBgImage || "/img/hero.png",
+                position: p.bannerPosition || secData.bannerPosition || "center center",
+                size: p.bannerSize || secData.bannerSize || "cover",
+              });
+            }
           } catch {}
         }
-        setHeroData({
-          heroEyebrow: secData.heroEyebrow || "Est. in Canada · Licensed Pilgrimage Operator",
-          title: p.bannerTitle || secData.title || "Your journey to<br /><span>Makkah &amp; Madinah</span>,<br />guided with care.",
-          description: p.bannerDescription || secData.description || "King Travel plans Hajj and Umrah journeys from Canada down to the smallest detail — flights, five‑star stays walking distance from the Haram, visas, and guides who've made this journey themselves.",
-          primaryBtnLabel: secData.primaryBtnLabel || "View Umrah Packages →",
-          primaryBtnLink: secData.primaryBtnLink || "#packages",
-          secondaryBtnLabel: secData.secondaryBtnLabel || "Speak With an Advisor",
-          secondaryBtnLink: secData.secondaryBtnLink || "/contact",
-          badge1Top: secData.badge1Top || "10,000+",
-          badge1Sub: secData.badge1Sub || "Pilgrims Guided",
-          badge2Top: secData.badge2Top || "5★ Hotels",
-          badge2Sub: secData.badge2Sub || "Every Package, Every Time",
-          bgImage: p.bannerBgImage || secData.bannerBgImage || "/img/hero.png",
-          position: p.bannerPosition || secData.bannerPosition || "center center",
-          size: p.bannerSize || secData.bannerSize || "cover",
-        });
       }
     });
   }, []);
@@ -407,7 +413,7 @@ export default function Home() {
       </section>
 
       {/* ================= TRUST Travel ================= */}
-      <section className="travels-section">
+      <section className="travels-section py-6">
         <div className="wrap section-head center reveal">
           <div className="eyebrow justify-center">Licensed &amp; Accredited</div>
           <h2 className="text-[32px]">Trusted travel Organization</h2>
@@ -416,7 +422,7 @@ export default function Home() {
       </section>
 
       {/* ================= ABOUT ================= */}
-      <section className="tint" id="trust">
+      <section className="tint py-6" id="trust">
         <div className="wrap about-split reveal">
           <div className="about-figure">
             <div className="main-img">
@@ -473,7 +479,7 @@ export default function Home() {
       </section>
 
       {/* ================= UMRAH PACKAGES ================= */}
-      <section id="packages">
+      <section id="packages" className="py-6">
         <div className="wrap">
           <div className="section-head split reveal">
             <div>
@@ -680,149 +686,112 @@ export default function Home() {
       </section>
 
       {/* ================= SERVICES ================= */}
-      <section id="services" className="tint">
-        <div className="wrap">
-          <div className="section-head center reveal">
-            <div className="eyebrow justify-center">Services We Offer</div>
-            <h2>Select your preferred travel service</h2>
-          </div>
-          <div className="svc-grid reveal">
-            <a className="svc-tile" href="#packages">
-              <div className="svc-ico">
-                <svg viewBox="0 0 24 24">
-                  <path d="M12 2 L14 9 L21 9 L15 13.5 L17 21 L12 16.5 L7 21 L9 13.5 L3 9 L10 9 Z" />
-                </svg>
+      {(() => {
+        const sec = dynamicSections.find((s: any) => s.type === 'Select Preferred Travel Service' || s.type === 'Services We Offer' || s.type === 'Services Grid');
+        const eyebrow = sec?.data?.eyebrow || 'Services We Offer';
+        const title = sec?.data?.title || 'Select your preferred travel service';
+        const tiles = (sec?.data?.items && Array.isArray(sec?.data?.items) && sec?.data?.items.length > 0) ? sec.data.items : [
+          { icon: "Star", title: "Umrah Packages", description: "Flexible departures with flights, stays & guidance included.", link: "#packages" },
+          { icon: "Building2", title: "Hajj Packages", description: "Fully accredited pilgrimage packages, curated end to end.", link: "/hajj-packages" },
+          { icon: "Plane", title: "Airline Tickets", description: "Best-fare flights sourced from every route into Jeddah.", link: "/contact" },
+          { icon: "FileCheck", title: "Saudi Visa Services", description: "Full visa processing, handled and confirmed before departure.", link: "/contact" },
+          { icon: "Hotel", title: "Hotel Booking", description: "5-star stays within walking distance of the Haram.", link: "/contact" },
+          { icon: "Globe", title: "Global Flight Reservations", description: "Worldwide reliable flight bookings for any itinerary.", link: "/contact" },
+          { icon: "FileText", title: "Travel Documentation", description: "Guidance on every document your journey requires.", link: "/contact" },
+          { icon: "Users", title: "Group & Private Tours", description: "Private, guided, and fully customizable itineraries.", link: "/contact" }
+        ];
+
+        return (
+          <section id="services" className="tint py-6">
+            <div className="wrap">
+              <div className="section-head center reveal">
+                <div className="eyebrow justify-center">{eyebrow}</div>
+                <h2 dangerouslySetInnerHTML={{ __html: title }} />
               </div>
-              <h4>Umrah Packages</h4>
-              <p>Flexible departures with flights, stays &amp; guidance included.</p>
-            </a>
-            <Link className="svc-tile" href="/hajj-packages">
-              <div className="svc-ico">
-                <svg viewBox="0 0 24 24">
-                  <rect x="7" y="9" width="10" height="12" />
-                  <circle cx="12" cy="6" r="3" />
-                </svg>
+              <div className="svc-grid reveal">
+                {tiles.map((t: any, idx: number) => {
+                  let IconComponent: any = null;
+                  if (t.icon && typeof t.icon === 'string') {
+                    // Try exact name or PascalCase lookup
+                    const cleanName = t.icon.trim();
+                    const pascalName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+                    IconComponent = (LucideIcons as any)[cleanName] || (LucideIcons as any)[pascalName];
+                  }
+
+                  return (
+                    <Link
+                      key={idx}
+                      className="svc-tile"
+                      href={t.link || '/contact'}
+                    >
+                      <div className="svc-ico">
+                        {IconComponent ? (
+                          <IconComponent className="w-6 h-6" />
+                        ) : t.icon && t.icon.length <= 4 ? (
+                          <span className="text-xl">{t.icon}</span>
+                        ) : (
+                          <LucideIcons.Star className="w-6 h-6" />
+                        )}
+                      </div>
+                      <h4>{t.title}</h4>
+                      <p>{t.description}</p>
+                    </Link>
+                  );
+                })}
               </div>
-              <h4>Hajj Packages</h4>
-              <p>Fully accredited pilgrimage packages, curated end to end.</p>
-            </Link>
-            <Link className="svc-tile" href="/contact">
-              <div className="svc-ico">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 12h18M3 12l6-6M3 12l6 6M21 12l-6-6M21 12l-6 6" />
-                </svg>
-              </div>
-              <h4>Airline Tickets</h4>
-              <p>Best-fare flights sourced from every route into Jeddah.</p>
-            </Link>
-            <Link className="svc-tile" href="/contact">
-              <div className="svc-ico">
-                <svg viewBox="0 0 24 24">
-                  <rect x="4" y="4" width="16" height="16" rx="1" />
-                  <path d="M4 10h16M9 4v6" />
-                </svg>
-              </div>
-              <h4>Saudi Visa Services</h4>
-              <p>Full visa processing, handled and confirmed before departure.</p>
-            </Link>
-            <Link className="svc-tile" href="/contact">
-              <div className="svc-ico">
-                <svg viewBox="0 0 24 24">
-                  <path d="M3 21V10l9-6 9 6v11" />
-                  <path d="M9 21v-7h6v7" />
-                </svg>
-              </div>
-              <h4>Hotel Booking</h4>
-              <p>5-star stays within walking distance of the Haram.</p>
-            </Link>
-            <Link className="svc-tile" href="/contact">
-              <div className="svc-ico">
-                <svg viewBox="0 0 24 24">
-                  <circle cx="12" cy="12" r="9" />
-                  <path d="M3 12h18M12 3c2.5 2.5 4 6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-6-4-9s1.5-6.5 4-9Z" />
-                </svg>
-              </div>
-              <h4>Global Flight Reservations</h4>
-              <p>Worldwide reliable flight bookings for any itinerary.</p>
-            </Link>
-            <Link className="svc-tile" href="/contact">
-              <div className="svc-ico">
-                <svg viewBox="0 0 24 24">
-                  <path d="M4 19V5a2 2 0 0 1 2-2h9l5 5v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
-                  <path d="M9 12h6M9 16h6" />
-                </svg>
-              </div>
-              <h4>Travel Documentation</h4>
-              <p>Guidance on every document your journey requires.</p>
-            </Link>
-            <Link className="svc-tile" href="/contact">
-              <div className="svc-ico">
-                <svg viewBox="0 0 24 24">
-                  <circle cx="12" cy="8" r="4" />
-                  <path d="M4 21c0-4 4-6 8-6s8 2 8 6" />
-                </svg>
-              </div>
-              <h4>Group &amp; Private Tours</h4>
-              <p>Private, guided, and fully customizable itineraries.</p>
-            </Link>
-          </div>
-        </div>
-      </section>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* ================= WHAT WE PROVIDE ================= */}
-      <section>
-        <div className="wrap provide-split reveal">
-          <div className="provide-img">
-            <Image
-              src="https://images.unsplash.com/photo-1577295605163-132e25c3c914?auto=format&fit=crop&w=900&q=80"
-              alt="Masjid al-Haram at night"
-              width={900}
-              height={900}
-              className="w-full h-full object-cover"
-              unoptimized
-            />
-          </div>
-          <div>
-            <div className="eyebrow">What We Provide</div>
-            <h2 className="mt-4 text-[clamp(28px,3.2vw,38px)]">
-              Lowest fares, exclusive<br />travel deals, real trust
-            </h2>
-            <div className="provide-list mt-[26px]">
-              <div className="item">
-                <div className="num">01</div>
-                <div>
-                  <h4>Lowest Fares</h4>
-                  <p>We offer the lowest rates on the market, sourced across every route into Jeddah.</p>
-                </div>
+      {(() => {
+        const sec = dynamicSections.find((s: any) => s.type === 'What We Provide (Numbered Features)' || s.type === 'What We Provide');
+        const eyebrow = sec?.data?.eyebrow || 'What We Provide';
+        const title = sec?.data?.title || 'Lowest fares, exclusive<br />travel deals, real trust';
+        const image = sec?.data?.image || 'https://images.unsplash.com/photo-1577295605163-132e25c3c914?auto=format&fit=crop&w=900&q=80';
+        const items = (sec?.data?.items && Array.isArray(sec?.data?.items) && sec?.data?.items.length > 0) ? sec.data.items : [
+          { num: "01", title: "Lowest Fares", description: "We offer the lowest rates on the market, sourced across every route into Jeddah." },
+          { num: "02", title: "Special Deals", description: "Fixed-price Umrah packages with hotels, meals and transport included." },
+          { num: "03", title: "Trusted & Certified", description: "A fully accredited travel agency you can rely on, licensed across Canada." },
+          { num: "04", title: "Pilgrimage Services", description: "Visa processing, group support — the full spiritual journey, arranged." }
+        ];
+
+        return (
+          <section className="py-6">
+            <div className="wrap provide-split reveal">
+              <div className="provide-img">
+                <Image
+                  src={image}
+                  alt="What We Provide photo"
+                  width={900}
+                  height={900}
+                  className="w-full h-full object-cover"
+                  unoptimized
+                />
               </div>
-              <div className="item">
-                <div className="num">02</div>
-                <div>
-                  <h4>Special Deals</h4>
-                  <p>Fixed-price Umrah packages with hotels, meals and transport included.</p>
-                </div>
-              </div>
-              <div className="item">
-                <div className="num">03</div>
-                <div>
-                  <h4>Trusted &amp; Certified</h4>
-                  <p>A fully accredited travel agency you can rely on, licensed across Canada.</p>
-                </div>
-              </div>
-              <div className="item">
-                <div className="num">04</div>
-                <div>
-                  <h4>Pilgrimage Services</h4>
-                  <p>Visa processing, group support — the full spiritual journey, arranged.</p>
+              <div>
+                <div className="eyebrow">{eyebrow}</div>
+                <h2 className="mt-4 text-[clamp(28px,3.2vw,38px)]" dangerouslySetInnerHTML={{ __html: title }} />
+                <div className="provide-list mt-[26px]">
+                  {items.map((item: any, iIdx: number) => (
+                    <div key={iIdx} className="item">
+                      <div className="num">{item.num || (iIdx + 1).toString().padStart(2, '0')}</div>
+                      <div>
+                        <h4>{item.title}</h4>
+                        <p>{item.description}</p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
+          </section>
+        );
+      })()}
 
       {/* ================= MAIN PACKAGES GRID ================= */}
-      <section>
+      <section className="py-6">
         <div className="wrap">
           <div className="section-head split reveal">
             <div>
@@ -1096,7 +1065,7 @@ export default function Home() {
       </section>
 
       {/* ================= HAJJ PACKAGES (SOLD OUT) ================= */}
-      <section id="hajj" className="tint">
+      <section id="hajj" className="tint py-6">
         <div className="wrap">
           <div className="section-head split reveal">
             <div>
@@ -1186,7 +1155,7 @@ export default function Home() {
       </section>
 
       {/* ================= SAUDI VISA GRID (MATCHING IMAGE 2 LAYOUT) ================= */}
-      <section id="saudi-visa" className="py-16 bg-[#f8fafc]">
+      <section id="saudi-visa" className="py-6 bg-[#f8fafc]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <div className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] mb-2">Explore Our</div>
@@ -1269,7 +1238,7 @@ export default function Home() {
 
       {/* ================= TESTIMONIALS ================= */}
       {/* ================= TESTIMONIALS (MATCHING SCREENSHOT 4) ================= */}
-      <section className="bg-[#004B39] text-white py-16 overflow-hidden">
+      <section className="bg-[#004B39] text-white py-6 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <div className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] mb-2">HAPPY PILGRIMS</div>
@@ -1305,7 +1274,7 @@ export default function Home() {
       </section>
 
       {/* ================= AIRLINES ================= */}
-      <section id="flights" className="py-12 bg-white">
+      <section id="flights" className="py-6 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-8">
             <div className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] mb-2">Our Trusted Partners</div>
@@ -1316,7 +1285,7 @@ export default function Home() {
       </section>
 
       {/* ================= CONTACT / GET IN TOUCH (MATCHING SCREENSHOT 3) ================= */}
-      <section id="contact" className="py-16 bg-[#FAF8F5]">
+      <section id="contact" className="py-6 bg-[#FAF8F5]">
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
             {/* Left Contact Info (5 Cols) */}

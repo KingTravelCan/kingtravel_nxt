@@ -53,8 +53,8 @@ export async function dispatchFormEmails(
     const userHtml = isValidUserEmail ? getResponsiveEmailTemplateHtml(formName, submittedData, true) : '';
 
     // Auto-Selected Generic Subjects
-    const adminSubject = `[King Travel Canada] New Form Submission: ${formName}`;
-    const userSubject = `Thank you for contacting King Travel Canada — ${formName} Received`;
+    const adminSubject = `[King Travel Canada] ${formName}`;
+    const userSubject = `Thank you for Contacting King Travel Canada — ${formName} Received`;
 
     // 2. Check if SMTP Credentials exist
     if (!smtpHost || !smtpUser) {
@@ -95,11 +95,11 @@ export async function dispatchFormEmails(
     // Prepare Email #2 (User, if email is valid)
     const userPromise = (isValidUserEmail && userHtml)
       ? transporter.sendMail({
-          from: `"King Travel Canada" <${fromEmail}>`,
-          to: userEmail.trim(),
-          subject: userSubject,
-          html: userHtml,
-        })
+        from: `"King Travel Canada" <${fromEmail}>`,
+        to: userEmail.trim(),
+        subject: userSubject,
+        html: userHtml,
+      })
       : Promise.resolve(null);
 
     // Dispatch both emails in parallel simultaneously

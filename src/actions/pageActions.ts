@@ -269,9 +269,8 @@ export async function savePageAction(formData: FormData) {
 
 export async function getDefaultNavItems() {
   return [
-    { id: '1', label: 'Home', url: '/', level: 1, children: [] },
     {
-      id: '2',
+      id: '1',
       label: 'About Us',
       url: '/about',
       level: 1,
@@ -279,11 +278,11 @@ export async function getDefaultNavItems() {
         { id: '2-1', label: 'Licenses', url: '/about#licenses', level: 2 },
       ],
     },
-    { id: '3', label: 'Umrah Packages', url: '/umrah/packages', level: 1, children: [] },
-    { id: '4', label: 'Hajj Packages', url: '/hajj/packages', level: 1, children: [] },
-    { id: '5', label: 'Saudi Visa', url: '/saudi-visa', level: 1, children: [] },
-    { id: '6', label: 'Flights', url: '/airlines', level: 1, children: [] },
-    { id: '7', label: 'Contact', url: '/contact', level: 1, children: [] },
+    { id: '2', label: 'Umrah Packages', url: '/umrah/packages', level: 1, children: [] },
+    { id: '3', label: 'Hajj Packages', url: '/hajj/packages', level: 1, children: [] },
+    { id: '4', label: 'Saudi Visa', url: '/saudi-visa', level: 1, children: [] },
+    { id: '5', label: 'Flights', url: '/airlines', level: 1, children: [] },
+    { id: '6', label: 'Contact', url: '/contact', level: 1, children: [] },
   ];
 }
 
@@ -847,7 +846,7 @@ export async function slugifyPackageTitle(title: string): Promise<string> {
 export async function getPackageDetailsAction(packageSlug: string) {
   try {
     const cleanSlug = packageSlug.toLowerCase().trim();
-    
+
     // 1. Search database sitePages
     const pages = await getPagesList();
     for (const page of pages) {
@@ -855,7 +854,7 @@ export async function getPackageDetailsAction(packageSlug: string) {
         let parsedSections: any[] = [];
         try {
           parsedSections = typeof page.sections === 'string' ? JSON.parse(page.sections) : page.sections;
-        } catch (e) {}
+        } catch (e) { }
 
         if (Array.isArray(parsedSections)) {
           for (const sec of parsedSections) {
