@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { updateBrowserFavicon } from '@/components/FaviconSync';
@@ -87,6 +87,12 @@ export default function AdminSettingsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pagesList, setPagesList] = useState<any[]>([]);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
+
+  // Drag-and-drop state (native HTML5 — no external library)
+  const dragL1Id = useRef<string | null>(null);           // dragged level-1 item id
+  const dragL2Key = useRef<string | null>(null);          // dragged level-2 item: "parentId::subId"
+  const [dragOverL1, setDragOverL1] = useState<string | null>(null);
+  const [dragOverL2, setDragOverL2] = useState<string | null>(null); // "parentId::subId"
 
   // Footer Builder State
   const [footerData, setFooterData] = useState<any>({});
@@ -861,14 +867,48 @@ export default function AdminSettingsPage() {
                   </button>
                 </div>
 
-                {/* Render Multi-level Colorized Menu Tree */}
+                {/* Render Multi-level Colorized Menu Tree — drag-and-drop enabled */}
                 <div className="flex flex-col gap-2">
                   {navTree.map((item) => (
-                    <div key={item.id} className="flex flex-col gap-1.5">
+                    <div
+                      key={item.id}
+                      className="flex flex-col gap-1.5"
+                      draggable
+                      onDragStart={(e) => {
+                        dragL1Id.current = item.id;
+                        e.dataTransfer.effectAllowed = 'move';
+                      }}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        if (dragL1Id.current && dragL1Id.current !== item.id) {
+                          setDragOverL1(item.id);
+                        }
+                      }}
+                      onDragLeave={() => setDragOverL1(null)}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        const fromId = dragL1Id.current;
+                        dragL1Id.current = null;
+                        setDragOverL1(null);
+                        if (!fromId || fromId === item.id) return;
+                        const fromIdx = navTree.findIndex((t) => t.id === fromId);
+                        const toIdx   = navTree.findIndex((t) => t.id === item.id);
+                        if (fromIdx === -1 || toIdx === -1) return;
+                        const updated = [...navTree];
+                        const [moved] = updated.splice(fromIdx, 1);
+                        updated.splice(toIdx, 0, moved);
+                        handleSaveNav(updated);
+                      }}
+                      onDragEnd={() => { dragL1Id.current = null; setDragOverL1(null); }}
+                      style={{ opacity: dragL1Id.current === item.id ? 0.4 : 1 }}
+                    >
                       {/* Level 1: White/Emerald Card */}
-                      <div className="flex items-center justify-between p-3 rounded-xl border border-emerald-800/20 bg-gradient-to-r from-emerald-50/70 to-white shadow-xs">
+                      <div
+                        className="flex items-center justify-between p-3 rounded-xl border border-emerald-800/20 bg-gradient-to-r from-emerald-50/70 to-white shadow-xs transition-all"
+                        style={dragOverL1 === item.id ? { borderLeft: '3px solid #004B39', background: 'linear-gradient(to right, #d1fae5, white)' } : {}}
+                      >
                         <div className="flex items-center gap-2.5">
-                          <span className="text-slate-400 font-bold text-xs">⋮⋮</span>
+                          <span className="text-slate-400 font-bold text-xs cursor-grab active:cursor-grabbing select-none" title="Drag to reorder">⋮⋮</span>
                           <span className="font-bold text-xs text-slate-800">{item.label}</span>
                           {item.children && item.children.length > 0 && (
                             <span className="text-[10px] font-extrabold bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full">
@@ -912,65 +952,74 @@ export default function AdminSettingsPage() {
                         </div>
                       </div>
 
-                      {/* Level 2 Sub-items */}
-                      {item.children && item.children.map((sub: any) => (
-                        <div key={sub.id} className="ml-6 flex flex-col gap-1.5">
-                          <div className="flex items-center justify-between p-2.5 rounded-xl border border-teal-200 bg-teal-50/70 shadow-xs">
-                            <div className="flex items-center gap-2">
-                              <span className="text-teal-400 font-bold text-xs">↳ ⋮⋮</span>
-                              <span className="font-bold text-xs text-teal-900">{sub.label}</span>
-                              {sub.children && sub.children.length > 0 && (
-                                <span className="text-[10px] font-extrabold bg-sky-200 text-sky-900 px-2 py-0.5 rounded-full">
-                                  {sub.children.length} sub
-                                </span>
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-teal-700 font-mono">{sub.url}</span>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  setEditingItem({ ...sub, parentId: item.id });
-                                  setIsModalOpen(true);
-                                }}
-                                className="flex gap-1 px-3 py-1.5 rounded-lg bg-gold/50 text-primary no-underline text-[11px] font-bold hover:bg-gold transition-colors"
-                              >
-                                <Pencil className="w-3 h-3" />
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => {
-                                  const newTree = navTree.map(t => {
-                                    if (t.id === item.id) {
-                                      return { ...t, children: t.children.filter((c: any) => c.id !== sub.id) };
-                                    }
-                                    return t;
-                                  });
-                                  handleSaveNav(newTree);
-                                }}
-                                className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-200 text-[11px] font-bold cursor-pointer disabled:opacity-50"
-                              >
-                                <Trash2 className="w-3 h-3" />
-                              </button>
-                            </div>
-                          </div>
-
-                          {/* Level 3 Sub-items */}
-                          {sub.children && sub.children.map((sub3: any) => (
-                            <div key={sub3.id} className="ml-6 flex items-center justify-between p-2 rounded-lg border border-sky-200 bg-sky-50 shadow-xs">
+                      {/* Level 2 Sub-items — drag within parent only */}
+                      {item.children && item.children.map((sub: any) => {
+                        const l2key = `${item.id}::${sub.id}`;
+                        return (
+                          <div
+                            key={sub.id}
+                            className="ml-6 flex flex-col gap-1.5"
+                            draggable
+                            onDragStart={(e) => {
+                              e.stopPropagation();
+                              dragL2Key.current = l2key;
+                              dragL1Id.current = null; // prevent level-1 drag from firing
+                              e.dataTransfer.effectAllowed = 'move';
+                            }}
+                            onDragOver={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              if (dragL2Key.current && dragL2Key.current !== l2key) {
+                                setDragOverL2(l2key);
+                              }
+                            }}
+                            onDragLeave={() => setDragOverL2(null)}
+                            onDrop={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              const fromKey = dragL2Key.current;
+                              dragL2Key.current = null;
+                              setDragOverL2(null);
+                              if (!fromKey || fromKey === l2key) return;
+                              const [fromParentId, fromSubId] = fromKey.split('::');
+                              if (fromParentId !== item.id) return; // cross-parent not allowed
+                              const children = item.children as any[];
+                              const fromIdx = children.findIndex((c: any) => c.id === fromSubId);
+                              const toIdx   = children.findIndex((c: any) => c.id === sub.id);
+                              if (fromIdx === -1 || toIdx === -1) return;
+                              const updatedChildren = [...children];
+                              const [moved] = updatedChildren.splice(fromIdx, 1);
+                              updatedChildren.splice(toIdx, 0, moved);
+                              const updatedTree = navTree.map(t =>
+                                t.id === item.id ? { ...t, children: updatedChildren } : t
+                              );
+                              handleSaveNav(updatedTree);
+                            }}
+                            onDragEnd={() => { dragL2Key.current = null; setDragOverL2(null); }}
+                            style={{ opacity: dragL2Key.current === l2key ? 0.4 : 1 }}
+                          >
+                            <div
+                              className="flex items-center justify-between p-2.5 rounded-xl border border-teal-200 bg-teal-50/70 shadow-xs transition-all"
+                              style={dragOverL2 === l2key ? { borderLeft: '3px solid #0d9488', background: '#ccfbf1' } : {}}
+                            >
                               <div className="flex items-center gap-2">
-                                <span className="text-sky-400 font-bold text-xs">↳↳ ⋮⋮</span>
-                                <span className="font-bold text-xs text-sky-900">{sub3.label}</span>
+                                <span className="text-teal-400 font-bold text-xs cursor-grab active:cursor-grabbing select-none" title="Drag to reorder">↳ ⋮⋮</span>
+                                <span className="font-bold text-xs text-teal-900">{sub.label}</span>
+                                {sub.children && sub.children.length > 0 && (
+                                  <span className="text-[10px] font-extrabold bg-sky-200 text-sky-900 px-2 py-0.5 rounded-full">
+                                    {sub.children.length} sub
+                                  </span>
+                                )}
                               </div>
                               <div className="flex items-center gap-2">
-                                <span className="text-xs text-sky-700 font-mono">{sub3.url}</span>
+                                <span className="text-xs text-teal-700 font-mono">{sub.url}</span>
                                 <button
                                   type="button"
                                   onClick={() => {
-                                    setEditingItem({ ...sub3, parentId: sub.id });
+                                    setEditingItem({ ...sub, parentId: item.id });
                                     setIsModalOpen(true);
                                   }}
-                                  className="text-xs text-sky-800 font-bold cursor-pointer border-none bg-transparent"
+                                  className="flex gap-1 px-3 py-1.5 rounded-lg bg-gold/50 text-primary no-underline text-[11px] font-bold hover:bg-gold transition-colors"
                                 >
                                   <Pencil className="w-3 h-3" />
                                 </button>
@@ -979,29 +1028,67 @@ export default function AdminSettingsPage() {
                                   onClick={() => {
                                     const newTree = navTree.map(t => {
                                       if (t.id === item.id) {
-                                        return {
-                                          ...t,
-                                          children: t.children.map((c: any) => {
-                                            if (c.id === sub.id) {
-                                              return { ...c, children: c.children.filter((c3: any) => c3.id !== sub3.id) };
-                                            }
-                                            return c;
-                                          })
-                                        };
+                                        return { ...t, children: t.children.filter((c: any) => c.id !== sub.id) };
                                       }
                                       return t;
                                     });
                                     handleSaveNav(newTree);
                                   }}
-                                  className="text-xs text-red-500 font-bold cursor-pointer border-none bg-transparent"
+                                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-200 text-[11px] font-bold cursor-pointer disabled:opacity-50"
                                 >
                                   <Trash2 className="w-3 h-3" />
                                 </button>
                               </div>
                             </div>
-                          ))}
-                        </div>
-                      ))}
+
+                            {/* Level 3 Sub-items (not draggable — keep existing behaviour) */}
+                            {sub.children && sub.children.map((sub3: any) => (
+                              <div key={sub3.id} className="ml-6 flex items-center justify-between p-2 rounded-lg border border-sky-200 bg-sky-50 shadow-xs">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-sky-400 font-bold text-xs">↳↳ ⋮⋮</span>
+                                  <span className="font-bold text-xs text-sky-900">{sub3.label}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <span className="text-xs text-sky-700 font-mono">{sub3.url}</span>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setEditingItem({ ...sub3, parentId: sub.id });
+                                      setIsModalOpen(true);
+                                    }}
+                                    className="text-xs text-sky-800 font-bold cursor-pointer border-none bg-transparent"
+                                  >
+                                    <Pencil className="w-3 h-3" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      const newTree = navTree.map(t => {
+                                        if (t.id === item.id) {
+                                          return {
+                                            ...t,
+                                            children: t.children.map((c: any) => {
+                                              if (c.id === sub.id) {
+                                                return { ...c, children: c.children.filter((c3: any) => c3.id !== sub3.id) };
+                                              }
+                                              return c;
+                                            })
+                                          };
+                                        }
+                                        return t;
+                                      });
+                                      handleSaveNav(newTree);
+                                    }}
+                                    className="text-xs text-red-500 font-bold cursor-pointer border-none bg-transparent"
+                                  >
+                                    <Trash2 className="w-3 h-3" />
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        );
+                      })}
                     </div>
                   ))}
                 </div>

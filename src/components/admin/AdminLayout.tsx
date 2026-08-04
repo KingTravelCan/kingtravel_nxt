@@ -25,6 +25,7 @@ import {
   Layers,
   Sparkles,
   LayoutDashboard,
+  BookOpen,
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -57,6 +58,11 @@ const navItems = [
     label: 'Pages',
     href: '/admin/pages',
     icon: <Layers className="w-4 h-4" />,
+  },
+  {
+    label: 'Blogs',
+    href: '/admin/blogs',
+    icon: <BookOpen className="w-4 h-4" />,
   },
   {
     label: 'Settings',

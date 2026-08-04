@@ -243,6 +243,7 @@ export const blogPosts = mysqlTable('blog_posts', {
   category: varchar('category', { length: 100 }).default('Pilgrimage Guide'),
   authorName: varchar('author_name', { length: 100 }).default('King Travel Editorial'),
   isPublished: boolean('is_published').notNull().default(true),
+  publishedAt: timestamp('published_at'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
 });

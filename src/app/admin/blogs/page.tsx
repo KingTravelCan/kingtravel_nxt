@@ -1,0 +1,310 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import AdminLayout from '@/components/admin/AdminLayout';
+import Link from 'next/link';
+import Image from 'next/image';
+import { getBlogsList, deleteBlogAction, saveBlogAction, slugifyBlogTitle } from '@/actions/blogActions';
+import { uploadFileToFtp } from '@/lib/uploadClient';
+import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
+import GlassNotificationModal from '@/components/ui/GlassNotificationModal';
+import SeoCenterModal from '@/components/admin/SeoCenterModal';
+import { Trash2, Pencil, Sliders, Upload, Plus, X } from 'lucide-react';
+
+export default function AdminBlogsPage() {
+  const [blogs, setBlogs] = useState<any[]>([]);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [confirmConfig, setConfirmConfig] = useState<ConfirmModalConfig | null>(null);
+  const [deletingId, setDeletingId] = useState<number | null>(null);
+  const [seoModalOpen, setSeoModalOpen] = useState(false);
+  const [selectedSeoBlog, setSelectedSeoBlog] = useState<any>(null);
+  const [notification, setNotification] = useState<{ isOpen: boolean; type: 'success' | 'error' | 'warning' | 'info'; title: string; message: string }>({ isOpen: false, type: 'success', title: '', message: '' });
+
+  // Quick-create panel state
+  const [creating, setCreating] = useState(false);
+  const [newBlog, setNewBlog] = useState({ title: '', category: 'Pilgrimage Guide', featuredImage: '', isPublished: true });
+  const [thumbUploading, setThumbUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const notify = (title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') =>
+    setNotification({ isOpen: true, type, title, message });
+
+  useEffect(() => {
+    getBlogsList().then((res) => { if (Array.isArray(res)) setBlogs(res); });
+  }, []);
+
+  const handleQuickCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newBlog.title.trim()) return;
+    setSaving(true);
+    const slug = await slugifyBlogTitle(newBlog.title);
+    const res = await saveBlogAction({
+      title: newBlog.title,
+      slug,
+      content: '',
+      category: newBlog.category,
+      featuredImage: newBlog.featuredImage || null,
+      isPublished: newBlog.isPublished,
+    });
+    setSaving(false);
+    if (res.success) {
+      const updated = await getBlogsList();
+      setBlogs(updated);
+      setCreating(false);
+      setNewBlog({ title: '', category: 'Pilgrimage Guide', featuredImage: '', isPublished: true });
+      notify('Blog Created', 'Blog post created. Open it to add full content.', 'success');
+    } else {
+      notify('Error', res.error || 'Failed to create blog.', 'error');
+    }
+  };
+
+  const handleDelete = (id: number, title: string) => {
+    setConfirmConfig({
+      icon: <Trash2 className="w-3 h-3 text-red-600" />,
+      title: 'Delete Blog Post',
+      message: `Permanently delete "${title}"? This cannot be undone.`,
+      confirmText: 'Delete Blog',
+      cancelText: 'Cancel',
+      variant: 'danger',
+      onConfirm: async () => {
+        setDeletingId(id);
+        const res = await deleteBlogAction(id);
+        if (res.success) setBlogs((prev) => prev.filter((b) => b.id !== id));
+        setDeletingId(null);
+      },
+    });
+  };
+
+  const handleThumbUpload = async (file: File) => {
+    setThumbUploading(true);
+    const url = await uploadFileToFtp(file, 'blogs');
+    setThumbUploading(false);
+    if (url) setNewBlog((prev) => ({ ...prev, featuredImage: url }));
+  };
+
+  const filtered = blogs.filter((b) => {
+    const q = search.trim().toLowerCase();
+    const matchesSearch = !q || b.title?.toLowerCase().includes(q) || b.slug?.toLowerCase().includes(q);
+    const bStatus = b.isPublished ? 'published' : 'draft';
+    const matchesStatus = statusFilter === 'all' || bStatus === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
+
+  const formatDate = (d: any) => {
+    if (!d) return '—';
+    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  };
+
+  return (
+    <AdminLayout user={{ name: 'Admin User', role: 'Super Admin' }}>
+      <div className="flex flex-col gap-6">
+
+        {/* Header */}
+        <div className="flex items-center justify-between flex-wrap gap-4">
+          <div>
+            <h1 className="text-2xl font-extrabold text-slate-900 m-0">Blog Posts</h1>
+            <p className="text-xs text-slate-400 mt-0.5 mb-0">Manage blog articles — thumbnails, content, SEO, and publish dates</p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setCreating(!creating)}
+            className="bg-[#004B39] text-white px-5 py-2.5 rounded-xl font-bold text-xs inline-flex items-center gap-2 shadow-lg shadow-emerald-900/20 border-none cursor-pointer hover:bg-[#00382B] transition-colors"
+          >
+            {creating ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
+            {creating ? 'Cancel' : '+ Create New Blog'}
+          </button>
+        </div>
+
+        {/* Quick Create Form */}
+        {creating && (
+          <form onSubmit={handleQuickCreate} className="bg-white rounded-2xl p-6 border border-emerald-100 shadow-sm flex flex-col gap-4">
+            <h3 className="text-sm font-extrabold text-slate-700 m-0">✍️ Quick Create Blog Post</h3>
+            <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_180px] gap-4">
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5">Title *</label>
+                <input
+                  type="text"
+                  required
+                  value={newBlog.title}
+                  onChange={(e) => setNewBlog((p) => ({ ...p, title: e.target.value }))}
+                  placeholder="e.g. Ultimate Guide to Umrah 2026"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39]"
+                />
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5">Category</label>
+                <select
+                  value={newBlog.category}
+                  onChange={(e) => setNewBlog((p) => ({ ...p, category: e.target.value }))}
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39] bg-white"
+                >
+                  {['Pilgrimage Guide', 'Hajj Tips', 'Umrah Guide', 'Saudi Visa', 'Travel Tips', 'News & Updates', 'Spiritual Journey'].map((c) => (
+                    <option key={c}>{c}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5">Thumbnail</label>
+                <label className="flex items-center gap-2 bg-slate-50 border border-dashed border-slate-300 rounded-xl px-3 py-2 cursor-pointer hover:border-[#004B39] transition-colors">
+                  <Upload className="w-3.5 h-3.5 text-slate-400" />
+                  <span className="text-xs text-slate-500">{thumbUploading ? 'Uploading...' : newBlog.featuredImage ? '✓ Uploaded' : 'Upload Image'}</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => { const f = e.target.files?.[0]; if (f) handleThumbUpload(f); }}
+                  />
+                </label>
+              </div>
+            </div>
+            <div className="flex items-center gap-4">
+              <label className="flex items-center gap-2 text-xs text-slate-600 font-semibold cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={newBlog.isPublished}
+                  onChange={(e) => setNewBlog((p) => ({ ...p, isPublished: e.target.checked }))}
+                  className="w-4 h-4 accent-[#004B39]"
+                />
+                Publish immediately
+              </label>
+              <p className="text-[11px] text-slate-400">You can add full content by clicking Edit after creation.</p>
+              <button
+                type="submit"
+                disabled={saving}
+                className="ml-auto bg-[#004B39] text-white px-6 py-2.5 rounded-xl text-xs font-bold border-none cursor-pointer hover:bg-[#00382B] disabled:opacity-50 transition-colors"
+              >
+                {saving ? 'Creating...' : 'Create Blog Post'}
+              </button>
+            </div>
+          </form>
+        )}
+
+        {/* Filter Bar */}
+        <div className="bg-white rounded-2xl p-5 border border-slate-100 flex items-center justify-between gap-4 shadow-xs">
+          <input
+            type="text"
+            placeholder="Search by title or slug..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="flex-1 max-w-md px-4 py-2.5 border border-slate-200 rounded-xl text-xs outline-none"
+          />
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="px-3.5 py-2 rounded-xl border border-slate-200 text-xs bg-white outline-none"
+          >
+            <option value="all">All Status</option>
+            <option value="published">Published</option>
+            <option value="draft">Draft</option>
+          </select>
+        </div>
+
+        {/* Blog Table */}
+        <div className="bg-white rounded-2xl border border-slate-100 overflow-hidden shadow-xs">
+          <table className="w-full border-collapse text-left text-xs">
+            <thead>
+              <tr className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[11px] uppercase tracking-wider">
+                <th className="py-3 px-4 font-bold w-16">Thumb</th>
+                <th className="py-3 px-4 font-bold">Title</th>
+                <th className="py-3 px-4 font-bold">Category</th>
+                <th className="py-3 px-4 font-bold">Status</th>
+                <th className="py-3 px-4 font-bold">Published</th>
+                <th className="py-3 px-4 font-bold text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filtered.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="py-12 text-center text-slate-400 text-xs">
+                    {blogs.length === 0 ? 'No blog posts yet. Create your first one above.' : 'No results match your search.'}
+                  </td>
+                </tr>
+              )}
+              {filtered.map((b: any) => (
+                <tr key={b.id} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                  {/* Thumbnail */}
+                  <td className="py-3 px-4">
+                    {b.featuredImage ? (
+                      <div className="w-12 h-10 rounded-lg overflow-hidden border border-slate-200 bg-slate-100">
+                        <img src={b.featuredImage} alt={b.title} className="w-full h-full object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-12 h-10 rounded-lg bg-gradient-to-br from-emerald-100 to-teal-100 border border-slate-200 flex items-center justify-center">
+                        <span className="text-[10px] text-emerald-600 font-bold">IMG</span>
+                      </div>
+                    )}
+                  </td>
+                  {/* Title + Slug */}
+                  <td className="py-3 px-4">
+                    <div className="font-bold text-slate-900 text-xs">{b.title}</div>
+                    <div className="text-[10px] text-slate-400 font-mono mt-0.5">/blogs/{b.slug}</div>
+                  </td>
+                  {/* Category */}
+                  <td className="py-3 px-4">
+                    <span className="text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 px-2.5 py-1 rounded-full">
+                      {b.category || 'Uncategorized'}
+                    </span>
+                  </td>
+                  {/* Status */}
+                  <td className="py-3 px-4">
+                    <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full ${b.isPublished ? 'bg-emerald-50 text-emerald-600 border border-emerald-200' : 'bg-amber-50 text-amber-600 border border-amber-200'}`}>
+                      {b.isPublished ? '• Published' : '• Draft'}
+                    </span>
+                  </td>
+                  {/* Published Date */}
+                  <td className="py-3 px-4 text-slate-400 text-[11px]">
+                    {formatDate(b.publishedAt || b.createdAt)}
+                  </td>
+                  {/* Actions */}
+                  <td className="py-3 px-4 text-right">
+                    <div className="inline-flex gap-2 items-center">
+                      <button
+                        type="button"
+                        onClick={() => { setSelectedSeoBlog(b); setSeoModalOpen(true); }}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-emerald-50 text-[#004B39] border border-emerald-300 text-[11px] font-extrabold hover:bg-[#004B39] hover:text-white transition-all cursor-pointer shadow-xs"
+                      >
+                        <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                        <Sliders className="w-3 h-3" />
+                        <span>SEO</span>
+                      </button>
+                      <Link
+                        href={`/admin/blogs/edit?id=${b.id}`}
+                        className="flex gap-1 px-3 py-1.5 rounded-lg bg-gold/50 text-primary no-underline text-[11px] font-bold hover:bg-gold transition-colors"
+                      >
+                        <Pencil className="w-3 h-3" />
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(b.id, b.title)}
+                        disabled={deletingId === b.id}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-200 text-[11px] font-bold cursor-pointer disabled:opacity-50"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <ConfirmModal config={confirmConfig} onClose={() => setConfirmConfig(null)} />
+      <GlassNotificationModal
+        isOpen={notification.isOpen}
+        type={notification.type}
+        title={notification.title}
+        message={notification.message}
+        onClose={() => setNotification((p) => ({ ...p, isOpen: false }))}
+      />
+      <SeoCenterModal
+        isOpen={seoModalOpen}
+        onClose={() => { setSeoModalOpen(false); setSelectedSeoBlog(null); }}
+        pageData={selectedSeoBlog ? { id: selectedSeoBlog.id, title: selectedSeoBlog.title, slug: `/blogs/${selectedSeoBlog.slug}`, seoData: selectedSeoBlog.seoData } : null}
+        onSaveSuccess={async () => { const updated = await getBlogsList(); setBlogs(updated); }}
+      />
+    </AdminLayout>
+  );
+}
