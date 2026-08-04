@@ -24,7 +24,7 @@ export async function uploadToFtp(
   originalFilename: string,
   subfolder: string = 'uploads'
 ): Promise<FtpUploadResult> {
-  const client = new Client(4000);
+  const client = new Client();
   client.ftp.verbose = false;
 
   const ftpHost = process.env.FTP_HOST;
@@ -54,7 +54,7 @@ export async function uploadToFtp(
     const relativeDir = `${subfolder}/${dateFolder}`.replace(/^\/+|\/+$/g, '');
     const targetDir = `${ftpRootDir.replace(/\/$/, '')}/${relativeDir}`;
 
-    // Connect to FTP server (with 5s connection timeout)
+    // Connect to FTP server
     await client.access({
       host: ftpHost,
       user: ftpUser,
