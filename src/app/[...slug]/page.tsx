@@ -603,6 +603,51 @@ export default function DynamicPage() {
               );
             }
 
+            if (sec.type === 'Latest Blogs Grid' || sec.type === 'Blog Posts Carousel') {
+              const eyebrow = sec.data?.eyebrow || 'LATEST NEWS & GUIDES';
+              const title = sec.data?.title || 'Articles, Tips & Spiritual Insights';
+              const showThumbnail = sec.data?.showThumbnail !== false;
+              const showDate = sec.data?.showDate !== false;
+              const TitleTag = sec.data?.titleTag === 'h3' ? 'h3' : 'h2';
+
+              return (
+                <section key={idx} className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 space-y-8">
+                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                      <span className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] block mb-1">{eyebrow}</span>
+                      <TitleTag className="text-2xl md:text-4xl font-serif font-bold text-[#004B39]">{title}</TitleTag>
+                    </div>
+                    <Link
+                      href="/blogs"
+                      className="inline-flex items-center gap-2 text-xs font-extrabold text-[#004B39] hover:gap-3 transition-all no-underline"
+                    >
+                      View All Articles <span className="text-[#DB9E30]">→</span>
+                    </Link>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {[
+                      { title: "Ultimate Guide to Umrah 2026", date: "August 4, 2026", image: "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg", slug: "ultimate-guide-to-umrah-2026" },
+                      { title: "Essential Hajj Preparation Checklist", date: "August 2, 2026", image: "https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80", slug: "essential-hajj-preparation-checklist" },
+                      { title: "Saudi Visa Requirements for Canadian Pilgrims", date: "July 28, 2026", image: "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?auto=format&fit=crop&w=800&q=80", slug: "saudi-visa-requirements-for-canadian-pilgrims" }
+                    ].map((blogItem, bIdx) => (
+                      <Link key={bIdx} href={`/blogs/${blogItem.slug}`} className="group flex flex-col rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 hover:shadow-lg transition-all no-underline">
+                        {showThumbnail && (
+                          <div className="h-44 overflow-hidden relative">
+                            <img src={blogItem.image} alt={blogItem.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          </div>
+                        )}
+                        <div className="p-5 flex flex-col justify-between flex-1">
+                          <h3 className="text-sm font-bold text-slate-900 group-hover:text-[#004B39] transition-colors leading-snug mb-2">{blogItem.title}</h3>
+                          {showDate && <div className="text-[11px] text-slate-400 font-medium">{blogItem.date}</div>}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              );
+            }
+
             return (
               <div key={idx} className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
                 {sec.title && <h2 className="text-2xl font-bold text-slate-800 mb-4">{sec.title}</h2>}
