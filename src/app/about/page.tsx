@@ -405,6 +405,23 @@ export default function AboutPage() {
           );
         }
 
+        if (sec.type === 'Text Block (Rich Text)') {
+          let content: string = sec.data?.content || '';
+          if (!content) return null;
+          content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, '\u00a0');
+          const innerM = content.match(/^<p>([\s\S]*)<\/p>$/);
+          if (innerM) { const inner = innerM[1].trim(); if (/^<(h[1-6]|ul|ol|blockquote)/.test(inner)) content = inner; }
+          if (!content || content === '<p></p>') return null;
+          return (
+            <section key={idx} className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 max-w-5xl mx-auto my-8 w-full">
+              <div
+                className="prose prose-slate prose-headings:font-serif prose-headings:text-[#004B39] prose-a:text-[#004B39] prose-strong:text-slate-900 max-w-none text-sm leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            </section>
+          );
+        }
+
         return null;
       })}
     </main>

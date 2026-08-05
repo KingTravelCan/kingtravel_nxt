@@ -6,6 +6,7 @@ import Link from "next/link";
 import PageBanner from "@/components/PageBanner";
 import { getPageBySlug } from "@/actions/pageActions";
 import PackageDetailModal, { PackageDetailData } from "@/components/PackageDetailModal";
+import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 
 const hajjCardsData = [
   {
@@ -166,7 +167,7 @@ export default function HajjPackagesPage() {
                 if (hajjSec?.data?.items && Array.isArray(hajjSec.data.items) && hajjSec.data.items.length > 0) {
                   cards = hajjSec.data.items;
                 }
-              } catch (e) {}
+              } catch (e) { }
             }
 
             return cards.map((card: any, idx: number) => {
@@ -323,6 +324,207 @@ export default function HajjPackagesPage() {
           })()}
         </div>
       </section>
+
+      {/* ================= HAJJ SERVICES GRID ================= */}
+      {(() => {
+        // Defaults matching the screenshot layout
+        const DEFAULT_SERVICES = [
+          { icon: '🕋', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
+          { icon: '🤝', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
+          { icon: '🍽️', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
+          { icon: '🪪', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
+          { icon: '🚐', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
+          { icon: '🛋️', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
+          { icon: '🛏️', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
+          { icon: '📖', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
+        ];
+        let eyebrow = 'WHAT IS INCLUDED';
+        let heading = 'Hajj 2027 Services';
+        let subtitle = 'From Departure to Return, We Take Care of Every Detail of Your Hajj.';
+        let services = DEFAULT_SERVICES;
+        try {
+          if (pageData?.sections) {
+            const parsed = typeof pageData.sections === 'string' ? JSON.parse(pageData.sections) : pageData.sections;
+            const sec = Array.isArray(parsed) && parsed.find((s: any) => s.type === 'Hajj Services Grid');
+            if (sec?.data) {
+              eyebrow = sec.data.eyebrow || eyebrow;
+              heading = sec.data.title || heading;
+              subtitle = sec.data.subtitle || subtitle;
+              if (Array.isArray(sec.data.items) && sec.data.items.length > 0) {
+                services = sec.data.items;
+              }
+            }
+          }
+        } catch (e) { }
+        return (
+          <section className="py-16 bg-white">
+            <div className="max-w-5xl mx-auto px-4">
+              <div className="text-center mb-10">
+                {eyebrow && (
+                  <span className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] block mb-2">{eyebrow}</span>
+                )}
+                <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">{heading}</h2>
+                {subtitle && (
+                  <p className="text-sm text-slate-500 max-w-xl mx-auto">{subtitle}</p>
+                )}
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+                {services.map((svc: any, i: number) => (
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-3 hover:shadow-md transition-shadow"
+                  >
+                    <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-3xl mb-1">
+                      {svc.icon}
+                    </div>
+                    <h3 className="text-sm font-extrabold text-[#004B39] leading-snug">{svc.title}</h3>
+                    <p className="text-[11px] text-slate-500 leading-relaxed">{svc.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* ================= DYNAMIC SECTIONS (Text Block, etc.) ================= */}
+      {(() => {
+        if (!pageData?.sections) return null;
+        try {
+          const parsed =
+            typeof pageData.sections === 'string'
+              ? JSON.parse(pageData.sections)
+              : pageData.sections;
+          if (!Array.isArray(parsed)) return null;
+
+          // Unescape HTML entities that may have been stored as text nodes
+          const unescapeHtmlEntities = (str: string): string => {
+            return str
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&#39;/g, "'")
+              .replace(/&nbsp;/g, '\u00a0');
+          };
+
+          return parsed
+            .filter((s: any) => s.type === 'Text Block (Rich Text)')
+            .map((sec: any, idx: number) => {
+              let content: string = sec.data?.content || '';
+              if (!content) return null;
+              // Unwrap if the HTML was stored inside a wrapping <p> as entity-encoded text
+              content = unescapeHtmlEntities(content);
+              // Strip wrapping <p>...</p> if the inner content starts with a block element
+              const innerMatch = content.match(/^<p>([\s\S]*)<\/p>$/);
+              if (innerMatch) {
+                const inner = innerMatch[1].trim();
+                if (inner.startsWith('<h') || inner.startsWith('<ul') || inner.startsWith('<ol') || inner.startsWith('<blockquote')) {
+                  content = inner;
+                }
+              }
+              if (!content || content === '<p></p>') return null;
+              return (
+                <section
+                  key={`tb-${idx}`}
+                  className="py-12 bg-white"
+                >
+                  <div className="max-w-5xl mx-auto px-4">
+                    <div
+                      className={[
+                        'prose prose-slate max-w-none text-sm leading-relaxed',
+                        '[&_h1]:text-3xl [&_h1]:font-extrabold [&_h1]:text-slate-900',
+                        '[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#004B39]',
+                        '[&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-[#004B39]',
+                        '[&_a]:text-[#004B39] [&_a]:underline',
+                        '[&_ul]:list-disc [&_ul]:pl-5',
+                        '[&_ol]:list-decimal [&_ol]:pl-5',
+                        '[&_blockquote]:border-l-4 [&_blockquote]:border-[#DB9E30] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-slate-600',
+                        '[&_strong]:text-slate-900',
+                        '[&_p]:text-slate-700 [&_p]:leading-relaxed',
+                      ].join(' ')}
+                      dangerouslySetInnerHTML={{ __html: content }}
+                    />
+                  </div>
+                </section>
+              );
+            });
+        } catch (e) {
+          return null;
+        }
+      })()}
+
+      {/* ================= GOOGLE REVIEWS / TESTIMONIALS ================= */}
+      {(() => {
+        let eyebrow = 'HAPPY PILGRIMS';
+        let heading = 'What our clients say';
+        let reviewCount = '927';
+        let reviewLink = 'https://maps.app.goo.gl/1BRUoBxtt4wWw58t6';
+        let ctaLabel = 'Write A Review';
+        try {
+          if (pageData?.sections) {
+            const parsed =
+              typeof pageData.sections === 'string'
+                ? JSON.parse(pageData.sections)
+                : pageData.sections;
+            const sec =
+              Array.isArray(parsed) &&
+              parsed.find((s: any) => s.type === 'Google Reviews / Testimonials');
+            if (sec?.data) {
+              eyebrow = sec.data.eyebrow || eyebrow;
+              heading = sec.data.title || heading;
+              reviewCount = sec.data.reviewCount || reviewCount;
+              reviewLink = sec.data.reviewLink || reviewLink;
+              ctaLabel = sec.data.ctaLabel || ctaLabel;
+            }
+          }
+        } catch (e) { }
+        return (
+          <section className="bg-[#004B39] text-white py-6 overflow-hidden">
+            <div className="max-w-7xl mx-auto px-4">
+              <div className="text-center mb-12">
+                <div className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] mb-2">
+                  {eyebrow}
+                </div>
+                <h2 className="text-3xl md:text-4xl font-serif text-white">{heading}</h2>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                <div className="lg:col-span-4 flex flex-col items-center lg:items-start text-center lg:text-left space-y-3">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src="/img/round-logo.png"
+                      className="w-12 h-12 rounded-full border border-white/20 object-cover"
+                      alt="King Travel logo"
+                    />
+                    <div className="text-sm font-bold text-white">
+                      King Travel Can Ltd - Mississauga
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-1 text-amber-400 text-lg">
+                    <i className="fa-solid fa-star"></i>
+                    <i className="fa-solid fa-star"></i>
+                    <i className="fa-solid fa-star"></i>
+                    <i className="fa-solid fa-star"></i>
+                    <i className="fa-solid fa-star"></i>
+                  </div>
+                  <div className="text-xs font-medium text-slate-200">{reviewCount} Google reviews</div>
+                  <a
+                    href={reviewLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block border border-white/40 text-white font-bold text-xs px-5 py-2.5 rounded-full hover:bg-white/10 transition-colors"
+                  >
+                    {ctaLabel}
+                  </a>
+                </div>
+                <div className="lg:col-span-8 relative">
+                  <TestimonialsCarousel />
+                </div>
+              </div>
+            </div>
+          </section>
+        );
+      })()}
     </div>
   );
 }

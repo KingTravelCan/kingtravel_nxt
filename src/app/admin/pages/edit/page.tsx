@@ -12,6 +12,7 @@ import { Trash2, Upload, Settings } from 'lucide-react';
 import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
 import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
+import TiptapEditor from '@/components/admin/TiptapEditor';
 
 type SectionMeta = {
   type: string;
@@ -58,6 +59,7 @@ const SECTION_CATALOG: SectionCategory[] = [
     items: [
       { type: 'Umrah Packages Grid', description: 'Database-driven Umrah package cards with price, hotel rating, and booking CTA.', pages: ['Umrah Packages', 'Homepage'] },
       { type: 'Hajj Packages Grid', description: 'Database-driven Hajj package cards with full details and booking form.', pages: ['Hajj Packages'] },
+      { type: 'Hajj Services Grid', description: '4-column icon grid showcasing Hajj services (e.g. Pre-Hajj Meet-up, Buffet Meals, Transport, Scholar).', pages: ['Hajj Packages'] },
       { type: 'CTA Banner', description: 'Full-width conversion CTA with heading, subtext, and call-to-action button.', pages: ['Umrah Packages', 'Hajj Packages', 'Any Page'] },
     ],
   },
@@ -94,6 +96,13 @@ const SECTION_CATALOG: SectionCategory[] = [
     items: [
       { type: 'Latest Blogs Grid', description: 'Grid of published blog posts with thumbnails, titles, excerpts, dates, and author badges.', pages: ['Blogs', 'Homepage', 'Any Page'] },
       { type: 'Blog Posts Carousel', description: 'Interactive slider/carousel of latest published blog posts with hover effects.', pages: ['Blogs', 'Homepage', 'Any Page'] },
+    ],
+  },
+  {
+    category: 'Reviews & Testimonials',
+    icon: '⭐',
+    items: [
+      { type: 'Google Reviews / Testimonials', description: 'Google Reviews carousel with star rating, review count, and testimonial cards from happy pilgrims.', pages: ['Homepage', 'Hajj Packages', 'Umrah Packages', 'Any Page'] },
     ],
   },
   {
@@ -480,6 +489,34 @@ function PageBuilderContent() {
         limit: 6,
         showExcerpt: true,
         showDate: true,
+      };
+    } else if (type === 'Google Reviews / Testimonials') {
+      defaultData = {
+        eyebrow: 'HAPPY PILGRIMS',
+        title: 'What our clients say',
+        reviewCount: '927',
+        reviewLink: 'https://maps.app.goo.gl/1BRUoBxtt4wWw58t6',
+        ctaLabel: 'Write A Review',
+      };
+    } else if (type === 'Hajj Services Grid') {
+      defaultData = {
+        eyebrow: 'WHAT IS INCLUDED',
+        title: 'Hajj 2027 Services',
+        subtitle: 'From Departure to Return, We Take Care of Every Detail of Your Hajj.',
+        items: [
+          { icon: '🕋', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
+          { icon: '🤝', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
+          { icon: '🍽️', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
+          { icon: '🪪', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
+          { icon: '🚐', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
+          { icon: '🛋️', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
+          { icon: '🛏️', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
+          { icon: '📖', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
+        ],
+      };
+    } else if (type === 'Text Block (Rich Text)') {
+      defaultData = {
+        content: '<p>Start writing your content here...</p>',
       };
     }
 
@@ -1000,12 +1037,12 @@ function PageBuilderContent() {
                 accept="image/*"
                 className="hidden"
                 onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'banners');
-                      if (url) setBannerBgImage(url);
-                    }
-                  }}
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const url = await uploadFileToFtp(file, 'banners');
+                    if (url) setBannerBgImage(url);
+                  }
+                }}
               />
               <div className="w-10 h-10 rounded-full bg-white shadow-xs border border-[#004B39]/20 flex items-center justify-center text-[#004B39] mb-2 text-lg">
                 ⇧
@@ -1037,13 +1074,13 @@ function PageBuilderContent() {
               <div className="relative z-10 max-w-md px-2">
                 <h1
                   className="text-lg md:text-xl font-serif text-white m-0 font-normal tracking-wide [&>span]:text-[#DB9E30] [&>em]:text-[#DB9E30] [&>em]:not-italic"
-                  
+
                   dangerouslySetInnerHTML={{ __html: bannerTitle || title || 'Page Title' }}
                 />
                 {bannerDescription && (
                   <p
                     className="text-[11px] opacity-90 max-w-sm m-0 mt-1 font-light leading-snug text-white/90"
-                    
+
                   >
                     {bannerDescription}
                   </p>
@@ -1365,7 +1402,7 @@ function PageBuilderContent() {
                         {editingSectionId === sec.id && (
                           <div className="pt-4 border-t border-slate-200 flex flex-col gap-3">
                             {/* Universal Section Header Block (Eyebrow, Heading, Description) - Hidden for Blog sections */}
-                            {sec.type !== 'Latest Blogs Grid' && sec.type !== 'Blog Posts Carousel' && (
+                            {sec.type !== 'Latest Blogs Grid' && sec.type !== 'Blog Posts Carousel' && sec.type !== 'Google Reviews / Testimonials' && sec.type !== 'Hajj Services Grid' && sec.type !== 'Text Block (Rich Text)' && (
                               <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col gap-2">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase flex items-center gap-1.5">
                                   ✏️ SECTION HEADING & BADGE CONTENT
@@ -1502,6 +1539,72 @@ function PageBuilderContent() {
                               </div>
                             )}
 
+                            {sec.type === 'Google Reviews / Testimonials' && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3.5 flex flex-col gap-3 mt-1">
+                                <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
+                                  ⭐ Google Reviews / Testimonials Settings
+                                </span>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">EYEBROW LABEL</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.eyebrow || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'eyebrow', e.target.value)}
+                                      placeholder="e.g. HAPPY PILGRIMS"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">SECTION HEADING</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.title || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'title', e.target.value)}
+                                      placeholder="e.g. What our clients say"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">GOOGLE REVIEW COUNT</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.reviewCount || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'reviewCount', e.target.value)}
+                                      placeholder="e.g. 927"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">CTA BUTTON LABEL</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.ctaLabel || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'ctaLabel', e.target.value)}
+                                      placeholder="e.g. Write A Review"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                  <div className="md:col-span-2">
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">GOOGLE REVIEWS LINK</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.reviewLink || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'reviewLink', e.target.value)}
+                                      placeholder="e.g. https://maps.app.goo.gl/..."
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-mono text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 flex items-center justify-between">
+                                  <div>
+                                    <div className="text-xs font-bold text-slate-800">Testimonial Cards</div>
+                                    <div className="text-[11px] text-slate-500">Review cards are managed in the TestimonialsCarousel component and display automatically.</div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
                             {sec.type === 'Stats Grid' && (
                               <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-2.5">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase">📊 KPI Stat Items (Value & Label)</span>
@@ -1568,12 +1671,12 @@ function PageBuilderContent() {
                                         accept="image/*"
                                         className="hidden"
                                         onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'sections');
-                      if (url) updateSectionData(sec.id, 'image', url);
-                    }
-                  }}
+                                          const file = e.target.files?.[0];
+                                          if (file) {
+                                            const url = await uploadFileToFtp(file, 'sections');
+                                            if (url) updateSectionData(sec.id, 'image', url);
+                                          }
+                                        }}
                                       />
                                       <span className="text-xs font-bold text-[#004B39] flex items-center gap-1.5">
                                         <Upload className="w-4 h-4" /> {sec.data?.image ? 'Click to Change Image File' : 'Click to Upload Image File'}
@@ -1938,6 +2041,146 @@ function PageBuilderContent() {
                                     </div>
                                   </div>
                                 ))}
+                              </div>
+                            )}
+
+                            {sec.type === 'Hajj Services Grid' && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
+                                    🕋 Hajj Services Grid Cards (Icon, Title & Description)
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      const currentItems: any[] = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
+                                      currentItems.push({ icon: '⭐', title: 'New Service', description: 'Service description here' });
+                                      updateSectionData(sec.id, 'items', currentItems);
+                                    }}
+                                    className="bg-[#004B39] text-white border-none rounded-md px-2.5 py-1 text-[11px] font-bold cursor-pointer"
+                                  >
+                                    + Add Service Card
+                                  </button>
+                                </div>
+
+                                {/* Section heading fields */}
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2 pb-3 border-b border-slate-200">
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5 uppercase">Eyebrow Label</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.eyebrow || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'eyebrow', e.target.value)}
+                                      placeholder="e.g. WHAT IS INCLUDED"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5 uppercase">Section Title (H2)</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.title || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'title', e.target.value)}
+                                      placeholder="e.g. Hajj 2027 Services"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5 uppercase">Subtitle / Tagline</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.subtitle || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'subtitle', e.target.value)}
+                                      placeholder="e.g. From Departure to Return..."
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* Service cards CRUD list */}
+                                {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
+                                  { icon: '🕋', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
+                                  { icon: '🤝', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
+                                  { icon: '🍽️', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
+                                  { icon: '🪪', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
+                                  { icon: '🚐', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
+                                  { icon: '🛋️', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
+                                  { icon: '🛏️', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
+                                  { icon: '📖', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
+                                ]).map((svc: any, sIdx: number, allItems: any[]) => (
+                                  <div key={sIdx} className="bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex flex-col gap-2">
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-[10px] font-extrabold text-slate-500">CARD #{sIdx + 1}</span>
+                                      <button
+                                        onClick={() => {
+                                          const updated = [...allItems];
+                                          updated.splice(sIdx, 1);
+                                          updateSectionData(sec.id, 'items', updated);
+                                        }}
+                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        title="Remove card"
+                                      >
+                                        <Trash2 className="w-3 h-3" /> Remove
+                                      </button>
+                                    </div>
+                                    <div className="grid grid-cols-[50px_1fr] gap-2">
+                                      <div>
+                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">ICON</label>
+                                        <input
+                                          type="text"
+                                          value={svc.icon || ''}
+                                          onChange={(e) => {
+                                            const updated = [...allItems];
+                                            updated[sIdx] = { ...updated[sIdx], icon: e.target.value };
+                                            updateSectionData(sec.id, 'items', updated);
+                                          }}
+                                          className="w-full p-1.5 rounded-md border border-slate-300 text-sm text-center"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">TITLE</label>
+                                        <input
+                                          type="text"
+                                          value={svc.title || ''}
+                                          onChange={(e) => {
+                                            const updated = [...allItems];
+                                            updated[sIdx] = { ...updated[sIdx], title: e.target.value };
+                                            updateSectionData(sec.id, 'items', updated);
+                                          }}
+                                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold bg-white"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div>
+                                      <label className="block text-[9px] font-bold text-slate-500 mb-0.5">DESCRIPTION</label>
+                                      <input
+                                        type="text"
+                                        value={svc.description || ''}
+                                        onChange={(e) => {
+                                          const updated = [...allItems];
+                                          updated[sIdx] = { ...updated[sIdx], description: e.target.value };
+                                          updateSectionData(sec.id, 'items', updated);
+                                        }}
+                                        className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px] bg-white"
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {sec.type === 'Text Block (Rich Text)' && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3.5 flex flex-col gap-3 mt-1">
+                                <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
+                                  📝 Rich Text Content Editor
+                                </span>
+                                <TiptapEditor
+                                  value={sec.data?.content || ''}
+                                  onChange={(html) => updateSectionData(sec.id, 'content', html)}
+                                  minHeight="200px"
+                                />
+                                <p className="text-[10px] text-slate-400 m-0">
+                                  Content is saved as HTML and rendered on the frontend with your site&apos;s prose styles.
+                                </p>
                               </div>
                             )}
 
@@ -2661,12 +2904,12 @@ function PageBuilderContent() {
                                             accept="image/*"
                                             className="hidden"
                                             onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'backgrounds');
-                      if (url) updateSectionData(sec.id, 'bgImage', url);
-                    }
-                  }}
+                                              const file = e.target.files?.[0];
+                                              if (file) {
+                                                const url = await uploadFileToFtp(file, 'backgrounds');
+                                                if (url) updateSectionData(sec.id, 'bgImage', url);
+                                              }
+                                            }}
                                           />
                                         </label>
                                       </div>
@@ -2778,12 +3021,12 @@ function PageBuilderContent() {
                                                 accept="image/*"
                                                 className="hidden"
                                                 onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'uploads');
-                      if (url) updateSectionData(sec.id, 'image', url);
-                    }
-                  }}
+                                                  const file = e.target.files?.[0];
+                                                  if (file) {
+                                                    const url = await uploadFileToFtp(file, 'uploads');
+                                                    if (url) updateSectionData(sec.id, 'image', url);
+                                                  }
+                                                }}
                                               />
                                             </label>
                                           </div>
@@ -3265,12 +3508,12 @@ function PageBuilderContent() {
                                               accept="image/*"
                                               className="hidden"
                                               onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'uploads');
-                      if (url) updateSectionData(sec.id, 'image', url);
-                    }
-                  }}
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                  const url = await uploadFileToFtp(file, 'uploads');
+                                                  if (url) updateSectionData(sec.id, 'image', url);
+                                                }
+                                              }}
                                             />
                                           </label>
                                         )}
@@ -3374,12 +3617,12 @@ function PageBuilderContent() {
                                                   accept="image/*"
                                                   className="hidden"
                                                   onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'uploads');
-                      if (url) updateSectionData(sec.id, 'image', url);
-                    }
-                  }}
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                      const url = await uploadFileToFtp(file, 'uploads');
+                                                      if (url) updateSectionData(sec.id, 'image', url);
+                                                    }
+                                                  }}
                                                 />
                                               </label>
                                             )}
@@ -3392,12 +3635,12 @@ function PageBuilderContent() {
                                               accept="image/*"
                                               className="hidden"
                                               onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'uploads');
-                      if (url) updateSectionData(sec.id, 'image', url);
-                    }
-                  }}
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                  const url = await uploadFileToFtp(file, 'uploads');
+                                                  if (url) updateSectionData(sec.id, 'image', url);
+                                                }
+                                              }}
                                             />
                                           </label>
                                         </div>
@@ -3492,12 +3735,12 @@ function PageBuilderContent() {
                                                   accept="image/*"
                                                   className="hidden"
                                                   onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'uploads');
-                      if (url) updateSectionData(sec.id, 'image', url);
-                    }
-                  }}
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                      const url = await uploadFileToFtp(file, 'uploads');
+                                                      if (url) updateSectionData(sec.id, 'image', url);
+                                                    }
+                                                  }}
                                                 />
                                               </label>
                                             )}
@@ -3510,12 +3753,12 @@ function PageBuilderContent() {
                                               accept="image/*"
                                               className="hidden"
                                               onChange={async (e) => {
-                    const file = e.target.files?.[0];
-                    if (file) {
-                      const url = await uploadFileToFtp(file, 'uploads');
-                      if (url) updateSectionData(sec.id, 'image', url);
-                    }
-                  }}
+                                                const file = e.target.files?.[0];
+                                                if (file) {
+                                                  const url = await uploadFileToFtp(file, 'uploads');
+                                                  if (url) updateSectionData(sec.id, 'image', url);
+                                                }
+                                              }}
                                             />
                                           </label>
                                         </div>

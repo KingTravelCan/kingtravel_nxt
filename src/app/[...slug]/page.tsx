@@ -191,8 +191,8 @@ export default function DynamicPage() {
                           <Link
                             href={btnLink}
                             className={`block w-full text-center py-2.5 rounded-full font-extrabold text-xs transition-all ${pkg.isGold
-                                ? 'bg-[#1c2925] text-white hover:bg-black'
-                                : 'bg-[#DB9E30] text-[#004B39] hover:bg-[#004B39] hover:text-white'
+                              ? 'bg-[#1c2925] text-white hover:bg-black'
+                              : 'bg-[#DB9E30] text-[#004B39] hover:bg-[#004B39] hover:text-white'
                               }`}
                           >
                             BOOK NOW
@@ -644,6 +644,23 @@ export default function DynamicPage() {
                       </Link>
                     ))}
                   </div>
+                </section>
+              );
+            }
+
+            if (sec.type === 'Text Block (Rich Text)') {
+              let content: string = sec.data?.content || '';
+              if (!content) return null;
+              content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, '\u00a0');
+              const innerM = content.match(/^<p>([\s\S]*)<\/p>$/);
+              if (innerM) { const inner = innerM[1].trim(); if (/^<(h[1-6]|ul|ol|blockquote)/.test(inner)) content = inner; }
+              if (!content || content === '<p></p>') return null;
+              return (
+                <section key={idx} className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100">
+                  <div
+                    className="prose prose-slate prose-headings:font-serif prose-headings:text-[#004B39] prose-a:text-[#004B39] prose-strong:text-slate-900 max-w-none text-sm leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: content }}
+                  />
                 </section>
               );
             }

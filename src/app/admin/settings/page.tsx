@@ -892,7 +892,7 @@ export default function AdminSettingsPage() {
                         setDragOverL1(null);
                         if (!fromId || fromId === item.id) return;
                         const fromIdx = navTree.findIndex((t) => t.id === fromId);
-                        const toIdx   = navTree.findIndex((t) => t.id === item.id);
+                        const toIdx = navTree.findIndex((t) => t.id === item.id);
                         if (fromIdx === -1 || toIdx === -1) return;
                         const updated = [...navTree];
                         const [moved] = updated.splice(fromIdx, 1);
@@ -985,7 +985,7 @@ export default function AdminSettingsPage() {
                               if (fromParentId !== item.id) return; // cross-parent not allowed
                               const children = item.children as any[];
                               const fromIdx = children.findIndex((c: any) => c.id === fromSubId);
-                              const toIdx   = children.findIndex((c: any) => c.id === sub.id);
+                              const toIdx = children.findIndex((c: any) => c.id === sub.id);
                               if (fromIdx === -1 || toIdx === -1) return;
                               const updatedChildren = [...children];
                               const [moved] = updatedChildren.splice(fromIdx, 1);
@@ -1668,6 +1668,80 @@ export default function AdminSettingsPage() {
                       className="w-full p-3 rounded-xl border border-slate-300 bg-emerald-50/30 text-xs font-medium text-slate-900 outline-none focus:border-[#004B39]"
                       placeholder="Describe your site for search engines and headers..."
                     />
+                  </div>
+
+                  {/* ── WhatsApp: Header Button ── */}
+                  <div className="pt-4 border-t border-slate-200/60">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-5 h-5 rounded-md bg-[#25D366] flex items-center justify-center shrink-0">
+                        <svg viewBox="0 0 24 24" fill="white" className="w-3 h-3"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" /><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.126 1.526 5.865L0 24l6.335-1.499A11.926 11.926 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.653-.49-5.187-1.348l-.372-.22-3.762.89.944-3.658-.242-.386A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" /></svg>
+                      </div>
+                      <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Header WhatsApp Button</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Subtext / Label Above Number</label>
+                        <input
+                          type="text"
+                          value={identityData.whatsappHeaderLabel || ''}
+                          onChange={(e) => setIdentityData({ ...identityData, whatsappHeaderLabel: e.target.value })}
+                          className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold outline-none focus:border-[#004B39]"
+                          placeholder="e.g. Book Hajj & Umrah"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Display Number / Text</label>
+                        <input
+                          type="text"
+                          value={identityData.whatsappHeaderText || ''}
+                          onChange={(e) => setIdentityData({ ...identityData, whatsappHeaderText: e.target.value })}
+                          className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold outline-none focus:border-[#004B39]"
+                          placeholder="e.g. +1 905-624-8344"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">WhatsApp URL (wa.me/...)</label>
+                        <input
+                          type="text"
+                          value={identityData.whatsappHeaderUrl || ''}
+                          onChange={(e) => setIdentityData({ ...identityData, whatsappHeaderUrl: e.target.value, whatsappFloatUrl: e.target.value })}
+                          className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-mono outline-none focus:border-[#004B39]"
+                          placeholder="https://wa.me/19056248344?text=Hi..."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ── WhatsApp: Floating Bottom Button ── */}
+                  <div className="pt-4 border-t border-slate-200/60">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div className="w-5 h-5 rounded-md bg-[#25D366] flex items-center justify-center shrink-0">
+                        <svg viewBox="0 0 24 24" fill="white" className="w-3 h-3"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" /><path d="M12 0C5.373 0 0 5.373 0 12c0 2.126.555 4.126 1.526 5.865L0 24l6.335-1.499A11.926 11.926 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.653-.49-5.187-1.348l-.372-.22-3.762.89.944-3.658-.242-.386A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z" /></svg>
+                      </div>
+                      <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Floating Bottom-Right WhatsApp Button</span>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">WhatsApp URL (wa.me/...)</label>
+                        <input
+                          type="text"
+                          value={identityData.whatsappFloatUrl || ''}
+                          onChange={(e) => setIdentityData({ ...identityData, whatsappFloatUrl: e.target.value, whatsappHeaderUrl: e.target.value })}
+                          className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-mono outline-none focus:border-[#004B39]"
+                          placeholder="https://wa.me/19056248344?text=Hi..."
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">Tooltip / Aria Label</label>
+                        <input
+                          type="text"
+                          value={identityData.whatsappFloatLabel || ''}
+                          onChange={(e) => setIdentityData({ ...identityData, whatsappFloatLabel: e.target.value })}
+                          className="w-full p-2.5 rounded-xl border border-slate-300 bg-white text-xs font-semibold outline-none focus:border-[#004B39]"
+                          placeholder="e.g. Chat on WhatsApp"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 

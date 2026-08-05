@@ -85,7 +85,7 @@ export default function Home() {
                 size: p.bannerSize || secData.bannerSize || "cover",
               });
             }
-          } catch {}
+          } catch { }
         }
       }
     });
@@ -277,7 +277,7 @@ export default function Home() {
         </div>
 
         <div className="wrap">
-          <div className="relative rounded-3xl overflow-hidden shadow-xl border border-gold bg-[#fadeac] p-6 md:p-8 -mt-8 reveal">
+          <div className="relative rounded-3xl overflow-hidden shadow-xl bg-sage p-6 md:p-8 -mt-8 reveal">
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#004B39] tracking-tight text-center mb-6">
               Get a free Quote
             </h2>
@@ -515,23 +515,23 @@ export default function Home() {
                 <div className="incl-label">Package Includes</div>
                 <ul className="space-y-4 text-on-surface-variant mb-8">
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">flight_takeoff</span> Return Flights from Toronto
+                    <span className="material-symbols-outlined text-ink-soft text-xl">flight_takeoff</span> Return Flights from Toronto
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">directions_bus</span> Luxury Ground Transportation
+                    <span className="material-symbols-outlined text-ink-soft text-xl">directions_bus</span> Luxury Ground Transportation
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">apparel</span> Free Ihram Kit
+                    <span className="material-symbols-outlined text-ink-soft text-xl">apparel</span> Free Ihram Kit
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">description</span> Registration &amp; Visa Assistance
+                    <span className="material-symbols-outlined text-ink-soft text-xl">description</span> Registration &amp; Visa Assistance
                   </li>
                   <li>
                     <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>
                     Imam Lead Guide &amp; Seminar
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah
+                    <span className="material-symbols-outlined text-ink-soft text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah
                   </li>
                 </ul>
                 <div className="pkg-cta-full"><Link className="btn block" href="/contact">Book Now</Link></div>
@@ -560,23 +560,23 @@ export default function Home() {
                 <div className="incl-label">Package Includes</div>
                 <ul className="space-y-4 text-on-surface-variant mb-8">
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">flight_takeoff</span> Return Flights from Toronto
+                    <span className="material-symbols-outlined text-ink-soft text-xl">flight_takeoff</span> Return Flights from Toronto
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">directions_bus</span> Luxury Ground Transportation
+                    <span className="material-symbols-outlined text-ink-soft text-xl">directions_bus</span> Luxury Ground Transportation
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">apparel</span> Free Ihram Kit
+                    <span className="material-symbols-outlined text-ink-soft text-xl">apparel</span> Free Ihram Kit
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">description</span> Registration &amp; Visa Assistance
+                    <span className="material-symbols-outlined text-ink-soft text-xl">description</span> Registration &amp; Visa Assistance
                   </li>
                   <li>
                     <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>
                     Imam Lead Guide &amp; Seminar
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah
+                    <span className="material-symbols-outlined text-ink-soft text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah
                   </li>
                 </ul>
                 <div className="pkg-cta-full"><Link className="btn block" href="/contact">Book Now</Link></div>
@@ -605,23 +605,23 @@ export default function Home() {
                 <div className="incl-label">Package Includes</div>
                 <ul className="space-y-4 text-on-surface-variant mb-8">
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">flight_takeoff</span> Return Flights from Toronto
+                    <span className="material-symbols-outlined text-ink-soft text-xl">flight_takeoff</span> Return Flights from Toronto
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">directions_bus</span> Luxury Ground Transportation
+                    <span className="material-symbols-outlined text-ink-soft text-xl">directions_bus</span> Luxury Ground Transportation
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">apparel</span> Free Ihram Kit
+                    <span className="material-symbols-outlined text-ink-soft text-xl">apparel</span> Free Ihram Kit
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">description</span> Registration &amp; Visa Assistance
+                    <span className="material-symbols-outlined text-ink-soft text-xl">description</span> Registration &amp; Visa Assistance
                   </li>
                   <li>
                     <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>
                     Imam Lead Guide &amp; Seminar
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah
+                    <span className="material-symbols-outlined text-ink-soft text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah
                   </li>
                 </ul>
                 <div className="pkg-cta-full"><Link className="btn block" href="/contact">Book Now</Link></div>
@@ -650,23 +650,23 @@ export default function Home() {
                 <div className="incl-label">Package Includes</div>
                 <ul className="space-y-4 text-on-surface-variant mb-8">
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">flight_takeoff</span> Return Flights from Toronto
+                    <span className="material-symbols-outlined text-ink-soft text-xl">flight_takeoff</span> Return Flights from Toronto
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">directions_bus</span> Luxury Ground Transportation
+                    <span className="material-symbols-outlined text-ink-soft text-xl">directions_bus</span> Luxury Ground Transportation
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">apparel</span> Free Ihram Kit
+                    <span className="material-symbols-outlined text-ink-soft text-xl">apparel</span> Free Ihram Kit
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">description</span> Registration &amp; Visa Assistance
+                    <span className="material-symbols-outlined text-ink-soft text-xl">description</span> Registration &amp; Visa Assistance
                   </li>
                   <li>
                     <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>
                     Imam Lead Guide &amp; Seminar
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-primary text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah
+                    <span className="material-symbols-outlined text-ink-soft text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah
                   </li>
                 </ul>
                 <div className="pkg-cta-full"><Link className="btn block" href="/contact">Book Now</Link></div>
@@ -1093,12 +1093,12 @@ export default function Home() {
               <div className="pkg-body">
                 <div className="incl-label">Package Includes</div>
                 <ul className="space-y-4 text-on-surface-variant mb-8">
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">flight_takeoff</span> Return Flights from Toronto</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">directions_bus</span> Luxury Ground Transportation</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">apparel</span> Free Ihram Kit</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">description</span> Registration &amp; Visa Assistance</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">flight_takeoff</span> Return Flights from Toronto</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">directions_bus</span> Luxury Ground Transportation</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">apparel</span> Free Ihram Kit</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">description</span> Registration &amp; Visa Assistance</li>
                   <li><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>Imam Lead Guide &amp; Seminar</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah</li>
                 </ul>
               </div>
             </div>
@@ -1117,12 +1117,12 @@ export default function Home() {
               <div className="pkg-body">
                 <div className="incl-label">Package Includes</div>
                 <ul className="space-y-4 text-on-surface-variant mb-8">
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">flight_takeoff</span> Return Flights from Toronto</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">directions_bus</span> Luxury Ground Transportation</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">apparel</span> Free Ihram Kit</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">description</span> Registration &amp; Visa Assistance</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">flight_takeoff</span> Return Flights from Toronto</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">directions_bus</span> Luxury Ground Transportation</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">apparel</span> Free Ihram Kit</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">description</span> Registration &amp; Visa Assistance</li>
                   <li><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>Imam Lead Guide &amp; Seminar</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah</li>
                 </ul>
               </div>
             </div>
@@ -1141,12 +1141,12 @@ export default function Home() {
               <div className="pkg-body">
                 <div className="incl-label">Package Includes</div>
                 <ul className="space-y-4 text-on-surface-variant mb-8">
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">flight_takeoff</span> Return Flights from Toronto</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">directions_bus</span> Luxury Ground Transportation</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">apparel</span> Free Ihram Kit</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">description</span> Registration &amp; Visa Assistance</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">flight_takeoff</span> Return Flights from Toronto</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">directions_bus</span> Luxury Ground Transportation</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">apparel</span> Free Ihram Kit</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">description</span> Registration &amp; Visa Assistance</li>
                   <li><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 4-6 8-6s8 2 8 6" /></svg>Imam Lead Guide &amp; Seminar</li>
-                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-primary text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah</li>
+                  <li className="flex items-center gap-3"><span className="material-symbols-outlined text-ink-soft text-xl">apartment</span> 5 Star Hotels Makkah &amp; Madinah</li>
                 </ul>
               </div>
             </div>
@@ -1371,9 +1371,8 @@ export default function Home() {
                         setContactForm({ ...contactForm, fullName: e.target.value });
                         if (contactErrors.fullName) setContactErrors((prev) => ({ ...prev, fullName: "" }));
                       }}
-                      className={`w-full text-xs font-medium px-4 py-3 rounded-xl border bg-white focus:outline-none transition-colors ${
-                        contactErrors.fullName ? "border-red-600 focus:border-red-600" : "border-slate-200 focus:border-[#DB9E30]"
-                      }`}
+                      className={`w-full text-xs font-medium px-4 py-3 rounded-xl border bg-white focus:outline-none transition-colors ${contactErrors.fullName ? "border-red-600 focus:border-red-600" : "border-slate-200 focus:border-[#DB9E30]"
+                        }`}
                     />
                     {contactErrors.fullName && <span className="text-red-600 text-xs font-semibold mt-1 block">{contactErrors.fullName}</span>}
                   </div>
@@ -1390,9 +1389,8 @@ export default function Home() {
                         setContactForm({ ...contactForm, email: e.target.value });
                         if (contactErrors.email) setContactErrors((prev) => ({ ...prev, email: "" }));
                       }}
-                      className={`w-full text-xs font-medium px-4 py-3 rounded-xl border bg-white focus:outline-none transition-colors ${
-                        contactErrors.email ? "border-red-600 focus:border-red-600" : "border-slate-200 focus:border-[#DB9E30]"
-                      }`}
+                      className={`w-full text-xs font-medium px-4 py-3 rounded-xl border bg-white focus:outline-none transition-colors ${contactErrors.email ? "border-red-600 focus:border-red-600" : "border-slate-200 focus:border-[#DB9E30]"
+                        }`}
                     />
                     {contactErrors.email && <span className="text-red-600 text-xs font-semibold mt-1 block">{contactErrors.email}</span>}
                   </div>
