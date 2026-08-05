@@ -103,7 +103,7 @@ export default function TiptapEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit.configure({ history: false }),
+      StarterKit,
       Underline,
       Link.configure({
         openOnClick: false,
@@ -150,7 +150,7 @@ export default function TiptapEditor({
     // resetting cursor position on every keystroke.
     if (incoming !== current) {
       // `true` as second arg emits the update event so onChange fires once
-      editor.commands.setContent(incoming || '<p></p>', false);
+      editor.commands.setContent(incoming || '<p></p>', { emitUpdate: false });
     }
   }, [value, editor]);
 

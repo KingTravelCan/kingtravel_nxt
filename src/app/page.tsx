@@ -277,7 +277,7 @@ export default function Home() {
         </div>
 
         <div className="wrap">
-          <div className="relative rounded-3xl overflow-hidden shadow-xl bg-sage p-6 md:p-8 -mt-8 reveal">
+          <div className="relative rounded-3xl shadow-xl bg-sage p-6 md:p-8 -mt-8 reveal">
             <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#004B39] tracking-tight text-center mb-6">
               Get a free Quote
             </h2>
@@ -286,71 +286,62 @@ export default function Home() {
             <form noValidate className="flex flex-col gap-4" onSubmit={handleQuoteSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="relative">
+                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                    Your Name
+                  </label>
                   <input
                     type="text"
                     id="quote-fullName"
-                    placeholder=" "
+                    placeholder="Full Name"
                     value={quoteForm.fullName}
                     onChange={(e) => {
                       setQuoteForm({ ...quoteForm, fullName: e.target.value });
                       if (quoteErrors.fullName) setQuoteErrors((prev) => ({ ...prev, fullName: "" }));
                     }}
-                    className={`peer w-full border p-3 rounded-xl bg-white/80 outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${quoteErrors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
-                      }`}
+                    className={`w-full border p-3 rounded-xl bg-white outline-none transition-colors duration-300 text-slate-900 text-sm font-medium ${
+                      quoteErrors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                    }`}
                   />
-                  <label
-                    htmlFor="quote-fullName"
-                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${quoteErrors.fullName ? "text-red-600 peer-focus:text-red-600" : "text-slate-500 peer-focus:text-emerald-800"
-                      }`}
-                  >
-                    Your Name
-                  </label>
                   {quoteErrors.fullName && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.fullName}</span>}
                 </div>
 
                 <div className="relative">
+                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                    Phone Number
+                  </label>
                   <input
                     type="text"
                     id="quote-phone"
-                    placeholder=" "
+                    placeholder="+1(___) ___-____"
                     value={quoteForm.phone}
                     onChange={(e) => {
                       setQuoteForm({ ...quoteForm, phone: e.target.value });
                       if (quoteErrors.phone) setQuoteErrors((prev) => ({ ...prev, phone: "" }));
                     }}
-                    className={`peer w-full border p-3 rounded-xl bg-white/80 outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${quoteErrors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
-                      }`}
+                    className={`w-full border p-3 rounded-xl bg-white outline-none transition-colors duration-300 text-slate-900 text-sm font-medium ${
+                      quoteErrors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                    }`}
                   />
-                  <label
-                    htmlFor="quote-phone"
-                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${quoteErrors.phone ? "text-red-600 peer-focus:text-red-600" : "text-slate-500 peer-focus:text-emerald-800"
-                      }`}
-                  >
-                    Phone Number
-                  </label>
                   {quoteErrors.phone && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.phone}</span>}
                 </div>
 
                 <div className="relative">
+                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                    Email Address
+                  </label>
                   <input
                     type="email"
                     id="quote-email"
-                    placeholder=" "
+                    placeholder="your@email.com"
                     value={quoteForm.email}
                     onChange={(e) => {
                       setQuoteForm({ ...quoteForm, email: e.target.value });
                       if (quoteErrors.email) setQuoteErrors((prev) => ({ ...prev, email: "" }));
                     }}
-                    className={`peer w-full border p-3 rounded-xl bg-white/80 outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${quoteErrors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
-                      }`}
+                    className={`w-full border p-3 rounded-xl bg-white outline-none transition-colors duration-300 text-slate-900 text-sm font-medium ${
+                      quoteErrors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                    }`}
                   />
-                  <label
-                    htmlFor="quote-email"
-                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${quoteErrors.email ? "text-red-600 peer-focus:text-red-600" : "text-slate-500 peer-focus:text-emerald-800"
-                      }`}
-                  >
-                    Email Address
-                  </label>
                   {quoteErrors.email && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.email}</span>}
                 </div>
               </div>
@@ -400,10 +391,9 @@ export default function Home() {
                 <div>
                   <button
                     type="submit"
-                    className="group w-full bg-[#004B39] text-white font-extrabold py-3.5 px-6 rounded-xl shadow-md hover:bg-[#DB9E30] hover:text-[#004B39] hover:border hover:border-[#004B39] active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full bg-[#DB9E30] text-[#004B39] font-extrabold py-3.5 px-6 rounded-xl shadow-md hover:bg-[#bfa030] hover:text-white active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
                   >
-                    <span>SUBMIT QUOTE</span>
-                    <i className="fa-solid fa-paper-plane text-xs group-hover:translate-x-1 transition-transform"></i>
+                    <span>SUBMIT</span>
                   </button>
                 </div>
               </div>
