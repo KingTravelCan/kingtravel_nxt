@@ -34,7 +34,7 @@ export default function PageBanner({
           el.style.backgroundSize = activeSize;
         }
       }}
-      className="relative text-center text-white py-20 px-5 overflow-hidden h-[360px] min-h-[360px] flex flex-col items-center justify-center bg-no-repeat"
+      className="relative text-center text-white py-20 px-5 overflow-hidden h-[420px] max-h-[420px] flex flex-col items-center justify-center bg-no-repeat"
     >
       <div className="max-w-[850px] mx-auto w-full z-10">
         <h1
