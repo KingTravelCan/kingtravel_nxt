@@ -1,0 +1,604 @@
+"use client";
+
+import Image from 'next/image';
+import Link from 'next/link';
+import MarqueeTrack from '@/components/MarqueeTrack';
+import TestimonialsCarousel from '@/components/TestimonialsCarousel';
+import DynamicIcon from '@/components/ui/DynamicIcon';
+import ContactFormSection from '@/components/ContactFormSection';
+
+export default function PageSectionsRenderer({ sections }: { sections: any[] }) {
+  if (!sections || !Array.isArray(sections)) return null;
+
+  return (
+    <div className="w-full overflow-x-hidden">
+      {sections.map((sec: any, idx: number) => {
+        if (!sec || !sec.type) return null;
+
+    if (sec.type === "Stats Grid") {
+          const items = sec.data?.items || [
+            { value: `72K+`, label: "Happy Travelers" },
+            { value: "4.4", label: "Google Rating" },
+            { value: `100%`, label: "Client Satisfaction" },
+            { value: `25+`, label: "Years Experience" },
+          ];
+          return (
+            <div key={idx} className="max-w-5xl mx-auto px-4 -mt-12 relative z-20 mb-8">
+              <div className="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x divide-slate-100">
+                {items.map((it: any, i: number) => (
+                  <div key={i} className="flex flex-col items-center justify-center p-2">
+                    <h3 className="text-2xl md:text-3xl font-bold text-[#004B39] font-serif m-0">{it.value}</h3>
+                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 m-0">{it.label}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+    if (sec.type === "Intro") {
+          return (
+            <div key={idx} className="wrap my-8">
+              <div className="bg-[#f2f5e8] border border-[#e4ebd3] rounded-2xl p-8 max-w-5xl mx-auto shadow-xs">
+                <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-1.5">
+                  {sec.data?.eyebrow || "ABOUT"}
+                </span>
+                <h2 className="text-3xl font-serif text-[#004B39] font-normal mb-3">
+                  {sec.data?.title || "King Travel"}
+                </h2>
+                <p className="text-slate-700 text-sm leading-relaxed font-normal m-0">
+                  {sec.data?.description}
+                </p>
+              </div>
+            </div>
+          );
+        }
+
+    if (sec.type === "Image+Text" || sec.type === "Why Choose Us") {
+          const feats = sec.data?.features || [
+            "Securing all types of Saudi visas quickly.",
+            "Coordinating family or group Hajj packages.",
+            "Last-minute airline ticket changes or cancellations.",
+            "5-Star Accommodations near the Haram.",
+            "Managing itineraries with multiple destinations.",
+            "Handling urgent travel during peak seasons."
+          ];
+          return (
+            <div key={idx} className="wrap">
+              <section className="about-section reveal">
+                <div className="grid-2">
+                  <div className="about-image">
+                    <Image
+                      src={sec.data?.image || "https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80"}
+                      alt={sec.data?.title || "Why Choose Us"}
+                      width={800}
+                      height={450}
+                      className="w-full h-auto"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="about-content">
+                    <span className="section-tag">{sec.data?.eyebrow || "WHY CHOOSE US"}</span>
+                    <h2 className="section-title">{sec.data?.title || "Your Trusted Partner for Pilgrimage & Global Travel"}</h2>
+                    <p>{sec.data?.description}</p>
+                    {sec.data?.subheading && (
+                      <h4 className="text-sm font-bold text-slate-800 mt-4 mb-2">{sec.data.subheading}</h4>
+                    )}
+                    <ul className="features-list grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-xs text-slate-700 font-medium list-none p-0 mt-3">
+                      {feats.map((f: string, i: number) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <span className="text-[#DB9E30] font-bold">✓</span> {f}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </section>
+            </div>
+          );
+        }
+
+    if (sec.type === "Services Grid" || sec.type === "What We Provide") {
+          const svcs = sec.data?.items || [
+            { icon: "✈️", title: "Lowest Fares", subtitle: "We Offer the Lowest Fair on Air Ticketing around the Globe.", description: "As a partner with major airlines, including PIA, King Travel Can Ltd guarantees the lowest airfares for flights to Pakistan, Saudi Arabia, and beyond. Whether it's for religious travel or international vacations, we offer unbeatable rates to help you save." },
+            { icon: "✨", title: "Special Deals", subtitle: "We Provide Best Prices Of All Inclusive Packages.", description: "We offer exclusive special deals on Umrah, Hajj, and international flight packages, tailored to fit your budget. These limited-time offers allow you to experience premium services without overspending, making your travel affordable and stress-free." },
+            { icon: "🛡️", title: "Trusted & Certified", subtitle: "We are The Only Authorized Saudi Visa Providers Canada!", description: "Recognized by IATA, ACTA, TICO, ASTA, ATAC, and the Saudi Ministry of Hajj & Umrah, ensuring every journey meets the highest international standards." },
+            { icon: "🕌", title: "Pilgrimage Experts", subtitle: "We Offer Best Accommodations & Transports In Saudia Arabia", description: "From visa processing and ticketing to 5-star accommodations and guided tours, King Travel provides a complete pilgrimage experience. Our services ensure a hassle-free journey, with everything taken care of from start to finish." }
+          ];
+          return (
+            <section key={idx} className="services-section">
+              <div className="wrap">
+                <div className="section-header reveal">
+                  <span className="section-tag">{sec.data?.eyebrow || "WHAT WE PROVIDE"}</span>
+                  <h2 className="section-title">{sec.data?.title || "Our Premium Travel Services"}</h2>
+                </div>
+                <div className="grid-2 md:grid-2 gap-6 reveal">
+                  {svcs.map((item: any, i: number) => (
+                    <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-2xl p-2.5 rounded-xl bg-slate-50 border border-slate-100">{item.icon}</span>
+                        <div>
+                          <h3 className="text-lg font-bold text-[#004B39] m-0">{item.title}</h3>
+                          {item.subtitle && <span className="text-xs font-semibold text-slate-800 block mt-0.5">{item.subtitle}</span>}
+                        </div>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed font-normal m-0">{item.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        }
+
+    if (sec.type === "Accreditations Bar" || sec.type === "Badges Cards") {
+          const badges = sec.data?.items || [
+            { title: "ATOL PROTECTED", icon: "fa-solid fa-[#004B39] fa-shield-halved", iconType: "fontawesome" },
+            { title: "SAUDI MINISTRY APPROVED", icon: "fa-solid fa-[#004B39] fa-mosque", iconType: "fontawesome" },
+            { title: "IATA ACCREDITED", icon: "fa-solid fa-[#004B39] fa-plane-departure", iconType: "fontawesome" },
+            { title: "ABTA BONDED", icon: "fa-solid fa-[#004B39] fa-stamp", iconType: "fontawesome" },
+          ];
+          return (
+            <div key={idx} className="max-w-6xl mx-auto px-4 my-8">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {badges.map((b: any, bI: number) => (
+                  <div key={bI} className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 flex flex-col items-center justify-center text-center gap-3">
+                    <div className="w-12 h-12 rounded-full bg-emerald-50/80 flex items-center justify-center text-[#004B39] text-xl">
+                      {b.iconType === "fontawesome" || !b.iconType ? (
+                        <i className={b.icon}></i>
+                      ) : (
+                        <span className="font-bold text-sm">{b.icon}</span>
+                      )}
+                    </div>
+                    <span className="text-xs font-bold tracking-wider text-slate-500 uppercase">{b.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+        }
+
+    if (sec.type === "Umrah Packages Grid" || sec.type === "Packages Grid") {
+          const defaultPackages = [
+            {
+              id: "pkg-1",
+              title: "Customize Umrah Package 2026",
+              duration: "10, 15 Days",
+              heroImage: "https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80",
+              price: "$7,499",
+              makkahHotel: { name: "5 Star Hotel in Makkah", location: "Near to Haram", nights: "6 Nights", badge: "Breakfast" },
+              madinahHotel: { name: "5 Star Hotel in Madinah", location: "Near to Masjid Nabawi", nights: "6 Nights", badge: "Breakfast" }
+            },
+            {
+              id: "pkg-2",
+              title: "Elite Platinum Umrah 2026",
+              duration: "15 Days",
+              heroImage: "https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=800&q=80",
+              price: "$10,950",
+              makkahHotel: { name: "Fairmont Clock Royal Tower", location: "Zero distance (In Front)", nights: "8 Nights", badge: "Buffet Included" },
+              madinahHotel: { name: "The Oberoi Madinah", location: "Adjacent to Courtyard", nights: "7 Nights", badge: "Buffet Included" }
+            },
+            {
+              id: "pkg-3",
+              title: "Express Custom Umrah 2026",
+              duration: "10 Days",
+              heroImage: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?auto=format&fit=crop&w=800&q=80",
+              price: "$5,850",
+              makkahHotel: { name: "Hyatt Regency Makkah", location: "2 Mins Walk", nights: "5 Nights", badge: "Breakfast" },
+              madinahHotel: { name: "Pullman Zamzam Madinah", location: "Walking Distance", nights: "5 Nights", badge: "Breakfast" }
+            }
+          ];
+
+          return (
+            <section key={idx} className="py-10 max-w-7xl mx-auto px-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {defaultPackages.map((pkg) => (
+                  <article key={pkg.id} className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 flex flex-col group">
+                    <div className="relative h-56 overflow-hidden">
+                      <Image src={pkg.heroImage} alt={pkg.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30"></div>
+                      <div className="absolute top-3 inset-x-3 flex justify-between items-center text-xs">
+                        <span className="bg-[#0a422d]/90 text-white font-bold px-2.5 py-1 rounded-md flex items-center gap-1">
+                          <i className="fa-solid fa-kaaba text-[#CBA25F]"></i> Umrah 2026
+                        </span>
+                        <span className="bg-amber-500 text-slate-900 font-extrabold px-2.5 py-1 rounded-md">
+                          {pkg.duration}
+                        </span>
+                      </div>
+                      <div className="absolute bottom-3 left-3 right-3">
+                        <span className="text-emerald-300 text-[10px] font-bold uppercase tracking-wider block mb-0.5">FROM CANADA → TO SAUDIA</span>
+                        <h3 className="text-lg font-bold text-white leading-tight">{pkg.title}</h3>
+                      </div>
+                    </div>
+                    <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                      <div className="space-y-3">
+                        <div className="p-2.5 rounded-xl bg-emerald-50/50 border border-emerald-100/50 flex gap-3 items-center">
+                          <div className="flex-1">
+                            <h4 className="text-xs font-bold text-slate-800">{pkg.makkahHotel.name}</h4>
+                            <p className="text-[10px] text-slate-500">{pkg.makkahHotel.location}</p>
+                          </div>
+                        </div>
+                        <div className="p-2.5 rounded-xl bg-amber-50/40 border border-amber-100/50 flex gap-3 items-center">
+                          <div className="flex-1">
+                            <h4 className="text-xs font-bold text-slate-800">{pkg.madinahHotel.name}</h4>
+                            <p className="text-[10px] text-slate-500">{pkg.madinahHotel.location}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <div>
+                          <span className="text-[9px] font-bold text-slate-400 block uppercase">STARTING FROM</span>
+                          <span className="text-lg font-extrabold text-[#004B39]">{pkg.price}</span>
+                        </div>
+                        <button className="bg-[#004B39] hover:bg-[#DB9E30] text-white hover:text-slate-900 px-4 py-2 rounded-xl text-xs font-bold transition-all">
+                          Book Package
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          );
+        }
+
+    if (sec.type === 'Text Block (Rich Text)') {
+          let content: string = sec.data?.content || '';
+          if (!content) return null;
+          content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, '\u00a0');
+          const innerM = content.match(/^<p>([\s\S]*)<\/p>$/);
+          if (innerM) { const inner = innerM[1].trim(); if (/^<(h[1-6]|ul|ol|blockquote)/.test(inner)) content = inner; }
+          if (!content || content === '<p></p>') return null;
+          return (
+            <section key={idx} className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 max-w-5xl mx-auto my-8 w-full">
+              <div
+                className="prose prose-slate prose-headings:font-serif prose-headings:text-[#004B39] prose-a:text-[#004B39] prose-strong:text-slate-900 max-w-none text-sm leading-relaxed"
+                dangerouslySetInnerHTML={{ __html: content }}
+              />
+            </section>
+          );
+        }
+
+    if (sec.type === "Available Flights Grid" || sec.type === "Flights Cards") {
+            const flights = (sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0)
+              ? sec.data.items
+              : [
+                  { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
+                  { code: "SA", name: "Saudia Airlines", operatedBy: "Operated By Saudia", originCode: "LHR", originCity: "London", destCode: "MED", destCity: "Madinah", time: "18:45", price: "CAD 1,380.00" }
+                ];
+
+            return (
+              <section key={idx} className="pt-14">
+                <div className="max-w-5xl mx-auto px-4">
+                  <div className="text-center mb-8">
+                    <span className="text-emerald-800 font-semibold uppercase tracking-wider text-sm block mb-1">
+                      {sec.data?.eyebrow || "AVAILABLE FLIGHTS"}
+                    </span>
+                    <h2 className="text-3xl font-serif text-gray-900 tracking-tight">
+                      {sec.data?.title || "BEST FARES, LIMITED AVAILABILITY FROM LONDON"}
+                    </h2>
+                  </div>
+                  <div className="space-y-6 mb-12">
+                    {(sec.data?.items || [
+                      { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
+                      { code: "SA", name: "Saudia Airlines", operatedBy: "Operated By Saudia", originCode: "LHR", originCity: "London", destCode: "MED", destCity: "Madinah", time: "18:45", price: "CAD 1,380.00" }
+                    ]).map((flight: any, fIdx: number) => (
+                      <div
+                        key={fIdx}
+                        className="bg-white shadow-lg rounded-2xl border border-gray-200/60 p-6 md:p-8 hover:shadow-md transition-shadow duration-200"
+                      >
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6">
+                          {/* Left: Airline Info */}
+                          <div className="flex items-center gap-4 min-w-[280px]">
+                            <div className="bg-emerald-900 text-white font-bold px-3 py-2 rounded text-base tracking-wide flex items-center justify-center min-w-[54px] h-[44px]">
+                              {flight.code || "PIA"}
+                            </div>
+                            <div>
+                              <h4 className="font-bold text-gray-900 text-lg">{flight.name}</h4>
+                              <p className="text-xs text-gray-500 font-medium mt-0.5">{flight.operatedBy || "Operated By PIA"}</p>
+                            </div>
+                          </div>
+
+                          {/* Middle: Route & Times */}
+                          <div className="flex flex-1 items-center justify-between max-w-md mx-auto w-full px-2">
+                            <div className="text-center md:text-left">
+                              <span className="block text-2xl font-bold text-gray-900">{flight.originCode || "LHR"}</span>
+                              <span className="text-xs text-gray-400 font-medium">{flight.originCity || "London"}</span>
+                            </div>
+
+                            <div className="flex-1 flex items-center justify-center px-4 relative">
+                              <div className="w-full border-t border-dashed border-gray-300 absolute"></div>
+                              <div className="bg-gray-100 px-2 z-10 rounded-full py-1">
+                                <i className="fa-solid fa-plane text-sky-400 text-sm rotate-45"></i>
+                              </div>
+                            </div>
+
+                            <div className="text-center md:text-left">
+                              <span className="block text-2xl font-bold text-gray-900">{flight.destCode || "JED"}</span>
+                              <span className="text-xs text-gray-400 font-medium">{flight.destCity || "Jeddah"}</span>
+                            </div>
+
+                            <div className="h-8 border-l border-gray-300 mx-6 hidden md:block"></div>
+
+                            <div className="text-center md:text-left">
+                              <span className="block text-xl font-bold text-gray-900">{flight.time || "14:20"}</span>
+                              <span className="text-xs text-gray-400 font-medium">{flight.originCode || "LHR"}</span>
+                            </div>
+                          </div>
+
+                          {/* Right: Pricing & CTA */}
+                          <div className="text-right flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4 border-t md:border-0 pt-4 md:pt-0 border-gray-200">
+                            <div>
+                              <span className="text-xs font-semibold text-gray-500 block md:hidden">Price</span>
+                              <span className="text-2xl font-extrabold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
+                            </div>
+                            <a
+                              href={`https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name)})`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="bg-emerald-900 text-white hover:bg-[#DB9E30] hover:text-slate-900 font-bold py-3 px-8 rounded-lg tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
+                            >
+                              Booking
+                            </a>
+                          </div>
+                        </div>
+
+                        <div className="border-t border-dashed border-gray-300/80 pt-4 text-right">
+                          <span className="text-xs font-medium text-gray-500">Price Per Person (Incl. Taxes &amp; Fees)</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            );
+          }
+
+    if (sec.type === "Flight Assistance CTA" || sec.type === "Flight Desk CTA") {
+            return (
+              <section key={idx} className="tint mt-12 py-20 bg-emerald-50/60 border-t border-emerald-100">
+                <div className="wrap text-center max-w-3xl mx-auto px-4">
+                  <h2 className="text-3xl font-serif text-[#004B39] mb-4">
+                    {sec.data?.title || "Need Flight Booking Assistance?"}
+                  </h2>
+                  <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed font-light">
+                    {sec.data?.description || "Speak directly with our ticketing specialists to get custom quotes, group flight discounts, and immediate confirmations."}
+                  </p>
+                  <Link href={sec.data?.btnLink || "/contact"} className="inline-block bg-[#004B39] hover:bg-[#DB9E30] text-white hover:text-slate-900 font-bold px-8 py-3.5 rounded-xl shadow-md transition-all text-sm">
+                    {sec.data?.btnLabel || "Contact Flight Desk"}
+                  </Link>
+                </div>
+              </section>
+            );
+          }
+
+        // ── Skip hero – already rendered in page.tsx ──────────────────────────
+        if (sec.type === "Homepage Hero Banner" || sec.type === "Hero Slider") {
+          return null;
+        }
+
+        // ── Who We Are ────────────────────────────────────────────────────────
+        if (sec.type === "Who We Are") {
+          return (
+            <section key={idx} className="wrap">
+              <div className="about-section reveal">
+                <div className="grid-2">
+                  <div className="about-image">
+                    <Image
+                      src={sec.data?.image || "https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80"}
+                      alt={sec.data?.title || "Who We Are"}
+                      width={800}
+                      height={500}
+                      className="w-full h-auto rounded-2xl"
+                      unoptimized
+                    />
+                  </div>
+                  <div className="about-content">
+                    <span className="section-tag">{sec.data?.eyebrow || "WHO WE ARE"}</span>
+                    <h2 className="section-title">{sec.data?.title || "We provide and offer Hajj & Umrah packages"}</h2>
+                    <p className="text-slate-600 text-sm leading-relaxed">{sec.data?.description}</p>
+                    {sec.data?.quoteBadgeText && (
+                      <blockquote className="border-l-4 border-[#DB9E30] pl-4 my-4 italic text-slate-700 text-sm">
+                        {sec.data.quoteBadgeText}
+                      </blockquote>
+                    )}
+                    {(sec.data?.stat1Num || sec.data?.stat2Num || sec.data?.stat3Num) && (
+                      <div className="grid grid-cols-3 gap-4 mt-6">
+                        {sec.data?.stat1Num && (
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-[#004B39]">{sec.data.stat1Num}</div>
+                            <div className="text-xs text-slate-500 mt-0.5">{sec.data.stat1Label}</div>
+                          </div>
+                        )}
+                        {sec.data?.stat2Num && (
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-[#004B39]">{sec.data.stat2Num}</div>
+                            <div className="text-xs text-slate-500 mt-0.5">{sec.data.stat2Label}</div>
+                          </div>
+                        )}
+                        {sec.data?.stat3Num && (
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-[#004B39]">{sec.data.stat3Num}</div>
+                            <div className="text-xs text-slate-500 mt-0.5">{sec.data.stat3Label}</div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </section>
+          );
+        }
+
+        // ── Sold Out Packages ─────────────────────────────────────────────────
+        if (sec.type === "Sold Out Packages") {
+          const items: any[] = sec.data?.items || [];
+          if (items.length === 0) return null;
+          return (
+            <section key={idx} className="py-14 bg-[#f7f3ec]">
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="text-center mb-10">
+                  {sec.data?.eyebrow && (
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+                      {sec.data.eyebrow}
+                    </span>
+                  )}
+                  <h2 className="text-3xl md:text-4xl font-serif text-[#004B39] font-normal">
+                    {sec.data?.title || "Packages Officially Sold Out"}
+                  </h2>
+                  {sec.data?.description && (
+                    <p className="text-slate-600 text-sm mt-3 max-w-xl mx-auto">{sec.data.description}</p>
+                  )}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {items.map((item: any, i: number) => (
+                    <article key={i} className="bg-white rounded-3xl overflow-hidden shadow-md border border-slate-100 flex flex-col group">
+                      {item.heroImage && (
+                        <div className="relative h-48 overflow-hidden">
+                          <Image
+                            src={item.heroImage}
+                            alt={item.title || "Sold Out Package"}
+                            fill
+                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            unoptimized
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
+                          {item.badgeText && (
+                            <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                              {item.badgeText}
+                            </span>
+                          )}
+                          <div className="absolute bottom-3 left-3">
+                            <h3 className="text-white font-bold text-base leading-tight">{item.title}</h3>
+                            {item.month && <span className="text-slate-300 text-xs">{item.month}</span>}
+                          </div>
+                        </div>
+                      )}
+                      <div className="p-5 flex-1 flex flex-col gap-3">
+                        {item.includes && item.includes.length > 0 && (
+                          <ul className="space-y-1.5">
+                            {item.includes.map((inc: any, j: number) => (
+                              <li key={j} className="flex items-center gap-2 text-xs text-slate-600">
+                                <DynamicIcon name={inc.icon || "Check"} className={`w-3.5 h-3.5 shrink-0 ${inc.iconColor || "text-[#004B39]"}`} />
+                                {inc.text}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
+                          <div>
+                            <span className="text-[9px] font-bold text-slate-400 uppercase block">Starting From</span>
+                            <span className="text-xl font-extrabold text-[#004B39]">{item.price}</span>
+                            {item.priceUnit && <span className="text-xs text-slate-400 ml-1">{item.priceUnit}</span>}
+                          </div>
+                          <Link
+                            href={item.btnLink || "/contact"}
+                            className="bg-[#DB9E30] hover:bg-[#004B39] text-slate-900 hover:text-white font-bold px-4 py-2 rounded-xl text-xs transition-all"
+                          >
+                            {item.btnText || "Enquire Now"}
+                          </Link>
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </section>
+          );
+        }
+
+        // ── Testimonials ──────────────────────────────────────────────────────
+        if (sec.type === "Testimonials") {
+          return (
+            <section key={idx} className="py-14 bg-white">
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
+                  <div>
+                    {sec.data?.eyebrow && (
+                      <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+                        {sec.data.eyebrow}
+                      </span>
+                    )}
+                    <h2 className="text-3xl md:text-4xl font-serif text-[#004B39] font-normal">
+                      {sec.data?.title || "What Our Clients Say"}
+                    </h2>
+                  </div>
+                  {sec.data?.reviewLink && (
+                    <div className="flex items-center gap-3 shrink-0">
+                      <div className="flex items-center gap-1.5">
+                        <svg className="w-5 h-5 text-[#DB9E30]" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                        <span className="font-bold text-slate-800 text-sm">5.0</span>
+                        {sec.data?.reviewCount && (
+                          <span className="text-slate-500 text-xs">({sec.data.reviewCount}+ reviews)</span>
+                        )}
+                      </div>
+                      <a
+                        href={sec.data.reviewLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block border border-[#004B39] text-[#004B39] font-bold text-xs px-4 py-2 rounded-full hover:bg-[#004B39] hover:text-white transition-colors"
+                      >
+                        {sec.data?.ctaLabel || "Write A Review"}
+                      </a>
+                    </div>
+                  )}
+                </div>
+                <TestimonialsCarousel />
+              </div>
+            </section>
+          );
+        }
+
+        // ── Airlines ──────────────────────────────────────────────────────────
+        if (sec.type === "Airlines") {
+          const logos: { src: string; alt: string }[] = (sec.data?.logos || []).map((l: any) => ({
+            src: l.src || "",
+            alt: l.alt || "",
+          }));
+          return (
+            <section key={idx} className="py-12 bg-[#f7f3ec] border-y border-[#e8e0d0]">
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="text-center mb-8">
+                  {sec.data?.eyebrow && (
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+                      {sec.data.eyebrow}
+                    </span>
+                  )}
+                  <h2 className="text-2xl font-serif text-[#004B39] font-normal">
+                    {sec.data?.title || "Airlines We Sourced Deals From"}
+                  </h2>
+                </div>
+                {logos.length > 0 ? (
+                  <MarqueeTrack
+                    type="airline"
+                    images={logos}
+                    speedMs={sec.data?.speedMs || 30000}
+                    direction={sec.data?.direction || "left"}
+                  />
+                ) : (
+                  <p className="text-center text-slate-400 text-sm">No airline logos configured yet.</p>
+                )}
+              </div>
+            </section>
+          );
+        }
+
+        // ── Contact ───────────────────────────────────────────────────────────
+        if (sec.type === "Contact") {
+          return <ContactFormSection key={idx} data={sec.data || {}} />;
+        }
+
+        // Default fallback for unmapped sections
+        return (
+          <div key={idx} className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
+            {sec.title && <h2 className="text-2xl font-bold text-slate-800 mb-4">{sec.title}</h2>}
+            {sec.data?.description && <p className="text-slate-600 leading-relaxed">{sec.data.description}</p>}
+          </div>
+        );
+      })}
+    </div>
+  );
+}

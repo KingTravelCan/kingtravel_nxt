@@ -219,7 +219,7 @@ function BlogEditorInner() {
               <TiptapEditor
                 value={form.content}
                 onChange={(html) => setForm((p) => ({ ...p, content: html }))}
-                minHeight="350px"
+                minHeight="400px"
               />
               <p className="text-[10px] text-slate-300 mt-1.5">{form.content.length} characters</p>
             </div>

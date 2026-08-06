@@ -37,7 +37,6 @@ const SECTION_CATALOG: SectionCategory[] = [
       { type: 'Upcoming Umrah Packages', description: 'Featured Umrah package cards with CTA button and price teaser.', pages: ['Homepage'] },
       { type: 'Travel Services', description: 'Interactive service icon grid (Umrah, Hajj, Visa, Flights, Hotels…).', pages: ['Homepage'] },
       { type: 'What We Provide', description: 'Numbered feature list alongside a full-height image — showcases key value props.', pages: ['Homepage'] },
-      { type: 'Hero Slider', description: 'Full-width hero slider with headline, subtext, and CTA buttons.', pages: ['Homepage'] },
       { type: 'Accreditations Bar', description: 'Logo bar of accreditation bodies (IATA, TICO, ACTA, Saudi Ministry).', pages: ['Homepage'] },
       { type: 'Hajj Packages', description: 'Database-driven Hajj package cards with full details and booking form.', pages: ['Homepage'] },
       { type: 'Sold Out Packages', description: 'Display previously sold out luxury packages.', pages: ['Homepage'] },
@@ -53,12 +52,7 @@ const SECTION_CATALOG: SectionCategory[] = [
     items: [
       { type: 'Intro', description: 'Simple eyebrow + heading + body text intro block for any page.', pages: ['About', 'Any Page'] },
       { type: 'Stats Grid', description: 'Horizontal KPI stat counters (e.g. 72K+ Travelers, 25+ Years).', pages: ['About', 'Homepage'] },
-      { type: 'Accreditations Bar', description: 'Logo bar of accreditation bodies (IATA, TICO, ACTA, Saudi Ministry).', pages: ['About', 'Homepage'] },
       { type: 'Certifications Flip Cards', description: 'Flip-card grid showing certifications and credentials front & back.', pages: ['About'] },
-      { type: 'Team Grid', description: 'Staff profile photo grid with name and role.', pages: ['About'] },
-      { type: 'Ideology / Feature Cards', description: 'Mission, vision, values cards in a branded card grid.', pages: ['About'] },
-      { type: 'Leader Bio Card', description: 'Full-width leadership bio with portrait photo and rich text.', pages: ['About'] },
-      { type: 'Organization Hero Banner', description: 'Bold full-width banner with org name, tagline, and background image.', pages: ['About'] },
     ],
   },
   {
@@ -66,16 +60,13 @@ const SECTION_CATALOG: SectionCategory[] = [
     icon: '🕋',
     items: [
       { type: 'Umrah Packages Grid', description: 'Database-driven Umrah package cards with price, hotel rating, and booking CTA.', pages: ['Umrah Packages', 'Homepage'] },
-      { type: 'Hajj Packages', description: 'Database-driven Hajj package cards with full details and booking form.', pages: ['Hajj Packages'] },
       { type: 'Hajj Services Grid', description: '4-column icon grid showcasing Hajj services (e.g. Pre-Hajj Meet-up, Buffet Meals, Transport, Scholar).', pages: ['Hajj Packages'] },
-      { type: 'CTA Banner', description: 'Full-width conversion CTA with heading, subtext, and call-to-action button.', pages: ['Umrah Packages', 'Hajj Packages', 'Any Page'] },
     ],
   },
   {
     category: 'Visa & Saudi',
     icon: '🪪',
     items: [
-      { type: 'Visa Solutions', description: 'Visa type cards (Tourist, Business, Umrah, Hajj) with features and apply CTA.', pages: ['Saudi Visa'] },
       { type: 'Visa Process Steps', description: '3-step visual process block (Apply → Review → Confirmed) for visa applicants.', pages: ['Saudi Visa'] },
     ],
   },
@@ -84,8 +75,6 @@ const SECTION_CATALOG: SectionCategory[] = [
     icon: '✈️',
     items: [
       { type: 'Available Flights Grid', description: 'Live flight route cards with fare, airline, and availability status.', pages: ['Airlines'] },
-      { type: 'Airlines', description: 'Infinite scrolling logo marquee of airline partner brands.', pages: ['Airlines', 'About', 'Homepage'] },
-      { type: 'Airlines Logo Carousel', description: 'Interactive carousel of airline partner logos with hover effect.', pages: ['Airlines', 'About'] },
       { type: 'Flight Assistance CTA', description: 'Full-width CTA encouraging visitors to contact the flight desk.', pages: ['Airlines'] },
     ],
   },
@@ -94,7 +83,6 @@ const SECTION_CATALOG: SectionCategory[] = [
     icon: '📞',
     items: [
       { type: 'Contact Info Cards', description: 'Office address cards with phone, email, and map links for each location.', pages: ['Contact'] },
-      { type: 'Contact', description: 'Animated Contact with dual notification (admin + user confirmation email).', pages: ['Contact', 'Any Page'] },
       { type: 'Contact Maps', description: 'Embedded dual Google Maps iframes for head office and branch locations.', pages: ['Contact'] },
     ],
   },
@@ -103,7 +91,6 @@ const SECTION_CATALOG: SectionCategory[] = [
     icon: '📝',
     items: [
       { type: 'Latest Blogs Grid', description: 'Grid of published blog posts with thumbnails, titles, excerpts, dates, and author badges.', pages: ['Blogs', 'Homepage', 'Any Page'] },
-      { type: 'Blog Posts Carousel', description: 'Interactive slider/carousel of latest published blog posts with hover effects.', pages: ['Blogs', 'Homepage', 'Any Page'] },
     ],
   },
   {
@@ -119,14 +106,7 @@ const SECTION_CATALOG: SectionCategory[] = [
     items: [
       { type: 'Services Grid', description: 'Icon + heading + description service tiles in a responsive grid.', pages: ['About', 'Any Page'] },
       { type: 'Image+Text', description: 'Split image-and-text block with eyebrow, heading, body, and optional CTA.', pages: ['Any Page'] },
-      { type: 'Intro (Text + Image)', description: 'Reversed intro block — text on left, image panel on right.', pages: ['Any Page'] },
-      { type: 'Image + Text (Side by Side)', description: 'Full-width split section with large image beside formatted text.', pages: ['Any Page'] },
       { type: 'Text Block (Rich Text)', description: 'Free-form rich text editor block for long-form content.', pages: ['Any Page'] },
-      { type: 'Accordion / FAQ', description: 'Expandable FAQ accordion with question-answer pairs.', pages: ['Any Page'] },
-      { type: 'Quote Banner (Full Width)', description: 'Bold full-width testimonial or inspirational quote with attribution.', pages: ['Any Page'] },
-      { type: 'Media Grid', description: 'Photo / video gallery grid with lightbox support.', pages: ['Any Page'] },
-      { type: 'Publications Grid', description: 'Media coverage and press publication logo grid.', pages: ['About', 'Any Page'] },
-      { type: 'Embed / Media', description: 'Embed any iframe, YouTube video, or external media block.', pages: ['Any Page'] },
     ],
   },
 ];
@@ -692,6 +672,7 @@ function PageBuilderContent() {
       cancelText: 'Not now',
       variant: 'primary',
       onConfirm: async () => {
+        setSaving(true);
         const updatedSections = [...sections];
         if (slug === '/' || pageId === 1) {
           const heroSecData = {
