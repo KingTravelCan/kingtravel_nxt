@@ -2538,3 +2538,8 @@ section#flights {
   color: #64748b;
   line-height: 1.6;
 }
+
+/* Force dark text on all input fields globally to prevent invisible white-on-white text in dark mode */
+input, textarea, select {
+  color: #0f172a; /* slate-900 */
+}

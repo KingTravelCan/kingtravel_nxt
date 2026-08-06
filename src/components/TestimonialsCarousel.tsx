@@ -11,7 +11,7 @@ interface Review {
   text: string;
 }
 
-const reviewsData: Review[] = [
+const defaultReviews: Review[] = [
   {
     id: 1,
     name: "tamim rahimi",
@@ -63,7 +63,7 @@ const reviewsData: Review[] = [
   },
 ];
 
-export default function TestimonialsCarousel() {
+export default function TestimonialsCarousel({ reviews = defaultReviews, autoplaySpeed = 3000 }: { reviews?: Review[], autoplaySpeed?: number }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedCards, setExpandedCards] = useState<Record<number, boolean>>({});
   const [visibleItems, setVisibleItems] = useState(3);
@@ -71,8 +71,8 @@ export default function TestimonialsCarousel() {
   const [enableTransition, setEnableTransition] = useState(true);
 
   // Triple array for continuous infinite sliding
-  const extendedReviews = [...reviewsData, ...reviewsData, ...reviewsData];
-  const totalOriginal = reviewsData.length;
+  const extendedReviews = [...reviews, ...reviews, ...reviews];
+  const totalOriginal = reviews.length;
 
   useEffect(() => {
     const handleResize = () => {
@@ -96,7 +96,7 @@ export default function TestimonialsCarousel() {
 
     const timer = setInterval(() => {
       setCurrentIndex((prev) => prev + 1);
-    }, 3500);
+    }, autoplaySpeed);
 
     return () => clearInterval(timer);
   }, [isPaused]);

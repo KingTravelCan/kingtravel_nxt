@@ -89,7 +89,7 @@ export default function UmrahPackagesPage() {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   useEffect(() => {
-    getPageBySlug('/umrah/packages').then(p => {
+    getPageBySlug('/umrah-packages').then(p => {
       if (p) setPageData(p);
     });
   }, []);
@@ -120,168 +120,168 @@ export default function UmrahPackagesPage() {
         size={pageData?.bannerSize}
       />
 
-        {/* ================= 4 FLOATING ACCREDITATION BADGES ================= */}
-        <div className="badges-overlap-container">
-          <div className="badge-grid">
-            <div className="badge-card">
-              <div className="badge-icon-wrap">
-                <i className="fa-solid fa-shield-halved"></i>
-              </div>
-              <span>ATOL Protected</span>
+      {/* ================= 4 FLOATING ACCREDITATION BADGES ================= */}
+      <div className="badges-overlap-container">
+        <div className="badge-grid">
+          <div className="badge-card">
+            <div className="badge-icon-wrap">
+              <i className="fa-solid fa-shield-halved"></i>
             </div>
+            <span>ATOL Protected</span>
+          </div>
 
-            <div className="badge-card">
-              <div className="badge-icon-wrap">
-                <i className="fa-solid fa-mosque"></i>
-              </div>
-              <span>Saudi Ministry Approved</span>
+          <div className="badge-card">
+            <div className="badge-icon-wrap">
+              <i className="fa-solid fa-mosque"></i>
             </div>
+            <span>Saudi Ministry Approved</span>
+          </div>
 
-            <div className="badge-card">
-              <div className="badge-icon-wrap">
-                <i className="fa-solid fa-plane-departure"></i>
-              </div>
-              <span>IATA Accredited</span>
+          <div className="badge-card">
+            <div className="badge-icon-wrap">
+              <i className="fa-solid fa-plane-departure"></i>
             </div>
+            <span>IATA Accredited</span>
+          </div>
 
-            <div className="badge-card">
-              <div className="badge-icon-wrap">
-                <i className="fa-solid fa-stamp"></i>
-              </div>
-              <span>ABTA Bonded</span>
+          <div className="badge-card">
+            <div className="badge-icon-wrap">
+              <i className="fa-solid fa-stamp"></i>
             </div>
+            <span>ABTA Bonded</span>
           </div>
         </div>
-
-        {/* ================= MAIN PACKAGES GRID ================= */}
-        <section className="packages-grid-container">
-          <div className="cards-grid">
-            {umrahCardsData.map((card) => (
-              <article key={card.id} className="custom-pkg-card">
-                {/* Hero Header Image */}
-                <div className="card-hero-img-wrap">
-                  <Image
-                    src={card.heroImage}
-                    alt={card.title}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 33vw"
-                    className="object-cover"
-                    unoptimized
-                  />
-                  <div className="card-hero-overlay" />
-
-                  {/* Top Bar Tags */}
-                  <div className="card-hero-tags">
-                    <div className="tag-black">
-                      <i className="fa-solid fa-kaaba text-[#DB9E30]"></i>
-                      <span>Umrah 2026</span>
-                    </div>
-                    <div className="tag-gold">
-                      <i className="fa-solid fa-calendar-days"></i>
-                      <span>{card.duration}</span>
-                    </div>
-                  </div>
-
-                  {/* Title & Route Placement */}
-                  <div className="card-hero-text">
-                    <div className="route-subtext">
-                      <i className="fa-solid fa-plane text-xs"></i> FROM CANADA <i className="fa-solid fa-arrow-right text-[10px]"></i> TO SAUDIA
-                    </div>
-                    <h2 className="card-main-title">{card.title}</h2>
-                  </div>
-                </div>
-
-                {/* Card Body */}
-                <div className="card-body">
-                  <div>
-                    <span className="section-label">Accommodations</span>
-
-                    {/* Makkah Hotel */}
-                    <div className="hotel-strip makkah">
-                      <div className="hotel-thumb">
-                        <Image
-                          src={card.makkahHotel.image}
-                          alt={card.makkahHotel.name}
-                          fill
-                          className="object-cover"
-                          unoptimized
-                        />
-                        <span className="city-badge-overlay mk">Makkah</span>
-                      </div>
-                      <div className="hotel-details">
-                        <div className="hotel-name">{card.makkahHotel.name}</div>
-                        <div className="hotel-location">
-                          <i className="fa-solid fa-location-dot text-[#004B39]"></i>
-                          <span>{card.makkahHotel.location}</span>
-                        </div>
-                        <div className="hotel-tags">
-                          <span className="tag-pill-dark">
-                            <i className="fa-solid fa-utensils text-[8px]"></i>
-                            <span>{card.makkahHotel.badge}</span>
-                          </span>
-                          <span className="tag-pill-light">{card.makkahHotel.nights}</span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Madinah Hotel */}
-                    <div className="hotel-strip madinah">
-                      <div className="hotel-thumb">
-                        <Image
-                          src={card.madinahHotel.image}
-                          alt={card.madinahHotel.name}
-                          fill
-                          className="object-cover"
-                          unoptimized
-                        />
-                        <span className="city-badge-overlay md">Madinah</span>
-                      </div>
-                      <div className="hotel-details">
-                        <div className="hotel-name">{card.madinahHotel.name}</div>
-                        <div className="hotel-location">
-                          <i className="fa-solid fa-location-dot text-[#DB9E30]"></i>
-                          <span>{card.madinahHotel.location}</span>
-                        </div>
-                        <div className="hotel-tags">
-                          <span className="tag-pill-dark">
-                            <i className="fa-solid fa-utensils text-[8px]"></i>
-                            <span>{card.madinahHotel.badge}</span>
-                          </span>
-                          <span className="tag-pill-light">{card.madinahHotel.nights}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Footer Meta & Actions */}
-                  <div className="card-footer-meta">
-                    <div className="meta-row">
-                      <div>
-                        <div className="operator-title">Operator</div>
-                        <div className="operator-val">
-                          <span className="operator-name">King Travel</span>
-                          <span className="rating-badge">4.4/5</span>
-                        </div>
-                      </div>
-                      <div>
-                        <div className="price-title">From CAD / Quad Occupancy</div>
-                        <div className="text-[24px] font-black text-[#004B39] text-right leading-none">{card.price}</div>
-                      </div>
-                    </div>
-
-                      <Link
-                        href={`/package/${card.id || card.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
-                        className="w-full bg-[#DB9E30] hover:bg-[#b88222] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer mt-2"
-                      >
-                        <i className="fa-solid fa-passport"></i>
-                        <span>Book Umrah 2026</span>
-                      </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </section>
       </div>
+
+      {/* ================= MAIN PACKAGES GRID ================= */}
+      <section className="packages-grid-container">
+        <div className="cards-grid">
+          {umrahCardsData.map((card) => (
+            <article key={card.id} className="custom-pkg-card">
+              {/* Hero Header Image */}
+              <div className="card-hero-img-wrap">
+                <Image
+                  src={card.heroImage}
+                  alt={card.title}
+                  fill
+                  sizes="(max-width: 768px) 100vw, 33vw"
+                  className="object-cover"
+                  unoptimized
+                />
+                <div className="card-hero-overlay" />
+
+                {/* Top Bar Tags */}
+                <div className="card-hero-tags">
+                  <div className="tag-black">
+                    <i className="fa-solid fa-kaaba text-[#DB9E30]"></i>
+                    <span>Umrah 2026</span>
+                  </div>
+                  <div className="tag-gold">
+                    <i className="fa-solid fa-calendar-days"></i>
+                    <span>{card.duration}</span>
+                  </div>
+                </div>
+
+                {/* Title & Route Placement */}
+                <div className="card-hero-text">
+                  <div className="route-subtext">
+                    <i className="fa-solid fa-plane text-xs"></i> FROM CANADA <i className="fa-solid fa-arrow-right text-[10px]"></i> TO SAUDIA
+                  </div>
+                  <h2 className="card-main-title">{card.title}</h2>
+                </div>
+              </div>
+
+              {/* Card Body */}
+              <div className="card-body">
+                <div>
+                  <span className="section-label">Accommodations</span>
+
+                  {/* Makkah Hotel */}
+                  <div className="hotel-strip makkah">
+                    <div className="hotel-thumb">
+                      <Image
+                        src={card.makkahHotel.image}
+                        alt={card.makkahHotel.name}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                      <span className="city-badge-overlay mk">Makkah</span>
+                    </div>
+                    <div className="hotel-details">
+                      <div className="hotel-name">{card.makkahHotel.name}</div>
+                      <div className="hotel-location">
+                        <i className="fa-solid fa-location-dot text-[#004B39]"></i>
+                        <span>{card.makkahHotel.location}</span>
+                      </div>
+                      <div className="hotel-tags">
+                        <span className="tag-pill-dark">
+                          <i className="fa-solid fa-utensils text-[8px]"></i>
+                          <span>{card.makkahHotel.badge}</span>
+                        </span>
+                        <span className="tag-pill-light">{card.makkahHotel.nights}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Madinah Hotel */}
+                  <div className="hotel-strip madinah">
+                    <div className="hotel-thumb">
+                      <Image
+                        src={card.madinahHotel.image}
+                        alt={card.madinahHotel.name}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
+                      <span className="city-badge-overlay md">Madinah</span>
+                    </div>
+                    <div className="hotel-details">
+                      <div className="hotel-name">{card.madinahHotel.name}</div>
+                      <div className="hotel-location">
+                        <i className="fa-solid fa-location-dot text-[#DB9E30]"></i>
+                        <span>{card.madinahHotel.location}</span>
+                      </div>
+                      <div className="hotel-tags">
+                        <span className="tag-pill-dark">
+                          <i className="fa-solid fa-utensils text-[8px]"></i>
+                          <span>{card.madinahHotel.badge}</span>
+                        </span>
+                        <span className="tag-pill-light">{card.madinahHotel.nights}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Meta & Actions */}
+                <div className="card-footer-meta">
+                  <div className="meta-row">
+                    <div>
+                      <div className="operator-title">Operator</div>
+                      <div className="operator-val">
+                        <span className="operator-name">King Travel</span>
+                        <span className="rating-badge">4.4/5</span>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="price-title">From CAD / Quad Occupancy</div>
+                      <div className="text-[24px] font-black text-[#004B39] text-right leading-none">{card.price}</div>
+                    </div>
+                  </div>
+
+                  <Link
+                    href={`/package/${card.id || card.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                    className="w-full bg-[#DB9E30] hover:bg-[#b88222] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer mt-2"
+                  >
+                    <i className="fa-solid fa-passport"></i>
+                    <span>Book Umrah 2026</span>
+                  </Link>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }

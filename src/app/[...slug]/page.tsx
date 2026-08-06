@@ -135,7 +135,7 @@ export default function DynamicPage() {
               const title = sec.data?.title || 'Umrah Packages from Canada';
               const subtext = sec.data?.subtext || 'Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking — contact us before reserving.';
               const btnText = sec.data?.btnText || 'SEE ALL PACKAGES →';
-              const btnLink = sec.data?.btnLink || '/umrah/packages';
+              const btnLink = sec.data?.btnLink || '/umrah-packages';
 
               const packagesData = [
                 { badge: '5 STAR', image: '/img/kaaba.png', month: 'AUGUST · 2026', title: '5 Star Umrah Package', price: 'CAD 2,895', isGold: false },
@@ -218,8 +218,8 @@ export default function DynamicPage() {
               const eyebrow = sec.data?.eyebrow || 'SERVICES WE OFFER';
               const title = sec.data?.title || 'Select your preferred travel service';
               const services = (sec.data?.services && Array.isArray(sec.data.services)) ? sec.data.services : [
-                { icon: '★', title: 'Umrah Packages', description: 'Flexible departures with flights, stays, & guidance included.', link: '/umrah/packages' },
-                { icon: '', title: 'Hajj Packages', description: 'Fully accredited pilgrimage packages, curated end to end.', link: '/hajj/packages' },
+                { icon: '★', title: 'Umrah Packages', description: 'Flexible departures with flights, stays, & guidance included.', link: '/umrah-packages' },
+                { icon: '', title: 'Hajj Packages', description: 'Fully accredited pilgrimage packages, curated end to end.', link: '/hajj-packages' },
                 { icon: '✈', title: 'Airline Tickets', description: 'Best-fare flights sourced from every route into Jeddah.', link: '/airlines' },
                 { icon: '📄', title: 'Saudi Visa Services', description: 'Full visa processing, handled and confirmed before departure.', link: '/saudi-visa' },
                 { icon: '🏨', title: 'Hotel Booking', description: '5-star stays within walking distance of the Haram.', link: '/contact' },

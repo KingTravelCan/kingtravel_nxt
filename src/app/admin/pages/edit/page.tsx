@@ -13,6 +13,7 @@ import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal'
 import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 import TiptapEditor from '@/components/admin/TiptapEditor';
+import SeoSettingsForm, { SeoSettings } from '@/components/admin/SeoSettingsForm';
 
 type SectionMeta = {
   type: string;
@@ -32,11 +33,18 @@ const SECTION_CATALOG: SectionCategory[] = [
     icon: '🏠',
     items: [
       { type: 'Homepage Hero Banner', description: 'Full-width hero header with background image, title, subtext, badges, and quote calculator.', pages: ['Homepage'] },
-      { type: 'Who We Are (Intro & Stats)', description: 'Split layout with agency intro text, trust quote badge, and animated stat counters.', pages: ['Homepage'] },
-      { type: 'Exclusive Upcoming Umrah Packages', description: 'Featured Umrah package cards with CTA button and price teaser.', pages: ['Homepage'] },
-      { type: 'Select Preferred Travel Service', description: 'Interactive service icon grid (Umrah, Hajj, Visa, Flights, Hotels…).', pages: ['Homepage'] },
-      { type: 'What We Provide (Numbered Features)', description: 'Numbered feature list alongside a full-height image — showcases key value props.', pages: ['Homepage'] },
+      { type: 'Who We Are', description: 'Split layout with agency intro text, trust quote badge, and animated stat counters.', pages: ['Homepage'] },
+      { type: 'Upcoming Umrah Packages', description: 'Featured Umrah package cards with CTA button and price teaser.', pages: ['Homepage'] },
+      { type: 'Travel Services', description: 'Interactive service icon grid (Umrah, Hajj, Visa, Flights, Hotels…).', pages: ['Homepage'] },
+      { type: 'What We Provide', description: 'Numbered feature list alongside a full-height image — showcases key value props.', pages: ['Homepage'] },
       { type: 'Hero Slider', description: 'Full-width hero slider with headline, subtext, and CTA buttons.', pages: ['Homepage'] },
+      { type: 'Accreditations Bar', description: 'Logo bar of accreditation bodies (IATA, TICO, ACTA, Saudi Ministry).', pages: ['Homepage'] },
+      { type: 'Hajj Packages', description: 'Database-driven Hajj package cards with full details and booking form.', pages: ['Homepage'] },
+      { type: 'Sold Out Packages', description: 'Display previously sold out luxury packages.', pages: ['Homepage'] },
+      { type: 'Visa Solutions', description: 'Visa type cards (Tourist, Business, Umrah, Hajj) with features and apply CTA.', pages: ['Homepage'] },
+      { type: 'Testimonials', description: 'Google Reviews carousel with star rating, review count, and testimonial cards from happy pilgrims.', pages: ['Homepage'] },
+      { type: 'Airlines', description: 'Infinite scrolling logo marquee of airline partner brands.', pages: ['Homepage'] },
+      { type: 'Contact', description: 'Animated Contact with dual notification (admin + user confirmation email).', pages: ['Homepage'] },
     ],
   },
   {
@@ -58,7 +66,7 @@ const SECTION_CATALOG: SectionCategory[] = [
     icon: '🕋',
     items: [
       { type: 'Umrah Packages Grid', description: 'Database-driven Umrah package cards with price, hotel rating, and booking CTA.', pages: ['Umrah Packages', 'Homepage'] },
-      { type: 'Hajj Packages Grid', description: 'Database-driven Hajj package cards with full details and booking form.', pages: ['Hajj Packages'] },
+      { type: 'Hajj Packages', description: 'Database-driven Hajj package cards with full details and booking form.', pages: ['Hajj Packages'] },
       { type: 'Hajj Services Grid', description: '4-column icon grid showcasing Hajj services (e.g. Pre-Hajj Meet-up, Buffet Meals, Transport, Scholar).', pages: ['Hajj Packages'] },
       { type: 'CTA Banner', description: 'Full-width conversion CTA with heading, subtext, and call-to-action button.', pages: ['Umrah Packages', 'Hajj Packages', 'Any Page'] },
     ],
@@ -67,7 +75,7 @@ const SECTION_CATALOG: SectionCategory[] = [
     category: 'Visa & Saudi',
     icon: '🪪',
     items: [
-      { type: 'Visa Solutions Grid', description: 'Visa type cards (Tourist, Business, Umrah, Hajj) with features and apply CTA.', pages: ['Saudi Visa'] },
+      { type: 'Visa Solutions', description: 'Visa type cards (Tourist, Business, Umrah, Hajj) with features and apply CTA.', pages: ['Saudi Visa'] },
       { type: 'Visa Process Steps', description: '3-step visual process block (Apply → Review → Confirmed) for visa applicants.', pages: ['Saudi Visa'] },
     ],
   },
@@ -76,7 +84,7 @@ const SECTION_CATALOG: SectionCategory[] = [
     icon: '✈️',
     items: [
       { type: 'Available Flights Grid', description: 'Live flight route cards with fare, airline, and availability status.', pages: ['Airlines'] },
-      { type: 'Airlines Marquee', description: 'Infinite scrolling logo marquee of airline partner brands.', pages: ['Airlines', 'About', 'Homepage'] },
+      { type: 'Airlines', description: 'Infinite scrolling logo marquee of airline partner brands.', pages: ['Airlines', 'About', 'Homepage'] },
       { type: 'Airlines Logo Carousel', description: 'Interactive carousel of airline partner logos with hover effect.', pages: ['Airlines', 'About'] },
       { type: 'Flight Assistance CTA', description: 'Full-width CTA encouraging visitors to contact the flight desk.', pages: ['Airlines'] },
     ],
@@ -86,7 +94,7 @@ const SECTION_CATALOG: SectionCategory[] = [
     icon: '📞',
     items: [
       { type: 'Contact Info Cards', description: 'Office address cards with phone, email, and map links for each location.', pages: ['Contact'] },
-      { type: 'Contact Form', description: 'Animated contact form with dual notification (admin + user confirmation email).', pages: ['Contact', 'Any Page'] },
+      { type: 'Contact', description: 'Animated Contact with dual notification (admin + user confirmation email).', pages: ['Contact', 'Any Page'] },
       { type: 'Contact Maps', description: 'Embedded dual Google Maps iframes for head office and branch locations.', pages: ['Contact'] },
     ],
   },
@@ -102,7 +110,7 @@ const SECTION_CATALOG: SectionCategory[] = [
     category: 'Reviews & Testimonials',
     icon: '⭐',
     items: [
-      { type: 'Google Reviews / Testimonials', description: 'Google Reviews carousel with star rating, review count, and testimonial cards from happy pilgrims.', pages: ['Homepage', 'Hajj Packages', 'Umrah Packages', 'Any Page'] },
+      { type: 'Testimonials', description: 'Google Reviews carousel with star rating, review count, and testimonial cards from happy pilgrims.', pages: ['Homepage', 'Hajj Packages', 'Umrah Packages', 'Any Page'] },
     ],
   },
   {
@@ -165,6 +173,7 @@ function PageBuilderContent() {
   const [richText, setRichText] = useState('');
   const [metaTitle, setMetaTitle] = useState('');
   const [metaDescription, setMetaDescription] = useState('');
+  const [seoSettings, setSeoSettings] = useState<SeoSettings>({});
   const [sections, setSections] = useState<SectionItem[]>([]);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [sectionSearch, setSectionSearch] = useState('');
@@ -232,6 +241,14 @@ function PageBuilderContent() {
           setBannerSize(p.bannerSize || 'cover');
           setBannerTitle(p.bannerTitle || p.title);
           setBannerDescription(p.bannerDescription || '');
+
+          if (p.seoSettings) {
+            try {
+              const parsed = typeof p.seoSettings === 'string' ? JSON.parse(p.seoSettings) : p.seoSettings;
+              setSeoSettings(parsed);
+            } catch (e) { }
+          }
+
           if (p.sections) {
             try {
               const parsed = JSON.parse(p.sections);
@@ -241,8 +258,8 @@ function PageBuilderContent() {
                 setSections([
                   {
                     id: 'sv-1',
-                    type: 'Visa Solutions Grid',
-                    title: 'Saudi Visa Solutions Grid',
+                    type: 'Visa Solutions',
+                    title: 'Saudi Visa Solutions',
                     data: {
                       eyebrow: 'EXPLORE OUR',
                       title: 'Saudi Visa Solutions'
@@ -273,7 +290,7 @@ function PageBuilderContent() {
                   },
                   {
                     id: 'air-2',
-                    type: 'Airlines Marquee',
+                    type: 'Airlines',
                     title: 'Airlines We Sourced Deals From',
                     data: {
                       eyebrow: 'OUR TRUSTED PARTNERS',
@@ -310,8 +327,8 @@ function PageBuilderContent() {
                   },
                   {
                     id: 'cnt-2',
-                    type: 'Contact Form',
-                    title: 'Interactive Contact Form',
+                    type: 'Contact',
+                    title: 'Interactive Contact',
                     data: {
                       title: 'Drop Us A Message',
                       subtitle: "Fill out the form below and we'll get back to you shortly."
@@ -362,7 +379,7 @@ function PageBuilderContent() {
                   },
                   {
                     id: '5',
-                    type: 'Airlines Marquee',
+                    type: 'Airlines',
                     title: 'Our Trusted Partners (Airlines)',
                     data: {
                       eyebrow: 'OUR TRUSTED PARTNERS',
@@ -409,7 +426,7 @@ function PageBuilderContent() {
               },
               {
                 id: '5',
-                type: 'Airlines Marquee',
+                type: 'Airlines',
                 title: 'Our Trusted Partners (Airlines)',
                 data: {
                   eyebrow: 'OUR TRUSTED PARTNERS',
@@ -433,7 +450,7 @@ function PageBuilderContent() {
       description: 'Add section content description here...',
     };
 
-    if (type === 'Who We Are (Intro & Stats)' || type === 'Who We Are') {
+    if (type === 'Who We Are' || type === 'Who We Are') {
       defaultData = {
         eyebrow: 'WHO WE ARE',
         title: 'We provide and offer Hajj & Umrah packages',
@@ -447,21 +464,43 @@ function PageBuilderContent() {
         stat3Num: '5★',
         stat3Label: 'Hotels, Every Package',
       };
-    } else if (type === 'Exclusive Upcoming Umrah Packages') {
+    } else if (type === 'Upcoming Umrah Packages') {
       defaultData = {
         eyebrow: 'EXCLUSIVE UPCOMING',
         title: 'Umrah Packages from Canada',
         subtext: 'Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking — contact us before reserving.',
         btnText: 'SEE ALL PACKAGES →',
-        btnLink: '/umrah/packages',
+        btnLink: '/umrah-packages',
       };
-    } else if (type === 'Select Preferred Travel Service') {
+    } else if (type === 'Sold Out Packages') {
       defaultData = {
-        eyebrow: 'SERVICES WE OFFER',
+        eyebrow: 'Luxury Hajj Packages',
+        title: 'Packages Officially<br />Sold Out',
+        description: 'We sincerely thank everyone for the incredible trust and response. Our Hajj 2026 packages are now fully sold out...',
+        items: [
+          {
+            title: 'Hajj Package',
+            month: 'May · 2026',
+            price: '$18,995',
+            heroImage: 'https://images.unsplash.com/photo-1553755088-ef1973c7b4a1?auto=format&fit=crop&w=700&q=80',
+            includes: [
+              { text: 'Return Flights from Toronto', icon: 'PlaneTakeoff', iconColor: 'text-ink-soft' },
+              { text: 'Luxury Ground Transportation', icon: 'Bus', iconColor: 'text-ink-soft' },
+              { text: 'Free Ihram Kit', icon: 'Shirt', iconColor: 'text-ink-soft' },
+              { text: 'Registration & Visa Assistance', icon: 'FileText', iconColor: 'text-ink-soft' },
+              { text: 'Imam Lead Guide & Seminar', icon: 'BookOpen', iconColor: 'text-ink-soft' },
+              { text: '5 Star Hotels Makkah & Madinah', icon: 'Building2', iconColor: 'text-ink-soft' },
+            ]
+          }
+        ]
+      };
+    } else if (type === 'Travel Services') {
+      defaultData = {
+        eyebrow: 'Travel Services',
         title: 'Select your preferred travel service',
-        services: [
-          { icon: 'star', title: 'Umrah Packages', description: 'Flexible departures with flights, stays, & guidance included.', link: '/umrah/packages' },
-          { icon: 'kaaba', title: 'Hajj Packages', description: 'Fully accredited pilgrimage packages, curated end to end.', link: '/hajj/packages' },
+        items: [
+          { icon: 'star', title: 'Umrah Packages', description: 'Flexible departures with flights, stays, & guidance included.', link: '/umrah-packages' },
+          { icon: 'kaaba', title: 'Hajj Packages', description: 'Fully accredited pilgrimage packages, curated end to end.', link: '/hajj-packages' },
           { icon: 'plane', title: 'Airline Tickets', description: 'Best-fare flights sourced from every route into Jeddah.', link: '/airlines' },
           { icon: 'visa', title: 'Saudi Visa Services', description: 'Full visa processing, handled and confirmed before departure.', link: '/saudi-visa' },
           { icon: 'hotel', title: 'Hotel Booking', description: '5-star stays within walking distance of the Haram.', link: '/contact' },
@@ -470,12 +509,12 @@ function PageBuilderContent() {
           { icon: 'users', title: 'Group & Private Tours', description: 'Private, guided, and fully customizable itineraries.', link: '/contact' },
         ],
       };
-    } else if (type === 'What We Provide (Numbered Features)') {
+    } else if (type === 'What We Provide') {
       defaultData = {
         eyebrow: 'WHAT WE PROVIDE',
         title: 'Lowest fares, exclusive travel deals, real trust',
         image: 'https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?auto=format&fit=crop&w=800&q=80',
-        features: [
+        items: [
           { num: '01', title: 'Lowest Fares', description: 'We offer the lowest rates on the market, sourced across every route into Jeddah.' },
           { num: '02', title: 'Special Deals', description: 'Fixed-price Umrah packages with hotels, meals and transport included.' },
           { num: '03', title: 'Trusted & Certified', description: 'A fully accredited travel agency you can rely on, licensed across Canada.' },
@@ -490,7 +529,7 @@ function PageBuilderContent() {
         showExcerpt: true,
         showDate: true,
       };
-    } else if (type === 'Google Reviews / Testimonials') {
+    } else if (type === 'Testimonials') {
       defaultData = {
         eyebrow: 'HAPPY PILGRIMS',
         title: 'What our clients say',
@@ -517,6 +556,102 @@ function PageBuilderContent() {
     } else if (type === 'Text Block (Rich Text)') {
       defaultData = {
         content: '<p>Start writing your content here...</p>',
+      };
+    } else if (type === 'Stats Grid') {
+      defaultData = {
+        items: [
+          { value: '25+', label: 'Years Serving Canada' },
+          { value: '10,000+', label: 'Pilgrims Guided' },
+          { value: '5★', label: 'Hotels, Every Package' },
+        ]
+      };
+    } else if (type === 'Intro') {
+      defaultData = {
+        eyebrow: 'ABOUT',
+        title: 'King Travel',
+        description: "For over 20 years, King Travel has been a trusted travel agency in Canada..."
+      };
+    } else if (type === 'Image+Text') {
+      defaultData = {
+        eyebrow: 'WHY CHOOSE US',
+        title: 'Your Trusted Partner for Pilgrimage & Global Travel',
+        description: "Serving Ontario travelers for years...",
+        subheading: '',
+        features: ['Lowest Fares', 'Special Deals', 'Trusted & Certified'],
+        image: "https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80"
+      };
+    } else if (type === 'Services Grid') {
+      defaultData = {
+        eyebrow: 'WHAT WE PROVIDE',
+        title: 'Our Premium Travel Services',
+        items: [
+          { icon: 'Star', title: 'Umrah Packages', subtitle: 'Flexible departures', description: 'With flights, stays, & guidance included.' },
+        ]
+      };
+    } else if (type === 'Accreditations Bar') {
+      defaultData = {
+        items: [
+          { title: 'IATA', icon: '/img/iata.png', iconType: 'image' },
+          { title: 'TICO', icon: '/img/tico.png', iconType: 'image' }
+        ]
+      };
+    } else if (type === 'Umrah Packages Grid') {
+      defaultData = {
+        items: []
+      };
+    } else if (type === 'Airlines') {
+      defaultData = {
+        eyebrow: 'OUR TRUSTED PARTNERS',
+        title: 'Airlines We Sourced Deals From',
+        speedMs: 30000,
+        direction: 'left',
+        logos: [
+          { src: '/img/air/saudia.png', alt: 'Saudia' },
+        ]
+      };
+    } else if (type === 'Available Flights Grid') {
+      defaultData = {
+        eyebrow: 'AVAILABLE FLIGHTS',
+        title: 'BEST FARES, LIMITED AVAILABILITY',
+        items: []
+      };
+    } else if (type === 'Flight Assistance CTA') {
+      defaultData = {
+        title: 'Need Flight Booking Assistance?',
+        description: 'Speak directly with our ticketing specialists...',
+        btnLabel: 'Contact Flight Desk',
+        btnLink: '/contact'
+      };
+    } else if (type === 'Contact Info Cards') {
+      defaultData = {
+        card1Title: 'Head Office', headAddress: '', branchAddress: '',
+        card2Title: 'Phones', phone1: '', phone2: '', phone3: '',
+        card3Title: 'Email & Socials', email: '', facebookUrl: '', instagramUrl: '', linkedinUrl: '', tiktokUrl: ''
+      };
+    } else if (type === 'Contact') {
+      defaultData = {
+        title: 'Drop Us A Message',
+        subtitle: "Fill out the form below and we'll get back to you shortly.",
+        enabled: true,
+        successMessage: 'Thank you! Your message has been received.'
+      };
+    } else if (type === 'Contact Maps') {
+      defaultData = {
+        headTitle: 'Head Office Map', headAddress: '', headMapUrl: '',
+        branchTitle: 'Branch Office Map', branchAddress: '', branchMapUrl: ''
+      };
+    } else if (type === 'Hajj Packages') {
+      defaultData = {
+        eyebrow: 'Luxury Hajj Packages',
+        title: 'Hajj Packages 2027',
+        description: 'Luxury Hajj 2027 Packages with 5-Star Hotels...',
+        items: []
+      };
+    } else if (type === 'Visa Solutions') {
+      defaultData = {
+        eyebrow: 'EXPLORE OUR',
+        title: 'Saudi Visa Solutions',
+        items: []
       };
     }
 
@@ -599,6 +734,7 @@ function PageBuilderContent() {
         fd.append('richText', richText);
         fd.append('metaTitle', metaTitle);
         fd.append('metaDescription', metaDescription);
+        fd.append('seoSettings', JSON.stringify(seoSettings));
         fd.append('bannerBgImage', bannerBgImage);
         fd.append('bannerPosition', bannerPosition);
         fd.append('bannerSize', bannerSize);
@@ -1209,7 +1345,7 @@ function PageBuilderContent() {
                     setSlug(generatedSlug);
                   }
                 }}
-                className="font-bold w-full text-slate-900 bg-slate-50"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-sm font-bold text-slate-900 outline-none focus:border-[#004B39] transition-colors"
               />
             </div>
 
@@ -1221,7 +1357,7 @@ function PageBuilderContent() {
                 type="text"
                 value={slug || ''}
                 onChange={(e) => setSlug(e.target.value)}
-                className="font-semibold w-full text-slate-900 bg-slate-50"
+                className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-sm font-semibold text-slate-900 outline-none focus:border-[#004B39] transition-colors"
               />
             </div>
           </div>
@@ -1402,7 +1538,7 @@ function PageBuilderContent() {
                         {editingSectionId === sec.id && (
                           <div className="pt-4 border-t border-slate-200 flex flex-col gap-3">
                             {/* Universal Section Header Block (Eyebrow, Heading, Description) - Hidden for Blog sections */}
-                            {sec.type !== 'Latest Blogs Grid' && sec.type !== 'Blog Posts Carousel' && sec.type !== 'Google Reviews / Testimonials' && sec.type !== 'Hajj Services Grid' && sec.type !== 'Text Block (Rich Text)' && (
+                            {sec.type !== 'Latest Blogs Grid' && sec.type !== 'Blog Posts Carousel' && sec.type !== 'Testimonials' && sec.type !== 'Hajj Services Grid' && sec.type !== 'Text Block (Rich Text)' && sec.type !== 'Sold Out Packages' && (
                               <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col gap-2">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase flex items-center gap-1.5">
                                   ✏️ SECTION HEADING & BADGE CONTENT
@@ -1539,10 +1675,10 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {sec.type === 'Google Reviews / Testimonials' && (
+                            {sec.type === 'Testimonials' && (
                               <div className="bg-white border border-slate-200 rounded-xl p-3.5 flex flex-col gap-3 mt-1">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
-                                  ⭐ Google Reviews / Testimonials Settings
+                                  ⭐ Testimonials Settings
                                 </span>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                   <div>
@@ -1725,11 +1861,235 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {(sec.type === 'Exclusive Upcoming Umrah Packages' || sec.type === 'Umrah Packages') && (
+                            {sec.type === 'Who We Are' && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-0.5">IMAGE URL</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.image || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'image', e.target.value)}
+                                      className="w-full text-xs p-2 border border-slate-200 rounded-lg outline-none focus:border-[#004B39]"
+                                      placeholder="/img/about.jpg"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-0.5">QUOTE BADGE TEXT</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.quoteBadgeText || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'quoteBadgeText', e.target.value)}
+                                      className="w-full text-xs p-2 border border-slate-200 rounded-lg outline-none focus:border-[#004B39]"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="grid grid-cols-3 gap-3">
+                                  {[1, 2, 3].map((num) => (
+                                    <div key={num} className="bg-slate-50 p-2 rounded-lg border border-slate-200">
+                                      <label className="block text-[10px] font-bold text-slate-600 mb-0.5">STAT {num} NUMBER</label>
+                                      <input
+                                        type="text"
+                                        value={sec.data?.[`stat${num}Num`] || ''}
+                                        onChange={(e) => updateSectionData(sec.id, `stat${num}Num`, e.target.value)}
+                                        className="w-full text-xs p-1.5 border border-slate-200 rounded mb-2 outline-none"
+                                      />
+                                      <label className="block text-[10px] font-bold text-slate-600 mb-0.5">STAT {num} LABEL</label>
+                                      <input
+                                        type="text"
+                                        value={sec.data?.[`stat${num}Label`] || ''}
+                                        onChange={(e) => updateSectionData(sec.id, `stat${num}Label`, e.target.value)}
+                                        className="w-full text-xs p-1.5 border border-slate-200 rounded outline-none"
+                                      />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {sec.type === 'What We Provide' && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
+                                <div>
+                                  <label className="block text-[10px] font-bold text-slate-600 mb-0.5">IMAGE URL</label>
+                                  <input
+                                    type="text"
+                                    value={sec.data?.image || ''}
+                                    onChange={(e) => updateSectionData(sec.id, 'image', e.target.value)}
+                                    className="w-full text-xs p-2 border border-slate-200 rounded-lg outline-none focus:border-[#004B39]"
+                                    placeholder="/img/feature.jpg"
+                                  />
+                                </div>
+                                <div className="flex justify-between items-center mt-2">
+                                  <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
+                                    Numbered Features
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
+                                      currentItems.push({ num: `0${currentItems.length + 1}`, title: 'New Feature', description: 'Description' });
+                                      updateSectionData(sec.id, 'items', currentItems);
+                                    }}
+                                    className="bg-[#004B39] text-white border-none rounded-md px-2.5 py-1 text-[11px] font-bold cursor-pointer"
+                                  >
+                                    + Add Feature
+                                  </button>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                  {sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.map((item: any, iIdx: number) => (
+                                    <div key={iIdx} className="relative bg-slate-50 border border-slate-200 p-2.5 rounded-lg group">
+                                      <button
+                                        onClick={() => {
+                                          const currentItems = [...(sec.data?.items || [])];
+                                          currentItems.splice(iIdx, 1);
+                                          updateSectionData(sec.id, 'items', currentItems);
+                                        }}
+                                        className="absolute top-2 right-2 text-red-500 hover:bg-red-50 w-6 h-6 flex items-center justify-center rounded-md border-none cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                                      >
+                                        ✕
+                                      </button>
+                                      <div className="grid grid-cols-12 gap-2">
+                                        <div className="col-span-2">
+                                          <label className="block text-[10px] font-bold text-slate-600 mb-0.5">NUMBER</label>
+                                          <input
+                                            type="text"
+                                            value={item.num || ''}
+                                            onChange={(e) => {
+                                              const currentItems = [...(sec.data?.items || [])];
+                                              currentItems[iIdx].num = e.target.value;
+                                              updateSectionData(sec.id, 'items', currentItems);
+                                            }}
+                                            className="w-full text-[11px] p-1.5 border border-slate-200 rounded outline-none"
+                                          />
+                                        </div>
+                                        <div className="col-span-10">
+                                          <label className="block text-[10px] font-bold text-slate-600 mb-0.5">TITLE</label>
+                                          <input
+                                            type="text"
+                                            value={item.title || ''}
+                                            onChange={(e) => {
+                                              const currentItems = [...(sec.data?.items || [])];
+                                              currentItems[iIdx].title = e.target.value;
+                                              updateSectionData(sec.id, 'items', currentItems);
+                                            }}
+                                            className="w-full text-[11px] p-1.5 border border-slate-200 rounded outline-none"
+                                          />
+                                        </div>
+                                      </div>
+                                      <div className="mt-2">
+                                        <label className="block text-[10px] font-bold text-slate-600 mb-0.5">DESCRIPTION</label>
+                                        <input
+                                          type="text"
+                                          value={item.description || ''}
+                                          onChange={(e) => {
+                                            const currentItems = [...(sec.data?.items || [])];
+                                            currentItems[iIdx].description = e.target.value;
+                                            updateSectionData(sec.id, 'items', currentItems);
+                                          }}
+                                          className="w-full text-[11px] p-1.5 border border-slate-200 rounded outline-none"
+                                        />
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {sec.type === 'Travel Services' && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
+                                    Travel Services Grid
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
+                                      currentItems.push({ icon: 'star', title: 'New Service', description: 'Description', link: '#' });
+                                      updateSectionData(sec.id, 'items', currentItems);
+                                    }}
+                                    className="bg-[#004B39] text-white border-none rounded-md px-2.5 py-1 text-[11px] font-bold cursor-pointer"
+                                  >
+                                    + Add Service
+                                  </button>
+                                </div>
+                                <div className="flex flex-col gap-2">
+                                  {sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.map((item: any, iIdx: number) => (
+                                    <div key={iIdx} className="relative bg-slate-50 border border-slate-200 p-2.5 rounded-lg group">
+                                      <button
+                                        onClick={() => {
+                                          const currentItems = [...(sec.data?.items || [])];
+                                          currentItems.splice(iIdx, 1);
+                                          updateSectionData(sec.id, 'items', currentItems);
+                                        }}
+                                        className="absolute top-2 right-2 text-red-500 hover:bg-red-50 w-6 h-6 flex items-center justify-center rounded-md border-none cursor-pointer opacity-0 group-hover:opacity-100 transition-opacity"
+                                      >
+                                        ✕
+                                      </button>
+                                      <div className="grid grid-cols-12 gap-2">
+                                        <div className="col-span-3">
+                                          <label className="block text-[10px] font-bold text-slate-600 mb-0.5">ICON (LUCIDE)</label>
+                                          <input
+                                            type="text"
+                                            value={item.icon || ''}
+                                            onChange={(e) => {
+                                              const currentItems = [...(sec.data?.items || [])];
+                                              currentItems[iIdx].icon = e.target.value;
+                                              updateSectionData(sec.id, 'items', currentItems);
+                                            }}
+                                            className="w-full text-[11px] p-1.5 border border-slate-200 rounded outline-none"
+                                            placeholder="e.g. Star, Plane"
+                                          />
+                                        </div>
+                                        <div className="col-span-5">
+                                          <label className="block text-[10px] font-bold text-slate-600 mb-0.5">TITLE</label>
+                                          <input
+                                            type="text"
+                                            value={item.title || ''}
+                                            onChange={(e) => {
+                                              const currentItems = [...(sec.data?.items || [])];
+                                              currentItems[iIdx].title = e.target.value;
+                                              updateSectionData(sec.id, 'items', currentItems);
+                                            }}
+                                            className="w-full text-[11px] p-1.5 border border-slate-200 rounded outline-none"
+                                          />
+                                        </div>
+                                        <div className="col-span-4">
+                                          <label className="block text-[10px] font-bold text-slate-600 mb-0.5">LINK</label>
+                                          <input
+                                            type="text"
+                                            value={item.link || ''}
+                                            onChange={(e) => {
+                                              const currentItems = [...(sec.data?.items || [])];
+                                              currentItems[iIdx].link = e.target.value;
+                                              updateSectionData(sec.id, 'items', currentItems);
+                                            }}
+                                            className="w-full text-[11px] p-1.5 border border-slate-200 rounded outline-none"
+                                          />
+                                        </div>
+                                      </div>
+                                      <div className="mt-2">
+                                        <label className="block text-[10px] font-bold text-slate-600 mb-0.5">DESCRIPTION</label>
+                                        <input
+                                          type="text"
+                                          value={item.description || ''}
+                                          onChange={(e) => {
+                                            const currentItems = [...(sec.data?.items || [])];
+                                            currentItems[iIdx].description = e.target.value;
+                                            updateSectionData(sec.id, 'items', currentItems);
+                                          }}
+                                          className="w-full text-[11px] p-1.5 border border-slate-200 rounded outline-none"
+                                        />
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {(sec.type === 'Upcoming Umrah Packages' || sec.type === 'Umrah Packages') && (
                               <div className="bg-white border border-slate-200 rounded-xl p-3.5 flex flex-col gap-3 mt-1">
                                 <div className="flex justify-between items-center pb-2 border-b border-slate-200">
                                   <span className="text-xs font-extrabold text-[#004B39] uppercase">
-                                    🕋 EXCLUSIVE UPCOMING UMRAH PACKAGES EDITOR
+                                    🕋 Upcoming Umrah Packages EDITOR
                                   </span>
                                   <button
                                     onClick={() => {
@@ -1917,7 +2277,7 @@ function PageBuilderContent() {
                                               pkgs[pIdx] = { ...pkgs[pIdx], buttonUrl: e.target.value };
                                               updateSectionData(sec.id, 'items', pkgs);
                                             }}
-                                            placeholder="e.g. /umrah/packages or #contact"
+                                            placeholder="e.g. /umrah-packages or #contact"
                                             className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-900 bg-white font-mono"
                                           />
                                         </div>
@@ -2041,6 +2401,294 @@ function PageBuilderContent() {
                                     </div>
                                   </div>
                                 ))}
+                              </div>
+                            )}
+
+                            {sec.type === 'Sold Out Packages' && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
+                                <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                                  <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
+                                    🛑 SOLD OUT PACKAGES EDITOR
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      const currentItems = Array.isArray(sec.data?.items) ? [...sec.data.items] : [];
+                                      currentItems.push({
+                                        title: 'Hajj Package',
+                                        month: 'May · 2026',
+                                        price: '$18,995',
+                                        priceUnit: '/ Person',
+                                        badgeText: 'Sold Out',
+                                        btnText: 'Book Hajj 2027',
+                                        btnLink: '/contact',
+                                        btnIcon: 'Passport',
+                                        heroImage: 'https://images.unsplash.com/photo-1553755088-ef1973c7b4a1?auto=format&fit=crop&w=700&q=80',
+                                        includes: [
+                                          { text: 'Return Flights from Toronto', icon: 'PlaneTakeoff', iconColor: 'text-ink-soft' },
+                                          { text: 'Luxury Ground Transportation', icon: 'Bus', iconColor: 'text-ink-soft' },
+                                          { text: 'Free Ihram Kit', icon: 'Shirt', iconColor: 'text-ink-soft' },
+                                          { text: 'Registration & Visa Assistance', icon: 'FileText', iconColor: 'text-ink-soft' },
+                                          { text: 'Imam Lead Guide & Seminar', icon: 'BookOpen', iconColor: 'text-ink-soft' },
+                                          { text: '5 Star Hotels Makkah & Madinah', icon: 'Building2', iconColor: 'text-ink-soft' },
+                                        ]
+                                      });
+                                      updateSectionData(sec.id, 'items', currentItems);
+                                    }}
+                                    className="bg-[#004B39] text-white rounded-md px-2.5 py-1 text-xs font-bold cursor-pointer"
+                                  >
+                                    + Add Package
+                                  </button>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-2">
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-500 mb-0.5">SECTION EYEBROW</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.eyebrow || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'eyebrow', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-500 mb-0.5">SECTION TITLE</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.title || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'title', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-500 mb-0.5">SECTION DESCRIPTION</label>
+                                    <textarea
+                                      rows={2}
+                                      value={sec.data?.description || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'description', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-sans text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                </div>
+                                {(Array.isArray(sec.data?.items) ? sec.data.items : []).map((pkg: any, pIdx: number) => {
+                                  const getActiveItems = () => Array.isArray(sec.data?.items) ? [...sec.data.items] : [];
+                                  return (
+                                    <div key={pIdx} className="bg-slate-50 border border-slate-300 rounded-lg p-3 flex flex-col gap-2.5">
+                                      <div className="flex justify-between items-center">
+                                        <span className="text-xs font-extrabold text-slate-700">PACKAGE CARD #{pIdx + 1}: {pkg.title || 'Untitled'}</span>
+                                        <button
+                                          onClick={() => {
+                                            const pkgs = getActiveItems();
+                                            pkgs.splice(pIdx, 1);
+                                            updateSectionData(sec.id, 'items', pkgs);
+                                          }}
+                                          className="bg-red-100 text-red-600 rounded px-2 py-1 text-xs font-bold cursor-pointer hover:bg-red-200 transition-colors"
+                                        >
+                                          <Trash2 className="w-3.5 h-3.5 inline mr-1" /> Remove Card
+                                        </button>
+                                      </div>
+                                      <div className="grid grid-cols-1 md:grid-cols-4 gap-2">
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">MONTH & YEAR BADGE</label>
+                                          <input
+                                            type="text"
+                                            value={pkg.month || ''}
+                                            onChange={(e) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], month: e.target.value };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                                          />
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">PACKAGE TITLE</label>
+                                          <input
+                                            type="text"
+                                            value={pkg.title || ''}
+                                            onChange={(e) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], title: e.target.value };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                                          />
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">PRICE (CAD)</label>
+                                          <input
+                                            type="text"
+                                            value={pkg.price || ''}
+                                            onChange={(e) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], price: e.target.value };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-bold text-slate-900 bg-white"
+                                          />
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">PRICE UNIT</label>
+                                          <input
+                                            type="text"
+                                            value={pkg.priceUnit || ''}
+                                            onChange={(e) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], priceUnit: e.target.value };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-900 bg-white"
+                                          />
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">BADGE TEXT</label>
+                                          <input
+                                            type="text"
+                                            value={pkg.badgeText || ''}
+                                            onChange={(e) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], badgeText: e.target.value };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-900 bg-white"
+                                          />
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">BUTTON TEXT</label>
+                                          <input
+                                            type="text"
+                                            value={pkg.btnText || ''}
+                                            onChange={(e) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], btnText: e.target.value };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-900 bg-white"
+                                          />
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">BUTTON LINK</label>
+                                          <input
+                                            type="text"
+                                            value={pkg.btnLink || ''}
+                                            onChange={(e) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], btnLink: e.target.value };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-900 bg-white"
+                                          />
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">BUTTON ICON</label>
+                                          <input
+                                            type="text"
+                                            value={pkg.btnIcon || ''}
+                                            onChange={(e) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], btnIcon: e.target.value };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-900 bg-white"
+                                          />
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">IMAGE URL</label>
+                                          <div className="flex items-center gap-2">
+                                            {pkg.heroImage && (
+                                              <div className="w-8 h-8 rounded shrink-0 overflow-hidden border border-slate-300 shadow-2xs">
+                                                <img src={pkg.heroImage} alt="Preview" className="w-full h-full object-cover" />
+                                              </div>
+                                            )}
+                                            <label className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 bg-white text-xs font-bold text-[#004B39] cursor-pointer hover:bg-slate-50 flex items-center gap-1.5 justify-center shadow-2xs">
+                                              <Upload className="w-4 h-4" /> Upload
+                                              <input
+                                                type="file"
+                                                accept="image/*"
+                                                className="hidden"
+                                                onChange={async (e) => {
+                                                  const file = e.target.files?.[0];
+                                                  if (file) {
+                                                    const url = await uploadFileToFtp(file, 'hajj');
+                                                    if (url) {
+                                                      const pkgs = getActiveItems();
+                                                      pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
+                                                      updateSectionData(sec.id, 'items', pkgs);
+                                                    }
+                                                  }
+                                                }}
+                                              />
+                                            </label>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div className="mt-2 border-t border-slate-200 pt-2">
+                                        <div className="flex justify-between items-center mb-2">
+                                          <label className="block text-[10px] font-bold text-slate-500">INCLUDED FEATURES</label>
+                                          <button
+                                            onClick={() => {
+                                              const pkgs = getActiveItems();
+                                              if (!pkgs[pIdx].includes) pkgs[pIdx].includes = [];
+                                              pkgs[pIdx].includes.push({ text: 'New Feature', icon: 'Check', iconColor: 'text-ink-soft' });
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            className="text-[10px] font-bold text-[#004B39] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200"
+                                          >
+                                            + Add Feature
+                                          </button>
+                                        </div>
+                                        <div className="flex flex-col gap-1.5">
+                                          {(pkg.includes || []).map((feat: any, fIdx: number) => (
+                                            <div key={fIdx} className="grid grid-cols-[1fr_100px_100px_auto] gap-2 items-center">
+                                              <input
+                                                type="text"
+                                                value={feat.text || ''}
+                                                placeholder="Feature Text"
+                                                onChange={(e) => {
+                                                  const pkgs = getActiveItems();
+                                                  pkgs[pIdx].includes[fIdx] = { ...feat, text: e.target.value };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2.5 py-1.5 rounded text-xs font-semibold text-slate-900 bg-white border border-slate-300 outline-none focus:border-[#004B39]"
+                                              />
+                                              <input
+                                                type="text"
+                                                value={feat.icon || ''}
+                                                placeholder="Lucide Icon"
+                                                onChange={(e) => {
+                                                  const pkgs = getActiveItems();
+                                                  pkgs[pIdx].includes[fIdx] = { ...feat, icon: e.target.value };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2.5 py-1.5 rounded text-xs font-semibold text-slate-900 bg-white border border-slate-300 outline-none focus:border-[#004B39]"
+                                              />
+                                              <input
+                                                type="text"
+                                                value={feat.iconColor || ''}
+                                                placeholder="Color Class"
+                                                onChange={(e) => {
+                                                  const pkgs = getActiveItems();
+                                                  pkgs[pIdx].includes[fIdx] = { ...feat, iconColor: e.target.value };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2.5 py-1.5 rounded text-xs font-semibold text-slate-900 bg-white border border-slate-300 outline-none focus:border-[#004B39]"
+                                              />
+                                              <button
+                                                onClick={() => {
+                                                  const pkgs = getActiveItems();
+                                                  pkgs[pIdx].includes.splice(fIdx, 1);
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="text-red-500 hover:text-red-700"
+                                              >
+                                                <Trash2 className="w-3.5 h-3.5" />
+                                              </button>
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  );
+                                })}
                               </div>
                             )}
 
@@ -2274,7 +2922,7 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {(sec.type === 'Visa Solutions Grid' || sec.type === 'Visa Cards') && (
+                            {(sec.type === 'Visa Solutions' || sec.type === 'Visa Cards') && (
                               <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
                                 <div className="flex justify-between items-center">
                                   <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
@@ -2641,7 +3289,7 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {(sec.type === 'Airlines Marquee' || sec.type === 'Partners Marquee' || sec.type === 'Logo Carousel' || sec.type === 'Airlines Logo Carousel') && (
+                            {(sec.type === 'Airlines' || sec.type === 'Partners Marquee' || sec.type === 'Logo Carousel' || sec.type === 'Airlines Logo Carousel') && (
                               <div className="flex flex-col bg-white">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
                                   ✈️ Airlines Logo Carousel & Partners Manager
@@ -3280,10 +3928,10 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {(sec.type === 'Contact Form') && (
+                            {(sec.type === 'Contact') && (
                               <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
-                                  ✉️ Interactive Contact Form Manager
+                                  ✉️ Interactive Contact Manager
                                 </span>
                                 <div className="grid grid-cols-2 gap-8">
                                   <div>
@@ -3383,7 +4031,7 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {(sec.type === 'Hajj Packages Grid' || sec.type === 'Hajj Cards') && (
+                            {(sec.type === 'Hajj Packages' || sec.type === 'Hajj Cards') && (
                               <div className="flex flex-col bg-white">
                                 <div className="flex justify-between items-center">
                                   <span className="text-xs font-bold text-slate-800">
@@ -4075,6 +4723,286 @@ function PageBuilderContent() {
                                 ))}
                               </div>
                             )}
+
+                            {(sec.type === 'Contact') && (
+                              <div className="flex flex-col bg-white gap-4">
+                                <div className="flex justify-between items-center mb-2">
+                                  <span className="text-xs font-bold text-slate-800">
+                                    📞 Contact MANAGER
+                                  </span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">TOLL FREE NUMBER</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.tollFree || '+1 800-844-5464'}
+                                      onChange={(e) => updateSectionData(sec.id, 'tollFree', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">LOCAL NUMBER 1</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.localNum1 || '+1 905-624-8555'}
+                                      onChange={(e) => updateSectionData(sec.id, 'localNum1', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">LOCAL NUMBER 2</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.localNum2 || '+1 905-624-8344'}
+                                      onChange={(e) => updateSectionData(sec.id, 'localNum2', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">WHATSAPP RESERVATION</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.waReservation || '+1 905-624-8344'}
+                                      onChange={(e) => updateSectionData(sec.id, 'waReservation', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">WHATSAPP VISA</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.waVisa || '+1 647-982-8555'}
+                                      onChange={(e) => updateSectionData(sec.id, 'waVisa', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">GENERAL EMAIL</label>
+                                    <input
+                                      type="email"
+                                      value={sec.data?.email || 'info@kingtravelcan.com'}
+                                      onChange={(e) => updateSectionData(sec.id, 'email', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">OFFICE HOURS</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.officeHours || 'Mon–Sat, 9am – 7pm EST'}
+                                      onChange={(e) => updateSectionData(sec.id, 'officeHours', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    />
+                                  </div>
+                                </div>
+                                <div className="mt-2">
+                                  <label className="block text-[9px] font-bold text-slate-500 mb-0.5">HEAD OFFICE ADDRESS (HTML ALLOWED)</label>
+                                  <textarea
+                                    value={sec.data?.headOffice || '1325 Eglinton Ave E Ste 218,<br />Mississauga, ON L4W 4L9, Canada'}
+                                    onChange={(e) => updateSectionData(sec.id, 'headOffice', e.target.value)}
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    rows={2}
+                                  />
+                                </div>
+                                <div className="mt-2">
+                                  <label className="block text-[9px] font-bold text-slate-500 mb-0.5">BRANCH OFFICE ADDRESS (HTML ALLOWED)</label>
+                                  <textarea
+                                    value={sec.data?.branchOffice || '22 Ontario St S,<br />Milton, ON L9T 2M6, Canada'}
+                                    onChange={(e) => updateSectionData(sec.id, 'branchOffice', e.target.value)}
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    rows={2}
+                                  />
+                                </div>
+                              </div>
+                            )}
+
+                            {(sec.type === 'Testimonials') && (
+                              <div className="flex flex-col bg-white">
+                                <div className="flex justify-between items-center mb-4">
+                                  <span className="text-xs font-bold text-slate-800">
+                                    ⭐ TESTIMONIALS MANAGER
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      const currentReviews = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
+                                      currentReviews.push({
+                                        id: Date.now(),
+                                        name: "New Reviewer",
+                                        time: "Just now",
+                                        avatar: "/img/round-logo.png",
+                                        text: "Enter review text here..."
+                                      });
+                                      updateSectionData(sec.id, 'items', currentReviews);
+                                    }}
+                                    className="font-extrabold cursor-pointer"
+                                  >
+                                    + Add Review
+                                  </button>
+                                </div>
+
+                                <div className="mb-6">
+                                  <label className="block text-[9px] font-bold text-slate-500 mb-0.5">AUTOPLAY SPEED (MILLISECONDS)</label>
+                                  <input
+                                    type="number"
+                                    value={sec.data?.autoplaySpeed || 3500}
+                                    onChange={(e) => updateSectionData(sec.id, 'autoplaySpeed', e.target.value)}
+                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    min="1000"
+                                    step="500"
+                                  />
+                                </div>
+
+                                {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
+                                  { id: 1, name: "Sample Name", time: "3 months ago", avatar: "/img/tamim.png", text: "Amazing experience..." }
+                                ]).map((review: any, rIdx: number) => (
+                                  <div key={review.id || rIdx} className="bg-slate-50 border border-slate-300 rounded-lg p-2.5 flex flex-col gap-2 relative mt-4">
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-[10px] font-extrabold text-slate-500">REVIEW #{rIdx + 1}</span>
+                                      <button
+                                        onClick={() => {
+                                          const reviews = [...(sec.data?.items || [])];
+                                          reviews.splice(rIdx, 1);
+                                          updateSectionData(sec.id, 'items', reviews);
+                                        }}
+                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        title="Remove Review"
+                                      >
+                                        <Trash2 className="w-3 h-3" /> Remove
+                                      </button>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div>
+                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">REVIEWER NAME</label>
+                                        <input
+                                          type="text"
+                                          value={review.name || ''}
+                                          onChange={(e) => {
+                                            const reviews = [...(sec.data?.items || [])];
+                                            reviews[rIdx] = { ...reviews[rIdx], name: e.target.value };
+                                            updateSectionData(sec.id, 'items', reviews);
+                                          }}
+                                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">TIME AGO</label>
+                                        <input
+                                          type="text"
+                                          value={review.time || ''}
+                                          onChange={(e) => {
+                                            const reviews = [...(sec.data?.items || [])];
+                                            reviews[rIdx] = { ...reviews[rIdx], time: e.target.value };
+                                            updateSectionData(sec.id, 'items', reviews);
+                                          }}
+                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className="mt-2">
+                                      <label className="block text-[9px] font-bold text-slate-500 mb-0.5">AVATAR URL</label>
+                                      <input
+                                        type="text"
+                                        value={review.avatar || ''}
+                                        onChange={(e) => {
+                                          const reviews = [...(sec.data?.items || [])];
+                                          reviews[rIdx] = { ...reviews[rIdx], avatar: e.target.value };
+                                          updateSectionData(sec.id, 'items', reviews);
+                                        }}
+                                        className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                      />
+                                    </div>
+                                    <div className="mt-2">
+                                      <label className="block text-[9px] font-bold text-slate-500 mb-0.5">REVIEW TEXT</label>
+                                      <textarea
+                                        rows={3}
+                                        value={review.text || ''}
+                                        onChange={(e) => {
+                                          const reviews = [...(sec.data?.items || [])];
+                                          reviews[rIdx] = { ...reviews[rIdx], text: e.target.value };
+                                          updateSectionData(sec.id, 'items', reviews);
+                                        }}
+                                        className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+
+                            {(sec.type === 'Airlines') && (
+                              <div className="flex flex-col bg-white">
+                                <div className="flex justify-between items-center">
+                                  <span className="text-xs font-bold text-slate-800">
+                                    ✈️ Airlines MANAGER
+                                  </span>
+                                  <button
+                                    onClick={() => {
+                                      const currentLogos = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
+                                      currentLogos.push({
+                                        image: "https://via.placeholder.com/150",
+                                        alt: "Airline Name"
+                                      });
+                                      updateSectionData(sec.id, 'items', currentLogos);
+                                    }}
+                                    className="font-extrabold cursor-pointer"
+                                  >
+                                    + Add Airline Logo
+                                  </button>
+                                </div>
+
+                                {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
+                                  { image: "/img/a-1.png", alt: "Saudi Airlines" },
+                                  { image: "/img/a-2.png", alt: "Emirates" }
+                                ]).map((logo: any, lIdx: number) => (
+                                  <div key={lIdx} className="bg-slate-50 border border-slate-300 rounded-lg p-2.5 flex flex-col gap-2 relative mt-4">
+                                    <div className="flex justify-between items-center">
+                                      <span className="text-[10px] font-extrabold text-slate-500">LOGO #{lIdx + 1}</span>
+                                      <button
+                                        onClick={() => {
+                                          const logos = [...sec.data?.items];
+                                          logos.splice(lIdx, 1);
+                                          updateSectionData(sec.id, 'items', logos);
+                                        }}
+                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        title="Remove Logo"
+                                      >
+                                        <Trash2 className="w-3 h-3" /> Remove
+                                      </button>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                      <div>
+                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">IMAGE URL</label>
+                                        <input
+                                          type="text"
+                                          value={logo.image || ''}
+                                          onChange={(e) => {
+                                            const logos = [...sec.data?.items];
+                                            logos[lIdx] = { ...logos[lIdx], image: e.target.value };
+                                            updateSectionData(sec.id, 'items', logos);
+                                          }}
+                                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                        />
+                                      </div>
+                                      <div>
+                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">ALT TEXT</label>
+                                        <input
+                                          type="text"
+                                          value={logo.alt || ''}
+                                          onChange={(e) => {
+                                            const logos = [...sec.data?.items];
+                                            logos[lIdx] = { ...logos[lIdx], alt: e.target.value };
+                                            updateSectionData(sec.id, 'items', logos);
+                                          }}
+                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                        />
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
@@ -4096,14 +5024,22 @@ function PageBuilderContent() {
               )}
 
               {activeTab === 'seo' && (
-                <div className="flex flex-col gap-16">
-                  <div>
-                    <label className="block font-extrabold text-slate-500">META TITLE</label>
-                    <input type="text" value={metaTitle || ''} onChange={(e) => setMetaTitle(e.target.value)} className="w-full" />
+                <div className="flex flex-col gap-10">
+                  <div className="flex flex-col gap-6">
+                    <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2">Meta Information</h3>
+                    <div>
+                      <label className="block font-extrabold text-slate-500 text-xs mb-1">META TITLE</label>
+                      <input type="text" value={metaTitle || ''} onChange={(e) => setMetaTitle(e.target.value)} className="w-full p-2 border border-slate-200 rounded-lg outline-none focus:border-[#004B39]" />
+                    </div>
+                    <div>
+                      <label className="block font-extrabold text-slate-500 text-xs mb-1">META DESCRIPTION</label>
+                      <textarea rows={3} value={metaDescription || ''} onChange={(e) => setMetaDescription(e.target.value)} className="w-full p-2 border border-slate-200 rounded-lg outline-none focus:border-[#004B39]" />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block font-extrabold text-slate-500">META DESCRIPTION</label>
-                    <textarea rows={3} value={metaDescription || ''} onChange={(e) => setMetaDescription(e.target.value)} className="w-full" />
+
+                  <div className="flex flex-col gap-6">
+                    <h3 className="text-lg font-bold text-slate-800 border-b border-slate-200 pb-2">Sitemap & Indexing Settings</h3>
+                    <SeoSettingsForm data={seoSettings} onChange={setSeoSettings} />
                   </div>
                 </div>
               )}

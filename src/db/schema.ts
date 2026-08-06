@@ -7,6 +7,7 @@ import {
   timestamp,
   mysqlEnum,
   decimal,
+  json,
 } from 'drizzle-orm/mysql-core';
 
 // 1. Users & Administrator Accounts
@@ -57,6 +58,7 @@ export const packages = mysqlTable('packages', {
   isFeatured: boolean('is_featured').notNull().default(false),
   inclusions: text('inclusions'),
   exclusions: text('exclusions'),
+  seoSettings: json('seo_settings'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
 });
@@ -106,6 +108,7 @@ export const visaServices = mysqlTable('visa_services', {
   imageUrl: text('image_url'),
   isPublished: boolean('is_published').notNull().default(true),
   displayOrder: int('display_order').default(0),
+  seoSettings: json('seo_settings'),
   createdAt: timestamp('created_at').defaultNow(),
 });
 
@@ -244,6 +247,7 @@ export const blogPosts = mysqlTable('blog_posts', {
   authorName: varchar('author_name', { length: 100 }).default('King Travel Editorial'),
   isPublished: boolean('is_published').notNull().default(true),
   publishedAt: timestamp('published_at'),
+  seoSettings: json('seo_settings'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
 });
@@ -273,7 +277,29 @@ export const sitePages = mysqlTable('site_pages', {
   richText: text('rich_text'),
   metaTitle: varchar('meta_title', { length: 255 }),
   metaDescription: text('meta_description'),
+  seoSettings: json('seo_settings'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
 });
 
+// 11. Sitemap Configs
+export const sitemapConfigs = mysqlTable('sitemap_configs', {
+  id: int('id').autoincrement().primaryKey(),
+  contentType: varchar('content_type', { length: 128 }).notNull().unique(), // 'global', 'sitePages', 'packages', etc.
+  includeInSitemap: boolean('include_in_sitemap').default(true),
+  changeFrequency: varchar('change_frequency', { length: 50 }).default('monthly'),
+  priority: decimal('priority', { precision: 3, scale: 1 }).default('0.5'),
+  includeImages: boolean('include_images').default(true),
+  includeLastModified: boolean('include_last_modified').default(true),
+  updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),
+});
+
+// 12. Sitemap Logs
+export const sitemapLogs = mysqlTable('sitemap_logs', {
+  id: int('id').autoincrement().primaryKey(),
+  action: varchar('action', { length: 50 }).notNull(), // 'generate', 'submit'
+  status: varchar('status', { length: 50 }).notNull(), // 'success', 'error', 'warning'
+  details: json('details'), // JSON holding file size, total urls, warnings, errors
+  triggeredBy: varchar('triggered_by', { length: 128 }).default('system'),
+  createdAt: timestamp('created_at').defaultNow(),
+});

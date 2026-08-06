@@ -19,8 +19,8 @@ function safeJsonParse<T>(jsonStr: any, fallback: T): T {
 const INITIAL_FRONTEND_PAGES = [
   { title: 'Home Page', slug: '/' },
   { title: 'About Us', slug: '/about' },
-  { title: 'Umrah Packages', slug: '/umrah/packages' },
-  { title: 'Hajj Packages', slug: '/hajj/packages' },
+  { title: 'Umrah Packages', slug: '/umrah-packages' },
+  { title: 'Hajj Packages', slug: '/hajj-packages' },
   { title: 'Saudi Visa', slug: '/saudi-visa' },
   { title: 'Airlines & Flights', slug: '/airlines' },
   { title: 'Contact Us', slug: '/contact' },
@@ -143,8 +143,9 @@ export async function savePageAction(formData: FormData) {
   const bannerBgImage = formData.get('bannerBgImage') ? String(formData.get('bannerBgImage')) : null;
   const bannerPosition = formData.get('bannerPosition') ? String(formData.get('bannerPosition')) : 'center center';
   const bannerSize = formData.get('bannerSize') ? String(formData.get('bannerSize')) : 'cover';
-  const bannerTitle = formData.get('bannerTitle') ? String(formData.get('bannerTitle')) : null;
-  const bannerDescription = formData.get('bannerDescription') ? String(formData.get('bannerDescription')) : null;
+  const bannerTitle = formData.get('bannerTitle') as string;
+  const bannerDescription = formData.get('bannerDescription') as string;
+  const seoSettings = formData.get('seoSettings') as string;
 
   try {
     let savedId = id;
@@ -164,6 +165,7 @@ export async function savePageAction(formData: FormData) {
         richText: richText || null,
         metaTitle: metaTitle || null,
         metaDescription: metaDescription || null,
+        seoSettings: seoSettings || null,
         updatedAt: new Date(),
       }).where(eq(sitePages.id, id));
     } else {
@@ -182,6 +184,7 @@ export async function savePageAction(formData: FormData) {
         richText: richText || null,
         metaTitle: metaTitle || null,
         metaDescription: metaDescription || null,
+        seoSettings: seoSettings || null,
       }).$returningId();
       if (inserted && inserted.length > 0) {
         savedId = inserted[0].id;
@@ -206,6 +209,7 @@ export async function savePageAction(formData: FormData) {
       richText,
       metaTitle,
       metaDescription,
+      seoSettings,
       updatedAt: new Date(),
     };
 
@@ -278,8 +282,8 @@ export async function getDefaultNavItems() {
         { id: '2-1', label: 'Licenses', url: '/about#licenses', level: 2 },
       ],
     },
-    { id: '2', label: 'Umrah Packages', url: '/umrah/packages', level: 1, children: [] },
-    { id: '3', label: 'Hajj Packages', url: '/hajj/packages', level: 1, children: [] },
+    { id: '2', label: 'Umrah Packages', url: '/umrah-packages', level: 1, children: [] },
+    { id: '3', label: 'Hajj Packages', url: '/hajj-packages', level: 1, children: [] },
     { id: '4', label: 'Saudi Visa', url: '/saudi-visa', level: 1, children: [] },
     { id: '5', label: 'Flights', url: '/airlines', level: 1, children: [] },
     { id: '6', label: 'Contact', url: '/contact', level: 1, children: [] },
@@ -333,15 +337,15 @@ export async function getDefaultFooterData() {
     ],
     servicesTitle: 'SERVICES',
     servicesLinks: [
-      { label: 'Umrah Packages', url: '/umrah/packages' },
-      { label: 'Hajj Packages', url: '/hajj/packages' },
+      { label: 'Umrah Packages', url: '/umrah-packages' },
+      { label: 'Hajj Packages', url: '/hajj-packages' },
       { label: 'Airline Tickets', url: '/airlines' },
       { label: 'Saudi Visa Services', url: '/saudi-visa' },
     ],
     sitemapTitle: 'SITEMAP',
     sitemapLinks: [
       { label: 'About Us', url: '/about' },
-      { label: 'Packages', url: '/umrah/packages' },
+      { label: 'Packages', url: '/umrah-packages' },
       { label: 'Contact', url: '/contact' },
       { label: 'Terms of Use', url: '#' },
     ],

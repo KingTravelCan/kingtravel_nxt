@@ -89,7 +89,7 @@ export default function HajjPackagesPage() {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
   useEffect(() => {
-    getPageBySlug("/hajj/packages").then((p) => {
+    getPageBySlug("/hajj-packages").then((p) => {
       if (p) setPageData(p);
     });
   }, []);

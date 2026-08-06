@@ -234,7 +234,7 @@ export async function getAllPackages() {
             durationDays: p.durationDays,
             isFeatured: p.isFeatured,
           });
-        } catch (seedErr) {}
+        } catch (seedErr) { }
       }
       list = await db.select().from(packages).orderBy(desc(packages.createdAt));
     }
@@ -306,8 +306,8 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
 
     revalidatePath('/admin/packages');
     revalidatePath('/hajj-packages');
-    revalidatePath('/umrah/packages');
-    revalidatePath('/hajj/packages');
+    revalidatePath('/umrah-packages');
+    revalidatePath('/hajj-packages');
     revalidatePath('/');
     return { success: true };
   } catch (error: any) {
@@ -350,8 +350,8 @@ export async function updatePackageAction(
 
     revalidatePath('/admin/packages');
     revalidatePath('/hajj-packages');
-    revalidatePath('/umrah/packages');
-    revalidatePath('/hajj/packages');
+    revalidatePath('/umrah-packages');
+    revalidatePath('/hajj-packages');
     revalidatePath('/');
     return { success: true };
   } catch (error: any) {
