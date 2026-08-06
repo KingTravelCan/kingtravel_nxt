@@ -46,7 +46,7 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-[1000] w-full bg-white backdrop-blur-md shadow-[0_2px_24px_-12px_rgba(19,39,35,0.18)]">
-      <div className="w-full max-w-[1400px] mx-auto px-[20px]">
+      <div className="w-full max-w-[1400px] mx-auto">
         <div className="flex items-center justify-between min-h-[80px] py-[10px]">
           {/* Logo */}
           <div className="block max-w-[250px] max-lg:max-w-[220px] max-sm:max-w-[180px] w-full">

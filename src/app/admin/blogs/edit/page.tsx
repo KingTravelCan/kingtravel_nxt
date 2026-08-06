@@ -9,6 +9,7 @@ import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 import GlassNotificationModal from '@/components/ui/GlassNotificationModal';
 import TiptapEditor from '@/components/admin/TiptapEditor';
+import ImageUploadWidget from '@/components/admin/ImageUploadWidget';
 import { Save, Upload, ArrowLeft, Sliders, Eye } from 'lucide-react';
 
 const CATEGORIES = [
@@ -231,36 +232,11 @@ function BlogEditorInner() {
             {/* Thumbnail */}
             <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-xs">
               <h3 className="text-xs font-extrabold text-slate-600 uppercase tracking-wider mb-3">🖼 Featured Thumbnail</h3>
-              {form.featuredImage ? (
-                <div className="relative rounded-xl overflow-hidden border border-slate-200 mb-3 group">
-                  <img src={form.featuredImage} alt="thumbnail" className="w-full h-40 object-cover" />
-                  <button
-                    type="button"
-                    onClick={() => setForm((p) => ({ ...p, featuredImage: '' }))}
-                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 text-xs flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity border-none cursor-pointer"
-                  >×</button>
-                </div>
-              ) : (
-                <div className="w-full h-32 rounded-xl bg-gradient-to-br from-slate-100 to-emerald-50 border-2 border-dashed border-slate-200 flex items-center justify-center mb-3">
-                  <span className="text-xs text-slate-400">No thumbnail set</span>
-                </div>
-              )}
-              <div className="flex gap-2">
-                <label className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl bg-[#004B39] text-white text-xs font-bold cursor-pointer hover:bg-[#00382B] transition-colors">
-                  <Upload className="w-3.5 h-3.5" />
-                  {thumbUploading ? 'Uploading...' : 'Upload Image'}
-                  <input type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleThumbUpload(f); }} />
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  type="text"
-                  value={form.featuredImage}
-                  onChange={(e) => setForm((p) => ({ ...p, featuredImage: e.target.value }))}
-                  placeholder="Or paste image URL..."
-                  className="w-full px-3 py-2 rounded-xl border border-slate-200 text-[11px] font-mono outline-none focus:border-[#004B39]"
-                />
-              </div>
+              <ImageUploadWidget
+                value={form.featuredImage || ''}
+                onChange={(url) => setForm((p) => ({ ...p, featuredImage: url }))}
+                subfolder="blogs"
+              />
             </div>
 
             {/* Publish Settings */}

@@ -28,50 +28,7 @@ export async function slugifyBlogTitle(title: string): Promise<string> {
     .replace(/-+/g, '-');
 }
 
-const INITIAL_BLOG_POSTS = [
-  {
-    id: 1,
-    title: 'Ultimate Guide to Umrah 2026',
-    slug: 'ultimate-guide-to-umrah-2026',
-    excerpt: 'Everything Canadian pilgrims need to know about preparing for Umrah in 2026 — from visa requirements to hotel selection near the Haram.',
-    content: '<p>Planning your Umrah journey from Canada requires careful preparation, clear understanding of visa protocols, and selecting accommodations that provide ease during worship. In this comprehensive guide, we walk you through step-by-step procedures for Canadian citizens and residents.</p><h3>1. Visa Requirements</h3><p>Canadian passport holders can obtain an eVisa or Visa-on-Arrival upon landing at King Abdulaziz International Airport in Jeddah or Prince Mohammad bin Abdulaziz Airport in Madinah.</p><h3>2. Choosing the Right Package</h3><p>Selecting 5-star accommodations within walking distance of the Haram ensures minimal transit stress, especially for elderly family members.</p>',
-    featuredImage: 'https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg',
-    category: 'Umrah Guide',
-    authorName: 'King Travel Editorial',
-    isPublished: true,
-    publishedAt: new Date('2026-08-04'),
-    createdAt: new Date('2026-08-04'),
-    updatedAt: new Date('2026-08-04'),
-  },
-  {
-    id: 2,
-    title: 'Essential Hajj Preparation Checklist',
-    slug: 'essential-hajj-preparation-checklist',
-    excerpt: 'A complete physical, spiritual, and logistical preparation guide for pilgrims embarking on Hajj from Canada.',
-    content: '<p>Preparing for Hajj requires spiritual readiness, physical stamina, and complete logistical clarity. Here is our essential checklist curated for Canadian pilgrims.</p><h3>1. Spiritual & Mental Preparation</h3><p>Begin learning the rites of Hajj months in advance. Practice daily prayers and maintain a heart centered on devotion and patience.</p><h3>2. Packing Essentials</h3><p>Ensure you pack Ihram garments, comfortable walking shoes for Mina and Arafat, essential medications, and Canadian travel documentation.</p>',
-    featuredImage: 'https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80',
-    category: 'Hajj Tips',
-    authorName: 'King Travel Editorial',
-    isPublished: true,
-    publishedAt: new Date('2026-08-02'),
-    createdAt: new Date('2026-08-02'),
-    updatedAt: new Date('2026-08-02'),
-  },
-  {
-    id: 3,
-    title: 'Saudi Visa Requirements for Canadian Pilgrims',
-    slug: 'saudi-visa-requirements-for-canadian-pilgrims',
-    excerpt: 'Fast, reliable guide explaining how Canadian passport holders can secure tourist eVisas and pilgrimage visas for Saudi Arabia.',
-    content: '<p>Navigating Saudi Arabian visa regulations has become significantly simpler for Canadian travelers. Here is what you need to know before booking your flight.</p><h3>1. Multiple-Entry Tourist eVisa</h3><p>The 1-year multiple-entry Tourist eVisa permits Canadian travelers to perform Umrah throughout the year (excluding the official Hajj season).</p>',
-    featuredImage: 'https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?auto=format&fit=crop&w=800&q=80',
-    category: 'Saudi Visa',
-    authorName: 'King Travel Editorial',
-    isPublished: true,
-    publishedAt: new Date('2026-07-28'),
-    createdAt: new Date('2026-07-28'),
-    updatedAt: new Date('2026-07-28'),
-  },
-];
+const INITIAL_BLOG_POSTS: any[] = [];
 
 INITIAL_BLOG_POSTS.forEach((b) => { blogMemoryCache[b.id] = b; });
 
@@ -126,10 +83,10 @@ export async function getBlogBySlug(slug: string) {
       return rows[0];
     }
     // Fallback to cache if DB returns no rows but it was saved in memory
-    return Object.values(blogMemoryCache).find((b: any) => b.slug === slug) ?? null;
+    return [].find((b: any) => b.slug === slug) ?? null;
   } catch (err) {
     console.error('getBlogBySlug DB error, checking cache:', err);
-    return Object.values(blogMemoryCache).find((b: any) => b.slug === slug) ?? null;
+    return [].find((b: any) => b.slug === slug) ?? null;
   }
 }
 
@@ -313,8 +270,6 @@ export async function getRelatedBlogs(excludeSlug: string, limit = 6) {
     return rows.filter((b) => b.slug !== excludeSlug).slice(0, limit);
   } catch (err) {
     console.error('getRelatedBlogs DB error:', err);
-    return Object.values(blogMemoryCache)
-      .filter((b) => b.slug !== excludeSlug && b.isPublished)
-      .slice(0, limit);
+    return [];
   }
 }

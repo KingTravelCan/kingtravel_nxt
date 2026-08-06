@@ -14,6 +14,7 @@ import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 import TiptapEditor from '@/components/admin/TiptapEditor';
 import SeoSettingsForm, { SeoSettings } from '@/components/admin/SeoSettingsForm';
+import ImageUploadWidget from '@/components/admin/ImageUploadWidget';
 
 type SectionMeta = {
   type: string;
@@ -1577,44 +1578,11 @@ function PageBuilderContent() {
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                   <div>
                                     <label className="block text-[10px] font-bold text-slate-600 mb-1">IMAGE THUMBNAIL UPLOADER</label>
-                                    <div className="flex flex-col gap-2">
-                                      {(sec.data?.image || sec.data?.thumbnail) && (
-                                        <div className="relative w-full h-24 rounded-lg overflow-hidden border border-slate-200 bg-slate-50">
-                                          <img src={sec.data?.image || sec.data?.thumbnail} alt="Thumbnail Preview" className="w-full h-full object-cover" />
-                                          <button
-                                            type="button"
-                                            onClick={() => updateSectionData(sec.id, 'image', '')}
-                                            className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-[10px] flex items-center justify-center border-none cursor-pointer shadow-xs"
-                                            title="Remove Image"
-                                          >
-                                            ✕
-                                          </button>
-                                        </div>
-                                      )}
-                                      <label className="flex items-center justify-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-[#004B39] text-xs font-bold cursor-pointer hover:bg-emerald-100 transition-colors">
-                                        <Upload className="w-3.5 h-3.5" />
-                                        <span>{(sec.data?.image || sec.data?.thumbnail) ? 'Change Thumbnail Image' : 'Upload Thumbnail Image'}</span>
-                                        <input
-                                          type="file"
-                                          accept="image/*"
-                                          className="hidden"
-                                          onChange={async (e) => {
-                                            const file = e.target.files?.[0];
-                                            if (file) {
-                                              const url = await uploadFileToFtp(file, 'blogs');
-                                              if (url) updateSectionData(sec.id, 'image', url);
-                                            }
-                                          }}
-                                        />
-                                      </label>
-                                      <input
-                                        type="text"
-                                        value={sec.data?.image || sec.data?.thumbnail || ''}
-                                        onChange={(e) => updateSectionData(sec.id, 'image', e.target.value)}
-                                        placeholder="Or paste image URL..."
-                                        className="w-full px-2 py-1 rounded-md border border-slate-300 text-[11px] font-mono text-slate-800 bg-white"
-                                      />
-                                    </div>
+                                    <ImageUploadWidget
+                                      value={sec.data?.image || sec.data?.thumbnail || ''}
+                                      onChange={(url) => updateSectionData(sec.id, 'image', url)}
+                                      subfolder="blogs"
+                                    />
                                   </div>
 
                                   <div>
@@ -1776,31 +1744,11 @@ function PageBuilderContent() {
                                   <label className="block text-[11px] font-bold text-slate-500 mb-1.5">
                                     🖼 SECTION IMAGE UPLOADER
                                   </label>
-                                  <div className="grid items-center">
-                                    {sec.data?.image && (
-                                      <div className="relative w-[120px] h-[80px] rounded-lg overflow-hidden border border-slate-300">
-                                        <img src={sec.data.image} alt="Preview" className="w-full h-full object-cover" />
-                                      </div>
-                                    )}
-                                    <label className="flex flex-col items-center justify-center cursor-pointer bg-slate-50">
-                                      <input
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                        onChange={async (e) => {
-                                          const file = e.target.files?.[0];
-                                          if (file) {
-                                            const url = await uploadFileToFtp(file, 'sections');
-                                            if (url) updateSectionData(sec.id, 'image', url);
-                                          }
-                                        }}
-                                      />
-                                      <span className="text-xs font-bold text-[#004B39] flex items-center gap-1.5">
-                                        <Upload className="w-4 h-4" /> {sec.data?.image ? 'Click to Change Image File' : 'Click to Upload Image File'}
-                                      </span>
-                                      <span className="text-[10px] text-slate-400 mt-0.5">Supports JPG, PNG, WEBP, SVG</span>
-                                    </label>
-                                  </div>
+                                  <ImageUploadWidget
+                                    value={sec.data?.image || ''}
+                                    onChange={(url) => updateSectionData(sec.id, 'image', url)}
+                                    subfolder="sections"
+                                  />
                                 </div>
 
                                 {/* Rich Text & Features Checklist Editor */}
@@ -1847,12 +1795,10 @@ function PageBuilderContent() {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                   <div>
                                     <label className="block text-[10px] font-bold text-slate-600 mb-0.5">IMAGE URL</label>
-                                    <input
-                                      type="text"
+                                    <ImageUploadWidget
                                       value={sec.data?.image || ''}
-                                      onChange={(e) => updateSectionData(sec.id, 'image', e.target.value)}
-                                      className="w-full text-xs p-2 border border-slate-200 rounded-lg outline-none focus:border-[#004B39]"
-                                      placeholder="/img/about.jpg"
+                                      onChange={(url) => updateSectionData(sec.id, 'image', url)}
+                                      subfolder="sections"
                                     />
                                   </div>
                                   <div>
@@ -1892,12 +1838,10 @@ function PageBuilderContent() {
                               <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
                                 <div>
                                   <label className="block text-[10px] font-bold text-slate-600 mb-0.5">IMAGE URL</label>
-                                  <input
-                                    type="text"
+                                  <ImageUploadWidget
                                     value={sec.data?.image || ''}
-                                    onChange={(e) => updateSectionData(sec.id, 'image', e.target.value)}
-                                    className="w-full text-xs p-2 border border-slate-200 rounded-lg outline-none focus:border-[#004B39]"
-                                    placeholder="/img/feature.jpg"
+                                    onChange={(url) => updateSectionData(sec.id, 'image', url)}
+                                    subfolder="sections"
                                   />
                                 </div>
                                 <div className="flex justify-between items-center mt-2">
@@ -2572,33 +2516,16 @@ function PageBuilderContent() {
                                           />
                                         </div>
                                         <div>
-                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">IMAGE URL</label>
-                                          <div className="flex items-center gap-2">
-                                            {pkg.heroImage && (
-                                              <div className="w-8 h-8 rounded shrink-0 overflow-hidden border border-slate-300 shadow-2xs">
-                                                <img src={pkg.heroImage} alt="Preview" className="w-full h-full object-cover" />
-                                              </div>
-                                            )}
-                                            <label className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 bg-white text-xs font-bold text-[#004B39] cursor-pointer hover:bg-slate-50 flex items-center gap-1.5 justify-center shadow-2xs">
-                                              <Upload className="w-4 h-4" /> Upload
-                                              <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="hidden"
-                                                onChange={async (e) => {
-                                                  const file = e.target.files?.[0];
-                                                  if (file) {
-                                                    const url = await uploadFileToFtp(file, 'hajj');
-                                                    if (url) {
-                                                      const pkgs = getActiveItems();
-                                                      pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
-                                                      updateSectionData(sec.id, 'items', pkgs);
-                                                    }
-                                                  }
-                                                }}
-                                              />
-                                            </label>
-                                          </div>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-0.5">IMAGE</label>
+                                          <ImageUploadWidget
+                                            value={pkg.heroImage || ''}
+                                            onChange={(url) => {
+                                              const pkgs = getActiveItems();
+                                              pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
+                                              updateSectionData(sec.id, 'items', pkgs);
+                                            }}
+                                            subfolder="hajj"
+                                          />
                                         </div>
                                       </div>
 
@@ -2964,15 +2891,15 @@ function PageBuilderContent() {
                                       </div>
                                       <div>
                                         <label className="block text-[9px] font-bold text-slate-500 mb-0.5">IMAGE URL</label>
-                                        <input
-                                          type="text"
+                                        <ImageUploadWidget
                                           value={vCard.image || ''}
-                                          onChange={(e) => {
+                                          onChange={(url) => {
                                             const currentVisas = [...sec.data?.items];
-                                            currentVisas[vIdx] = { ...currentVisas[vIdx], image: e.target.value };
+                                            currentVisas[vIdx] = { ...currentVisas[vIdx], image: url };
                                             updateSectionData(sec.id, 'items', currentVisas);
                                           }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                          subfolder="visas"
+                                          compact={true}
                                         />
                                       </div>
                                     </div>
@@ -3431,26 +3358,16 @@ function PageBuilderContent() {
                                           </button>
                                         </div>
 
-                                        {/* Logo Image Preview */}
-                                        <div className="flex items-center justify-center bg-slate-50">
-                                          {logoItem.src ? (
-                                            <img src={logoItem.src} alt={logoItem.alt || 'Logo'} className="object-contain" />
-                                          ) : (
-                                            <span className="text-xs text-slate-500">No Image Preview</span>
-                                          )}
-                                        </div>
-
-                                        {/* Image URL / Input */}
-                                        <input
-                                          type="text"
-                                          placeholder="Image URL / Path"
+                                        {/* Logo Upload & Preview */}
+                                        <ImageUploadWidget
                                           value={logoItem.src || ''}
-                                          onChange={(e) => {
+                                          onChange={(url) => {
                                             const updated = [...allLogos];
-                                            updated[lIdx] = { ...updated[lIdx], src: e.target.value };
+                                            updated[lIdx] = { ...updated[lIdx], src: url };
                                             updateSectionData(sec.id, 'logos', updated);
                                           }}
-                                          className="w-full"
+                                          subfolder="logos"
+                                          compact={true}
                                         />
 
                                         {/* Alt Text Input */}
@@ -3619,47 +3536,17 @@ function PageBuilderContent() {
                                           </button>
                                         </div>
 
-                                        {/* Logo Image Live Thumbnail Preview */}
-                                        <div className="flex items-center justify-center bg-slate-50">
-                                          {item.logo ? (
-                                            <img src={item.logo} alt={item.title || 'Logo'} className="object-contain" />
-                                          ) : (
-                                            <span className="text-xs text-slate-500">No Logo Preview</span>
-                                          )}
-                                        </div>
-
-                                        {/* Logo Upload & Image URL Input */}
-                                        <div>
-                                          <label className="block text-[9px] font-bold text-slate-500 mb-0.5">LOGO IMAGE FILE / URL</label>
-                                          <div className="flex items-center gap-6">
-                                            <input
-                                              type="text"
-                                              placeholder="/img/tico-logo.png or Base64"
-                                              value={item.logo || ''}
-                                              onChange={(e) => {
-                                                const current = [...allCards];
-                                                current[cIdx] = { ...current[cIdx], logo: e.target.value };
-                                                updateSectionData(sec.id, 'items', current);
-                                              }}
-                                              className="font-sans"
-                                            />
-                                            <label className="font-bold cursor-pointer text-white bg-[#004B39]">
-                                              Upload
-                                              <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="hidden"
-                                                onChange={async (e) => {
-                                                  const file = e.target.files?.[0];
-                                                  if (file) {
-                                                    const url = await uploadFileToFtp(file, 'uploads');
-                                                    if (url) updateSectionData(sec.id, 'image', url);
-                                                  }
-                                                }}
-                                              />
-                                            </label>
-                                          </div>
-                                        </div>
+                                        {/* Logo Upload & Preview */}
+                                        <ImageUploadWidget
+                                          value={item.logo || ''}
+                                          onChange={(url) => {
+                                            const current = [...allCards];
+                                            current[cIdx] = { ...current[cIdx], logo: url };
+                                            updateSectionData(sec.id, 'items', current);
+                                          }}
+                                          subfolder="uploads"
+                                          compact={true}
+                                        />
 
                                         <div>
                                           <label className="block text-[9px] font-bold text-slate-500 mb-0.5">BACKSIDE TITLE</label>
@@ -4955,15 +4842,15 @@ function PageBuilderContent() {
                                     <div className="grid grid-cols-2 gap-4">
                                       <div>
                                         <label className="block text-[9px] font-bold text-slate-500 mb-0.5">IMAGE URL</label>
-                                        <input
-                                          type="text"
+                                        <ImageUploadWidget
                                           value={logo.image || ''}
-                                          onChange={(e) => {
+                                          onChange={(url) => {
                                             const logos = [...sec.data?.items];
-                                            logos[lIdx] = { ...logos[lIdx], image: e.target.value };
+                                            logos[lIdx] = { ...logos[lIdx], image: url };
                                             updateSectionData(sec.id, 'items', logos);
                                           }}
-                                          className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                          subfolder="flights"
+                                          compact={true}
                                         />
                                       </div>
                                       <div>
