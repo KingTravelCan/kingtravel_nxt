@@ -290,7 +290,7 @@ export default function AboutPage() {
               id: "pkg-2",
               title: "Elite Platinum Umrah 2026",
               duration: "15 Days",
-              heroImage: "https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=800&q=80",
+              heroImage: "uploads\sections\hajj_1.jpg",
               price: "$10,950",
               makkahHotel: { name: "Fairmont Clock Royal Tower", location: "Zero distance (In Front)", nights: "8 Nights", badge: "Buffet Included" },
               madinahHotel: { name: "The Oberoi Madinah", location: "Adjacent to Courtyard", nights: "7 Nights", badge: "Buffet Included" }
@@ -299,7 +299,7 @@ export default function AboutPage() {
               id: "pkg-3",
               title: "Express Custom Umrah 2026",
               duration: "10 Days",
-              heroImage: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?auto=format&fit=crop&w=800&q=80",
+              heroImage: "uploads\sections\hajj_1.jpg",
               price: "$5,850",
               makkahHotel: { name: "Hyatt Regency Makkah", location: "2 Mins Walk", nights: "5 Nights", badge: "Breakfast" },
               madinahHotel: { name: "Pullman Zamzam Madinah", location: "Walking Distance", nights: "5 Nights", badge: "Breakfast" }

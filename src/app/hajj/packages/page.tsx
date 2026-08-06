@@ -14,7 +14,7 @@ const hajjCardsData = [
     title: "Economy Hajj Package 2027",
     duration: "14Days",
     heroImage:
-      "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg",
+      "uploads\sections\hajj_1.jpg",
     price: "CAD 12,995",
     makkahHotel: {
       name: "5 Star Hotel in Makkah",
@@ -38,7 +38,7 @@ const hajjCardsData = [
     title: "Deluxe Hajj 2027",
     duration: "15 Days",
     heroImage:
-      "https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=800&q=80",
+      "uploads\sections\hajj_1.jpg",
     price: "CAD 17,995",
     makkahHotel: {
       name: "5 Star Hotel Fairmont Makkah",
@@ -62,7 +62,7 @@ const hajjCardsData = [
     title: "Express Custom Hajj 2027",
     duration: "10 Days",
     heroImage:
-      "https://images.unsplash.com/photo-1591604466107-ec97de577aff?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photos/kaaba-mecca-IAwnp88Fz8Y",
     price: "CAD 14,995",
     makkahHotel: {
       name: "Hyatt Regency Makkah",

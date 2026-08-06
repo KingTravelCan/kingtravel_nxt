@@ -15,7 +15,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
       {sections.map((sec: any, idx: number) => {
         if (!sec || !sec.type) return null;
 
-    if (sec.type === "Stats Grid") {
+        if (sec.type === "Stats Grid") {
           const items = sec.data?.items || [
             { value: `72K+`, label: "Happy Travelers" },
             { value: "4.4", label: "Google Rating" },
@@ -36,7 +36,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
-    if (sec.type === "Intro") {
+        if (sec.type === "Intro") {
           return (
             <div key={idx} className="wrap my-8">
               <div className="bg-[#f2f5e8] border border-[#e4ebd3] rounded-2xl p-8 max-w-5xl mx-auto shadow-xs">
@@ -54,7 +54,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
-    if (sec.type === "Image+Text" || sec.type === "Why Choose Us") {
+        if (sec.type === "Image+Text" || sec.type === "Why Choose Us") {
           const feats = sec.data?.features || [
             "Securing all types of Saudi visas quickly.",
             "Coordinating family or group Hajj packages.",
@@ -98,7 +98,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
-    if (sec.type === "Services Grid" || sec.type === "What We Provide") {
+        if (sec.type === "Services Grid" || sec.type === "What We Provide") {
           const svcs = sec.data?.items || [
             { icon: "✈️", title: "Lowest Fares", subtitle: "We Offer the Lowest Fair on Air Ticketing around the Globe.", description: "As a partner with major airlines, including PIA, King Travel Can Ltd guarantees the lowest airfares for flights to Pakistan, Saudi Arabia, and beyond. Whether it's for religious travel or international vacations, we offer unbeatable rates to help you save." },
             { icon: "✨", title: "Special Deals", subtitle: "We Provide Best Prices Of All Inclusive Packages.", description: "We offer exclusive special deals on Umrah, Hajj, and international flight packages, tailored to fit your budget. These limited-time offers allow you to experience premium services without overspending, making your travel affordable and stress-free." },
@@ -131,7 +131,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
-    if (sec.type === "Accreditations Bar" || sec.type === "Badges Cards") {
+        if (sec.type === "Accreditations Bar" || sec.type === "Badges Cards") {
           const badges = sec.data?.items || [
             { title: "ATOL PROTECTED", icon: "fa-solid fa-[#004B39] fa-shield-halved", iconType: "fontawesome" },
             { title: "SAUDI MINISTRY APPROVED", icon: "fa-solid fa-[#004B39] fa-mosque", iconType: "fontawesome" },
@@ -158,7 +158,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
-    if (sec.type === "Umrah Packages Grid" || sec.type === "Packages Grid") {
+        if (sec.type === "Umrah Packages Grid" || sec.type === "Packages Grid") {
           const defaultPackages = [
             {
               id: "pkg-1",
@@ -173,7 +173,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
               id: "pkg-2",
               title: "Elite Platinum Umrah 2026",
               duration: "15 Days",
-              heroImage: "https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=800&q=80",
+              heroImage: "uploads\sections\hajj_1.jpg",
               price: "$10,950",
               makkahHotel: { name: "Fairmont Clock Royal Tower", location: "Zero distance (In Front)", nights: "8 Nights", badge: "Buffet Included" },
               madinahHotel: { name: "The Oberoi Madinah", location: "Adjacent to Courtyard", nights: "7 Nights", badge: "Buffet Included" }
@@ -182,7 +182,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
               id: "pkg-3",
               title: "Express Custom Umrah 2026",
               duration: "10 Days",
-              heroImage: "https://images.unsplash.com/photo-1591604466107-ec97de577aff?auto=format&fit=crop&w=800&q=80",
+              heroImage: "https://unsplash.com/photos/kaaba-mecca-IAwnp88Fz8Y",
               price: "$5,850",
               makkahHotel: { name: "Hyatt Regency Makkah", location: "2 Mins Walk", nights: "5 Nights", badge: "Breakfast" },
               madinahHotel: { name: "Pullman Zamzam Madinah", location: "Walking Distance", nights: "5 Nights", badge: "Breakfast" }
@@ -242,7 +242,7 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
-    if (sec.type === 'Text Block (Rich Text)') {
+        if (sec.type === 'Text Block (Rich Text)') {
           let content: string = sec.data?.content || '';
           if (!content) return null;
           content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, '\u00a0');
@@ -259,118 +259,118 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
-    if (sec.type === "Available Flights Grid" || sec.type === "Flights Cards") {
-            const flights = (sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0)
-              ? sec.data.items
-              : [
-                  { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
-                  { code: "SA", name: "Saudia Airlines", operatedBy: "Operated By Saudia", originCode: "LHR", originCity: "London", destCode: "MED", destCity: "Madinah", time: "18:45", price: "CAD 1,380.00" }
-                ];
+        if (sec.type === "Available Flights Grid" || sec.type === "Flights Cards") {
+          const flights = (sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0)
+            ? sec.data.items
+            : [
+              { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
+              { code: "SA", name: "Saudia Airlines", operatedBy: "Operated By Saudia", originCode: "LHR", originCity: "London", destCode: "MED", destCity: "Madinah", time: "18:45", price: "CAD 1,380.00" }
+            ];
 
-            return (
-              <section key={idx} className="pt-14">
-                <div className="max-w-5xl mx-auto px-4">
-                  <div className="text-center mb-8">
-                    <span className="text-emerald-800 font-semibold uppercase tracking-wider text-sm block mb-1">
-                      {sec.data?.eyebrow || "AVAILABLE FLIGHTS"}
-                    </span>
-                    <h2 className="text-3xl font-serif text-gray-900 tracking-tight">
-                      {sec.data?.title || "BEST FARES, LIMITED AVAILABILITY FROM LONDON"}
-                    </h2>
-                  </div>
-                  <div className="space-y-6 mb-12">
-                    {(sec.data?.items || [
-                      { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
-                      { code: "SA", name: "Saudia Airlines", operatedBy: "Operated By Saudia", originCode: "LHR", originCity: "London", destCode: "MED", destCity: "Madinah", time: "18:45", price: "CAD 1,380.00" }
-                    ]).map((flight: any, fIdx: number) => (
-                      <div
-                        key={fIdx}
-                        className="bg-white shadow-lg rounded-2xl border border-gray-200/60 p-6 md:p-8 hover:shadow-md transition-shadow duration-200"
-                      >
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6">
-                          {/* Left: Airline Info */}
-                          <div className="flex items-center gap-4 min-w-[280px]">
-                            <div className="bg-emerald-900 text-white font-bold px-3 py-2 rounded text-base tracking-wide flex items-center justify-center min-w-[54px] h-[44px]">
-                              {flight.code || "PIA"}
-                            </div>
-                            <div>
-                              <h4 className="font-bold text-gray-900 text-lg">{flight.name}</h4>
-                              <p className="text-xs text-gray-500 font-medium mt-0.5">{flight.operatedBy || "Operated By PIA"}</p>
-                            </div>
+          return (
+            <section key={idx} className="pt-14">
+              <div className="max-w-5xl mx-auto px-4">
+                <div className="text-center mb-8">
+                  <span className="text-emerald-800 font-semibold uppercase tracking-wider text-sm block mb-1">
+                    {sec.data?.eyebrow || "AVAILABLE FLIGHTS"}
+                  </span>
+                  <h2 className="text-3xl font-serif text-gray-900 tracking-tight">
+                    {sec.data?.title || "BEST FARES, LIMITED AVAILABILITY FROM LONDON"}
+                  </h2>
+                </div>
+                <div className="space-y-6 mb-12">
+                  {(sec.data?.items || [
+                    { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
+                    { code: "SA", name: "Saudia Airlines", operatedBy: "Operated By Saudia", originCode: "LHR", originCity: "London", destCode: "MED", destCity: "Madinah", time: "18:45", price: "CAD 1,380.00" }
+                  ]).map((flight: any, fIdx: number) => (
+                    <div
+                      key={fIdx}
+                      className="bg-white shadow-lg rounded-2xl border border-gray-200/60 p-6 md:p-8 hover:shadow-md transition-shadow duration-200"
+                    >
+                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6">
+                        {/* Left: Airline Info */}
+                        <div className="flex items-center gap-4 min-w-[280px]">
+                          <div className="bg-emerald-900 text-white font-bold px-3 py-2 rounded text-base tracking-wide flex items-center justify-center min-w-[54px] h-[44px]">
+                            {flight.code || "PIA"}
                           </div>
-
-                          {/* Middle: Route & Times */}
-                          <div className="flex flex-1 items-center justify-between max-w-md mx-auto w-full px-2">
-                            <div className="text-center md:text-left">
-                              <span className="block text-2xl font-bold text-gray-900">{flight.originCode || "LHR"}</span>
-                              <span className="text-xs text-gray-400 font-medium">{flight.originCity || "London"}</span>
-                            </div>
-
-                            <div className="flex-1 flex items-center justify-center px-4 relative">
-                              <div className="w-full border-t border-dashed border-gray-300 absolute"></div>
-                              <div className="bg-gray-100 px-2 z-10 rounded-full py-1">
-                                <i className="fa-solid fa-plane text-sky-400 text-sm rotate-45"></i>
-                              </div>
-                            </div>
-
-                            <div className="text-center md:text-left">
-                              <span className="block text-2xl font-bold text-gray-900">{flight.destCode || "JED"}</span>
-                              <span className="text-xs text-gray-400 font-medium">{flight.destCity || "Jeddah"}</span>
-                            </div>
-
-                            <div className="h-8 border-l border-gray-300 mx-6 hidden md:block"></div>
-
-                            <div className="text-center md:text-left">
-                              <span className="block text-xl font-bold text-gray-900">{flight.time || "14:20"}</span>
-                              <span className="text-xs text-gray-400 font-medium">{flight.originCode || "LHR"}</span>
-                            </div>
-                          </div>
-
-                          {/* Right: Pricing & CTA */}
-                          <div className="text-right flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4 border-t md:border-0 pt-4 md:pt-0 border-gray-200">
-                            <div>
-                              <span className="text-xs font-semibold text-gray-500 block md:hidden">Price</span>
-                              <span className="text-2xl font-extrabold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
-                            </div>
-                            <a
-                              href={`https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name)})`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="bg-emerald-900 text-white hover:bg-[#DB9E30] hover:text-slate-900 font-bold py-3 px-8 rounded-lg tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
-                            >
-                              Booking
-                            </a>
+                          <div>
+                            <h4 className="font-bold text-gray-900 text-lg">{flight.name}</h4>
+                            <p className="text-xs text-gray-500 font-medium mt-0.5">{flight.operatedBy || "Operated By PIA"}</p>
                           </div>
                         </div>
 
-                        <div className="border-t border-dashed border-gray-300/80 pt-4 text-right">
-                          <span className="text-xs font-medium text-gray-500">Price Per Person (Incl. Taxes &amp; Fees)</span>
+                        {/* Middle: Route & Times */}
+                        <div className="flex flex-1 items-center justify-between max-w-md mx-auto w-full px-2">
+                          <div className="text-center md:text-left">
+                            <span className="block text-2xl font-bold text-gray-900">{flight.originCode || "LHR"}</span>
+                            <span className="text-xs text-gray-400 font-medium">{flight.originCity || "London"}</span>
+                          </div>
+
+                          <div className="flex-1 flex items-center justify-center px-4 relative">
+                            <div className="w-full border-t border-dashed border-gray-300 absolute"></div>
+                            <div className="bg-gray-100 px-2 z-10 rounded-full py-1">
+                              <i className="fa-solid fa-plane text-sky-400 text-sm rotate-45"></i>
+                            </div>
+                          </div>
+
+                          <div className="text-center md:text-left">
+                            <span className="block text-2xl font-bold text-gray-900">{flight.destCode || "JED"}</span>
+                            <span className="text-xs text-gray-400 font-medium">{flight.destCity || "Jeddah"}</span>
+                          </div>
+
+                          <div className="h-8 border-l border-gray-300 mx-6 hidden md:block"></div>
+
+                          <div className="text-center md:text-left">
+                            <span className="block text-xl font-bold text-gray-900">{flight.time || "14:20"}</span>
+                            <span className="text-xs text-gray-400 font-medium">{flight.originCode || "LHR"}</span>
+                          </div>
+                        </div>
+
+                        {/* Right: Pricing & CTA */}
+                        <div className="text-right flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4 border-t md:border-0 pt-4 md:pt-0 border-gray-200">
+                          <div>
+                            <span className="text-xs font-semibold text-gray-500 block md:hidden">Price</span>
+                            <span className="text-2xl font-extrabold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
+                          </div>
+                          <a
+                            href={`https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name)})`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-emerald-900 text-white hover:bg-[#DB9E30] hover:text-slate-900 font-bold py-3 px-8 rounded-lg tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
+                          >
+                            Booking
+                          </a>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-              </section>
-            );
-          }
 
-    if (sec.type === "Flight Assistance CTA" || sec.type === "Flight Desk CTA") {
-            return (
-              <section key={idx} className="tint mt-12 py-20 bg-emerald-50/60 border-t border-emerald-100">
-                <div className="wrap text-center max-w-3xl mx-auto px-4">
-                  <h2 className="text-3xl font-serif text-[#004B39] mb-4">
-                    {sec.data?.title || "Need Flight Booking Assistance?"}
-                  </h2>
-                  <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed font-light">
-                    {sec.data?.description || "Speak directly with our ticketing specialists to get custom quotes, group flight discounts, and immediate confirmations."}
-                  </p>
-                  <Link href={sec.data?.btnLink || "/contact"} className="inline-block bg-[#004B39] hover:bg-[#DB9E30] text-white hover:text-slate-900 font-bold px-8 py-3.5 rounded-xl shadow-md transition-all text-sm">
-                    {sec.data?.btnLabel || "Contact Flight Desk"}
-                  </Link>
+                      <div className="border-t border-dashed border-gray-300/80 pt-4 text-right">
+                        <span className="text-xs font-medium text-gray-500">Price Per Person (Incl. Taxes &amp; Fees)</span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </section>
-            );
-          }
+              </div>
+            </section>
+          );
+        }
+
+        if (sec.type === "Flight Assistance CTA" || sec.type === "Flight Desk CTA") {
+          return (
+            <section key={idx} className="tint mt-12 py-20 bg-emerald-50/60 border-t border-emerald-100">
+              <div className="wrap text-center max-w-3xl mx-auto px-4">
+                <h2 className="text-3xl font-serif text-[#004B39] mb-4">
+                  {sec.data?.title || "Need Flight Booking Assistance?"}
+                </h2>
+                <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed font-light">
+                  {sec.data?.description || "Speak directly with our ticketing specialists to get custom quotes, group flight discounts, and immediate confirmations."}
+                </p>
+                <Link href={sec.data?.btnLink || "/contact"} className="inline-block bg-[#004B39] hover:bg-[#DB9E30] text-white hover:text-slate-900 font-bold px-8 py-3.5 rounded-xl shadow-md transition-all text-sm">
+                  {sec.data?.btnLabel || "Contact Flight Desk"}
+                </Link>
+              </div>
+            </section>
+          );
+        }
 
         // ── Skip hero – already rendered in page.tsx ──────────────────────────
         if (sec.type === "Homepage Hero Banner" || sec.type === "Hero Slider") {
@@ -436,69 +436,81 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           const items: any[] = sec.data?.items || [];
           if (items.length === 0) return null;
           return (
-            <section key={idx} className="py-14 bg-[#f7f3ec]">
-              <div className="max-w-7xl mx-auto px-4">
-                <div className="text-center mb-10">
-                  {sec.data?.eyebrow && (
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
-                      {sec.data.eyebrow}
-                    </span>
-                  )}
-                  <h2 className="text-3xl md:text-4xl font-serif text-[#004B39] font-normal">
-                    {sec.data?.title || "Packages Officially Sold Out"}
-                  </h2>
+            <section key={idx} className="py-20 bg-[#f4f6ec]">
+              <div className="max-w-[1400px] mx-auto px-4">
+
+                {/* Header (Two Columns) */}
+                <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
+                  <div className="md:w-1/2">
+                    {sec.data?.eyebrow && (
+                      <span className="text-[#DB9E30] font-black uppercase tracking-widest text-xs mb-3 block">
+                        {sec.data.eyebrow}
+                      </span>
+                    )}
+                    <h2
+                      className="text-4xl md:text-5xl font-serif text-[#004B39] leading-tight"
+                      dangerouslySetInnerHTML={{ __html: sec.data?.title || "Packages Officially<br />Sold Out" }}
+                    />
+                  </div>
                   {sec.data?.description && (
-                    <p className="text-slate-600 text-sm mt-3 max-w-xl mx-auto">{sec.data.description}</p>
+                    <div className="md:w-1/2">
+                      <p className="text-gray-700 text-sm leading-relaxed max-w-lg pt-2">
+                        {sec.data.description}
+                      </p>
+                    </div>
                   )}
                 </div>
+
+                {/* Cards Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   {items.map((item: any, i: number) => (
-                    <article key={i} className="bg-white rounded-3xl overflow-hidden shadow-md border border-slate-100 flex flex-col group">
+                    <article key={i} className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-100 flex flex-col group transition-shadow hover:shadow-md">
                       {item.heroImage && (
-                        <div className="relative h-48 overflow-hidden">
-                          <Image
+                        <div className="relative h-[220px] w-full overflow-hidden shrink-0">
+                          <img
                             src={item.heroImage}
                             alt={item.title || "Sold Out Package"}
-                            fill
-                            className="object-cover group-hover:scale-105 transition-transform duration-500"
-                            unoptimized
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-slate-900/70 via-transparent to-transparent" />
-                          {item.badgeText && (
-                            <span className="absolute top-3 right-3 bg-red-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">
-                              {item.badgeText}
-                            </span>
-                          )}
-                          <div className="absolute bottom-3 left-3">
-                            <h3 className="text-white font-bold text-base leading-tight">{item.title}</h3>
-                            {item.month && <span className="text-slate-300 text-xs">{item.month}</span>}
-                          </div>
                         </div>
                       )}
-                      <div className="p-5 flex-1 flex flex-col gap-3">
+
+                      <div className="p-8 flex-1 flex flex-col">
+                        <div className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2">
+                          {item.month || "MAY · 2026"}
+                        </div>
+                        <h3 className="text-[28px] font-serif text-[#1a2b25] mb-2 leading-tight">
+                          {item.title}
+                        </h3>
+                        <div className="text-[#1a2b25] font-black text-2xl mb-8 flex items-baseline gap-1">
+                          {item.price} <span className="text-sm font-medium text-gray-500">{item.priceUnit || "/Person"}</span>
+                        </div>
+
+                        <div className="text-[10px] font-black text-[#DB9E30] uppercase tracking-widest mb-5">
+                          PACKAGE INCLUDES
+                        </div>
+
                         {item.includes && item.includes.length > 0 && (
-                          <ul className="space-y-1.5">
-                            {item.includes.map((inc: any, j: number) => (
-                              <li key={j} className="flex items-center gap-2 text-xs text-slate-600">
-                                <DynamicIcon name={inc.icon || "Check"} className={`w-3.5 h-3.5 shrink-0 ${inc.iconColor || "text-[#004B39]"}`} />
-                                {inc.text}
-                              </li>
-                            ))}
+                          <ul className="space-y-4 mb-2 flex-1">
+                            {item.includes.map((inc: any, j: number) => {
+                              // map some common text to icons based on the UI
+                              let iconName = inc.icon || "Check";
+                              if (inc.text?.toLowerCase().includes("flight")) iconName = "Plane";
+                              if (inc.text?.toLowerCase().includes("transport")) iconName = "Bus";
+                              if (inc.text?.toLowerCase().includes("ihram")) iconName = "Shirt";
+                              if (inc.text?.toLowerCase().includes("visa")) iconName = "FileText";
+                              if (inc.text?.toLowerCase().includes("guide") || inc.text?.toLowerCase().includes("imam")) iconName = "User";
+                              if (inc.text?.toLowerCase().includes("hotel")) iconName = "Building";
+
+                              return (
+                                <li key={j} className="flex gap-4 items-center text-sm text-gray-600">
+                                  <DynamicIcon name={iconName} className="w-4 h-4 text-gray-400 shrink-0" />
+                                  <span>{inc.text}</span>
+                                </li>
+                              );
+                            })}
                           </ul>
                         )}
-                        <div className="pt-3 border-t border-slate-100 flex items-center justify-between mt-auto">
-                          <div>
-                            <span className="text-[9px] font-bold text-slate-400 uppercase block">Starting From</span>
-                            <span className="text-xl font-extrabold text-[#004B39]">{item.price}</span>
-                            {item.priceUnit && <span className="text-xs text-slate-400 ml-1">{item.priceUnit}</span>}
-                          </div>
-                          <Link
-                            href={item.btnLink || "/contact"}
-                            className="bg-[#DB9E30] hover:bg-[#004B39] text-slate-900 hover:text-white font-bold px-4 py-2 rounded-xl text-xs transition-all"
-                          >
-                            {item.btnText || "Enquire Now"}
-                          </Link>
-                        </div>
                       </div>
                     </article>
                   ))}

@@ -53,7 +53,7 @@ const DEFAULT_HAJJ_UMRAH_PACKAGES = [
     currencyCode: "CAD",
     priceSubtext: "PER PERSON, QUAD OCCUPANCY",
     heroImage:
-      "https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=800&q=80",
+      "uploads\sections\hajj_1.jpg",
     makkahHotel: {
       name: "5 Star Hotel Fairmont Makkah",
       location: "Near to Haram",
