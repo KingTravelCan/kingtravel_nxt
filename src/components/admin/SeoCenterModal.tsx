@@ -99,39 +99,39 @@ export default function SeoCenterModal({
 
       setMetaTitle(
         pageData.metaTitle ||
-          existingSeo.metaTitle ||
-          `${pageTitle} | Official Umrah & Hajj Packages Canada | King Travel`
+        existingSeo.metaTitle ||
+        `${pageTitle} | Official Umrah & Hajj Packages Canada | King Travel`
       );
 
       setMetaDescription(
         pageData.metaDescription ||
-          existingSeo.metaDescription ||
-          `Explore official Umrah, Hajj, and Saudi visa services for ${pageTitle} provided by King Travel Canada. Trusted travel solutions, flights, and luxury hotel bookings.`
+        existingSeo.metaDescription ||
+        `Explore official Umrah, Hajj, and Saudi visa services for ${pageTitle} provided by King Travel Canada. Trusted travel solutions, flights, and luxury hotel bookings.`
       );
 
       setHeroAlt(
         existingSeo.heroAlt ||
-          `Official visual illustration and hero presentation for ${pageTitle} at King Travel Canada`
+        `Official visual illustration and hero presentation for ${pageTitle} at King Travel Canada`
       );
 
       setOgCardAlt(
         existingSeo.ogCardAlt ||
-          `Official social share card banner for ${pageTitle} at King Travel Canada`
+        `Official social share card banner for ${pageTitle} at King Travel Canada`
       );
 
       setGeoSummary(
         existingSeo.geoSummary ||
-          `Comprehensive official overview of ${pageTitle} services, Umrah packages, hotel reservations, and visa processing presented by King Travel Canada.`
+        `Comprehensive official overview of ${pageTitle} services, Umrah packages, hotel reservations, and visa processing presented by King Travel Canada.`
       );
 
       setGeoClusters(
         existingSeo.geoClusters ||
-          `King Travel Canada, Umrah Packages, Hajj Packages, Saudi Visa, Flights, Luxury Hotels, Toronto Travel Agency`
+        `King Travel Canada, Umrah Packages, Hajj Packages, Saudi Visa, Flights, Luxury Hotels, Toronto Travel Agency`
       );
 
       setAeoFaqs(
         existingSeo.aeoFaqs ||
-          `Q: What is the main focus of ${pageTitle} at King Travel Canada?\nA: This page provides official guidance, pricing, and booking details regarding ${pageTitle}.\n\nQ: How can I book packages for ${pageTitle}?\nA: Visit our official website contact section or request a free quote online.`
+        `Q: What is the main focus of ${pageTitle} at King Travel Canada?\nA: This page provides official guidance, pricing, and booking details regarding ${pageTitle}.\n\nQ: How can I book packages for ${pageTitle}?\nA: Visit our official website contact section or request a free quote online.`
       );
 
       setSchemaType(existingSeo.schemaType || 'TravelAgency');
@@ -160,8 +160,8 @@ export default function SeoCenterModal({
       setNoIndex(existingSeo.noIndex || false);
       setOgImageUrl(
         existingSeo.ogImageUrl ||
-          pageData.bannerBgImage ||
-          'https://media.kingtravelcan.com/uploads/branding/logo.png'
+        pageData.bannerBgImage ||
+        'https://media.kingtravelcan.com/uploads/branding/logo.png'
       );
     }
   }, [pageData]);
@@ -287,7 +287,7 @@ export default function SeoCenterModal({
   return (
     <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 bg-slate-950/80 backdrop-blur-md animate-in fade-in duration-200 overflow-hidden">
       <div className="bg-[#F8FAFC] w-full max-w-6xl h-[86vh] max-h-[820px] rounded-3xl shadow-2xl border border-slate-800 flex flex-col overflow-hidden text-slate-800 animate-in zoom-in-95 duration-200 my-auto">
-        
+
         {/* ── Sleek Dark Top Header Bar (Contrasts sharply & never cuts off) ── */}
         <header className="bg-[#0F172A] text-white border-b border-slate-800 px-6 py-3.5 flex items-center justify-between gap-4 shrink-0 shadow-md">
           <div className="flex items-center gap-3">
@@ -402,11 +402,10 @@ export default function SeoCenterModal({
             <button
               type="button"
               onClick={() => scrollToSection('traditional', 'seo-sec-traditional')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${
-                activeTab === 'traditional'
-                  ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
-                  : 'text-slate-700 border-transparent hover:bg-slate-100'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${activeTab === 'traditional'
+                ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
+                : 'text-slate-700 border-transparent hover:bg-slate-100'
+                }`}
             >
               <Search className={`w-4 h-4 shrink-0 ${activeTab === 'traditional' ? 'text-white' : 'text-emerald-600'}`} />
               <span>Traditional SEO</span>
@@ -415,11 +414,10 @@ export default function SeoCenterModal({
             <button
               type="button"
               onClick={() => scrollToSection('alt', 'seo-sec-alt')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${
-                activeTab === 'alt'
-                  ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
-                  : 'text-slate-700 border-transparent hover:bg-slate-100'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${activeTab === 'alt'
+                ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
+                : 'text-slate-700 border-transparent hover:bg-slate-100'
+                }`}
             >
               <ImageIcon className={`w-4 h-4 shrink-0 ${activeTab === 'alt' ? 'text-white' : 'text-sky-600'}`} />
               <span>Alt Texts</span>
@@ -428,11 +426,10 @@ export default function SeoCenterModal({
             <button
               type="button"
               onClick={() => scrollToSection('geo', 'seo-sec-geo')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${
-                activeTab === 'geo'
-                  ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
-                  : 'text-slate-700 border-transparent hover:bg-slate-100'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${activeTab === 'geo'
+                ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
+                : 'text-slate-700 border-transparent hover:bg-slate-100'
+                }`}
             >
               <Zap className={`w-4 h-4 shrink-0 ${activeTab === 'geo' ? 'text-[#DB9E30]' : 'text-amber-500'}`} />
               <span>GEO (Generative AI)</span>
@@ -441,11 +438,10 @@ export default function SeoCenterModal({
             <button
               type="button"
               onClick={() => scrollToSection('aeo', 'seo-sec-aeo')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${
-                activeTab === 'aeo'
-                  ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
-                  : 'text-slate-700 border-transparent hover:bg-slate-100'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${activeTab === 'aeo'
+                ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
+                : 'text-slate-700 border-transparent hover:bg-slate-100'
+                }`}
             >
               <MessageSquare className={`w-4 h-4 shrink-0 ${activeTab === 'aeo' ? 'text-white' : 'text-indigo-600'}`} />
               <span>AEO (Voice &amp; Answer)</span>
@@ -454,11 +450,10 @@ export default function SeoCenterModal({
             <button
               type="button"
               onClick={() => scrollToSection('schema', 'seo-sec-schema')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${
-                activeTab === 'schema'
-                  ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
-                  : 'text-slate-700 border-transparent hover:bg-slate-100'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${activeTab === 'schema'
+                ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
+                : 'text-slate-700 border-transparent hover:bg-slate-100'
+                }`}
             >
               <FileCode className={`w-4 h-4 shrink-0 ${activeTab === 'schema' ? 'text-white' : 'text-emerald-600'}`} />
               <span>JSON-LD Schema</span>
@@ -467,11 +462,10 @@ export default function SeoCenterModal({
             <button
               type="button"
               onClick={() => scrollToSection('technical', 'seo-sec-technical')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${
-                activeTab === 'technical'
-                  ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
-                  : 'text-slate-700 border-transparent hover:bg-slate-100'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${activeTab === 'technical'
+                ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
+                : 'text-slate-700 border-transparent hover:bg-slate-100'
+                }`}
             >
               <Sliders className={`w-4 h-4 shrink-0 ${activeTab === 'technical' ? 'text-white' : 'text-purple-600'}`} />
               <span>Technical SEO</span>
@@ -480,11 +474,10 @@ export default function SeoCenterModal({
             <button
               type="button"
               onClick={() => scrollToSection('score', 'seo-sec-score')}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${
-                activeTab === 'score'
-                  ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
-                  : 'text-slate-700 border-transparent hover:bg-slate-100'
-              }`}
+              className={`w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all text-left border cursor-pointer ${activeTab === 'score'
+                ? 'bg-[#004B39] text-white border-[#004B39] shadow-md'
+                : 'text-slate-700 border-transparent hover:bg-slate-100'
+                }`}
             >
               <BarChart3 className={`w-4 h-4 shrink-0 ${activeTab === 'score' ? 'text-white' : 'text-rose-500'}`} />
               <span>Validation &amp; Score</span>
@@ -508,9 +501,8 @@ export default function SeoCenterModal({
                   <div className="flex justify-between text-xs mb-1">
                     <label className="font-extrabold text-slate-700">Meta Title</label>
                     <span
-                      className={`font-mono text-[11px] font-bold ${
-                        isTitleOk ? 'text-emerald-600' : 'text-amber-600'
-                      }`}
+                      className={`font-mono text-[11px] font-bold ${isTitleOk ? 'text-emerald-600' : 'text-amber-600'
+                        }`}
                     >
                       {metaTitle.length}/60 characters optimally
                     </span>
@@ -529,9 +521,8 @@ export default function SeoCenterModal({
                   <div className="flex justify-between text-xs mb-1">
                     <label className="font-extrabold text-slate-700">Meta Description</label>
                     <span
-                      className={`font-mono text-[11px] font-bold ${
-                        isDescOk ? 'text-emerald-600' : 'text-amber-600'
-                      }`}
+                      className={`font-mono text-[11px] font-bold ${isDescOk ? 'text-emerald-600' : 'text-amber-600'
+                        }`}
                     >
                       {metaDescription.length}/160 characters optimally
                     </span>
@@ -691,8 +682,8 @@ export default function SeoCenterModal({
                 </div>
 
                 <div>
-                  <label className="block text-xs font-extrabold text-slate-700 mb-1">JSON-LD Payload</label>
-                  <div className="relative bg-[#0F172A] rounded-2xl p-4 overflow-hidden border border-slate-800">
+                  <label className="block text-xs font-extrabold text-slate-700 mb-1">JSON-LD</label>
+                  <div className="relative bg-white rounded-2xl p-4 overflow-hidden border border-slate-800">
                     <textarea
                       rows={8}
                       value={jsonLdPayload}
@@ -826,18 +817,16 @@ export default function SeoCenterModal({
                     <button
                       type="button"
                       onClick={() => setPreviewDevice('desktop')}
-                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1 transition-all ${
-                        previewDevice === 'desktop' ? 'bg-white text-[#004B39] shadow-xs' : 'text-slate-500'
-                      }`}
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1 transition-all ${previewDevice === 'desktop' ? 'bg-white text-[#004B39] shadow-xs' : 'text-slate-500'
+                        }`}
                     >
                       <Monitor className="w-3 h-3" /> Desktop
                     </button>
                     <button
                       type="button"
                       onClick={() => setPreviewDevice('mobile')}
-                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1 transition-all ${
-                        previewDevice === 'mobile' ? 'bg-white text-[#004B39] shadow-xs' : 'text-slate-500'
-                      }`}
+                      className={`px-2.5 py-1 rounded-md text-[11px] font-bold flex items-center gap-1 transition-all ${previewDevice === 'mobile' ? 'bg-white text-[#004B39] shadow-xs' : 'text-slate-500'
+                        }`}
                     >
                       <Smartphone className="w-3 h-3" /> Mobile
                     </button>

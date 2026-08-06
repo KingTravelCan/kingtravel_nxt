@@ -507,7 +507,7 @@ export default function HajjPackagesPage() {
                     <i className="fa-solid fa-star"></i>
                     <i className="fa-solid fa-star"></i>
                   </div>
-                  <div className="text-xs font-medium text-slate-200">{reviewCount} Google reviews</div>
+                  <div className="text-xs font-medium text-slate-200">Google reviews</div>
                   <a
                     href={reviewLink}
                     target="_blank"

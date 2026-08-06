@@ -125,10 +125,11 @@ export async function getBlogBySlug(slug: string) {
       blogMemoryCache[rows[0].id] = rows[0];
       return rows[0];
     }
-    return null;
+    // Fallback to cache if DB returns no rows but it was saved in memory
+    return Object.values(blogMemoryCache).find((b: any) => b.slug === slug) ?? null;
   } catch (err) {
     console.error('getBlogBySlug DB error, checking cache:', err);
-    return Object.values(blogMemoryCache).find((b) => b.slug === slug) ?? null;
+    return Object.values(blogMemoryCache).find((b: any) => b.slug === slug) ?? null;
   }
 }
 
@@ -140,7 +141,8 @@ export async function getBlogById(id: number) {
       blogMemoryCache[rows[0].id] = rows[0];
       return rows[0];
     }
-    return null;
+    // Fallback to cache
+    return blogMemoryCache[id] ?? null;
   } catch (err) {
     console.error('getBlogById DB error, checking cache:', err);
     return blogMemoryCache[id] ?? null;

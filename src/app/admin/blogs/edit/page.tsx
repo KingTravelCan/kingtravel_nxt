@@ -8,6 +8,7 @@ import { getBlogById, saveBlogAction, slugifyBlogTitle } from '@/actions/blogAct
 import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 import GlassNotificationModal from '@/components/ui/GlassNotificationModal';
+import TiptapEditor from '@/components/admin/TiptapEditor';
 import { Save, Upload, ArrowLeft, Sliders, Eye } from 'lucide-react';
 
 const CATEGORIES = [
@@ -215,12 +216,10 @@ function BlogEditorInner() {
             <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-xs">
               {fieldLabel('Full Blog Content', true)}
               <p className="text-[11px] text-slate-400 mb-2">Supports HTML markup for headings, bold, lists, images etc.</p>
-              <textarea
-                rows={22}
+              <TiptapEditor
                 value={form.content}
-                onChange={(e) => setForm((p) => ({ ...p, content: e.target.value }))}
-                placeholder="<p>Write your full blog article here. You can use HTML for formatting...</p>"
-                className="w-full px-4 py-3 rounded-xl border border-slate-200 text-xs font-mono text-slate-700 outline-none focus:border-[#004B39] resize-y transition-colors leading-relaxed"
+                onChange={(html) => setForm((p) => ({ ...p, content: html }))}
+                minHeight="350px"
               />
               <p className="text-[10px] text-slate-300 mt-1.5">{form.content.length} characters</p>
             </div>
@@ -305,12 +304,29 @@ function BlogEditorInner() {
               <div>
                 {fieldLabel('Category')}
                 <select
-                  value={form.category}
-                  onChange={(e) => setForm((p) => ({ ...p, category: e.target.value }))}
+                  value={CATEGORIES.includes(form.category) ? form.category : 'Custom'}
+                  onChange={(e) => {
+                    const val = e.target.value;
+                    if (val !== 'Custom') {
+                      setForm((p) => ({ ...p, category: val }));
+                    } else {
+                      setForm((p) => ({ ...p, category: '' }));
+                    }
+                  }}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39] bg-white"
                 >
-                  {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
+                  {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
+                  <option value="Custom">Custom Category...</option>
                 </select>
+                {!CATEGORIES.includes(form.category) && (
+                  <input
+                    type="text"
+                    value={form.category}
+                    onChange={(e) => setForm((p) => ({ ...p, category: e.target.value }))}
+                    placeholder="Type custom category name..."
+                    className="w-full mt-2 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39]"
+                  />
+                )}
               </div>
               <div>
                 {fieldLabel('Author Name')}
