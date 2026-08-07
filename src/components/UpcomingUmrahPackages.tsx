@@ -27,7 +27,7 @@ export default function UpcomingUmrahPackages({ data }: { data: any }) {
 
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
-          {(data?.packages || []).map((pkg: any, idx: number) => {
+          {(data?.items || []).map((pkg: any, idx: number) => {
             const isGold = pkg.isActiveCard;
             return (
               <div key={idx} className={`${isGold ? 'bg-[#DB9E30] shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8' : 'bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100'} rounded-[32px] overflow-hidden flex flex-col`}>
