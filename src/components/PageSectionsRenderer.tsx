@@ -6,8 +6,15 @@ import MarqueeTrack from '@/components/MarqueeTrack';
 import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import DynamicIcon from '@/components/ui/DynamicIcon';
 import ContactFormSection from '@/components/ContactFormSection';
+import VisaSolutionsSection from '@/components/VisaSolutionsSection';
+import HomepageHeroBanner from '@/components/HomepageHeroBanner';
+import WhoWeAreSection from '@/components/WhoWeAreSection';
+import UpcomingUmrahPackages from '@/components/UpcomingUmrahPackages';
+import TravelServicesSection from '@/components/TravelServicesSection';
+import WhatWeProvideSection from '@/components/WhatWeProvideSection';
+import HajjPackagesSection from '@/components/HajjPackagesSection';
 
-export default function PageSectionsRenderer({ sections }: { sections: any[] }) {
+export default function PageSectionsRenderer({ sections, pageData }: { sections: any[], pageData?: any }) {
   if (!sections || !Array.isArray(sections)) return null;
 
   return (
@@ -144,11 +151,6 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
-        // ── Skip hero – already rendered in page.tsx ──────────────────────────
-        if (sec.type === "Homepage Hero Banner" || sec.type === "Hero Slider") {
-          return null;
-        }
-
 
         // ── Sold Out Packages ─────────────────────────────────────────────────
         if (sec.type === "Sold Out Packages") {
@@ -242,47 +244,61 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
         // ── Testimonials ──────────────────────────────────────────────────────
         if (sec.type === "Testimonials") {
           return (
-            <section key={idx} className="py-14 bg-white">
+            <section key={idx} className="py-14 bg-[#004B39]">
               <div className="max-w-7xl mx-auto px-4">
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10">
-                  <div>
-                    {sec.data?.eyebrow && (
-                      <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
-                        {sec.data.eyebrow}
-                      </span>
-                    )}
-                    <h2 className="text-3xl md:text-4xl font-serif text-[#004B39] font-normal">
-                      {sec.data?.title || "What Our Clients Say"}
-                    </h2>
-                  </div>
-                  {sec.data?.reviewLink && (
-                    <div className="flex items-center gap-3 shrink-0">
-                      <div className="flex items-center gap-1.5">
-                        <svg className="w-5 h-5 text-[#DB9E30]" fill="currentColor" viewBox="0 0 20 20">
-                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                        </svg>
-                        <span className="font-bold text-slate-800 text-sm">5.0</span>
-                        {sec.data?.reviewCount && (
-                          <span className="text-slate-500 text-xs">({sec.data.reviewCount}+ reviews)</span>
-                        )}
+                <div className="text-center mb-10">
+                  {sec.data?.eyebrow && (
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+                      {sec.data.eyebrow}
+                    </span>
+                  )}
+                  <h2 className="text-3xl md:text-4xl font-serif text-white font-normal">
+                    {sec.data?.title || "What our clients say"}
+                  </h2>
+                </div>
+                
+                <div className="flex flex-col lg:flex-row gap-8 items-center lg:items-stretch">
+                  <div className="lg:w-1/4 flex flex-col items-center lg:items-start text-center lg:text-left text-white shrink-0 lg:pt-10 space-y-3">
+                    <div className="flex items-center gap-3 mb-2">
+                      <img
+                        src="/img/round-logo.png"
+                        className="w-12 h-12 rounded-full border border-white/20 object-cover"
+                        alt="King Travel logo"
+                      />
+                      <div className="font-bold text-sm leading-tight text-left text-white">
+                        King Travel Can Ltd -<br />Mississauga
                       </div>
+                    </div>
+                    <div className="flex items-center gap-1 text-amber-400 text-lg mb-1">
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+                    </div>
+                    <div className="text-xs font-medium text-slate-200 mb-5">
+                      {sec.data?.reviewCount || "927"} Google reviews
+                    </div>
+                    {sec.data?.reviewLink && (
                       <a
                         href={sec.data.reviewLink}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-block border border-[#004B39] text-[#004B39] font-bold text-xs px-4 py-2 rounded-full hover:bg-[#004B39] hover:text-white transition-colors"
+                        className="inline-block border border-white/40 text-white font-bold text-xs px-5 py-2.5 rounded-full hover:bg-white/10 transition-colors"
                       >
                         {sec.data?.ctaLabel || "Write A Review"}
                       </a>
-                    </div>
-                  )}
+                    )}
+                  </div>
+                  
+                  <div className="lg:w-3/4 w-full">
+                    <TestimonialsCarousel />
+                  </div>
                 </div>
-                <TestimonialsCarousel />
               </div>
             </section>
           );
         }
-
         // ── Airlines ──────────────────────────────────────────────────────────
         if (sec.type === "Airlines") {
           const logos: { src: string; alt: string }[] = (sec.data?.logos || []).map((l: any) => ({
@@ -317,44 +333,77 @@ export default function PageSectionsRenderer({ sections }: { sections: any[] }) 
           );
         }
 
+        // ── Travel Organization ───────────────────────────────────────────────
+        if (sec.type === "Travel Organization") {
+          const logos: { src: string; alt: string }[] = (sec.data?.logos || []).map((l: any) => ({
+            src: l.src || "",
+            alt: l.alt || "",
+          }));
+          return (
+            <section key={idx} className="py-12 bg-white">
+              <div className="max-w-7xl mx-auto px-4">
+                <div className="text-center mb-8">
+                  {sec.data?.eyebrow && (
+                    <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+                      {sec.data.eyebrow}
+                    </span>
+                  )}
+                  <h2 className="text-3xl font-serif text-[#004B39] font-normal">
+                    {sec.data?.title || "Trusted Travel Organizations"}
+                  </h2>
+                </div>
+                {logos.length > 0 ? (
+                  <MarqueeTrack
+                    type="travel"
+                    images={logos}
+                    speedMs={sec.data?.speedMs || 30000}
+                    direction={sec.data?.direction || "left"}
+                    cardStyle={true}
+                  />
+                ) : (
+                  <p className="text-center text-slate-400 text-sm">No organization logos configured yet.</p>
+                )}
+              </div>
+            </section>
+          );
+        }
+
+        // ── Visa Solutions ───────────────────────────────────────────────────
+        if (sec.type === 'Visa Solutions' || sec.type === 'Visa Solutions Grid' || sec.type === 'Visa Cards') {
+          return <VisaSolutionsSection key={idx} data={sec.data} />;
+        }
+
         // ── Contact ───────────────────────────────────────────────────────────
         if (sec.type === "Contact") {
           return <ContactFormSection key={idx} data={sec.data || {}} />;
         }
 
-        // ── Statically Rendered Sections (Ignore) ──────────────────────────
-        const ignoredSections = [
-          "Upcoming Umrah Packages",
-          "Umrah Packages",
-          "Hajj Packages",
-          "Hajj Services Grid",
-          "Umrah Services Grid",
-          "Travel Services",
-          "Stats Grid",
-          "Intro",
-          "Image+Text",
-          "Why Choose Us",
-          "Services Grid",
-          "What We Provide",
-          "Accreditations Bar",
-          "Badges Cards",
-          "Umrah Packages Grid",
-          "Packages Grid",
-          "Who We Are",
-          "Homepage Hero Banner",
-          "Hero Slider"
-        ];
-        if (ignoredSections.includes(sec.type)) {
-          return null;
+        if (sec.type === "Homepage Hero Banner" || sec.type === "Hero Slider") {
+          return <HomepageHeroBanner key={idx} data={sec.data} pageData={pageData} />;
+        }
+        
+        if (sec.type === "Who We Are" || sec.type === "Image+Text" || sec.type === "Intro") {
+          return <WhoWeAreSection key={idx} data={sec.data} />;
+        }
+        
+        if (sec.type === "Upcoming Umrah Packages" || sec.type === "Umrah Packages" || sec.type === "Umrah Packages Grid") {
+          return <UpcomingUmrahPackages key={idx} data={sec.data} />;
         }
 
-        // Default fallback for unmapped sections
-        return (
-          <div key={idx} className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-            {sec.title && <h2 className="text-2xl font-bold text-slate-800 mb-4">{sec.title}</h2>}
-            {sec.data?.description && <p className="text-slate-600 leading-relaxed">{sec.data.description}</p>}
-          </div>
-        );
+        if (sec.type === "Travel Services" || sec.type === "Services Grid" || sec.type === "Umrah Services Grid" || sec.type === "Hajj Services Grid") {
+          return <TravelServicesSection key={idx} data={sec.data} />;
+        }
+
+        if (sec.type === "What We Provide" || sec.type === "Why Choose Us" || sec.type === "Stats Grid" || sec.type === "Accreditations Bar") {
+          return <WhatWeProvideSection key={idx} data={sec.data} />;
+        }
+
+        if (sec.type === "Hajj Packages" || sec.type === "Packages Grid") {
+          return <HajjPackagesSection key={idx} data={sec.data} />;
+        }
+
+        // Return null for any unmapped sections
+        return null;
       })}
     </div>
   );

@@ -44,6 +44,7 @@ const SECTION_CATALOG: SectionCategory[] = [
       { type: 'Visa Solutions', description: 'Visa type cards (Tourist, Business, Umrah, Hajj) with features and apply CTA.', pages: ['Homepage'] },
       { type: 'Testimonials', description: 'Google Reviews carousel with star rating, review count, and testimonial cards from happy pilgrims.', pages: ['Homepage'] },
       { type: 'Airlines', description: 'Infinite scrolling logo marquee of airline partner brands.', pages: ['Homepage'] },
+      { type: 'Travel Organization', description: 'Infinite scrolling logo marquee of travel organizations.', pages: ['Homepage'] },
       { type: 'Contact', description: 'Animated Contact with dual notification (admin + user confirmation email).', pages: ['Homepage'] },
     ],
   },
@@ -579,6 +580,16 @@ function PageBuilderContent() {
     } else if (type === 'Umrah Packages Grid') {
       defaultData = {
         items: []
+      };
+    } else if (type === 'Travel Organization') {
+      defaultData = {
+        eyebrow: 'LICENSED & ACCREDITED',
+        title: 'Trusted Travel Organizations',
+        speedMs: 30000,
+        direction: 'left',
+        logos: [
+          { src: '/img/air/saudia.png', alt: 'Organization' },
+        ]
       };
     } else if (type === 'Airlines') {
       defaultData = {
@@ -3197,47 +3208,31 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {(sec.type === 'Airlines' || sec.type === 'Partners Marquee' || sec.type === 'Logo Carousel' || sec.type === 'Airlines Logo Carousel') && (
-                              <div className="flex flex-col bg-white">
-                                <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
-                                  ✈️ Airlines Logo Carousel & Partners Manager
-                                </span>
-                                <div className="grid grid-cols-4 gap-8">
+                            {(sec.type === 'Airlines' || sec.type === 'Travel Organization' || sec.type === 'Partners Marquee' || sec.type === 'Logo Carousel' || sec.type === 'Airlines Logo Carousel') && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3.5 flex flex-col gap-3 mt-1">
+                                <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                                  <span className="text-xs font-extrabold text-[#004B39] uppercase">
+                                    {sec.type === 'Travel Organization' ? '🏢 TRAVEL ORGANIZATION LOGO CAROUSEL' : '✈️ AIRLINES LOGO CAROUSEL & PARTNERS MANAGER'}
+                                  </span>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                   <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">EYEBROW TEXT</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.eyebrow || 'OUR TRUSTED PARTNERS'}
-                                      onChange={(e) => updateSectionData(sec.id, 'eyebrow', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">SECTION TITLE</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.title || 'Airlines We Sourced Deals From'}
-                                      onChange={(e) => updateSectionData(sec.id, 'title', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">CAROUSEL SPEED (MS)</label>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">CAROUSEL SPEED (MS)</label>
                                     <input
                                       type="number"
                                       step="1000"
                                       placeholder="35000"
                                       value={sec.data?.speedMs !== undefined ? sec.data.speedMs : 35000}
                                       onChange={(e) => updateSectionData(sec.id, 'speedMs', Number(e.target.value))}
-                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
                                     />
                                   </div>
                                   <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">SCROLL DIRECTION</label>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">SCROLL DIRECTION</label>
                                     <select
                                       value={sec.data?.direction || 'left'}
                                       onChange={(e) => updateSectionData(sec.id, 'direction', e.target.value)}
-                                      className="w-full bg-white"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
                                     >
                                       <option value="left">⬅️ Left</option>
                                       <option value="right">➡️ Right</option>
@@ -3246,13 +3241,13 @@ function PageBuilderContent() {
                                 </div>
 
                                 {/* Multi Logo Uploader & Draggable Grid */}
-                                <div className="flex flex-col bg-slate-50">
-                                  <div className="flex justify-between items-center">
-                                    <span className="text-xs font-bold text-slate-800">
+                                <div className="flex flex-col mt-2">
+                                  <div className="flex justify-between items-center mb-3">
+                                    <span className="text-[10px] font-bold text-slate-600">
                                       🖼️ Upload & Manage Logos (Drag to reorder)
                                     </span>
-                                    <div className="flex gap-8">
-                                      <label className="flex items-center font-bold cursor-pointer text-white bg-[#004B39]">
+                                    <div className="flex gap-2">
+                                      <label className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-[#004B39] hover:bg-[#00382B] text-white text-[10px] font-bold cursor-pointer transition-colors">
                                         <Upload className="w-3.5 h-3.5" /> Upload Multiple Logos
                                         <input
                                           type="file"
