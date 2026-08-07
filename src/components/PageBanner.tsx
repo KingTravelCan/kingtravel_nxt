@@ -29,7 +29,7 @@ export default function PageBanner({
     <section
       ref={(el) => {
         if (el) {
-          el.style.backgroundImage = `linear-gradient(rgba(10, 66, 45, 0.45), rgba(10, 66, 45, 0.45)), url("${cleanBg}")`;
+          el.style.backgroundImage = `linear-gradient(rgba(10, 66, 45, 0.45), rgba(10, 66, 45, 1)), url("${cleanBg}")`;
           el.style.backgroundPosition = activePos;
           el.style.backgroundSize = activeSize;
         }

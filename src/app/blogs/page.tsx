@@ -44,8 +44,8 @@ export default async function BlogsListingPage() {
         description="Insights, tips, and inspiration for your pilgrimage journey — written by the King Travel Canada team."
       />
 
-      <section className="py-16 px-5 bg-[#f9fafb]">
-        <div className="max-w-[1280px] mx-auto">
+      <section className="section-outer bg-sage">
+        <div className="section-inner">
 
           {allBlogs.length === 0 && (
             <div className="text-center py-24 text-slate-400">
@@ -79,13 +79,14 @@ export default async function BlogsListingPage() {
                   <span className={`self-start text-[11px] font-extrabold px-3 py-1 rounded-full mb-4 ${CATEGORY_COLORS[featured.category ?? ''] ?? 'bg-emerald-100 text-emerald-700'}`}>
                     {featured.category || 'Article'}
                   </span>
-                  <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-3 leading-tight group-hover:text-[#004B39] transition-colors">
+                  <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2 leading-tight group-hover:text-[#004B39] transition-colors">
                     {featured.title}
                   </h2>
+                  <span className="date-display mb-3">{formatDate(featured.publishedAt || featured.createdAt)}</span>
                   {featured.excerpt && (
-                    <p className="text-sm text-slate-500 leading-relaxed mb-5 line-clamp-3">{featured.excerpt}</p>
+                    <p className="normal-text">{featured.excerpt}</p>
                   )}
-                  <div className="flex items-center gap-3 text-xs text-slate-400">
+                  {/* <div className="flex items-center gap-3 text-xs text-slate-400">
                     <span className="w-7 h-7 rounded-full bg-[#004B39] flex items-center justify-center text-white font-bold text-[10px]">
                       {featured.authorName?.charAt(0) || 'K'}
                     </span>
@@ -96,8 +97,8 @@ export default async function BlogsListingPage() {
                         <span>{formatDate(featured.publishedAt || featured.createdAt)}</span>
                       </>
                     )}
-                  </div>
-                  <div className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-[#004B39] group-hover:gap-3 transition-all">
+                  </div> */}
+                  <div className=" inline-flex items-center gap-2 text-sm font-bold text-ink group-hover:gap-3 transition-all">
                     Read Full Article <span className="text-[#DB9E30]">→</span>
                   </div>
                 </div>
@@ -108,8 +109,7 @@ export default async function BlogsListingPage() {
           {/* ── Grid of Remaining Posts ── */}
           {rest.length > 0 && (
             <>
-              <h2 className="text-lg font-extrabold text-slate-700 mb-6 flex items-center gap-2">
-                <span className="w-1 h-5 bg-[#004B39] rounded-full inline-block" />
+              <h2 className="text-2xl md:text-3xl font-extrabold text-ink mb-6 flex items-center">
                 More Articles
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
@@ -119,7 +119,7 @@ export default async function BlogsListingPage() {
                     <Link
                       key={blog.id}
                       href={`/blogs/${blog.slug}`}
-                      className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200 hover:-translate-y-1 transition-all duration-400 no-underline"
+                      className="group flex flex-col rounded-2xl overflow-hidden bg-white border border-slate-100 shadow-sm hover:shadow-xl hover:shadow-slate-200 hover:-translate-y-1 transition-all duration-400 no-underline blog-card"
                     >
                       {/* Thumbnail */}
                       <div className="relative overflow-hidden h-52">
@@ -136,25 +136,26 @@ export default async function BlogsListingPage() {
 
                       {/* Body */}
                       <div className="flex flex-col flex-1 p-5">
-                        <h3 className="text-sm font-bold text-slate-900 leading-snug mb-2 line-clamp-2 group-hover:text-[#004B39] transition-colors">
+                        <h3 className="text-xl font-bold text-ink leading-snug mb-2 line-clamp-2 group-hover:text-[#004B39] transition-colors">
                           {blog.title}
                         </h3>
-                        {blog.excerpt && (
-                          <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-4 flex-1">
-                            {blog.excerpt}
-                          </p>
-                        )}
-                        <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100">
-                          <div className="flex items-center gap-2 text-[11px] text-slate-400">
+                        <div className="flex items-center justify-between pb-3">
+                          {/* <div className="flex items-center gap-2 text-[11px] text-slate-400">
                             <span className="w-5 h-5 rounded-full bg-[#004B39] flex items-center justify-center text-white font-bold text-[9px]">
                               {blog.authorName?.charAt(0) || 'K'}
                             </span>
                             <span className="font-medium text-slate-500 truncate max-w-[90px]">{blog.authorName?.split(' ')[0] || 'King Travel'}</span>
-                          </div>
+                          </div> */}
                           {displayDate && (
-                            <span className="text-[11px] text-slate-400">{displayDate}</span>
+                            <span className="date-display">{displayDate}</span>
                           )}
                         </div>
+                        {blog.excerpt && (
+                          <p className="text-sm normal-text">
+                            {blog.excerpt}
+                          </p>
+                        )}
+                        
                       </div>
                     </Link>
                   );

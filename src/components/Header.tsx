@@ -153,7 +153,7 @@ export default function Header() {
           </nav>
 
           {/* Right: WhatsApp chip + hamburger */}
-          <div className="flex items-center max-lg:order-2 max-lg:ml-auto max-lg:mr-[15px]">
+          <div className="flex items-center max-lg:order-2 max-lg:ml-auto">
             <div className="flex items-center gap-[5px] max-sm:hidden">
               <div className="w-[32px] max-sm:w-[24px] h-auto block">
                 <Image

@@ -30,6 +30,7 @@
 /* ============ TOKENS ============ */
 :root {
   --ink: #132723;
+  --ink-light: color-mix(in srgb, var(--ink), white 50%);
   --ink-2: #1c352f;
   --cream: #F5EFE1;
   --sage: #F1F5E5;
@@ -109,7 +110,22 @@ button {
   margin: 0 auto;
   padding: 0 40px;
 }
-
+.section-outer{
+  @apply py-10 px-5
+}
+.section-inner{
+  @apply max-w-[1280px] mx-auto
+}
+.date-display{
+  @apply text-sm text-[var(--ink-light)] font-bold
+}
+.normal-text{
+  font-weight: 500;
+  @apply text-ink-soft leading-relaxed mb-5 line-clamp-3
+}
+.blog-card .normal-text{
+  @apply mb-1
+}
 @media (max-width:720px) {
   .wrap {
     padding: 0 22px;
@@ -124,7 +140,16 @@ h4 {
   line-height: 1.1;
   letter-spacing: .2px;
 }
-
+/* Custom CSS override */
+.\[\&_p\]\:text-\[15px\] p {
+  font-size: 1rem;
+}
+.\[\&_h3\]\:text-\[\#004B39\] h3 {
+  color: var(--ink) !important;
+}
+.\[\&_p\]\:text-slate-700 p{
+  color: var(--ink) !important;
+}
 .eyebrow {
   font-family: var(--sans);
   font-size: 18px;
@@ -493,7 +518,7 @@ header {
 .hero {
   position: relative;
   padding: 0 0;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .hero-inner {
@@ -780,11 +805,11 @@ section#flights {
   padding: 60px 0;
 }
 
-@media (max-width:720px) {
+/* @media (max-width:720px) {
   section {
     padding: 70px 0;
   }
-}
+} */
 
 .section-head {
   max-width: 640px;

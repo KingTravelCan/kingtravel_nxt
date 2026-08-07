@@ -89,21 +89,21 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
       {/* ── Hero Banner ── */}
-      <div className="relative w-full h-[420px] md:h-[520px] overflow-hidden">
+      <div className="relative w-full h-[360px] overflow-hidden">
         <img
           src={blog.featuredImage || FALLBACK_THUMB}
           alt={blog.title}
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10" />
-        <div className="absolute inset-0 flex flex-col justify-end px-6 pb-10 max-w-[900px] mx-auto left-0 right-0">
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0a422d]/45 to-[#0a422d]/100" />
+        <div className="absolute inset-0 flex flex-col justify-center px-6 xl:px-0 pb-10 max-w-[1280px] mx-auto left-0 right-0">
           <span className={`self-start text-[11px] font-extrabold px-3 py-1 rounded-full border mb-4 ${catClass}`}>
             {blog.category || 'Article'}
           </span>
           <h1 className="text-2xl md:text-4xl font-bold text-white leading-tight mb-4 drop-shadow-lg">
             {blog.title}
           </h1>
-          <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
+          {/* <div className="flex flex-wrap items-center gap-4 text-sm text-white/80">
             <div className="flex items-center gap-2">
               <span className="w-8 h-8 rounded-full bg-[#004B39] flex items-center justify-center text-white font-bold text-xs border-2 border-white/30">
                 {blog.authorName?.charAt(0) || 'K'}
@@ -116,29 +116,30 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 <span>{displayDate}</span>
               </>
             )}
-          </div>
+          </div> */}
+          <span className="date-display !text-white">{displayDate}</span>
         </div>
       </div>
 
       {/* ── Content Layout ── */}
-      <section className="bg-[#f9fafb] py-12 px-5">
-        <div className="max-w-[1280px] mx-auto">
+      <section className="bg-sage section-outer">
+        <div className="section-inner">
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-10 items-start">
 
             {/* ── Main Article Content ── */}
             <article>
               {/* Breadcrumb */}
-              <nav className="flex items-center gap-2 text-[11px] text-slate-400 mb-8">
-                <Link href="/" className="hover:text-[#004B39] no-underline transition-colors">Home</Link>
+              <nav className="flex items-center gap-2 text-sm text-slate-400 mb-8">
+                <Link href="/" className="text-[var(--ink-light)] hover:text-[#004B39] no-underline transition-colors">Home</Link>
                 <span>›</span>
-                <Link href="/blogs" className="hover:text-[#004B39] no-underline transition-colors">Blog</Link>
+                <Link href="/blogs" className="text-[var(--ink-light)] hover:text-[#004B39] no-underline transition-colors">Blog</Link>
                 <span>›</span>
-                <span className="text-slate-600 font-medium truncate max-w-[200px]">{blog.title}</span>
+                <span className="text-slate-600 font-medium max-sm:truncate max-sm:max-w-[200px]">{blog.title}</span>
               </nav>
 
               {/* Excerpt callout */}
               {blog.excerpt && (
-                <div className="bg-white border-l-4 border-[#004B39] rounded-r-2xl px-6 py-5 mb-8 shadow-sm">
+                <div className="bg-[var(--gold-soft)] border-l-4 border-[#004B39] rounded-r-2xl px-6 py-5 mb-8 shadow-sm">
                   <p className="text-base text-slate-700 italic leading-relaxed font-medium m-0">{blog.excerpt}</p>
                 </div>
               )}
@@ -162,14 +163,14 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
               {/* Tags footer */}
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <span className="text-xs font-bold text-slate-500">Tags:</span>
+                <span className="text-sm font-bold text-ink">Tags:</span>
                 {[blog.category, 'King Travel Canada', 'Pilgrimage'].filter(Boolean).map((tag) => (
-                  <span key={tag} className="text-xs px-3 py-1 rounded-full bg-slate-100 text-slate-600 font-medium">{tag}</span>
+                  <span key={tag} className="text-sm px-3 py-1 rounded-full border-1 border-[var(--ink-light)]  text-[var(--ink-light)] font-medium">{tag}</span>
                 ))}
               </div>
 
               {/* Back to blog */}
-              <div className="mt-10 pt-6 border-t border-slate-100">
+              <div className="max-sm:hidden max-lg:landscape:hidden mt-10 pt-6 border-t border-slate-100">
                 <Link
                   href="/blogs"
                   className="inline-flex items-center gap-2 text-sm font-bold text-[#004B39] hover:gap-3 transition-all no-underline"
@@ -182,9 +183,9 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             {/* ── Related Posts Sidebar ── */}
             <aside className="lg:sticky lg:top-6">
               <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-                <div className="px-5 py-4 border-b border-slate-100 flex items-center gap-2">
-                  <span className="w-1 h-5 bg-[#004B39] rounded-full inline-block" />
-                  <h2 className="text-sm font-extrabold text-slate-800 m-0">Other Articles</h2>
+                <div className="px-5 py-4 border-b border-slate-100 flex items-center">
+                  {/* <span className="w-1 h-5 bg-[#004B39] rounded-full inline-block" /> */}
+                  <h2 className="text-xl font-extrabold text-ink m-0">Other Articles</h2>
                 </div>
 
                 {relatedBlogs.length === 0 ? (
@@ -241,11 +242,11 @@ function RelatedCard({ post }: { post: any }) {
       </div>
       {/* Text */}
       <div className="flex-1 min-w-0">
-        <h3 className="text-xs font-bold text-slate-800 leading-snug line-clamp-2 group-hover:text-[#004B39] transition-colors mb-1">
+        <h3 className="text-sm font-bold text-slate-800 leading-snug line-clamp-2 group-hover:text-[#004B39] transition-colors mb-1">
           {post.title}
         </h3>
         {displayDate && (
-          <span className="text-[10px] text-slate-400">{displayDate}</span>
+          <span className="text-[12px] text-[var(--ink-light)]">{displayDate}</span>
         )}
       </div>
     </Link>
