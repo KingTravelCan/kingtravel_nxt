@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'basic-ftp';
 import { PassThrough } from 'stream';
 
-export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   // Await the params object in Next.js 16+ App Router
   const resolvedParams = await params;
   const filePath = resolvedParams.path.join('/');
