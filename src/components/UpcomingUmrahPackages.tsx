@@ -15,7 +15,7 @@ export default function UpcomingUmrahPackages({ data }: { data: any }) {
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div>
             <h3 className="text-[#DB9E30] font-black uppercase tracking-widest text-xs mb-3">{eyebrow}</h3>
-            <h2 
+            <h2
               className="text-4xl md:text-5xl font-serif text-[#004B39] leading-tight"
               dangerouslySetInnerHTML={{ __html: title }}
             />
@@ -27,105 +27,46 @@ export default function UpcomingUmrahPackages({ data }: { data: any }) {
 
         {/* Packages Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
-          {/* Card 1 */}
-          <div className="bg-white rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col border border-gray-100">
-            <div className="relative h-48 w-full">
-              <img src="uploads/sections/hajj_1.jpg" alt="Makkah" className="w-full h-full object-cover" />
-              <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-gray-800 tracking-wider">5 STAR</div>
-            </div>
-            <div className="p-8 flex-1 flex flex-col">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">AUGUST · 2026</div>
-              <h3 className="text-2xl font-serif text-[#004B39] mb-2">5 Star Umrah Package</h3>
-              <div className="text-[#DB9E30] font-black text-xl mb-6">CAD 2,895 <span className="text-sm font-medium text-gray-500">/ Person</span></div>
+          {(data?.packages || []).map((pkg: any, idx: number) => {
+            const isGold = pkg.isActiveCard;
+            return (
+              <div key={idx} className={`${isGold ? 'bg-[#DB9E30] shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8' : 'bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100'} rounded-[32px] overflow-hidden flex flex-col`}>
+                <div className="relative h-48 w-full">
+                  <img src={pkg.heroImage} alt={pkg.title} className="w-full h-full object-cover" />
+                  <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-gray-800 tracking-wider">{pkg.starRating} STAR</div>
+                </div>
+                <div className="p-8 flex-1 flex flex-col">
+                  <div className={`${isGold ? 'text-[#004B39]/70' : 'text-gray-500'} text-xs font-bold uppercase tracking-widest mb-2`}>{pkg.month}</div>
+                  <h3 className="text-2xl font-serif text-[#004B39] mb-2">{pkg.title}</h3>
+                  <div className={`${isGold ? 'text-[#004B39]' : 'text-[#DB9E30]'} font-black text-xl mb-6`}>CAD {pkg.price} <span className={`text-sm font-medium ${isGold ? 'opacity-80' : 'text-gray-500'}`}>/ Person</span></div>
 
-              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">PACKAGE INCLUDES</div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Plane className="w-4 h-4 text-gray-400 shrink-0" /> Return Flights from Toronto</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Bus className="w-4 h-4 text-gray-400 shrink-0" /> Luxury Ground Transportation</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Gift className="w-4 h-4 text-gray-400 shrink-0" /> Free Ihram Kit</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.FileText className="w-4 h-4 text-gray-400 shrink-0" /> Registration & Visa Assistance</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Users className="w-4 h-4 text-gray-400 shrink-0" /> Imam Lead Guide & Seminar</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Hotel className="w-4 h-4 text-gray-400 shrink-0" /> 5 Star Hotels Makkah & Madinah</li>
-              </ul>
+                  <div className={`text-[10px] font-black uppercase tracking-widest mb-4 ${isGold ? 'text-[#004B39]/70' : 'text-gray-400'}`}>PACKAGE INCLUDES</div>
+                  <ul className="space-y-4 mb-8 flex-1">
+                    {(pkg.includes || []).map((inc: string, i: number) => {
+                      const firstWord = inc.split(' ')[0].toLowerCase();
+                      let Icon = LucideIcons.CheckCircle;
+                      if (firstWord === 'return' || firstWord === 'flights') Icon = LucideIcons.Plane;
+                      else if (firstWord === 'luxury' || firstWord === 'transport') Icon = LucideIcons.Bus;
+                      else if (firstWord === 'free' || firstWord === 'ihram') Icon = LucideIcons.Gift;
+                      else if (firstWord === 'registration' || firstWord === 'visa') Icon = LucideIcons.FileText;
+                      else if (firstWord === 'imam' || firstWord === 'guide') Icon = LucideIcons.Users;
+                      else if (firstWord === '5' || firstWord === 'hotel') Icon = LucideIcons.Hotel;
 
-              <button className="w-full py-4 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors">BOOK NOW</button>
-            </div>
-          </div>
+                      return (
+                        <li key={i} className={`flex gap-3 text-sm ${isGold ? 'text-[#004B39]/90' : 'text-gray-600'}`}>
+                          <Icon className={`w-4 h-4 shrink-0 ${isGold ? 'text-[#004B39]/90' : 'text-gray-400'}`} /> {inc}
+                        </li>
+                      );
+                    })}
+                  </ul>
 
-          {/* Card 2 */}
-          <div className="bg-[#DB9E30] rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col mt-0 xl:mt-8">
-            <div className="relative h-48 w-full">
-              <img src="https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=600&q=80" alt="Madinah" className="w-full h-full object-cover" />
-              <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-gray-800 tracking-wider">5 STAR</div>
-            </div>
-            <div className="p-8 flex-1 flex flex-col">
-              <div className="text-[#004B39]/70 text-xs font-bold uppercase tracking-widest mb-2">SEPTEMBER · 2026</div>
-              <h3 className="text-2xl font-serif text-[#004B39] mb-2">5 Star Umrah Package</h3>
-              <div className="text-[#004B39] font-black text-xl mb-6">CAD 2,695 <span className="text-sm font-medium opacity-80">/ Person</span></div>
-
-              <div className="text-[10px] font-black text-[#004B39]/70 uppercase tracking-widest mb-4">PACKAGE INCLUDES</div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Plane className="w-4 h-4 shrink-0" /> Return Flights from Toronto</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Bus className="w-4 h-4 shrink-0" /> Luxury Ground Transportation</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Gift className="w-4 h-4 shrink-0" /> Free Ihram Kit</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.FileText className="w-4 h-4 shrink-0" /> Registration & Visa Assistance</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Users className="w-4 h-4 shrink-0" /> Imam Lead Guide & Seminar</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Hotel className="w-4 h-4 shrink-0" /> 5 Star Hotels Makkah & Madinah</li>
-              </ul>
-
-              <button className="w-full py-4 bg-[#2c3e35] hover:bg-[#1a2520] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors">BOOK NOW</button>
-            </div>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-white rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.08)] flex flex-col border border-gray-100">
-            <div className="relative h-48 w-full">
-              <img src="uploads/sections/hajj_1.jpg" alt="Makkah" className="w-full h-full object-cover" />
-              <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-gray-800 tracking-wider">5 STAR</div>
-            </div>
-            <div className="p-8 flex-1 flex flex-col">
-              <div className="text-gray-500 text-xs font-bold uppercase tracking-widest mb-2">OCTOBER · 2026</div>
-              <h3 className="text-2xl font-serif text-[#004B39] mb-2">5 Star Umrah Package</h3>
-              <div className="text-[#DB9E30] font-black text-xl mb-6">CAD 2,795 <span className="text-sm font-medium text-gray-500">/ Person</span></div>
-
-              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">PACKAGE INCLUDES</div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Plane className="w-4 h-4 text-gray-400 shrink-0" /> Return Flights from Toronto</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Bus className="w-4 h-4 text-gray-400 shrink-0" /> Luxury Ground Transportation</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Gift className="w-4 h-4 text-gray-400 shrink-0" /> Free Ihram Kit</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.FileText className="w-4 h-4 text-gray-400 shrink-0" /> Registration & Visa Assistance</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Users className="w-4 h-4 text-gray-400 shrink-0" /> Imam Lead Guide & Seminar</li>
-                <li className="flex gap-3 text-sm text-gray-600"><LucideIcons.Hotel className="w-4 h-4 text-gray-400 shrink-0" /> 5 Star Hotels Makkah & Madinah</li>
-              </ul>
-
-              <button className="w-full py-4 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors">BOOK NOW</button>
-            </div>
-          </div>
-
-          {/* Card 4 */}
-          <div className="bg-[#DB9E30] rounded-[32px] overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.12)] flex flex-col mt-0 xl:mt-8">
-            <div className="relative h-48 w-full">
-              <img src="https://images.unsplash.com/photo-1565552070098-fd83a8dac718?auto=format&fit=crop&w=600&q=80" alt="Madinah" className="w-full h-full object-cover" />
-              <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-gray-800 tracking-wider">5 STAR</div>
-            </div>
-            <div className="p-8 flex-1 flex flex-col">
-              <div className="text-[#004B39]/70 text-xs font-bold uppercase tracking-widest mb-2">NOVEMBER · 2026</div>
-              <h3 className="text-2xl font-serif text-[#004B39] mb-2">5 Star Umrah Package</h3>
-              <div className="text-[#004B39] font-black text-xl mb-6">CAD 2,795 <span className="text-sm font-medium opacity-80">/ Person</span></div>
-
-              <div className="text-[10px] font-black text-[#004B39]/70 uppercase tracking-widest mb-4">PACKAGE INCLUDES</div>
-              <ul className="space-y-4 mb-8 flex-1">
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Plane className="w-4 h-4 shrink-0" /> Return Flights from Toronto</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Bus className="w-4 h-4 shrink-0" /> Luxury Ground Transportation</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Gift className="w-4 h-4 shrink-0" /> Free Ihram Kit</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.FileText className="w-4 h-4 shrink-0" /> Registration & Visa Assistance</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Users className="w-4 h-4 shrink-0" /> Imam Lead Guide & Seminar</li>
-                <li className="flex gap-3 text-sm text-[#004B39]/90"><LucideIcons.Hotel className="w-4 h-4 shrink-0" /> 5 Star Hotels Makkah & Madinah</li>
-              </ul>
-
-              <button className="w-full py-4 bg-[#2c3e35] hover:bg-[#1a2520] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors">BOOK NOW</button>
-            </div>
-          </div>
+                  <a href={pkg.buttonUrl || '#contact'} className={`w-full py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block ${isGold ? 'bg-[#2c3e35] hover:bg-[#1a2520] text-white' : 'bg-[#DB9E30] hover:bg-[#c58d2a] text-white'}`}>
+                    {pkg.buttonText || 'BOOK NOW'}
+                  </a>
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         <div className="flex justify-center mt-12">
