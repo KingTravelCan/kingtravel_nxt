@@ -41,12 +41,15 @@ export async function uploadFileToFtp(file: File, subfolder: string = 'uploads')
  */
 export function sanitizeMediaUrl(url: string): string {
   if (!url) return '';
-  const mediaBase = (process.env.NEXT_PUBLIC_MEDIA_URL || 'https://tanzeem.dks.com.pk/media').replace(/\/$/, '');
+  const mediaBase = (process.env.NEXT_PUBLIC_MEDIA_URL || '/media').replace(/\/$/, '');
   if (url.startsWith('https://media.kingtravelcan.com')) {
     return url.replace(/^https?:\/\/media\.kingtravelcan\.com\/?/, `${mediaBase}/`);
   }
   if (url.startsWith('/media/')) {
     return url.replace(/^\/media\//, `${mediaBase}/`);
+  }
+  if (url.startsWith('/uploads/')) {
+    return url.replace(/^\/uploads\//, `${mediaBase}/uploads/`);
   }
   return url;
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import PageBanner from "@/components/PageBanner";
 import { getPageBySlug } from "@/actions/pageActions";
+import CertificationsFlipCardsSection from "@/components/CertificationsFlipCardsSection";
 
 export default function AboutPage() {
   const [pageData, setPageData] = useState<any>(null);
@@ -420,6 +421,10 @@ export default function AboutPage() {
               />
             </section>
           );
+        }
+
+        if (sec.type === 'Certifications Flip Cards' || sec.type === 'Our Certifications') {
+          return <CertificationsFlipCardsSection key={idx} data={sec.data || {}} />;
         }
 
         return null;

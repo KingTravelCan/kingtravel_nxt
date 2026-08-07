@@ -368,7 +368,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
           pkgSeo?.metaDescription ||
           `Book official ${title} packages with King Travel Canada. ${durationText}, departure from ${departure}, starting price CAD $${price}. Authorized visa, 5-star hotels & flight options.`
         }
-        canonicalUrl={pkgSeo?.canonicalUrl || `https://kingtravelcan.com/package/${rawSlug}`}
+        canonicalUrl={pkgSeo?.canonicalUrl || `/package/${rawSlug}`}
         ogImageUrl={pkgSeo?.ogImageUrl || pkg.heroImage || 'https://media.kingtravelcan.com/uploads/branding/logo.png'}
         jsonLdPayload={
           pkgSeo?.jsonLdPayload ||
@@ -385,7 +385,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
               },
               offers: {
                 '@type': 'Offer',
-                url: `https://kingtravelcan.com/package/${rawSlug}`,
+                url: `/package/${rawSlug}`,
                 priceCurrency: 'CAD',
                 price: (pkg.price || price || '12995').replace(/,/g, ''),
                 priceValidUntil: '2027-12-31',

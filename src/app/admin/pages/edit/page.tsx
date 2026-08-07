@@ -2153,25 +2153,19 @@ function PageBuilderContent() {
                                                 <img src={pkg.heroImage} alt="Card Preview" className="w-full h-full object-cover" />
                                               </div>
                                             )}
-                                            <label className="px-3 py-1.5 rounded-md border border-slate-300 bg-white text-xs font-bold text-[#004B39] cursor-pointer hover:bg-slate-50 flex items-center gap-1.5 shadow-2xs">
-                                              <Upload className="w-4 h-4" /> {pkg.heroImage ? 'Change Image' : 'Upload Image'}
-                                              <input
-                                                type="file"
-                                                accept="image/*"
-                                                className="hidden"
-                                                onChange={async (e) => {
-                                                  const file = e.target.files?.[0];
-                                                  if (file) {
-                                                    const url = await uploadFileToFtp(file, 'umrah');
-                                                    if (url) {
-                                                      const pkgs = getActiveItems();
-                                                      pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
-                                                      updateSectionData(sec.id, 'items', pkgs);
-                                                    }
-                                                  }
-                                                }}
-                                              />
-                                            </label>
+                                            <div className="w-full flex justify-center py-2 bg-slate-50 rounded-md border border-slate-100">
+      <ImageUploadWidget
+        value={pkg.heroImage || ''}
+        onChange={(url) => {
+          const pkgs = getActiveItems();
+          pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
+          updateSectionData(sec.id, 'items', pkgs);
+        }}
+        subfolder="umrah"
+        compact={true}
+        hideManualUrl={true}
+      />
+    </div>
                                           </div>
                                         </div>
                                         <label className="flex items-center gap-2 cursor-pointer pt-2">
@@ -3306,7 +3300,7 @@ function PageBuilderContent() {
                                   </div>
 
                                   {/* Logo Cards Grid */}
-                                  <div className="grid">
+                                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
                                     {((sec.data?.logos && Array.isArray(sec.data.logos)) ? sec.data.logos : [
                                       { src: '/img/a-1.png', alt: 'Saudi Airlines' },
                                       { src: '/img/a-2.png', alt: 'Emirates' },
@@ -3334,11 +3328,11 @@ function PageBuilderContent() {
                                           updated.splice(lIdx, 0, reordered);
                                           updateSectionData(sec.id, 'logos', updated);
                                         }}
-                                        className="flex flex-col relative bg-white"
+                                        className="flex flex-col relative bg-white border border-slate-200 rounded-lg p-3 shadow-sm hover:shadow-md transition-shadow gap-2"
                                       >
-                                        <div className="flex justify-between items-center">
-                                          <span className="text-xs font-bold text-slate-800">
-                                            ⋮⋮ Logo #{lIdx + 1}
+                                        <div className="flex justify-between items-center mb-1">
+                                          <span className="text-[10px] font-bold text-slate-500 tracking-wider">
+                                            ⋮⋮ LOGO #{lIdx + 1}
                                           </span>
                                           <button
                                             type="button"
@@ -3346,37 +3340,42 @@ function PageBuilderContent() {
                                               const updated = allLogos.filter((_, i) => i !== lIdx);
                                               updateSectionData(sec.id, 'logos', updated);
                                             }}
-                                            className="flex items-center justify-center cursor-pointer"
+                                            className="flex items-center justify-center cursor-pointer text-slate-400 hover:text-red-500 transition-colors"
                                             title="Remove logo"
                                           >
-                                            <Trash2 className="w-3 h-3" />
+                                            <Trash2 className="w-3.5 h-3.5" />
                                           </button>
                                         </div>
 
                                         {/* Logo Upload & Preview */}
-                                        <ImageUploadWidget
-                                          value={logoItem.src || ''}
-                                          onChange={(url) => {
-                                            const updated = [...allLogos];
-                                            updated[lIdx] = { ...updated[lIdx], src: url };
-                                            updateSectionData(sec.id, 'logos', updated);
-                                          }}
-                                          subfolder="logos"
-                                          compact={true}
-                                        />
+                                        <div className="w-full flex justify-center py-2 bg-slate-50 rounded-md border border-slate-100">
+                                          <ImageUploadWidget
+                                            value={logoItem.src || ''}
+                                            onChange={(url) => {
+                                              const updated = [...allLogos];
+                                              updated[lIdx] = { ...updated[lIdx], src: url };
+                                              updateSectionData(sec.id, 'logos', updated);
+                                            }}
+                                            subfolder="logos"
+                                            compact={true}
+                                            hideManualUrl={true}
+                                          />
+                                        </div>
 
                                         {/* Alt Text Input */}
-                                        <input
-                                          type="text"
-                                          placeholder="Airline / Partner Name"
-                                          value={logoItem.alt || ''}
-                                          onChange={(e) => {
-                                            const updated = [...allLogos];
-                                            updated[lIdx] = { ...updated[lIdx], alt: e.target.value };
-                                            updateSectionData(sec.id, 'logos', updated);
-                                          }}
-                                          className="w-full"
-                                        />
+                                        <div className="mt-1">
+                                          <input
+                                            type="text"
+                                            placeholder="Airline / Partner Name"
+                                            value={logoItem.alt || ''}
+                                            onChange={(e) => {
+                                              const updated = [...allLogos];
+                                              updated[lIdx] = { ...updated[lIdx], alt: e.target.value };
+                                              updateSectionData(sec.id, 'logos', updated);
+                                            }}
+                                            className="w-full text-xs px-2 py-1.5 rounded-md border border-slate-200 focus:border-[#004B39] outline-none"
+                                          />
+                                        </div>
                                       </div>
                                     ))}
                                   </div>
@@ -3429,30 +3428,13 @@ function PageBuilderContent() {
 
                                     {/* Upload Button + File Input */}
                                     <div className="flex flex-col gap-3">
-                                      <div className="flex gap-2 items-center">
-                                        <input
-                                          type="text"
-                                          placeholder="Background Image URL"
-                                          value={sec.data?.bgImage || ''}
-                                          onChange={(e) => updateSectionData(sec.id, 'bgImage', e.target.value)}
-                                          className="flex-1 px-3 py-2 rounded-lg border border-slate-300 text-sm font-sans"
-                                        />
-                                        <label className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold cursor-pointer text-white bg-[#004B39] hover:bg-emerald-800 transition-colors shrink-0">
-                                          <Upload className="w-4 h-4" /> Upload
-                                          <input
-                                            type="file"
-                                            accept="image/*"
-                                            className="hidden"
-                                            onChange={async (e) => {
-                                              const file = e.target.files?.[0];
-                                              if (file) {
-                                                const url = await uploadFileToFtp(file, 'backgrounds');
-                                                if (url) updateSectionData(sec.id, 'bgImage', url);
-                                              }
-                                            }}
-                                          />
-                                        </label>
-                                      </div>
+                                      <div className="w-full">
+      <ImageUploadWidget
+        value={sec.data?.bgImage || ''}
+        onChange={(url) => updateSectionData(sec.id, 'bgImage', url)}
+        subfolder="backgrounds"
+      />
+    </div>
                                       <span className="text-xs text-slate-500">Upload background image (JPG, PNG, WebP) for the section. Suggested size: 1920x800px.</span>
                                     </div>
                                   </div>

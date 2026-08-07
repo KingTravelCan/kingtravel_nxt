@@ -61,10 +61,10 @@ export default function CertificationsFlipCardsSection({ data }: CertificationsF
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {items.map((item, idx) => (
             <div key={idx} className="h-64 w-full group [perspective:1000px]">
-              <div className="relative h-full w-full rounded-[32px] transition-all duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-sm hover:shadow-xl">
+              <div className="relative h-full w-full rounded-[32px] transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-sm hover:shadow-xl">
                 
                 {/* Front Side */}
-                <div className="absolute inset-0 h-full w-full rounded-[32px] bg-white p-8 [backface-visibility:hidden] flex items-center justify-center border border-gray-100">
+                <div className="absolute inset-0 h-full w-full rounded-[32px] bg-white p-8 backface-hidden flex items-center justify-center border border-gray-100 z-10">
                   {item.logo ? (
                     <div className="relative w-4/5 h-4/5 flex items-center justify-center">
                       <img
@@ -79,7 +79,7 @@ export default function CertificationsFlipCardsSection({ data }: CertificationsF
                 </div>
 
                 {/* Back Side */}
-                <div className="absolute inset-0 h-full w-full rounded-[32px] bg-[#004B39] text-white p-8 [transform:rotateY(180deg)] [backface-visibility:hidden] flex flex-col justify-center items-center text-center">
+                <div className="absolute inset-0 h-full w-full rounded-[32px] bg-[#004B39] text-white p-8 [transform:rotateY(180deg)] backface-hidden flex flex-col justify-center items-center text-center">
                   <h3 className="font-bold text-lg mb-3 text-[#DB9E30]">{item.title}</h3>
                   <p className="text-sm text-emerald-50/90 leading-relaxed overflow-y-auto custom-scrollbar">
                     {item.description}

@@ -1,7 +1,9 @@
+'use server';
+
 import { db } from '@/db';
 import { siteSettings } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, unstable_noStore } from 'next/cache';
 
 export interface ActivityItem {
   id: string;
@@ -15,6 +17,7 @@ export interface ActivityItem {
 }
 
 export async function getRecentActivities(limit?: number): Promise<ActivityItem[]> {
+  unstable_noStore();
   try {
     const setting = await db.select().from(siteSettings).where(eq(siteSettings.key, 'activity_logs')).limit(1);
     if (setting && setting.length > 0) {

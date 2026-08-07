@@ -74,6 +74,7 @@ export default function LetsTravelPage() {
               width={210}
               height={50}
               priority
+              unoptimized={true}
               className="w-[210px] h-auto"
             />
           </div>

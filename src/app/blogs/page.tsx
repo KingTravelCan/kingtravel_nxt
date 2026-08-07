@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Blog & Travel Guides | King Travel Canada',
     description: 'Explore pilgrimage tips, Hajj & Umrah guides, Saudi Visa info, and travel inspiration.',
-    url: 'https://kingtravelcan.com/blogs',
+    url: '/blogs',
     type: 'website',
   },
 };
@@ -155,7 +155,7 @@ export default async function BlogsListingPage() {
                             {blog.excerpt}
                           </p>
                         )}
-                        
+
                       </div>
                     </Link>
                   );

@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { ActivityItem } from '@/actions/activityActions';
+import { useState, useEffect } from 'react';
+import { ActivityItem, getRecentActivities } from '@/actions/activityActions';
 import { Search, Filter, ShieldCheck, Layers, Users, Sliders, Package, FileText, Mail } from 'lucide-react';
 
 interface ActivityLogsClientProps {
@@ -19,9 +19,21 @@ const TYPE_CONFIG: Record<string, { label: string; bg: string; text: string; dot
 };
 
 export default function ActivityLogsClient({ initialActivities }: ActivityLogsClientProps) {
-  const [activities] = useState<ActivityItem[]>(initialActivities);
+  const [activities, setActivities] = useState<ActivityItem[]>(initialActivities);
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('all');
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const data = await getRecentActivities(100);
+        setActivities(data);
+      } catch (err) {
+        console.error('Failed to refresh activity logs:', err);
+      }
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const filtered = activities.filter((act) => {
     const q = search.trim().toLowerCase();

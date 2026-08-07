@@ -8,6 +8,7 @@ interface ImageUploadWidgetProps {
   onChange: (url: string) => void;
   subfolder?: string;
   compact?: boolean;
+  hideManualUrl?: boolean;
 }
 
 export default function ImageUploadWidget({
@@ -15,6 +16,7 @@ export default function ImageUploadWidget({
   onChange,
   subfolder = "uploads",
   compact = false,
+  hideManualUrl = false,
 }: ImageUploadWidgetProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
@@ -105,16 +107,18 @@ export default function ImageUploadWidget({
       )}
 
       {/* Manual URL Input (Fallback) */}
-      <div className={`flex-1 ${compact ? "w-full" : ""}`}>
-        <input
-          type="text"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder="Or paste image URL..."
-          className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-[#004B39] font-mono text-slate-600"
-        />
-        {error && <p className="text-red-500 text-[10px] mt-1">{error}</p>}
-      </div>
+      {!hideManualUrl && (
+        <div className={`flex-1 ${compact ? "w-full" : ""}`}>
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            placeholder="Or paste image URL..."
+            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-[#004B39] font-mono text-slate-600"
+          />
+          {error && <p className="text-red-500 text-[10px] mt-1">{error}</p>}
+        </div>
+      )}
     </div>
   );
 }

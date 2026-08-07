@@ -18,6 +18,7 @@
 *.php
 /temp
 /temp_html
+public/uploads/
  
 # debug
 npm-debug.log*

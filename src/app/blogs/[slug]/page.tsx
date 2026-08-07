@@ -54,7 +54,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     openGraph: {
       title: metaTitle,
       description: metaDesc,
-      url: `https://kingtravelcan.com/blogs/${slug}`,
+      url: `/blogs/${slug}`,
       type: 'article',
       images: [{ url: ogImage, width: 1200, height: 630, alt: blog.title }],
     },
@@ -89,14 +89,14 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     publisher: {
       '@type': 'Organization',
       name: 'King Travel Canada',
-      logo: { '@type': 'ImageObject', url: 'https://kingtravelcan.com/img/logo.png' },
+      logo: { '@type': 'ImageObject', url: '/img/logo.png' },
     },
     datePublished:
       toSafeISOString(blog.publishedAt) ||
       toSafeISOString(blog.createdAt),
 
     dateModified: toSafeISOString(blog.updatedAt),
-    mainEntityOfPage: { '@type': 'WebPage', '@id': `https://kingtravelcan.com/blogs/${slug}` },
+    mainEntityOfPage: { '@type': 'WebPage', '@id': `/blogs/${slug}` },
   };
 
   return (

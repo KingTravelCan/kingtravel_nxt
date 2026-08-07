@@ -59,7 +59,7 @@ export default function DynamicPage() {
   }
 
   return (
-    <main className="bg-[#f2f5f3] min-h-screen pb-16">
+    <main className="bg-[#f2f5f3] min-h-screen">
       <PageSeoHead pageTitle={page.title} seoData={page.seoData} />
       <PackageDetailModal
         isOpen={isDetailOpen}
@@ -77,7 +77,7 @@ export default function DynamicPage() {
 
       {/* Dynamic Page Content / Sections */}
       {sections.length > 0 ? (
-        <div className="w-full mx-auto pb-12">
+        <div className="w-full mx-auto">
           <PageSectionsRenderer sections={sections} />
         </div>
       ) : page.richText ? (

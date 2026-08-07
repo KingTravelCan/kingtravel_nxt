@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { updateBrowserFavicon } from '@/components/FaviconSync';
+import ImageUploadWidget from '@/components/admin/ImageUploadWidget';
 import { uploadFileToFtp, generateAutoAltText, sanitizeMediaUrl } from '@/lib/uploadClient';
 import {
   getNavItems,
@@ -1153,29 +1154,12 @@ export default function AdminSettingsPage() {
                   <div className="flex flex-col gap-3">
                     <div>
                       <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">Footer Logo Image</label>
-                      <div className="flex gap-2 items-center">
-                        <input
-                          type="text"
+                      <div className="w-full">
+                        <ImageUploadWidget
                           value={footerData.logo || ''}
-                          onChange={(e) => setFooterData({ ...footerData, logo: e.target.value })}
-                          className="flex-1 p-2 rounded-lg border border-slate-300 text-xs bg-white"
-                          placeholder="/img/logo-footer.png or Base64"
+                          onChange={(url: string) => setFooterData({ ...footerData, logo: url })}
+                          subfolder="footer"
                         />
-                        <label className="bg-[#004B39] text-white px-3 py-2 rounded-lg text-xs font-bold cursor-pointer flex items-center gap-1.5">
-                          <Upload className="w-3.5 h-3.5" /> Upload Logo
-                          <input
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                const url = await uploadFileToFtp(file, 'footer');
-                                if (url) setFooterData({ ...footerData, logo: url });
-                              }
-                            }}
-                          />
-                        </label>
                       </div>
                     </div>
                     <div>
@@ -2138,7 +2122,7 @@ export default function AdminSettingsPage() {
                           value={shareData.customShareUrl || ''}
                           onChange={(e) => setShareData({ ...shareData, customShareUrl: e.target.value })}
                           className="w-full mt-2 p-2.5 rounded-xl border border-slate-300 text-xs font-mono"
-                          placeholder="https://kingtravelcan.com/special-offer"
+                          placeholder="/special-offer"
                         />
                       )}
                     </div>

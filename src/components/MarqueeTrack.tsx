@@ -11,8 +11,8 @@ interface MarqueeTrackProps {
 }
 
 export default function MarqueeTrack({ type, images, speedMs = 35000, direction = "left", cardStyle = false }: MarqueeTrackProps) {
-  // Duplicate images for infinite scroll loop
-  const displayImages = [...images, ...images];
+  // Duplicate images for infinite scroll loop, and filter out any with empty sources
+  const displayImages = [...images, ...images].filter((img) => img.src && img.src.trim() !== "");
   const animationDuration = `${speedMs / 1000}s`;
   const animationDirection = direction === "right" ? "reverse" : "normal";
 
@@ -30,7 +30,7 @@ export default function MarqueeTrack({ type, images, speedMs = 35000, direction 
         >
           {displayImages.map((img, idx) => (
             <div className={`marquee-item ${cardStyle ? 'p-3' : ''}`} key={idx}>
-              <div className={`w-full h-full flex items-center justify-center ${cardStyle ? 'bg-white rounded-[20px] border border-slate-200/60 shadow-sm p-6 min-h-[110px]' : ''}`}>
+              <div className={`w-full h-full flex items-center justify-center ${cardStyle ? 'min-h-[110px]' : ''}`}>
                 {img.src.startsWith('data:') ? (
                   <img
                     src={img.src}

@@ -25,6 +25,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "media.kingtravelcan.com",
+      },
+      {
+        protocol: "https",
         hostname: "dks.com.pk",
       },
       {
