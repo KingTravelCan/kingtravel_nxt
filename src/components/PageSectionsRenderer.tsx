@@ -13,6 +13,7 @@ import UpcomingUmrahPackages from '@/components/UpcomingUmrahPackages';
 import TravelServicesSection from '@/components/TravelServicesSection';
 import WhatWeProvideSection from '@/components/WhatWeProvideSection';
 import HajjPackagesSection from '@/components/HajjPackagesSection';
+import CertificationsFlipCardsSection from '@/components/CertificationsFlipCardsSection';
 
 export default function PageSectionsRenderer({ sections, pageData }: { sections: any[], pageData?: any }) {
   if (!sections || !Array.isArray(sections)) return null;
@@ -21,6 +22,9 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
     <div className="w-full">
       {sections.map((sec: any, idx: number) => {
         if (!sec || !sec.type) return null;
+        if (sec.type === 'Certifications Flip Cards' || sec.type === 'Our Certifications') {
+          return <CertificationsFlipCardsSection key={idx} data={sec.data || {}} />;
+        }
         if (sec.type === 'Text Block (Rich Text)') {
           let content: string = sec.data?.content || '';
           if (!content) return null;

@@ -3385,61 +3385,60 @@ function PageBuilderContent() {
                             )}
 
                             {(sec.type === 'Certifications Flip Cards' || sec.type === 'Our Certifications') && (
-                              <div className="flex flex-col bg-white">
-                                <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
-                                  🏅 Certifications 3D Flip Cards Manager
-                                </span>
-                                <div className="grid grid-cols-3 gap-8">
+                              <div className="flex flex-col gap-5 p-6 bg-white border border-slate-200 rounded-xl">
+                                <div className="flex items-center gap-2 border-b border-slate-100 pb-3">
+                                  <span className="text-sm font-extrabold text-[#004B39] uppercase tracking-wide">
+                                    🏅 Certifications 3D Flip Cards Manager
+                                  </span>
+                                </div>
+                                <div className="grid grid-cols-2 gap-6">
                                   <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">EYEBROW TEXT</label>
+                                    <label className="block text-[10px] font-bold text-slate-500 mb-1">EYEBROW TEXT</label>
                                     <input
                                       type="text"
                                       value={sec.data?.eyebrow || 'WHY THEY MATTER'}
                                       onChange={(e) => updateSectionData(sec.id, 'eyebrow', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                                     />
                                   </div>
                                   <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">SECTION TITLE</label>
+                                    <label className="block text-[10px] font-bold text-slate-500 mb-1">SECTION TITLE</label>
                                     <input
                                       type="text"
                                       value={sec.data?.title || 'OUR CERTIFICATIONS'}
                                       onChange={(e) => updateSectionData(sec.id, 'title', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                      className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                                     />
                                   </div>
                                 </div>
 
                                 {/* Background Image Upload & Preview Row */}
-                                <div className="flex flex-col bg-slate-50">
-                                  <label className="block font-extrabold uppercase">
-                                    SECTION BACKGROUND IMAGE & PREVIEW
+                                <div className="flex flex-col gap-3 p-4 bg-slate-50 rounded-lg border border-slate-200">
+                                  <label className="block text-[10px] font-bold text-slate-500">
+                                    SECTION BACKGROUND IMAGE
                                   </label>
-                                  <div className="grid items-center">
+                                  <div className="grid grid-cols-[150px_1fr] gap-6 items-center">
                                     {/* Image Live Preview */}
-                                    <div className="flex items-center justify-center relative">
+                                    <div className="flex items-center justify-center relative w-[150px] h-[100px] rounded-lg overflow-hidden border border-slate-300 bg-white">
                                       {sec.data?.bgImage ? (
                                         <img src={sec.data.bgImage} alt="Background preview" className="w-full h-full object-cover" />
                                       ) : (
-                                        <span className="text-xs text-slate-500">No Image Loaded</span>
+                                        <span className="text-xs text-slate-400">No Image</span>
                                       )}
-                                      <span className="font-bold absolute text-white">
-                                        Preview
-                                      </span>
                                     </div>
 
                                     {/* Upload Button + File Input */}
-                                    <div className="flex flex-col gap-6">
+                                    <div className="flex flex-col gap-3">
                                       <div className="flex gap-2 items-center">
                                         <input
                                           type="text"
-                                          placeholder="Background Image Path / URL or Uploaded Base64"
-                                          value={sec.data?.bgImage || 'https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=1920&q=80'}
+                                          placeholder="Background Image URL"
+                                          value={sec.data?.bgImage || ''}
                                           onChange={(e) => updateSectionData(sec.id, 'bgImage', e.target.value)}
-                                          className="font-sans"
+                                          className="flex-1 px-3 py-2 rounded-lg border border-slate-300 text-sm font-sans"
                                         />
-                                        <label className="flex items-center font-bold cursor-pointer text-white bg-[#004B39]">
-                                          <Upload className="w-3.5 h-3.5" /> Upload Image
+                                        <label className="flex items-center gap-2 px-4 py-2 rounded-lg font-bold cursor-pointer text-white bg-[#004B39] hover:bg-emerald-800 transition-colors shrink-0">
+                                          <Upload className="w-4 h-4" /> Upload
                                           <input
                                             type="file"
                                             accept="image/*"
@@ -3454,15 +3453,15 @@ function PageBuilderContent() {
                                           />
                                         </label>
                                       </div>
-                                      <span className="text-xs text-slate-500">Upload custom background image (JPG, PNG, WebP) for the certification cards section</span>
+                                      <span className="text-xs text-slate-500">Upload background image (JPG, PNG, WebP) for the section. Suggested size: 1920x800px.</span>
                                     </div>
                                   </div>
                                 </div>
 
                                 {/* Certification Flip Cards Editor List with Drag-and-Drop & Preview */}
-                                <div className="flex flex-col bg-slate-50">
-                                  <div className="flex justify-between items-center">
-                                    <span className="text-xs font-bold text-slate-800">
+                                <div className="flex flex-col gap-4">
+                                  <div className="flex justify-between items-center border-b border-slate-100 pb-2">
+                                    <span className="text-sm font-extrabold text-slate-800">
                                       Flip Cards Items ({((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : []).length})
                                     </span>
                                     <button
@@ -3477,13 +3476,13 @@ function PageBuilderContent() {
                                         });
                                         updateSectionData(sec.id, 'items', currentItems);
                                       }}
-                                      className="font-bold cursor-pointer text-white bg-[#004B39]"
+                                      className="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer text-white bg-[#004B39] hover:bg-emerald-800 transition-colors shadow-sm"
                                     >
                                       + Add Certification Card
                                     </button>
                                   </div>
 
-                                  <div className="grid">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                     {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
                                       { logo: '/img/tico-logo.png', title: 'TICO - Travel Industry Council of Ontario', description: 'TICO regulates travel agencies in Ontario, protecting consumer prepaid funds and ensuring compliance with strict Canadian travel industry regulations.' },
                                       { logo: '/img/iata-logo.png', title: 'IATA - International Air Transport Association', description: 'Being an IATA accredited agency allows us to work directly with airlines, offering competitive airfares, seamless ticketing, and exclusive deals.' },
@@ -3511,12 +3510,12 @@ function PageBuilderContent() {
                                           updated.splice(cIdx, 0, movedCard);
                                           updateSectionData(sec.id, 'items', updated);
                                         }}
-                                        className="flex flex-col bg-white"
+                                        className="flex flex-col gap-3 p-4 bg-slate-50 border border-slate-200 rounded-lg hover:border-emerald-300 transition-colors shadow-sm cursor-grab active:cursor-grabbing"
                                       >
                                         {/* Card Top Drag Handle & Delete Button */}
-                                        <div className="flex justify-between items-center">
-                                          <span className="text-xs font-bold text-slate-800" title="Drag to reorder card">
-                                            ⋮⋮ Card #{cIdx + 1}
+                                        <div className="flex justify-between items-center pb-2 border-b border-slate-200">
+                                          <span className="text-xs font-bold text-slate-500 flex items-center gap-1" title="Drag to reorder card">
+                                            <span className="text-slate-400">⋮⋮</span> Card #{cIdx + 1}
                                           </span>
                                           <button
                                             type="button"
@@ -3524,7 +3523,7 @@ function PageBuilderContent() {
                                               const updated = allCards.filter((_, i) => i !== cIdx);
                                               updateSectionData(sec.id, 'items', updated);
                                             }}
-                                            className="flex items-center justify-center cursor-pointer"
+                                            className="flex items-center justify-center w-6 h-6 rounded-md bg-red-50 text-red-500 hover:bg-red-500 hover:text-white transition-colors cursor-pointer"
                                             title="Remove card"
                                           >
                                             <Trash2 className="w-3 h-3" />
@@ -3532,19 +3531,22 @@ function PageBuilderContent() {
                                         </div>
 
                                         {/* Logo Upload & Preview */}
-                                        <ImageUploadWidget
-                                          value={item.logo || ''}
-                                          onChange={(url) => {
-                                            const current = [...allCards];
-                                            current[cIdx] = { ...current[cIdx], logo: url };
-                                            updateSectionData(sec.id, 'items', current);
-                                          }}
-                                          subfolder="uploads"
-                                          compact={true}
-                                        />
+                                        <div className="mb-1">
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-1">FRONT LOGO</label>
+                                          <ImageUploadWidget
+                                            value={item.logo || ''}
+                                            onChange={(url) => {
+                                              const current = [...allCards];
+                                              current[cIdx] = { ...current[cIdx], logo: url };
+                                              updateSectionData(sec.id, 'items', current);
+                                            }}
+                                            subfolder="uploads"
+                                            compact={true}
+                                          />
+                                        </div>
 
                                         <div>
-                                          <label className="block text-[9px] font-bold text-slate-500 mb-0.5">BACKSIDE TITLE</label>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-1">BACKSIDE TITLE</label>
                                           <input
                                             type="text"
                                             value={item.title || ''}
@@ -3553,21 +3555,21 @@ function PageBuilderContent() {
                                               current[cIdx] = { ...current[cIdx], title: e.target.value };
                                               updateSectionData(sec.id, 'items', current);
                                             }}
-                                            className="w-full"
+                                            className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors"
                                           />
                                         </div>
 
                                         <div>
-                                          <label className="block text-[9px] font-bold text-slate-500 mb-0.5">BACKSIDE DESCRIPTION</label>
+                                          <label className="block text-[10px] font-bold text-slate-500 mb-1">BACKSIDE DESCRIPTION</label>
                                           <textarea
-                                            rows={2}
+                                            rows={3}
                                             value={item.description || ''}
                                             onChange={(e) => {
                                               const current = [...allCards];
                                               current[cIdx] = { ...current[cIdx], description: e.target.value };
                                               updateSectionData(sec.id, 'items', current);
                                             }}
-                                            className="w-full"
+                                            className="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-colors resize-y"
                                           />
                                         </div>
                                       </div>
