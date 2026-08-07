@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server';
 
 const COOKIE_NAME = 'king_travel_session';
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const sessionCookie = request.cookies.get(COOKIE_NAME)?.value;
 
