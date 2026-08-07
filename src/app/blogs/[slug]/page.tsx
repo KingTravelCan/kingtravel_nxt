@@ -25,6 +25,18 @@ function formatDateShort(d: any) {
   return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
+function toSafeISOString(value: any): string | undefined {
+  if (!value) return undefined;
+
+  const date = value instanceof Date ? value : new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return undefined;
+  }
+
+  return date.toISOString();
+}
+
 // ─── generateMetadata ──────────────────────────────────────────────────────
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -79,8 +91,11 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
       name: 'King Travel Canada',
       logo: { '@type': 'ImageObject', url: 'https://kingtravelcan.com/img/logo.png' },
     },
-    datePublished: blog.publishedAt ? new Date(blog.publishedAt).toISOString() : new Date(blog.createdAt!).toISOString(),
-    dateModified: blog.updatedAt ? new Date(blog.updatedAt).toISOString() : undefined,
+    datePublished:
+      toSafeISOString(blog.publishedAt) ||
+      toSafeISOString(blog.createdAt),
+
+    dateModified: toSafeISOString(blog.updatedAt),
     mainEntityOfPage: { '@type': 'WebPage', '@id': `https://kingtravelcan.com/blogs/${slug}` },
   };
 
