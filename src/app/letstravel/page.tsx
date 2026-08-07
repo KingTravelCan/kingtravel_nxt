@@ -108,11 +108,10 @@ export default function LetsTravelPage() {
               type="email"
               name="email"
               required
-              className={`w-full px-4 py-3 text-sm bg-[#0c1a17] text-white rounded-xl outline-none transition placeholder:text-gray-500 ${
-                error
+              className={`w-full px-4 py-3 text-sm bg-[#0c1a17] text-white rounded-xl outline-none transition placeholder:text-gray-500 ${error
                   ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
                   : 'border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]'
-              }`}
+                }`}
               placeholder="user@kingtravelcan.com"
             />
           </div>
@@ -126,11 +125,10 @@ export default function LetsTravelPage() {
                 type={showPassword ? "text" : "password"}
                 name="password"
                 required
-                className={`w-full px-4 py-3 text-sm bg-[#0c1a17] text-white rounded-xl outline-none transition placeholder:text-gray-500 pr-10 ${
-                  error
+                className={`w-full px-4 py-3 text-sm bg-[#0c1a17] text-white rounded-xl outline-none transition placeholder:text-gray-500 pr-10 ${error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
                     : 'border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]'
-                }`}
+                  }`}
                 placeholder="••••••••••••"
               />
               <button
