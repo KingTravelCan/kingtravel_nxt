@@ -231,15 +231,15 @@ export default function AboutPage() {
                 </div>
                 <div className="grid-2 md:grid-2 gap-6 reveal">
                   {svcs.map((item: any, i: number) => (
-                    <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm hover:shadow-md transition-shadow flex flex-col gap-3">
+                    <div key={i} className="about-service-card">
                       <div className="flex items-center gap-3">
-                        <span className="text-2xl p-2.5 rounded-xl bg-slate-50 border border-slate-100">{item.icon}</span>
+                        <span className="service-icon text-2xl p-2.5 rounded-xl bg-slate-50 border border-slate-100">{item.icon}</span>
                         <div>
-                          <h3 className="text-lg font-bold text-[#004B39] m-0">{item.title}</h3>
-                          {item.subtitle && <span className="text-xs font-semibold text-slate-800 block mt-0.5">{item.subtitle}</span>}
+                          <h3 className="text-[20px] font-bold text-[#004B39] m-0">{item.title}</h3>
+                          {item.subtitle && <span className="text-[14px] font-semibold text-slate-800 block mt-0.5">{item.subtitle}</span>}
                         </div>
                       </div>
-                      <p className="text-xs text-slate-600 leading-relaxed font-normal m-0">{item.description}</p>
+                      <p className="text-[14px] text-slate-600 leading-relaxed font-normal m-0">{item.description}</p>
                     </div>
                   ))}
                 </div>
