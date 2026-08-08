@@ -17,12 +17,12 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 function formatDate(d: any) {
   if (!d) return null;
-  return new Date(d).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+  return new Date(d).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: '2-digit', year: 'numeric' });
 }
 
 function formatDateShort(d: any) {
   if (!d) return null;
-  return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+  return new Date(d).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
 }
 
 function toSafeISOString(value: any): string | undefined {

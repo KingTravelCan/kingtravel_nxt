@@ -5,6 +5,7 @@ import { createPackage, updatePackageAction, deletePackage, updatePackageStatus 
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
 import { Trash2, Edit2, Plus, Sparkles, Sliders } from 'lucide-react';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
+import { useSearchParams } from 'next/navigation';
 
 interface PackagesClientProps {
   initialPackages: any[];
@@ -17,6 +18,12 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
   const [isCreating, setIsCreating] = useState(false);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
   const [confirmConfig, setConfirmConfig] = useState<ConfirmModalConfig | null>(null);
+
+  const searchParams = useSearchParams();
+  const tabParam = searchParams.get('tab') as 'umrah' | 'hajj' | null;
+  const initialTab = tabParam && ['umrah', 'hajj'].includes(tabParam) ? tabParam : 'hajj';
+  
+  const [activeTab, setActiveTab] = useState<'umrah' | 'hajj'>(initialTab);
 
   const [newPkg, setNewPkg] = useState({
     title: '',
@@ -124,106 +131,19 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
           {saveMsg && <span className="text-xs font-bold text-emerald-600 animate-in fade-in">{saveMsg}</span>}
           <button
             type="button"
-            onClick={() => setIsCreating(!isCreating)}
+            onClick={() => {
+              if (!isCreating) setNewPkg({ ...newPkg, type: activeTab });
+              setIsCreating(!isCreating);
+            }}
             className="bg-[#DB9E30] hover:bg-[#c38927] text-slate-950 px-5 py-2.5 rounded-full text-xs font-extrabold transition-colors cursor-pointer border-none shadow-md flex items-center gap-2"
           >
             <Plus className="w-4 h-4" />
-            {isCreating ? 'Close Form' : 'Create New Package'}
+            {isCreating ? 'Close Form' : `Create New ${activeTab === 'hajj' ? 'Hajj' : 'Umrah'} Package`}
           </button>
         </div>
       </div>
 
-      {/* Create Package Form */}
-      {isCreating && (
-        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-2xs animate-in fade-in">
-          <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-[#DB9E30]" /> Add New Pilgrimage Package
-          </h3>
-          <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="md:col-span-2">
-              <label className="text-xs font-bold text-slate-700 block mb-1">Package Title *</label>
-              <input
-                type="text"
-                placeholder="e.g. 5 Star September Umrah Package 2026"
-                value={newPkg.title}
-                onChange={(e) => setNewPkg({ ...newPkg, title: e.target.value })}
-                required
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Package Type *</label>
-              <select
-                value={newPkg.type}
-                onChange={(e) => setNewPkg({ ...newPkg, type: e.target.value as any })}
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
-              >
-                <option value="umrah">🕋 Umrah Package</option>
-                <option value="hajj">🕌 Hajj Package</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Month / Travel Dates *</label>
-              <input
-                type="text"
-                placeholder="e.g. September 2026 (14 Nights)"
-                value={newPkg.month}
-                onChange={(e) => setNewPkg({ ...newPkg, month: e.target.value })}
-                required
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Starting Price (CAD) *</label>
-              <input
-                type="text"
-                placeholder="2695.00"
-                value={newPkg.startingPrice}
-                onChange={(e) => setNewPkg({ ...newPkg, startingPrice: e.target.value })}
-                required
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-              />
-            </div>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Hotel Star Rating</label>
-              <select
-                value={newPkg.starRating}
-                onChange={(e) => setNewPkg({ ...newPkg, starRating: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
-              >
-                <option value="5 Star">5 Star Luxury</option>
-                <option value="4 Star">4 Star Premium</option>
-                <option value="3 Star">3 Star Standard</option>
-              </select>
-            </div>
-            <div className="md:col-span-3">
-              <label className="text-xs font-bold text-slate-700 block mb-1">Short Summary Description</label>
-              <input
-                type="text"
-                placeholder="Brief package highlight description"
-                value={newPkg.shortDescription}
-                onChange={(e) => setNewPkg({ ...newPkg, shortDescription: e.target.value })}
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-              />
-            </div>
-            <div className="md:col-span-3 flex justify-end gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => setIsCreating(false)}
-                className="px-5 py-2 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border-none cursor-pointer"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-6 py-2 rounded-full text-xs font-extrabold bg-[#004B39] text-white border-none cursor-pointer shadow-md"
-              >
-                Publish Package
-              </button>
-            </div>
-          </form>
-        </div>
-      )}
+
 
       {/* Edit Package Modal */}
       {editingPkg && (
@@ -323,6 +243,99 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
         </div>
       )}
 
+      {/* Create Package Form */}
+      {isCreating && (
+        <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-2xs animate-in fade-in mb-6">
+          <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#DB9E30]" /> Add New Pilgrimage Package
+          </h3>
+          <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="md:col-span-2">
+              <label className="text-xs font-bold text-slate-700 block mb-1">Package Title *</label>
+              <input
+                type="text"
+                placeholder="e.g. 5 Star September Umrah Package 2026"
+                value={newPkg.title}
+                onChange={(e) => setNewPkg({ ...newPkg, title: e.target.value })}
+                required
+                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-bold text-slate-700 block mb-1">Package Type *</label>
+              <select
+                value={newPkg.type}
+                onChange={(e) => setNewPkg({ ...newPkg, type: e.target.value as any })}
+                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white opacity-60 cursor-not-allowed"
+                disabled
+              >
+                <option value="umrah">🕋 Umrah Package</option>
+                <option value="hajj">🕌 Hajj Package</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-xs font-bold text-slate-700 block mb-1">Month / Travel Dates *</label>
+              <input
+                type="text"
+                placeholder="e.g. September 2026 (14 Nights)"
+                value={newPkg.month}
+                onChange={(e) => setNewPkg({ ...newPkg, month: e.target.value })}
+                required
+                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-bold text-slate-700 block mb-1">Starting Price (CAD) *</label>
+              <input
+                type="text"
+                placeholder="2695.00"
+                value={newPkg.startingPrice}
+                onChange={(e) => setNewPkg({ ...newPkg, startingPrice: e.target.value })}
+                required
+                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
+              />
+            </div>
+            <div>
+              <label className="text-xs font-bold text-slate-700 block mb-1">Hotel Star Rating</label>
+              <select
+                value={newPkg.starRating}
+                onChange={(e) => setNewPkg({ ...newPkg, starRating: e.target.value })}
+                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
+              >
+                <option value="5 Star">5 Star Luxury</option>
+                <option value="4 Star">4 Star Premium</option>
+                <option value="3 Star">3 Star Standard</option>
+              </select>
+            </div>
+            <div className="md:col-span-3">
+              <label className="text-xs font-bold text-slate-700 block mb-1">Short Summary Description</label>
+              <input
+                type="text"
+                placeholder="Brief package highlight description"
+                value={newPkg.shortDescription}
+                onChange={(e) => setNewPkg({ ...newPkg, shortDescription: e.target.value })}
+                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
+              />
+            </div>
+            <div className="md:col-span-3 flex justify-end gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setIsCreating(false)}
+                className="px-5 py-2 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border-none cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                className="px-6 py-2 rounded-full text-xs font-extrabold bg-[#004B39] text-white border-none cursor-pointer shadow-md"
+              >
+                Publish Package
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
       {/* Packages Table Card */}
       <div className="bg-white rounded-3xl border border-slate-100 shadow-2xs overflow-hidden">
         <div className="overflow-x-auto">
@@ -338,76 +351,76 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              {packagesList.length === 0 ? (
+              {packagesList.filter(pkg => pkg.type === activeTab).length === 0 ? (
                 <tr>
                   <td colSpan={6} className="py-12 text-center text-slate-400 text-xs">
-                    No packages in database yet.
+                    No packages found in this category.
                   </td>
                 </tr>
               ) : (
-                packagesList.map((pkg) => (
-                  <tr key={pkg.id} className="hover:bg-slate-50/60 transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-slate-900">
-                      <div>{pkg.title}</div>
-                      <div className="text-[10px] font-mono text-slate-400">{pkg.slug}</div>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase border ${
-                        pkg.type === 'hajj'
+                packagesList
+                  .filter(pkg => pkg.type === activeTab)
+                  .map((pkg) => (
+                    <tr key={pkg.id} className="hover:bg-slate-50/60 transition-colors">
+                      <td className="py-3.5 px-4 font-bold text-slate-900">
+                        <div>{pkg.title}</div>
+                        <div className="text-[10px] font-mono text-slate-400">{pkg.slug}</div>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase border ${pkg.type === 'hajj'
                           ? 'bg-amber-50 text-amber-800 border-amber-200'
                           : 'bg-emerald-50 text-emerald-800 border-emerald-200'
-                      }`}>
-                        {pkg.type === 'hajj' ? '🕌 Hajj' : '🕋 Umrah'}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4 font-medium text-slate-600">{pkg.month || 'Flexible'}</td>
-                    <td className="py-3.5 px-4 font-black text-slate-900">
-                      CAD ${Number(pkg.startingPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <button
-                        type="button"
-                        onClick={() => handleStatusToggle(pkg.id, pkg.status)}
-                        className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold capitalize border cursor-pointer ${
-                          pkg.status === 'available'
+                          }`}>
+                          {pkg.type === 'hajj' ? '🕌 Hajj' : '🕋 Umrah'}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4 font-medium text-slate-600">{pkg.month || 'Flexible'}</td>
+                      <td className="py-3.5 px-4 font-black text-slate-900">
+                        CAD ${Number(pkg.startingPrice).toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <button
+                          type="button"
+                          onClick={() => handleStatusToggle(pkg.id, pkg.status)}
+                          className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold capitalize border cursor-pointer ${pkg.status === 'available'
                             ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
                             : 'bg-red-50 text-red-800 border-red-200'
-                        }`}
-                      >
-                        ● {pkg.status || 'available'}
-                      </button>
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedSeoPkg(pkg)}
-                          title="Package SEO Center"
-                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-[#004B39] border border-emerald-200 text-[10px] font-extrabold hover:bg-[#004B39] hover:text-white transition-all cursor-pointer shadow-2xs"
+                            }`}
                         >
-                          <Sliders className="w-3 h-3" />
-                          <span>SEO</span>
+                          ● {pkg.status || 'available'}
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => setEditingPkg(pkg)}
-                          title="Edit Package"
-                          className="w-7 h-7 rounded-full bg-slate-100 hover:bg-[#004B39] text-slate-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all"
-                        >
-                          <Edit2 className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteInitiate(pkg.id, pkg.title)}
-                          title="Delete Package"
-                          className="w-7 h-7 rounded-full bg-red-50 hover:bg-red-600 text-red-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all"
-                        >
-                          <Trash2 className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))
+                      </td>
+                      <td className="py-3.5 px-4 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => setSelectedSeoPkg(pkg)}
+                            title="Package SEO Center"
+                            className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-50 text-[#004B39] border border-emerald-200 text-[10px] font-extrabold hover:bg-[#004B39] hover:text-white transition-all cursor-pointer shadow-2xs"
+                          >
+                            <Sliders className="w-3 h-3" />
+                            <span>SEO</span>
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditingPkg(pkg)}
+                            title="Edit Package"
+                            className="w-7 h-7 rounded-full bg-slate-100 hover:bg-[#004B39] text-slate-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all"
+                          >
+                            <Edit2 className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleDeleteInitiate(pkg.id, pkg.title)}
+                            title="Delete Package"
+                            className="w-7 h-7 rounded-full bg-red-50 hover:bg-red-600 text-red-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all"
+                          >
+                            <Trash2 className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
               )}
             </tbody>
           </table>
@@ -422,12 +435,12 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
         pageData={
           selectedSeoPkg
             ? {
-                id: `pkg_${selectedSeoPkg.id}`,
-                title: selectedSeoPkg.title,
-                slug: `/package/${selectedSeoPkg.id}`,
-                metaTitle: `${selectedSeoPkg.title} | King Travel Canada`,
-                metaDescription: `Book official ${selectedSeoPkg.title} from Canada. Starting at CAD $${selectedSeoPkg.startingPrice}. ${selectedSeoPkg.shortDescription || 'Verified visa, luxury hotel stays, flights included.'}`,
-              }
+              id: `pkg_${selectedSeoPkg.id}`,
+              title: selectedSeoPkg.title,
+              slug: `/package/${selectedSeoPkg.id}`,
+              metaTitle: `${selectedSeoPkg.title} | King Travel Canada`,
+              metaDescription: `Book official ${selectedSeoPkg.title} from Canada. Starting at CAD $${selectedSeoPkg.startingPrice}. ${selectedSeoPkg.shortDescription || 'Verified visa, luxury hotel stays, flights included.'}`,
+            }
             : null
         }
       />

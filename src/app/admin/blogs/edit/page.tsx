@@ -10,17 +10,10 @@ import SeoCenterModal from '@/components/admin/SeoCenterModal';
 import GlassNotificationModal from '@/components/ui/GlassNotificationModal';
 import TiptapEditor from '@/components/admin/TiptapEditor';
 import ImageUploadWidget from '@/components/admin/ImageUploadWidget';
+import CustomDatePicker from '@/components/ui/CustomDatePicker';
 import { Save, Upload, ArrowLeft, Sliders, Eye } from 'lucide-react';
 
-const CATEGORIES = [
-  'Pilgrimage Guide',
-  'Hajj Tips',
-  'Umrah Guide',
-  'Saudi Visa',
-  'Travel Tips',
-  'News & Updates',
-  'Spiritual Journey',
-];
+import CategoryDropdown from '@/components/admin/CategoryDropdown';
 
 function BlogEditorInner() {
   const searchParams = useSearchParams();
@@ -264,11 +257,9 @@ function BlogEditorInner() {
               {/* Published Date */}
               <div>
                 <label className="block text-[11px] font-extrabold text-slate-500 uppercase mb-1.5">Display Date <span className="font-normal text-slate-400 normal-case">(optional)</span></label>
-                <input
-                  type="date"
+                <CustomDatePicker
                   value={form.publishedAt}
-                  onChange={(e) => setForm((p) => ({ ...p, publishedAt: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39]"
+                  onChange={(val) => setForm((p) => ({ ...p, publishedAt: val }))}
                 />
                 <p className="text-[10px] text-slate-400 mt-1">If empty, creation date is used</p>
               </div>
@@ -279,30 +270,10 @@ function BlogEditorInner() {
               <h3 className="text-xs font-extrabold text-slate-600 uppercase tracking-wider m-0">✏️ Classification</h3>
               <div>
                 {fieldLabel('Category')}
-                <select
-                  value={CATEGORIES.includes(form.category) ? form.category : 'Custom'}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (val !== 'Custom') {
-                      setForm((p) => ({ ...p, category: val }));
-                    } else {
-                      setForm((p) => ({ ...p, category: '' }));
-                    }
-                  }}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39] bg-white"
-                >
-                  {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
-                  <option value="Custom">Custom Category...</option>
-                </select>
-                {!CATEGORIES.includes(form.category) && (
-                  <input
-                    type="text"
-                    value={form.category}
-                    onChange={(e) => setForm((p) => ({ ...p, category: e.target.value }))}
-                    placeholder="Type custom category name..."
-                    className="w-full mt-2 px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39]"
-                  />
-                )}
+                <CategoryDropdown
+                  value={form.category}
+                  onChange={(val) => setForm((p) => ({ ...p, category: val }))}
+                />
               </div>
               <div>
                 {fieldLabel('Author Name')}

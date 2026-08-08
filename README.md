@@ -39,12 +39,20 @@ A modern, full-stack Next.js application built for **King Travel Can Ltd** — a
 ### 1. Prerequisites
 Ensure you have Node.js (v24+) installed on your machine.
 
-### 3. Install Dependencies
+### 2. Install Dependencies
+You can install all dependencies at once using `npm install` (recommended if you have a `package.json`), or run the explicit commands below to install packages individually:
+
+**Production Dependencies:**
 ```bash
-npm install
+npm install @tiptap/extension-image @tiptap/extension-link @tiptap/extension-text-align @tiptap/extension-underline @tiptap/pm @tiptap/react @tiptap/starter-kit @types/nodemailer basic-ftp drizzle-orm lucide-react mysql2 next nodemailer react react-dom
 ```
 
-### 4. Database Setup & Migrations
+**Development Dependencies:**
+```bash
+npm install -D @tailwindcss/postcss @types/node @types/react @types/react-dom @types/uuid drizzle-kit tailwindcss typescript
+```
+
+### 3. Database Setup & Migrations
 ```bash
 # Generate database migrations
 npm run db:generate
@@ -56,7 +64,7 @@ npm run db:push
 npm run db:studio
 ```
 
-### 5. Run Development Server
+### 4. Run Development Server
 ```bash
 npm run dev
 ```

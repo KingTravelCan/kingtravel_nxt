@@ -1,7 +1,7 @@
 'use server';
 
 import { db } from '@/db';
-import { blogPosts } from '@/db/schema';
+import { blogPosts, siteSettings } from '@/db/schema';
 import { eq, desc, ne } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 
@@ -202,5 +202,71 @@ export async function getRelatedBlogs(excludeSlug: string, limit = 6) {
   } catch (err) {
     console.error('getRelatedBlogs DB error:', err);
     return [];
+  }
+}
+
+// ─── GET BLOG CATEGORIES ───────────────────────────────────────────────────
+export async function getBlogCategories() {
+  try {
+    const rows = await db
+      .select({ value: siteSettings.value })
+      .from(siteSettings)
+      .where(eq(siteSettings.key, 'blog_categories'))
+      .limit(1);
+
+    if (rows && rows.length > 0) {
+      return JSON.parse(rows[0].value) as string[];
+    }
+    // Default categories if none exist in db
+    return [
+      'Pilgrimage Guide',
+      'Hajj Tips',
+      'Umrah Guide',
+      'Saudi Visa',
+      'Travel Tips',
+      'News & Updates',
+      'Spiritual Journey',
+    ];
+  } catch (err) {
+    console.error('getBlogCategories DB error:', err);
+    return [
+      'Pilgrimage Guide',
+      'Hajj Tips',
+      'Umrah Guide',
+      'Saudi Visa',
+      'Travel Tips',
+      'News & Updates',
+      'Spiritual Journey',
+    ];
+  }
+}
+
+// ─── SAVE BLOG CATEGORIES ──────────────────────────────────────────────────
+export async function saveBlogCategories(categories: string[]) {
+  try {
+    const jsonStr = JSON.stringify(categories);
+    const existing = await db
+      .select()
+      .from(siteSettings)
+      .where(eq(siteSettings.key, 'blog_categories'))
+      .limit(1);
+
+    if (existing.length > 0) {
+      await db.update(siteSettings)
+        .set({ value: jsonStr, updatedAt: new Date() })
+        .where(eq(siteSettings.key, 'blog_categories'));
+    } else {
+      await db.insert(siteSettings).values({
+        key: 'blog_categories',
+        value: jsonStr,
+      });
+    }
+
+    revalidatePath('/admin/blogs');
+    revalidatePath('/admin/blogs/edit');
+    return { success: true };
+  } catch (err: any) {
+    console.error('saveBlogCategories DB error:', err);
+    return { success: false, error: err.message || 'Failed to save categories' };
   }
 }

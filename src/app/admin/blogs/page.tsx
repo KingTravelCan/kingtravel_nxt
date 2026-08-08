@@ -10,6 +10,7 @@ import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
 import GlassNotificationModal from '@/components/ui/GlassNotificationModal';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 import { Trash2, Pencil, Sliders, Upload, Plus, X } from 'lucide-react';
+import CategoryDropdown from '@/components/admin/CategoryDropdown';
 
 export default function AdminBlogsPage() {
   const [blogs, setBlogs] = useState<any[]>([]);
@@ -21,11 +22,7 @@ export default function AdminBlogsPage() {
   const [selectedSeoBlog, setSelectedSeoBlog] = useState<any>(null);
   const [notification, setNotification] = useState<{ isOpen: boolean; type: 'success' | 'error' | 'warning' | 'info'; title: string; message: string }>({ isOpen: false, type: 'success', title: '', message: '' });
 
-  // Quick-create panel state
-  const [creating, setCreating] = useState(false);
-  const [newBlog, setNewBlog] = useState({ title: '', category: 'Pilgrimage Guide', featuredImage: '', isPublished: true });
-  const [thumbUploading, setThumbUploading] = useState(false);
-  const [saving, setSaving] = useState(false);
+
 
   const notify = (title: string, message: string, type: 'success' | 'error' | 'warning' | 'info' = 'success') =>
     setNotification({ isOpen: true, type, title, message });
@@ -34,30 +31,7 @@ export default function AdminBlogsPage() {
     getBlogsList().then((res) => { if (Array.isArray(res)) setBlogs(res); });
   }, []);
 
-  const handleQuickCreate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newBlog.title.trim()) return;
-    setSaving(true);
-    const slug = await slugifyBlogTitle(newBlog.title);
-    const res = await saveBlogAction({
-      title: newBlog.title,
-      slug,
-      content: '',
-      category: newBlog.category,
-      featuredImage: newBlog.featuredImage || null,
-      isPublished: newBlog.isPublished,
-    });
-    setSaving(false);
-    if (res.success) {
-      const updated = await getBlogsList();
-      setBlogs(updated);
-      setCreating(false);
-      setNewBlog({ title: '', category: 'Pilgrimage Guide', featuredImage: '', isPublished: true });
-      notify('Blog Created', 'Blog post created. Open it to add full content.', 'success');
-    } else {
-      notify('Error', res.error || 'Failed to create blog.', 'error');
-    }
-  };
+
 
   const handleDelete = (id: number, title: string) => {
     setConfirmConfig({
@@ -76,12 +50,7 @@ export default function AdminBlogsPage() {
     });
   };
 
-  const handleThumbUpload = async (file: File) => {
-    setThumbUploading(true);
-    const url = await uploadFileToFtp(file, 'blogs');
-    setThumbUploading(false);
-    if (url) setNewBlog((prev) => ({ ...prev, featuredImage: url }));
-  };
+
 
   const filtered = blogs.filter((b) => {
     const q = search.trim().toLowerCase();
@@ -93,7 +62,7 @@ export default function AdminBlogsPage() {
 
   const formatDate = (d: any) => {
     if (!d) return '—';
-    return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    return new Date(d).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
   };
 
   return (
@@ -106,79 +75,14 @@ export default function AdminBlogsPage() {
             <h1 className="text-2xl font-extrabold text-slate-900 m-0">Blog Posts</h1>
             <p className="text-xs text-slate-400 mt-0.5 mb-0">Manage blog articles — thumbnails, content, SEO, and publish dates</p>
           </div>
-          <button
-            type="button"
-            onClick={() => setCreating(!creating)}
-            className="bg-[#004B39] text-white px-5 py-2.5 rounded-xl font-bold text-xs inline-flex items-center gap-2 shadow-lg shadow-emerald-900/20 border-none cursor-pointer hover:bg-[#00382B] transition-colors"
+          <Link
+            href="/admin/blogs/edit"
+            className="bg-[#004B39] text-white px-5 py-2.5 rounded-xl font-bold text-xs inline-flex items-center gap-2 shadow-lg shadow-emerald-900/20 border-none cursor-pointer hover:bg-[#00382B] transition-colors no-underline"
           >
-            {creating ? <X className="w-4 h-4" /> : <Plus className="w-4 h-4" />}
-            {creating ? 'Cancel' : '+ Create New Blog'}
-          </button>
+            <Plus className="w-4 h-4" />
+            Create New Blog
+          </Link>
         </div>
-
-        {/* Quick Create Form */}
-        {creating && (
-          <form onSubmit={handleQuickCreate} className="bg-white rounded-2xl p-6 border border-emerald-100 shadow-sm flex flex-col gap-4">
-            <h3 className="text-sm font-extrabold text-slate-700 m-0">✍️ Quick Create Blog Post</h3>
-            <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_180px] gap-4">
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5">Title *</label>
-                <input
-                  type="text"
-                  required
-                  value={newBlog.title}
-                  onChange={(e) => setNewBlog((p) => ({ ...p, title: e.target.value }))}
-                  placeholder="e.g. Ultimate Guide to Umrah 2026"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39]"
-                />
-              </div>
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5">Category</label>
-                <select
-                  value={newBlog.category}
-                  onChange={(e) => setNewBlog((p) => ({ ...p, category: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39] bg-white"
-                >
-                  {['Pilgrimage Guide', 'Hajj Tips', 'Umrah Guide', 'Saudi Visa', 'Travel Tips', 'News & Updates', 'Spiritual Journey'].map((c) => (
-                    <option key={c}>{c}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="block text-[11px] font-bold text-slate-500 uppercase mb-1.5">Thumbnail</label>
-                <label className="flex items-center gap-2 bg-slate-50 border border-dashed border-slate-300 rounded-xl px-3 py-2 cursor-pointer hover:border-[#004B39] transition-colors">
-                  <Upload className="w-3.5 h-3.5 text-slate-400" />
-                  <span className="text-xs text-slate-500">{thumbUploading ? 'Uploading...' : newBlog.featuredImage ? '✓ Uploaded' : 'Upload Image'}</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => { const f = e.target.files?.[0]; if (f) handleThumbUpload(f); }}
-                  />
-                </label>
-              </div>
-            </div>
-            <div className="flex items-center gap-4">
-              <label className="flex items-center gap-2 text-xs text-slate-600 font-semibold cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={newBlog.isPublished}
-                  onChange={(e) => setNewBlog((p) => ({ ...p, isPublished: e.target.checked }))}
-                  className="w-4 h-4 accent-[#004B39]"
-                />
-                Publish immediately
-              </label>
-              <p className="text-[11px] text-slate-400">You can add full content by clicking Edit after creation.</p>
-              <button
-                type="submit"
-                disabled={saving}
-                className="ml-auto bg-[#004B39] text-white px-6 py-2.5 rounded-xl text-xs font-bold border-none cursor-pointer hover:bg-[#00382B] disabled:opacity-50 transition-colors"
-              >
-                {saving ? 'Creating...' : 'Create Blog Post'}
-              </button>
-            </div>
-          </form>
-        )}
 
         {/* Filter Bar */}
         <div className="bg-white rounded-2xl p-5 border border-slate-100 flex items-center justify-between gap-4 shadow-xs">

@@ -1575,14 +1575,14 @@ function PageBuilderContent() {
                               <div className="bg-white border border-slate-200 rounded-xl p-3.5 flex flex-col gap-3 mt-1">
                                 <div className="flex justify-between items-center pb-2 border-b border-slate-200">
                                   <span className="text-xs font-extrabold text-[#004B39] uppercase">
-                                    📝 BLOG & NEWS DISPLAY SETTINGS
+                                    BLOG DISPLAY SETTINGS
                                   </span>
                                   <Link
                                     href="/admin/blogs/edit"
                                     target="_blank"
                                     className="bg-[#004B39] text-white rounded-md px-3 py-1 text-xs font-bold no-underline hover:bg-[#00382B] transition-colors"
                                   >
-                                    + Create New Blog Article
+                                    Create New Blog
                                   </Link>
                                 </div>
 
@@ -2154,18 +2154,18 @@ function PageBuilderContent() {
                                               </div>
                                             )}
                                             <div className="w-full flex justify-center py-2 bg-slate-50 rounded-md border border-slate-100">
-      <ImageUploadWidget
-        value={pkg.heroImage || ''}
-        onChange={(url) => {
-          const pkgs = getActiveItems();
-          pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
-          updateSectionData(sec.id, 'items', pkgs);
-        }}
-        subfolder="umrah"
-        compact={true}
-        hideManualUrl={true}
-      />
-    </div>
+                                              <ImageUploadWidget
+                                                value={pkg.heroImage || ''}
+                                                onChange={(url) => {
+                                                  const pkgs = getActiveItems();
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                subfolder="umrah"
+                                                compact={true}
+                                                hideManualUrl={true}
+                                              />
+                                            </div>
                                           </div>
                                         </div>
                                         <label className="flex items-center gap-2 cursor-pointer pt-2">
@@ -3429,12 +3429,12 @@ function PageBuilderContent() {
                                     {/* Upload Button + File Input */}
                                     <div className="flex flex-col gap-3">
                                       <div className="w-full">
-      <ImageUploadWidget
-        value={sec.data?.bgImage || ''}
-        onChange={(url) => updateSectionData(sec.id, 'bgImage', url)}
-        subfolder="backgrounds"
-      />
-    </div>
+                                        <ImageUploadWidget
+                                          value={sec.data?.bgImage || ''}
+                                          onChange={(url) => updateSectionData(sec.id, 'bgImage', url)}
+                                          subfolder="backgrounds"
+                                        />
+                                      </div>
                                       <span className="text-xs text-slate-500">Upload background image (JPG, PNG, WebP) for the section. Suggested size: 1920x800px.</span>
                                     </div>
                                   </div>
@@ -3962,7 +3962,34 @@ function PageBuilderContent() {
                                       <button
                                         type="button"
                                         onClick={() => {
-                                          const pkgs = [...allPkgs];
+                                          const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                            {
+                                              id: "temp-1",
+                                              title: "Economy Hajj Package 2027",
+                                              badgeTag: "HAJJ 2027",
+                                              duration: "14Days",
+                                              flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                              price: "12,995",
+                                              priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                              operatorName: "King Travel",
+                                              operatorRating: "4.4/5",
+                                              heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                              makkahHotel: {
+                                                name: "5 Star Hotel in Makkah",
+                                                location: "Near to Haram",
+                                                badge: "Breakfast",
+                                                nights: "6 Nights",
+                                                image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                              },
+                                              madinahHotel: {
+                                                name: "5 Star Hotel in Madinah",
+                                                location: "Near to Masjid Nabawi",
+                                                badge: "Breakfast",
+                                                nights: "6 Nights",
+                                                image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                              }
+                                            }
+                                          ])];
                                           pkgs.splice(pIdx, 1);
                                           updateSectionData(sec.id, 'items', pkgs);
                                         }}
@@ -3984,7 +4011,34 @@ function PageBuilderContent() {
                                               type="button"
                                               onClick={(e) => {
                                                 e.stopPropagation();
-                                                const pkgs = [...allPkgs];
+                                                const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                  {
+                                                    id: "temp-1",
+                                                    title: "Economy Hajj Package 2027",
+                                                    badgeTag: "HAJJ 2027",
+                                                    duration: "14Days",
+                                                    flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                    price: "12,995",
+                                                    priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                    operatorName: "King Travel",
+                                                    operatorRating: "4.4/5",
+                                                    heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                    makkahHotel: {
+                                                      name: "5 Star Hotel in Makkah",
+                                                      location: "Near to Haram",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                    },
+                                                    madinahHotel: {
+                                                      name: "5 Star Hotel in Madinah",
+                                                      location: "Near to Masjid Nabawi",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                    }
+                                                  }
+                                                ])];
                                                 pkgs[pIdx] = { ...pkgs[pIdx], heroImage: '' };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
@@ -4007,7 +4061,34 @@ function PageBuilderContent() {
                                                 if (file) {
                                                   const url = await uploadFileToFtp(file, 'uploads');
                                                   if (url) {
-                                                    const pkgs = [...allPkgs];
+                                                    const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                      {
+                                                        id: "temp-1",
+                                                        title: "Economy Hajj Package 2027",
+                                                        badgeTag: "HAJJ 2027",
+                                                        duration: "14Days",
+                                                        flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                        price: "12,995",
+                                                        priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                        operatorName: "King Travel",
+                                                        operatorRating: "4.4/5",
+                                                        heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                        makkahHotel: {
+                                                          name: "5 Star Hotel in Makkah",
+                                                          location: "Near to Haram",
+                                                          badge: "Breakfast",
+                                                          nights: "6 Nights",
+                                                          image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                        },
+                                                        madinahHotel: {
+                                                          name: "5 Star Hotel in Madinah",
+                                                          location: "Near to Masjid Nabawi",
+                                                          badge: "Breakfast",
+                                                          nights: "6 Nights",
+                                                          image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                        }
+                                                      }
+                                                    ])];
                                                     pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
                                                     updateSectionData(sec.id, 'items', pkgs);
                                                   }
@@ -4027,7 +4108,34 @@ function PageBuilderContent() {
                                               type="text"
                                               value={pkg.title || ''}
                                               onChange={(e) => {
-                                                const pkgs = [...allPkgs];
+                                                const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                  {
+                                                    id: "temp-1",
+                                                    title: "Economy Hajj Package 2027",
+                                                    badgeTag: "HAJJ 2027",
+                                                    duration: "14Days",
+                                                    flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                    price: "12,995",
+                                                    priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                    operatorName: "King Travel",
+                                                    operatorRating: "4.4/5",
+                                                    heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                    makkahHotel: {
+                                                      name: "5 Star Hotel in Makkah",
+                                                      location: "Near to Haram",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                    },
+                                                    madinahHotel: {
+                                                      name: "5 Star Hotel in Madinah",
+                                                      location: "Near to Masjid Nabawi",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                    }
+                                                  }
+                                                ])];
                                                 pkgs[pIdx] = { ...pkgs[pIdx], title: e.target.value };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
@@ -4040,7 +4148,34 @@ function PageBuilderContent() {
                                               type="text"
                                               value={pkg.badgeTag || 'HAJJ 2027'}
                                               onChange={(e) => {
-                                                const pkgs = [...allPkgs];
+                                                const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                  {
+                                                    id: "temp-1",
+                                                    title: "Economy Hajj Package 2027",
+                                                    badgeTag: "HAJJ 2027",
+                                                    duration: "14Days",
+                                                    flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                    price: "12,995",
+                                                    priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                    operatorName: "King Travel",
+                                                    operatorRating: "4.4/5",
+                                                    heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                    makkahHotel: {
+                                                      name: "5 Star Hotel in Makkah",
+                                                      location: "Near to Haram",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                    },
+                                                    madinahHotel: {
+                                                      name: "5 Star Hotel in Madinah",
+                                                      location: "Near to Masjid Nabawi",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                    }
+                                                  }
+                                                ])];
                                                 pkgs[pIdx] = { ...pkgs[pIdx], badgeTag: e.target.value };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
@@ -4056,7 +4191,34 @@ function PageBuilderContent() {
                                               type="text"
                                               value={pkg.duration || '14Days'}
                                               onChange={(e) => {
-                                                const pkgs = [...allPkgs];
+                                                const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                  {
+                                                    id: "temp-1",
+                                                    title: "Economy Hajj Package 2027",
+                                                    badgeTag: "HAJJ 2027",
+                                                    duration: "14Days",
+                                                    flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                    price: "12,995",
+                                                    priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                    operatorName: "King Travel",
+                                                    operatorRating: "4.4/5",
+                                                    heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                    makkahHotel: {
+                                                      name: "5 Star Hotel in Makkah",
+                                                      location: "Near to Haram",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                    },
+                                                    madinahHotel: {
+                                                      name: "5 Star Hotel in Madinah",
+                                                      location: "Near to Masjid Nabawi",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                    }
+                                                  }
+                                                ])];
                                                 pkgs[pIdx] = { ...pkgs[pIdx], duration: e.target.value };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
@@ -4069,7 +4231,34 @@ function PageBuilderContent() {
                                               type="text"
                                               value={pkg.flightRoute || 'FROM CANADA ➔ TO SAUDIA'}
                                               onChange={(e) => {
-                                                const pkgs = [...allPkgs];
+                                                const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                  {
+                                                    id: "temp-1",
+                                                    title: "Economy Hajj Package 2027",
+                                                    badgeTag: "HAJJ 2027",
+                                                    duration: "14Days",
+                                                    flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                    price: "12,995",
+                                                    priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                    operatorName: "King Travel",
+                                                    operatorRating: "4.4/5",
+                                                    heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                    makkahHotel: {
+                                                      name: "5 Star Hotel in Makkah",
+                                                      location: "Near to Haram",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                    },
+                                                    madinahHotel: {
+                                                      name: "5 Star Hotel in Madinah",
+                                                      location: "Near to Masjid Nabawi",
+                                                      badge: "Breakfast",
+                                                      nights: "6 Nights",
+                                                      image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                    }
+                                                  }
+                                                ])];
                                                 pkgs[pIdx] = { ...pkgs[pIdx], flightRoute: e.target.value };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
@@ -4098,7 +4287,34 @@ function PageBuilderContent() {
                                                   type="button"
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    const pkgs = [...allPkgs];
+                                                    const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                      {
+                                                        id: "temp-1",
+                                                        title: "Economy Hajj Package 2027",
+                                                        badgeTag: "HAJJ 2027",
+                                                        duration: "14Days",
+                                                        flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                        price: "12,995",
+                                                        priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                        operatorName: "King Travel",
+                                                        operatorRating: "4.4/5",
+                                                        heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                        makkahHotel: {
+                                                          name: "5 Star Hotel in Makkah",
+                                                          location: "Near to Haram",
+                                                          badge: "Breakfast",
+                                                          nights: "6 Nights",
+                                                          image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                        },
+                                                        madinahHotel: {
+                                                          name: "5 Star Hotel in Madinah",
+                                                          location: "Near to Masjid Nabawi",
+                                                          badge: "Breakfast",
+                                                          nights: "6 Nights",
+                                                          image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                        }
+                                                      }
+                                                    ])];
                                                     pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: '' } };
                                                     updateSectionData(sec.id, 'items', pkgs);
                                                   }}
@@ -4121,7 +4337,34 @@ function PageBuilderContent() {
                                                     if (file) {
                                                       const url = await uploadFileToFtp(file, 'uploads');
                                                       if (url) {
-                                                        const pkgs = [...allPkgs];
+                                                        const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                          {
+                                                            id: "temp-1",
+                                                            title: "Economy Hajj Package 2027",
+                                                            badgeTag: "HAJJ 2027",
+                                                            duration: "14Days",
+                                                            flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                            price: "12,995",
+                                                            priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                            operatorName: "King Travel",
+                                                            operatorRating: "4.4/5",
+                                                            heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                            makkahHotel: {
+                                                              name: "5 Star Hotel in Makkah",
+                                                              location: "Near to Haram",
+                                                              badge: "Breakfast",
+                                                              nights: "6 Nights",
+                                                              image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                            },
+                                                            madinahHotel: {
+                                                              name: "5 Star Hotel in Madinah",
+                                                              location: "Near to Masjid Nabawi",
+                                                              badge: "Breakfast",
+                                                              nights: "6 Nights",
+                                                              image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                            }
+                                                          }
+                                                        ])];
                                                         pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: url } };
                                                         updateSectionData(sec.id, 'items', pkgs);
                                                       }
@@ -4134,59 +4377,167 @@ function PageBuilderContent() {
 
 
 
-                                        <div className="grid grid-cols-1 gap-2">
-                                          <div>
-                                            <label className="block font-bold text-slate-500">MAKKAH HOTEL NAME</label>
-                                            <input
-                                              type="text"
-                                              value={pkg.makkahHotel?.name || '5 Star Hotel in Makkah'}
-                                              onChange={(e) => {
-                                                const pkgs = [...allPkgs];
-                                                pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), name: e.target.value } };
-                                                updateSectionData(sec.id, 'items', pkgs);
-                                              }}
-                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
-                                            />
-                                          </div>
-                                          <div>
-                                            <label className="block font-bold text-slate-500">LOCATION SUBTEXT</label>
-                                            <input
-                                              type="text"
-                                              value={pkg.makkahHotel?.location || 'Near to Haram'}
-                                              onChange={(e) => {
-                                                const pkgs = [...allPkgs];
-                                                pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), location: e.target.value } };
-                                                updateSectionData(sec.id, 'items', pkgs);
-                                              }}
-                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
-                                            />
-                                          </div>
-                                          <div>
-                                            <label className="block font-bold text-slate-500">MEAL BADGE</label>
-                                            <input
-                                              type="text"
-                                              value={pkg.makkahHotel?.badge || 'Breakfast'}
-                                              onChange={(e) => {
-                                                const pkgs = [...allPkgs];
-                                                pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), badge: e.target.value } };
-                                                updateSectionData(sec.id, 'items', pkgs);
-                                              }}
-                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
-                                            />
-                                          </div>
-                                          <div>
-                                            <label className="block font-bold text-slate-500">DAY/NIGHTS BADGE</label>
-                                            <input
-                                              type="text"
-                                              value={pkg.makkahHotel?.nights || '6 Nights'}
-                                              onChange={(e) => {
-                                                const pkgs = [...allPkgs];
-                                                pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), nights: e.target.value } };
-                                                updateSectionData(sec.id, 'items', pkgs);
-                                              }}
-                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
-                                            />
-                                          </div>
+                                          <div className="grid grid-cols-1 gap-2">
+                                            <div>
+                                              <label className="block font-bold text-slate-500">MAKKAH HOTEL NAME</label>
+                                              <input
+                                                type="text"
+                                                value={pkg.makkahHotel?.name || '5 Star Hotel in Makkah'}
+                                                onChange={(e) => {
+                                                  const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                    {
+                                                      id: "temp-1",
+                                                      title: "Economy Hajj Package 2027",
+                                                      badgeTag: "HAJJ 2027",
+                                                      duration: "14Days",
+                                                      flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                      price: "12,995",
+                                                      priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                      operatorName: "King Travel",
+                                                      operatorRating: "4.4/5",
+                                                      heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                      makkahHotel: {
+                                                        name: "5 Star Hotel in Makkah",
+                                                        location: "Near to Haram",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                      },
+                                                      madinahHotel: {
+                                                        name: "5 Star Hotel in Madinah",
+                                                        location: "Near to Masjid Nabawi",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                      }
+                                                    }
+                                                  ])];
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), name: e.target.value } };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
+                                              />
+                                            </div>
+                                            <div>
+                                              <label className="block font-bold text-slate-500">LOCATION SUBTEXT</label>
+                                              <input
+                                                type="text"
+                                                value={pkg.makkahHotel?.location || 'Near to Haram'}
+                                                onChange={(e) => {
+                                                  const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                    {
+                                                      id: "temp-1",
+                                                      title: "Economy Hajj Package 2027",
+                                                      badgeTag: "HAJJ 2027",
+                                                      duration: "14Days",
+                                                      flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                      price: "12,995",
+                                                      priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                      operatorName: "King Travel",
+                                                      operatorRating: "4.4/5",
+                                                      heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                      makkahHotel: {
+                                                        name: "5 Star Hotel in Makkah",
+                                                        location: "Near to Haram",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                      },
+                                                      madinahHotel: {
+                                                        name: "5 Star Hotel in Madinah",
+                                                        location: "Near to Masjid Nabawi",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                      }
+                                                    }
+                                                  ])];
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), location: e.target.value } };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
+                                              />
+                                            </div>
+                                            <div>
+                                              <label className="block font-bold text-slate-500">MEAL BADGE</label>
+                                              <input
+                                                type="text"
+                                                value={pkg.makkahHotel?.badge || 'Breakfast'}
+                                                onChange={(e) => {
+                                                  const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                    {
+                                                      id: "temp-1",
+                                                      title: "Economy Hajj Package 2027",
+                                                      badgeTag: "HAJJ 2027",
+                                                      duration: "14Days",
+                                                      flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                      price: "12,995",
+                                                      priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                      operatorName: "King Travel",
+                                                      operatorRating: "4.4/5",
+                                                      heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                      makkahHotel: {
+                                                        name: "5 Star Hotel in Makkah",
+                                                        location: "Near to Haram",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                      },
+                                                      madinahHotel: {
+                                                        name: "5 Star Hotel in Madinah",
+                                                        location: "Near to Masjid Nabawi",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                      }
+                                                    }
+                                                  ])];
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), badge: e.target.value } };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
+                                              />
+                                            </div>
+                                            <div>
+                                              <label className="block font-bold text-slate-500">DAY/NIGHTS BADGE</label>
+                                              <input
+                                                type="text"
+                                                value={pkg.makkahHotel?.nights || '6 Nights'}
+                                                onChange={(e) => {
+                                                  const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                    {
+                                                      id: "temp-1",
+                                                      title: "Economy Hajj Package 2027",
+                                                      badgeTag: "HAJJ 2027",
+                                                      duration: "14Days",
+                                                      flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                      price: "12,995",
+                                                      priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                      operatorName: "King Travel",
+                                                      operatorRating: "4.4/5",
+                                                      heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                      makkahHotel: {
+                                                        name: "5 Star Hotel in Makkah",
+                                                        location: "Near to Haram",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                      },
+                                                      madinahHotel: {
+                                                        name: "5 Star Hotel in Madinah",
+                                                        location: "Near to Masjid Nabawi",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                      }
+                                                    }
+                                                  ])];
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), nights: e.target.value } };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
+                                              />
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
@@ -4207,7 +4558,34 @@ function PageBuilderContent() {
                                                   type="button"
                                                   onClick={(e) => {
                                                     e.stopPropagation();
-                                                    const pkgs = [...allPkgs];
+                                                    const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                      {
+                                                        id: "temp-1",
+                                                        title: "Economy Hajj Package 2027",
+                                                        badgeTag: "HAJJ 2027",
+                                                        duration: "14Days",
+                                                        flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                        price: "12,995",
+                                                        priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                        operatorName: "King Travel",
+                                                        operatorRating: "4.4/5",
+                                                        heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                        makkahHotel: {
+                                                          name: "5 Star Hotel in Makkah",
+                                                          location: "Near to Haram",
+                                                          badge: "Breakfast",
+                                                          nights: "6 Nights",
+                                                          image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                        },
+                                                        madinahHotel: {
+                                                          name: "5 Star Hotel in Madinah",
+                                                          location: "Near to Masjid Nabawi",
+                                                          badge: "Breakfast",
+                                                          nights: "6 Nights",
+                                                          image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                        }
+                                                      }
+                                                    ])];
                                                     pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: '' } };
                                                     updateSectionData(sec.id, 'items', pkgs);
                                                   }}
@@ -4230,7 +4608,34 @@ function PageBuilderContent() {
                                                     if (file) {
                                                       const url = await uploadFileToFtp(file, 'uploads');
                                                       if (url) {
-                                                        const pkgs = [...allPkgs];
+                                                        const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                          {
+                                                            id: "temp-1",
+                                                            title: "Economy Hajj Package 2027",
+                                                            badgeTag: "HAJJ 2027",
+                                                            duration: "14Days",
+                                                            flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                            price: "12,995",
+                                                            priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                            operatorName: "King Travel",
+                                                            operatorRating: "4.4/5",
+                                                            heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                            makkahHotel: {
+                                                              name: "5 Star Hotel in Makkah",
+                                                              location: "Near to Haram",
+                                                              badge: "Breakfast",
+                                                              nights: "6 Nights",
+                                                              image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                            },
+                                                            madinahHotel: {
+                                                              name: "5 Star Hotel in Madinah",
+                                                              location: "Near to Masjid Nabawi",
+                                                              badge: "Breakfast",
+                                                              nights: "6 Nights",
+                                                              image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                            }
+                                                          }
+                                                        ])];
                                                         pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: url } };
                                                         updateSectionData(sec.id, 'items', pkgs);
                                                       }
@@ -4243,59 +4648,167 @@ function PageBuilderContent() {
 
 
 
-                                        <div className="grid grid-cols-1 gap-2">
-                                          <div>
-                                            <label className="block font-bold text-slate-500">MADINAH HOTEL NAME</label>
-                                            <input
-                                              type="text"
-                                              value={pkg.madinahHotel?.name || '5 Star Hotel in Madinah'}
-                                              onChange={(e) => {
-                                                const pkgs = [...allPkgs];
-                                                pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), name: e.target.value } };
-                                                updateSectionData(sec.id, 'items', pkgs);
-                                              }}
-                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
-                                            />
-                                          </div>
-                                          <div>
-                                            <label className="block font-bold text-slate-500">LOCATION SUBTEXT</label>
-                                            <input
-                                              type="text"
-                                              value={pkg.madinahHotel?.location || 'Near to Masjid Nabawi'}
-                                              onChange={(e) => {
-                                                const pkgs = [...allPkgs];
-                                                pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), location: e.target.value } };
-                                                updateSectionData(sec.id, 'items', pkgs);
-                                              }}
-                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
-                                            />
-                                          </div>
-                                          <div>
-                                            <label className="block font-bold text-slate-500">MEAL BADGE</label>
-                                            <input
-                                              type="text"
-                                              value={pkg.madinahHotel?.badge || 'Breakfast'}
-                                              onChange={(e) => {
-                                                const pkgs = [...allPkgs];
-                                                pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), badge: e.target.value } };
-                                                updateSectionData(sec.id, 'items', pkgs);
-                                              }}
-                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
-                                            />
-                                          </div>
-                                          <div>
-                                            <label className="block font-bold text-slate-500">DAY/NIGHTS BADGE</label>
-                                            <input
-                                              type="text"
-                                              value={pkg.madinahHotel?.nights || '6 Nights'}
-                                              onChange={(e) => {
-                                                const pkgs = [...allPkgs];
-                                                pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), nights: e.target.value } };
-                                                updateSectionData(sec.id, 'items', pkgs);
-                                              }}
-                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
-                                            />
-                                          </div>
+                                          <div className="grid grid-cols-1 gap-2">
+                                            <div>
+                                              <label className="block font-bold text-slate-500">MADINAH HOTEL NAME</label>
+                                              <input
+                                                type="text"
+                                                value={pkg.madinahHotel?.name || '5 Star Hotel in Madinah'}
+                                                onChange={(e) => {
+                                                  const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                    {
+                                                      id: "temp-1",
+                                                      title: "Economy Hajj Package 2027",
+                                                      badgeTag: "HAJJ 2027",
+                                                      duration: "14Days",
+                                                      flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                      price: "12,995",
+                                                      priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                      operatorName: "King Travel",
+                                                      operatorRating: "4.4/5",
+                                                      heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                      makkahHotel: {
+                                                        name: "5 Star Hotel in Makkah",
+                                                        location: "Near to Haram",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                      },
+                                                      madinahHotel: {
+                                                        name: "5 Star Hotel in Madinah",
+                                                        location: "Near to Masjid Nabawi",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                      }
+                                                    }
+                                                  ])];
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), name: e.target.value } };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
+                                              />
+                                            </div>
+                                            <div>
+                                              <label className="block font-bold text-slate-500">LOCATION SUBTEXT</label>
+                                              <input
+                                                type="text"
+                                                value={pkg.madinahHotel?.location || 'Near to Masjid Nabawi'}
+                                                onChange={(e) => {
+                                                  const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                    {
+                                                      id: "temp-1",
+                                                      title: "Economy Hajj Package 2027",
+                                                      badgeTag: "HAJJ 2027",
+                                                      duration: "14Days",
+                                                      flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                      price: "12,995",
+                                                      priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                      operatorName: "King Travel",
+                                                      operatorRating: "4.4/5",
+                                                      heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                      makkahHotel: {
+                                                        name: "5 Star Hotel in Makkah",
+                                                        location: "Near to Haram",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                      },
+                                                      madinahHotel: {
+                                                        name: "5 Star Hotel in Madinah",
+                                                        location: "Near to Masjid Nabawi",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                      }
+                                                    }
+                                                  ])];
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), location: e.target.value } };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
+                                              />
+                                            </div>
+                                            <div>
+                                              <label className="block font-bold text-slate-500">MEAL BADGE</label>
+                                              <input
+                                                type="text"
+                                                value={pkg.madinahHotel?.badge || 'Breakfast'}
+                                                onChange={(e) => {
+                                                  const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                    {
+                                                      id: "temp-1",
+                                                      title: "Economy Hajj Package 2027",
+                                                      badgeTag: "HAJJ 2027",
+                                                      duration: "14Days",
+                                                      flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                      price: "12,995",
+                                                      priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                      operatorName: "King Travel",
+                                                      operatorRating: "4.4/5",
+                                                      heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                      makkahHotel: {
+                                                        name: "5 Star Hotel in Makkah",
+                                                        location: "Near to Haram",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                      },
+                                                      madinahHotel: {
+                                                        name: "5 Star Hotel in Madinah",
+                                                        location: "Near to Masjid Nabawi",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                      }
+                                                    }
+                                                  ])];
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), badge: e.target.value } };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
+                                              />
+                                            </div>
+                                            <div>
+                                              <label className="block font-bold text-slate-500">DAY/NIGHTS BADGE</label>
+                                              <input
+                                                type="text"
+                                                value={pkg.madinahHotel?.nights || '6 Nights'}
+                                                onChange={(e) => {
+                                                  const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                                    {
+                                                      id: "temp-1",
+                                                      title: "Economy Hajj Package 2027",
+                                                      badgeTag: "HAJJ 2027",
+                                                      duration: "14Days",
+                                                      flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                      price: "12,995",
+                                                      priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                      operatorName: "King Travel",
+                                                      operatorRating: "4.4/5",
+                                                      heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                      makkahHotel: {
+                                                        name: "5 Star Hotel in Makkah",
+                                                        location: "Near to Haram",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                      },
+                                                      madinahHotel: {
+                                                        name: "5 Star Hotel in Madinah",
+                                                        location: "Near to Masjid Nabawi",
+                                                        badge: "Breakfast",
+                                                        nights: "6 Nights",
+                                                        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                      }
+                                                    }
+                                                  ])];
+                                                  pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), nights: e.target.value } };
+                                                  updateSectionData(sec.id, 'items', pkgs);
+                                                }}
+                                                className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
+                                              />
+                                            </div>
                                           </div>
                                         </div>
                                       </div>
@@ -4309,7 +4822,34 @@ function PageBuilderContent() {
                                           type="text"
                                           value={pkg.operatorName || 'King Travel'}
                                           onChange={(e) => {
-                                            const pkgs = [...allPkgs];
+                                            const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                              {
+                                                id: "temp-1",
+                                                title: "Economy Hajj Package 2027",
+                                                badgeTag: "HAJJ 2027",
+                                                duration: "14Days",
+                                                flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                price: "12,995",
+                                                priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                operatorName: "King Travel",
+                                                operatorRating: "4.4/5",
+                                                heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                makkahHotel: {
+                                                  name: "5 Star Hotel in Makkah",
+                                                  location: "Near to Haram",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                },
+                                                madinahHotel: {
+                                                  name: "5 Star Hotel in Madinah",
+                                                  location: "Near to Masjid Nabawi",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                }
+                                              }
+                                            ])];
                                             pkgs[pIdx] = { ...pkgs[pIdx], operatorName: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
@@ -4322,7 +4862,34 @@ function PageBuilderContent() {
                                           type="text"
                                           value={pkg.operatorRating || '4.4/5'}
                                           onChange={(e) => {
-                                            const pkgs = [...allPkgs];
+                                            const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                              {
+                                                id: "temp-1",
+                                                title: "Economy Hajj Package 2027",
+                                                badgeTag: "HAJJ 2027",
+                                                duration: "14Days",
+                                                flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                price: "12,995",
+                                                priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                operatorName: "King Travel",
+                                                operatorRating: "4.4/5",
+                                                heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                makkahHotel: {
+                                                  name: "5 Star Hotel in Makkah",
+                                                  location: "Near to Haram",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                },
+                                                madinahHotel: {
+                                                  name: "5 Star Hotel in Madinah",
+                                                  location: "Near to Masjid Nabawi",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                }
+                                              }
+                                            ])];
                                             pkgs[pIdx] = { ...pkgs[pIdx], operatorRating: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
@@ -4335,7 +4902,34 @@ function PageBuilderContent() {
                                           type="text"
                                           value={pkg.priceSubtext || 'FROM CAD / QUAD OCCUPANCY'}
                                           onChange={(e) => {
-                                            const pkgs = [...allPkgs];
+                                            const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                              {
+                                                id: "temp-1",
+                                                title: "Economy Hajj Package 2027",
+                                                badgeTag: "HAJJ 2027",
+                                                duration: "14Days",
+                                                flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                price: "12,995",
+                                                priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                operatorName: "King Travel",
+                                                operatorRating: "4.4/5",
+                                                heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                makkahHotel: {
+                                                  name: "5 Star Hotel in Makkah",
+                                                  location: "Near to Haram",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                },
+                                                madinahHotel: {
+                                                  name: "5 Star Hotel in Madinah",
+                                                  location: "Near to Masjid Nabawi",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                }
+                                              }
+                                            ])];
                                             pkgs[pIdx] = { ...pkgs[pIdx], priceSubtext: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
@@ -4348,7 +4942,34 @@ function PageBuilderContent() {
                                           type="text"
                                           value={pkg.price || ''}
                                           onChange={(e) => {
-                                            const pkgs = [...allPkgs];
+                                            const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                              {
+                                                id: "temp-1",
+                                                title: "Economy Hajj Package 2027",
+                                                badgeTag: "HAJJ 2027",
+                                                duration: "14Days",
+                                                flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                price: "12,995",
+                                                priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                operatorName: "King Travel",
+                                                operatorRating: "4.4/5",
+                                                heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                makkahHotel: {
+                                                  name: "5 Star Hotel in Makkah",
+                                                  location: "Near to Haram",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                },
+                                                madinahHotel: {
+                                                  name: "5 Star Hotel in Madinah",
+                                                  location: "Near to Masjid Nabawi",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                }
+                                              }
+                                            ])];
                                             pkgs[pIdx] = { ...pkgs[pIdx], price: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
@@ -4361,7 +4982,34 @@ function PageBuilderContent() {
                                           type="text"
                                           value={pkg.btnLabel || 'Book Hajj 2027'}
                                           onChange={(e) => {
-                                            const pkgs = [...allPkgs];
+                                            const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                              {
+                                                id: "temp-1",
+                                                title: "Economy Hajj Package 2027",
+                                                badgeTag: "HAJJ 2027",
+                                                duration: "14Days",
+                                                flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                price: "12,995",
+                                                priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                operatorName: "King Travel",
+                                                operatorRating: "4.4/5",
+                                                heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                makkahHotel: {
+                                                  name: "5 Star Hotel in Makkah",
+                                                  location: "Near to Haram",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                },
+                                                madinahHotel: {
+                                                  name: "5 Star Hotel in Madinah",
+                                                  location: "Near to Masjid Nabawi",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                }
+                                              }
+                                            ])];
                                             pkgs[pIdx] = { ...pkgs[pIdx], btnLabel: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
@@ -4374,7 +5022,34 @@ function PageBuilderContent() {
                                           type="text"
                                           value={pkg.btnLink || '/contact'}
                                           onChange={(e) => {
-                                            const pkgs = [...allPkgs];
+                                            const pkgs = [...((sec as any).items && Array.isArray((sec as any).items) && (sec as any).items.length > 0 ? (sec as any).items : [
+                                              {
+                                                id: "temp-1",
+                                                title: "Economy Hajj Package 2027",
+                                                badgeTag: "HAJJ 2027",
+                                                duration: "14Days",
+                                                flightRoute: "FROM CANADA ➔ TO SAUDIA",
+                                                price: "12,995",
+                                                priceSubtext: "FROM CAD / QUAD OCCUPANCY",
+                                                operatorName: "King Travel",
+                                                operatorRating: "4.4/5",
+                                                heroImage: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+                                                makkahHotel: {
+                                                  name: "5 Star Hotel in Makkah",
+                                                  location: "Near to Haram",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=200&q=80"
+                                                },
+                                                madinahHotel: {
+                                                  name: "5 Star Hotel in Madinah",
+                                                  location: "Near to Masjid Nabawi",
+                                                  badge: "Breakfast",
+                                                  nights: "6 Nights",
+                                                  image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg"
+                                                }
+                                              }
+                                            ])];
                                             pkgs[pIdx] = { ...pkgs[pIdx], btnLink: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
