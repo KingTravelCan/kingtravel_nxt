@@ -112,7 +112,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
     revalidatePath('/umrah-packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/');
-    revalidateTag('packages');
+    revalidateTag('packages', 'max');
     return { success: true };
   } catch (error: any) {
     console.error('Error creating package:', error);
@@ -159,7 +159,7 @@ export async function updatePackageAction(
     revalidatePath('/umrah-packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/');
-    revalidateTag('packages');
+    revalidateTag('packages', 'max');
     return { success: true };
   } catch (error: any) {
     console.error('Error updating package:', error);
@@ -172,7 +172,7 @@ export async function updatePackageStatus(id: number, status: 'available' | 'sol
     await db.update(packages).set({ status, updatedAt: new Date() }).where(eq(packages.id, id));
     revalidatePath('/admin/packages');
     revalidatePath('/');
-    revalidateTag('packages');
+    revalidateTag('packages', 'max');
   } catch (error) {
     console.error('Error updating package status:', error);
   }
@@ -183,7 +183,7 @@ export async function deletePackage(id: number): Promise<void> {
     await db.delete(packages).where(eq(packages.id, id));
     revalidatePath('/admin/packages');
     revalidatePath('/');
-    revalidateTag('packages');
+    revalidateTag('packages', 'max');
   } catch (error) {
     console.error('Error deleting package:', error);
   }

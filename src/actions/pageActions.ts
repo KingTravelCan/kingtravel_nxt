@@ -180,8 +180,8 @@ export async function savePageAction(formData: FormData) {
     revalidatePath('/admin/pages');
     revalidatePath(slug);
     revalidatePath('/', 'layout');
-    revalidateTag('pages');
-    revalidateTag(`page-slug-${slug}`);
+    revalidateTag('pages', 'max');
+    revalidateTag(`page-slug-${slug}`, 'max');
     return { success: true, pageId: savedId, error: undefined };
   } catch (err: any) {
     console.error('savePageAction DB query failed:', err);
@@ -239,7 +239,7 @@ export async function saveNavItemsAction(navItems: any[]) {
       await db.insert(siteSettings).values({ key: 'nav_items', value: JSON.stringify(navItems) });
     }
     revalidatePath('/', 'layout');
-    revalidateTag('nav-items');
+    revalidateTag('nav-items', 'max');
     return { success: true };
   } catch (err: any) {
     console.error('saveNavItemsAction DB query failed:', err);
@@ -327,13 +327,13 @@ export async function saveFooterSettingsAction(footerData: any) {
       await db.insert(siteSettings).values({ key: 'footer_settings', value: JSON.stringify(footerData) });
     }
     revalidatePath('/', 'layout');
-    revalidateTag('footer-data');
+    revalidateTag('footer-data', 'max');
     return { success: true };
   } catch (err: any) {
     console.warn('saveFooterSettingsAction DB insert failed, fallback to memory cache:', err);
     footerMemoryCache = footerData;
     revalidatePath('/', 'layout');
-    revalidateTag('footer-data');
+    revalidateTag('footer-data', 'max');
     return { success: true, warning: 'Saved to session cache.' };
   }
 }
@@ -410,13 +410,13 @@ export async function saveSiteIdentityAction(data: any) {
       await db.insert(siteSettings).values({ key: 'site_identity', value: JSON.stringify(data) });
     }
     revalidatePath('/', 'layout');
-    revalidateTag('site-identity');
+    revalidateTag('site-identity', 'max');
     return { success: true };
   } catch (err: any) {
     console.warn('saveSiteIdentityAction DB query failed, saving to cache fallback:', err);
     siteIdentityMemoryCache = data;
     revalidatePath('/', 'layout');
-    revalidateTag('site-identity');
+    revalidateTag('site-identity', 'max');
     return { success: true, warning: 'Saved to session memory cache.' };
   }
 }
