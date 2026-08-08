@@ -2,8 +2,27 @@
 
 import { db } from '@/db';
 import { packages, packagePrices, packageHotels } from '@/db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { eq, desc, and, ne } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+
+/**
+ * Fetch every non-draft package of a given type ('umrah' | 'hajj'), newest first.
+ * Used by public-facing sections that should automatically show every package an
+ * admin creates, without needing a separate manual "add to section" step.
+ */
+export async function getPackagesByType(type: 'umrah' | 'hajj'): Promise<any[]> {
+  try {
+    const list = await db
+      .select()
+      .from(packages)
+      .where(and(eq(packages.type, type), ne(packages.status, 'draft')))
+      .orderBy(desc(packages.createdAt));
+    return list || [];
+  } catch (err) {
+    console.error('getPackagesByType DB error:', err);
+    return [];
+  }
+}
 
 export async function getAllPackages() {
   try {
