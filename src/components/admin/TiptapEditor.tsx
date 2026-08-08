@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
@@ -101,6 +101,9 @@ export default function TiptapEditor({
   // on the very first render (it was already provided via `content:`).
   const isMounted = useRef(false);
 
+  const [sourceMode, setSourceMode] = useState(false);
+  const [htmlSource, setHtmlSource] = useState('');
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -122,7 +125,9 @@ export default function TiptapEditor({
           '[&_h3]:text-base [&_h3]:font-bold [&_h3]:text-[#004B39] ' +
           '[&_a]:text-[#004B39] [&_a]:underline ' +
           '[&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 ' +
-          '[&_blockquote]:border-l-4 [&_blockquote]:border-[#DB9E30] [&_blockquote]:pl-4 [&_blockquote]:text-slate-600',
+          '[&_blockquote]:border-l-4 [&_blockquote]:border-[#DB9E30] [&_blockquote]:pl-4 [&_blockquote]:text-slate-600 ' +
+          '[&_pre]:bg-slate-900 [&_pre]:text-white [&_pre]:rounded-lg [&_pre]:p-4 [&_pre]:overflow-x-auto ' +
+          '[&_pre_code]:bg-transparent [&_pre_code]:text-inherit',
         style: `min-height: ${minHeight}`,
       },
     },
@@ -187,16 +192,29 @@ export default function TiptapEditor({
     }
   };
 
+  // ADD IT HERE
+  const toggleSourceMode = () => {
+    if (!sourceMode) {
+      // Visual editor -> HTML source
+      setHtmlSource(editor.getHTML());
+      setSourceMode(true);
+    } else {
+      // HTML source -> Visual editor
+      editor.commands.setContent(htmlSource || '<p></p>');
+
+      onChange(editor.isEmpty ? '' : editor.getHTML());
+
+      setSourceMode(false);
+    }
+  };
+
   return (
     <div
-  className="flex flex-col rounded-xl border border-slate-300 overflow-hidden bg-white focus-within:border-[#004B39] transition-colors"
-      style={{
-        height: "700px",
-        overflow: "auto",
-      }}
-    >
+  className="flex flex-col rounded-xl border border-slate-300 overflow-hidden bg-white focus-within:border-[#004B39] transition-colors" style={{
+    height: "700px",
+  }}>
       {/* ── Toolbar ── */}
-      <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 bg-slate-50 border-b border-slate-200">
+      <div className="shrink-0 flex flex-wrap items-center gap-0.5 px-2 py-1.5 bg-slate-50 border-b border-slate-200">
         {/* Paragraph / Heading picker */}
         <select
           value={activeHeading}
@@ -340,16 +358,31 @@ export default function TiptapEditor({
           —
         </ToolbarButton>
         <ToolbarButton
-          onClick={() => editor.chain().focus().toggleCode().run()}
-          active={editor.isActive('code')}
-          title="Inline code"
+          onClick={toggleSourceMode}
+          active={sourceMode}
+          title={sourceMode ? 'Visual editor' : 'Edit HTML source'}
         >
           <code className="text-[10px]">{'</>'}</code>
         </ToolbarButton>
       </div>
 
       {/* ── Editable content area ── */}
-      <EditorContent editor={editor} />
+      {sourceMode ? (
+        <textarea
+          value={htmlSource}
+          onChange={(e) => {
+            setHtmlSource(e.target.value);
+            onChange(e.target.value);
+          }}
+          spellCheck={false}
+          className="flex-1 min-h-0 w-full resize-none overflow-y-auto outline-none border-none bg-slate-950 text-slate-100 font-mono text-sm leading-relaxed p-4"
+        />
+      ) : (
+        <EditorContent
+          editor={editor}
+          className="flex-1 min-h-0 overflow-y-auto"
+        />
+      )}
     </div>
   );
 }
