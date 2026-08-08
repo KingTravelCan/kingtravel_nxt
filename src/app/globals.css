@@ -484,6 +484,32 @@ header {
   border-radius: 2px;
 }
 
+/* about us page */
+
+.service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    display: inline-block;
+    height: 70px;
+    min-width: 70px;
+    border: 2px solid #ccc;
+    box-shadow: var(--shadow);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+}
+
+.about-service-card {
+    background-color: var(--white);
+    padding: 40px 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    border-top: 4px solid transparent;
+    height: 100%;
+}
+
 @media (max-width: 1200px) {
   .logo img {
     max-width: 220px;
