@@ -1,31 +1,24 @@
-"use client";
-
-import { useState, useEffect } from "react";
 import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 import { getPageBySlug } from "@/actions/pageActions";
 import PageSeoHead from "@/components/PageSeoHead";
 
-export default function Home() {
-  const [homeSeo, setHomeSeo] = useState<any>(null);
-  const [dynamicSections, setDynamicSections] = useState<any[]>([]);
-  const [pageData, setPageData] = useState<any>(null);
+export default async function Home() {
+  const pageData = await getPageBySlug("/");
 
-  useEffect(() => {
-    getPageBySlug("/").then((p) => {
-      if (p) {
-        setPageData(p);
-        if (p.seoData) setHomeSeo(p.seoData);
-        if (p.sections) {
-          try {
-            const parsed = typeof p.sections === 'string' ? JSON.parse(p.sections) : p.sections;
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              setDynamicSections(parsed);
-            }
-          } catch { }
-        }
+  const homeSeo = pageData?.seoData || null;
+
+  let dynamicSections: any[] = [];
+  if (pageData?.sections) {
+    try {
+      const parsed =
+        typeof pageData.sections === "string"
+          ? JSON.parse(pageData.sections)
+          : pageData.sections;
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        dynamicSections = parsed;
       }
-    });
-  }, []);
+    } catch {}
+  }
 
   return (
     <main>

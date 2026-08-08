@@ -3,8 +3,15 @@
 import { db } from '@/db';
 import { sitePages, siteSettings } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
 import { getResponsiveEmailTemplateHtml } from '@/lib/emailTemplate';
+
+// Cached reads go stale after this long (seconds) and refetch in the background.
+// Saves from the admin also bust these instantly via revalidateTag(), so content
+// updates show up right away - this just avoids hitting the DB (a full network
+// round trip) on every single page load, which is what was making the header
+// and footer render before the actual page content.
+const CONTENT_CACHE_SECONDS = 300;
 
 function safeJsonParse<T>(jsonStr: any, fallback: T): T {
   if (!jsonStr || typeof jsonStr !== 'string') return fallback;
@@ -58,14 +65,24 @@ export async function getPageById(id: number) {
   return null;
 }
 
+async function fetchPageBySlugFromDb(slug: string) {
+  const pages = await db.select().from(sitePages).where(eq(sitePages.slug, slug)).limit(1);
+  if (pages && pages.length > 0) {
+    const p = pages[0];
+    const seoData = p.seoSettings ? safeJsonParse(p.seoSettings, null) : null;
+    return { ...p, seoData };
+  }
+  return null;
+}
+
 export async function getPageBySlug(slug: string) {
   try {
-    const pages = await db.select().from(sitePages).where(eq(sitePages.slug, slug)).limit(1);
-    if (pages && pages.length > 0) {
-      const p = pages[0];
-      const seoData = p.seoSettings ? safeJsonParse(p.seoSettings, null) : null;
-      return { ...p, seoData };
-    }
+    const getCachedPage = unstable_cache(
+      () => fetchPageBySlugFromDb(slug),
+      ['page-by-slug', slug],
+      { tags: ['pages', `page-slug-${slug}`], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    return await getCachedPage();
   } catch (err) {
     console.error('getPageBySlug DB query failed:', err);
   }
@@ -163,6 +180,8 @@ export async function savePageAction(formData: FormData) {
     revalidatePath('/admin/pages');
     revalidatePath(slug);
     revalidatePath('/', 'layout');
+    revalidateTag('pages');
+    revalidateTag(`page-slug-${slug}`);
     return { success: true, pageId: savedId, error: undefined };
   } catch (err: any) {
     console.error('savePageAction DB query failed:', err);
@@ -189,12 +208,22 @@ export async function getDefaultNavItems() {
   ];
 }
 
+async function fetchNavItemsFromDb() {
+  const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'nav_items')).limit(1);
+  if (res && res.length > 0) {
+    return safeJsonParse(res[0].value, await getDefaultNavItems());
+  }
+  return await getDefaultNavItems();
+}
+
 export async function getNavItems() {
   try {
-    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'nav_items')).limit(1);
-    if (res && res.length > 0) {
-      return safeJsonParse(res[0].value, getDefaultNavItems());
-    }
+    const getCachedNavItems = unstable_cache(
+      fetchNavItemsFromDb,
+      ['nav-items'],
+      { tags: ['nav-items'], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    return await getCachedNavItems();
   } catch (err) {
     console.error('getNavItems DB query failed:', err);
   }
@@ -210,6 +239,7 @@ export async function saveNavItemsAction(navItems: any[]) {
       await db.insert(siteSettings).values({ key: 'nav_items', value: JSON.stringify(navItems) });
     }
     revalidatePath('/', 'layout');
+    revalidateTag('nav-items');
     return { success: true };
   } catch (err: any) {
     console.error('saveNavItemsAction DB query failed:', err);
@@ -265,12 +295,22 @@ export async function getDefaultFooterData() {
 
 let footerMemoryCache: any = null;
 
+async function fetchFooterDataFromDb() {
+  const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'footer_settings')).limit(1);
+  if (res && res.length > 0) {
+    return safeJsonParse(res[0].value, footerMemoryCache || await getDefaultFooterData());
+  }
+  return footerMemoryCache || await getDefaultFooterData();
+}
+
 export async function getFooterData() {
   try {
-    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'footer_settings')).limit(1);
-    if (res && res.length > 0) {
-      return safeJsonParse(res[0].value, footerMemoryCache || getDefaultFooterData());
-    }
+    const getCachedFooterData = unstable_cache(
+      fetchFooterDataFromDb,
+      ['footer-data'],
+      { tags: ['footer-data'], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    return await getCachedFooterData();
   } catch (err) {
     console.error('getFooterData DB query failed:', err);
   }
@@ -287,11 +327,13 @@ export async function saveFooterSettingsAction(footerData: any) {
       await db.insert(siteSettings).values({ key: 'footer_settings', value: JSON.stringify(footerData) });
     }
     revalidatePath('/', 'layout');
+    revalidateTag('footer-data');
     return { success: true };
   } catch (err: any) {
     console.warn('saveFooterSettingsAction DB insert failed, fallback to memory cache:', err);
     footerMemoryCache = footerData;
     revalidatePath('/', 'layout');
+    revalidateTag('footer-data');
     return { success: true, warning: 'Saved to session cache.' };
   }
 }
@@ -325,13 +367,23 @@ export async function getDefaultSiteIdentity() {
 
 let siteIdentityMemoryCache: any = null;
 
+async function fetchSiteIdentityFromDb() {
+  const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'site_identity')).limit(1);
+  if (res && res.length > 0) {
+    return safeJsonParse(res[0].value, siteIdentityMemoryCache || await getDefaultSiteIdentity());
+  }
+  return null;
+}
+
 export async function getSiteIdentity() {
   let identityData: any = null;
   try {
-    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'site_identity')).limit(1);
-    if (res && res.length > 0) {
-      identityData = safeJsonParse(res[0].value, siteIdentityMemoryCache || await getDefaultSiteIdentity());
-    }
+    const getCachedSiteIdentity = unstable_cache(
+      fetchSiteIdentityFromDb,
+      ['site-identity'],
+      { tags: ['site-identity'], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    identityData = await getCachedSiteIdentity();
   } catch (err) {
     console.warn('getSiteIdentity DB query failed, using defaults or cache:', err);
   }
@@ -358,11 +410,13 @@ export async function saveSiteIdentityAction(data: any) {
       await db.insert(siteSettings).values({ key: 'site_identity', value: JSON.stringify(data) });
     }
     revalidatePath('/', 'layout');
+    revalidateTag('site-identity');
     return { success: true };
   } catch (err: any) {
     console.warn('saveSiteIdentityAction DB query failed, saving to cache fallback:', err);
     siteIdentityMemoryCache = data;
     revalidatePath('/', 'layout');
+    revalidateTag('site-identity');
     return { success: true, warning: 'Saved to session memory cache.' };
   }
 }
