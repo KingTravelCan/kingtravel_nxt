@@ -21,8 +21,8 @@ export default function Footer() {
   }
 
   return (
-    <footer id="footer-place" className="bg-[#004B39] text-[#95a29c] py-[70px] pb-[30px] text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-[#DB9E30]">
-      <div className="max-w-[1280px] mx-auto px-[22px] sm:px-[40px]">
+    <footer id="footer-place" className="bg-[#004B39] text-[#bccfc6] py-[70px] pb-[30px] text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-[#DB9E30]">
+      <div className="max-w-[1280px] mx-auto ">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-[40px] lg:gap-[50px]">
 
           {/* ── Column 1: Brand + tagline + social + trust badges ── */}

@@ -30,17 +30,17 @@ export default function UpcomingUmrahPackages({ data }: { data: any }) {
           {(data?.items || []).map((pkg: any, idx: number) => {
             const isGold = pkg.isActiveCard;
             return (
-              <div key={idx} className={`${isGold ? 'bg-[#DB9E30] shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8' : 'bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100'} rounded-[32px] overflow-hidden flex flex-col`}>
+              <div key={idx} className={`${isGold ? 'bg-[#DB9E30] hover:bg-[#FBF8F1] shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8' : 'hover:bg-[#FBF8F1] border-1 border-[#ccc] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]'} rounded-[32px] overflow-hidden flex flex-col`}>
                 <div className="relative h-48 w-full">
                   <img src={pkg.heroImage} alt={pkg.title} className="w-full h-full object-cover" />
                   <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-gray-800 tracking-wider">{pkg.starRating} STAR</div>
                 </div>
                 <div className="p-8 flex-1 flex flex-col">
-                  <div className={`${isGold ? 'text-[#004B39]/70' : 'text-gray-500'} text-xs font-bold uppercase tracking-widest mb-2`}>{pkg.month}</div>
-                  <h3 className="text-2xl font-serif text-[#004B39] mb-2">{pkg.title}</h3>
-                  <div className={`${isGold ? 'text-[#004B39]' : 'text-[#DB9E30]'} font-black text-xl mb-6`}>CAD {pkg.price} <span className={`text-sm font-medium ${isGold ? 'opacity-80' : 'text-gray-500'}`}>/ Person</span></div>
+                  <div className={`${isGold ? '' : 'text-gray-500'} text-xs font-bold uppercase tracking-widest mb-2`}>{pkg.month}</div>
+                  <h3 className="text-2xl font-serif mb-2">{pkg.title}</h3>
+                  <div className={`${isGold ? '' : 'text-[#DB9E30]'} font-black text-xl mb-6`}>CAD {pkg.price} <span className={`text-sm font-medium ${isGold ? '' : 'text-gray-500'}`}>/ Person</span></div>
 
-                  <div className={`text-[10px] font-black uppercase tracking-widest mb-4 ${isGold ? 'text-[#004B39]/70' : 'text-gray-400'}`}>PACKAGE INCLUDES</div>
+                  <div className={`incl-label ${isGold ? '' : ''}`}>PACKAGE INCLUDES</div>
                   <ul className="space-y-4 mb-8 flex-1">
                     {(pkg.includes || []).map((inc: string, i: number) => {
                       const firstWord = inc.split(' ')[0].toLowerCase();
@@ -53,8 +53,8 @@ export default function UpcomingUmrahPackages({ data }: { data: any }) {
                       else if (firstWord === '5' || firstWord === 'hotel') Icon = LucideIcons.Hotel;
 
                       return (
-                        <li key={i} className={`flex gap-3 text-sm ${isGold ? 'text-[#004B39]/90' : 'text-gray-600'}`}>
-                          <Icon className={`w-4 h-4 shrink-0 ${isGold ? 'text-[#004B39]/90' : 'text-gray-400'}`} /> {inc}
+                        <li key={i} className={`flex gap-3 text-sm ${isGold ? '' : 'text-gray-600'}`}>
+                          <Icon className={`w-4 h-4 shrink-0 ${isGold ? '' : 'text-gray-400'}`} /> {inc}
                         </li>
                       );
                     })}

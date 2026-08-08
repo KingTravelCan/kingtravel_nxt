@@ -77,11 +77,11 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
 
   return (
     <section className="py-20 bg-[#F1F1ED]">
-      <div className="max-w-6xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
           {/* Left Column: Contact Details */}
-          <div>
+          <div className="contact-info">
             <div className="mb-10">
               <span className="eyebrow">
                 {data.eyebrow || "GET IN TOUCH"}
@@ -94,16 +94,16 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="text-[10px] font-bold text-[#DB9E30] uppercase tracking-widest mb-2">Landlines:</h4>
-                  <div className="text-[#333] text-sm leading-relaxed font-medium">
+                  <h4 className="">Landlines:</h4>
+                  <div className="">
                     {data.tollFree || "+1 800-844-5464"}<br/>
                     {data.localNum1 || "+1 905-624-8555"}<br/>
                     {data.localNum2 || "+1 905-624-8344"}
                   </div>
                 </div>
                 <div>
-                  <h4 className="text-[10px] font-bold text-[#DB9E30] uppercase tracking-widest mb-2">Whatsapp:</h4>
-                  <div className="text-[#333] text-sm leading-relaxed font-medium">
+                  <h4 className="">Whatsapp:</h4>
+                  <div className="">
                     {data.waReservation || "+1 905-624-8344"} - <span className="text-xs font-normal">Reservation</span><br/>
                     {data.waVisa || "+1 647-982-8555"} - <span className="text-xs font-normal">Saudi Visa</span>
                   </div>
@@ -111,31 +111,31 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold text-[#DB9E30] uppercase tracking-widest mb-2">Email</h4>
-                <div className="text-[#333] text-sm font-medium">
+                <h4 className="">Email</h4>
+                <div className="">
                   {data.email || "info@kingtravelcan.com"}
                 </div>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold text-[#DB9E30] uppercase tracking-widest mb-2">Office Hours</h4>
-                <div className="text-[#333] text-sm font-medium">
+                <h4 className="">Office Hours</h4>
+                <div className="">
                   {data.officeHours || "Mon-Sat, 9am - 7pm EST"}
                 </div>
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold text-[#DB9E30] uppercase tracking-widest mb-2">Head Office</h4>
+                <h4 className="">Head Office</h4>
                 <div 
-                  className="text-[#333] text-sm font-medium leading-relaxed"
+                  className=" leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: data.headOffice || "1325 Eglinton Ave E Ste 218,<br/>Mississauga, ON L4W 4L9, Canada" }}
                 />
               </div>
 
               <div>
-                <h4 className="text-[10px] font-bold text-[#DB9E30] uppercase tracking-widest mb-2">Branch Office</h4>
+                <h4 className="">Branch Office</h4>
                 <div 
-                  className="text-[#333] text-sm font-medium leading-relaxed"
+                  className=" leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: data.branchOffice || "22 Ontario St S,<br/>Milton, ON L9T 2M6, Canada" }}
                 />
               </div>
@@ -149,8 +149,8 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
             )}
             <form noValidate className="flex flex-col gap-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2">
+                <div className="field">
+                  <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -158,12 +158,12 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                     placeholder="Full Name"
                     value={form.fullName}
                     onChange={(e) => { setForm({ ...form, fullName: e.target.value }); if (errors.fullName) setErrors((p) => ({ ...p, fullName: "" })); }}
-                    className={`w-full border p-3 rounded-xl outline-none transition-colors text-slate-900 text-sm ${errors.fullName ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-[#DB9E30] bg-white"}`}
+                    className={`w-full border p-3 rounded-lg outline-none transition-colors text-slate-900 text-sm ${errors.fullName ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-[#DB9E30] bg-white"}`}
                   />
                   {errors.fullName && <span className="text-red-600 text-xs mt-1 block">{errors.fullName}</span>}
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2">
+                <div className="field">
+                  <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -171,12 +171,12 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                     placeholder="Email Address"
                     value={form.email}
                     onChange={(e) => { setForm({ ...form, email: e.target.value }); if (errors.email) setErrors((p) => ({ ...p, email: "" })); }}
-                    className={`w-full border p-3 rounded-xl outline-none transition-colors text-slate-900 text-sm ${errors.email ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-[#DB9E30] bg-white"}`}
+                    className={`w-full border p-3 rounded-lg outline-none transition-colors text-slate-900 text-sm ${errors.email ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-[#DB9E30] bg-white"}`}
                   />
                   {errors.email && <span className="text-red-600 text-xs mt-1 block">{errors.email}</span>}
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2">
+                <div className="field">
+                  <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
                     Phone Number
                   </label>
                   <input
@@ -184,18 +184,18 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                     placeholder="Phone Number"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="w-full border border-slate-200 p-3 rounded-xl bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm"
+                    className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm"
                   />
                 </div>
-                <div>
-                  <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2">
+                <div className="field">
+                  <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
                     Select Package
                   </label>
                   <select
                     value={form.packageType}
                     onChange={(e) => setForm({ ...form, packageType: e.target.value })}
-                    className="w-full border border-slate-200 p-3 rounded-xl bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm appearance-none"
-                    style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
+                    className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm appearance-none"
+                    style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%2２%20stroke-linejoin%3D%2２round%２２%3E%3Cpolyline%２ points%３D%２6%２０9%２ 1２%２ 15%２ 18%２ 9%２％３C％２Fpolyline％３E％３C％２Fsvg％３E')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
                   >
                     <option>Select Package</option>
                     <option>Umrah Package</option>
@@ -206,8 +206,8 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                   </select>
                 </div>
               </div>
-              <div>
-                <label className="block text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-2">
+              <div className="field">
+                <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
                   Message
                 </label>
                 <textarea
@@ -215,14 +215,14 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                   placeholder="Your Message"
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="w-full border border-slate-200 p-3 rounded-xl bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm resize-y"
+                  className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm resize-y"
                   style={{ backgroundImage: "linear-gradient(45deg, transparent 50%, #94a3b8 50%, #94a3b8 55%, transparent 55%, transparent 65%, #94a3b8 65%, #94a3b8 70%, transparent 70%, transparent 80%, #94a3b8 80%, #94a3b8 85%, transparent 85%)", backgroundSize: "12px 12px", backgroundRepeat: "no-repeat", backgroundPosition: "bottom 4px right 4px" }}
                 />
               </div>
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-[#DB9E30] hover:bg-[#c48d2a] text-[#1e2f2b] font-bold py-4 px-6 rounded-xl shadow-md transition-all duration-300 tracking-wider uppercase text-xs cursor-pointer text-center"
+                  className="w-full bg-[#DB9E30] hover:bg-[#c48d2a] text-[#1e2f2b] font-bold py-4 px-6 rounded-lg shadow-md transition-all duration-300 tracking-wider uppercase text-xs cursor-pointer text-center"
                 >
                   Send Enquiry
                 </button>

@@ -41,8 +41,8 @@ export default function VisaSolutionsSection({ data }: { data?: any }) {
               </div>
               <div className="card-content p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <h3 className="card-title text-xl font-bold text-[#004B39] mb-2">{card.title}</h3>
-                  <p className="card-description text-xs text-slate-600 leading-relaxed font-normal">{card.description}</p>
+                  <h3 className="card-title">{card.title}</h3>
+                  <p className="card-description">{card.description}</p>
                 </div>
               </div>
             </div>

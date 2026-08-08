@@ -380,7 +380,7 @@ export default function AboutPage() {
                   <div className="eyebrow uppercase text-xs font-bold tracking-widest text-[#DB9E30] justify-center mb-1">
                     {sec.data?.eyebrow || "OUR TRUSTED PARTNERS"}
                   </div>
-                  <h2 className="text-3xl font-serif text-[#004B39]">
+                  <h2 className="">
                     {sec.data?.title || "Airlines we work with"}
                   </h2>
                 </div>

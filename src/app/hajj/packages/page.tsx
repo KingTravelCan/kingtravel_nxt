@@ -481,7 +481,7 @@ export default function HajjPackagesPage() {
         } catch (e) { }
         return (
           <section className="bg-[#004B39] text-white py-6 overflow-hidden">
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
                 <div className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] mb-2">
                   {eyebrow}

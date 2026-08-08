@@ -948,7 +948,7 @@ function PageBuilderContent() {
                 {/* Primary & Secondary Buttons Matching Frontend */}
                 <div className="flex flex-wrap items-center gap-3 pt-2">
                   <span className="bg-[#DB9E30] hover:bg-[#c68e27] text-[#004B39] font-black text-xs px-5 py-2.5 rounded-full shadow-md transition-all cursor-pointer">
-                    {primaryBtnLabel || 'View Umrah Packages →'}
+                    {primaryBtnLabel || 'View Umrah Packages'}
                   </span>
                   <span className="bg-white text-slate-900 hover:bg-slate-100 font-extrabold text-xs px-5 py-2.5 rounded-full shadow-md transition-all cursor-pointer border border-white">
                     {secondaryBtnLabel || 'Speak With an Advisor'}
