@@ -155,12 +155,12 @@ export default function Header() {
           {/* Right: WhatsApp chip + hamburger */}
           <div className="flex items-center max-lg:order-2 max-lg:ml-auto">
             <div className="flex items-center gap-[5px] max-sm:hidden">
-              <div className="w-[32px] max-sm:w-[24px] h-auto block">
+              <div className="w-[40px] max-sm:w-[24px] h-auto block">
                 <Image
                   src="/img/whatsapp.svg"
                   alt="WhatsApp"
-                  width={32}
-                  height={32}
+                  width={40}
+                  height={40}
                 />
               </div>
               <div>

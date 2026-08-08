@@ -30,15 +30,15 @@ export default function WhoWeAreSection({ data }: { data: any }) {
 
           {/* Right: Text & Stats */}
           <div>
-            <h3 className="text-[#DB9E30] font-black uppercase tracking-widest text-sm mb-4">{eyebrow}</h3>
+            <h3 className="eyebrow">{eyebrow}</h3>
             <h2 
-              className="text-4xl md:text-5xl font-serif text-[#004B39] leading-tight mb-6"
+              className="font-serif  leading-tight mb-6"
               dangerouslySetInnerHTML={{ __html: title }}
             />
-            <p className="text-gray-700 mb-6 leading-relaxed text-sm md:text-base">
+            <p className="!text-[18px] text-gray-700 mb-6 leading-relaxed text-sm md:text-base">
               {description1}
             </p>
-            <p className="text-gray-700 mb-10 leading-relaxed text-sm md:text-base">
+            <p className="!text-[18px] text-gray-700 mb-10 leading-relaxed text-sm md:text-base">
               {description2}
             </p>
 

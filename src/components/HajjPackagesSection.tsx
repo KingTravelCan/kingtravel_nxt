@@ -14,7 +14,7 @@ export default function HajjPackagesSection({ data }: { data: any }) {
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
           <div>
-            <h3 className="text-[#DB9E30] font-black uppercase tracking-widest text-xs mb-3">{eyebrow}</h3>
+            <h3 className="eyebrow">{eyebrow}</h3>
             <h2 className="text-4xl md:text-5xl font-serif text-[#004B39] leading-tight">{title}</h2>
           </div>
           <div className="max-w-sm text-gray-500 text-sm leading-relaxed">

@@ -22,10 +22,10 @@ export default function TravelServicesSection({ data }: { data: any }) {
   return (
     <section className="py-20 bg-[#f4f6ec]">
       <div className="max-w-[1400px] mx-auto px-4">
-        <div className="text-center mb-16">
-          <h3 className="text-[#DB9E30] font-black uppercase tracking-[0.2em] text-sm mb-3">{eyebrow}</h3>
+        <div className="text-center flex flex-col items-center mb-16">
+          <h3 className="eyebrow">{eyebrow}</h3>
           <h2 
-            className="text-4xl md:text-5xl font-serif text-[#004B39] leading-tight"
+            className=""
             dangerouslySetInnerHTML={{ __html: title }}
           />
         </div>

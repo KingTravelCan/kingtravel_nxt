@@ -141,7 +141,7 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
           return (
             <section key={idx} className="tint mt-12 py-20 bg-emerald-50/60 border-t border-emerald-100">
               <div className="wrap text-center max-w-3xl mx-auto px-4">
-                <h2 className="text-3xl font-serif text-[#004B39] mb-4">
+                <h2 className=" mb-4">
                   {sec.data?.title || "Need Flight Booking Assistance?"}
                 </h2>
                 <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed font-light">
@@ -168,12 +168,12 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
                 <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
                   <div className="md:w-1/2">
                     {sec.data?.eyebrow && (
-                      <span className="text-[#DB9E30] font-black uppercase tracking-widest text-xs mb-3 block">
+                      <span className="eyebrow block">
                         {sec.data.eyebrow}
                       </span>
                     )}
                     <h2
-                      className="text-4xl md:text-5xl font-serif text-[#004B39] leading-tight"
+                      className=""
                       dangerouslySetInnerHTML={{ __html: sec.data?.title || "Packages Officially<br />Sold Out" }}
                     />
                   </div>
@@ -250,9 +250,9 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
           return (
             <section key={idx} className="py-14 bg-[#004B39]">
               <div className="max-w-7xl mx-auto px-4">
-                <div className="text-center mb-10">
+                <div className="text-center flex flex-col mb-10">
                   {sec.data?.eyebrow && (
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+                    <span className="eyebrow mx-auto">
                       {sec.data.eyebrow}
                     </span>
                   )}
@@ -312,9 +312,9 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
           return (
             <section key={idx} className="py-12 bg-[#f7f3ec] border-y border-[#e8e0d0]">
               <div className="max-w-7xl mx-auto px-4">
-                <div className="text-center mb-8">
+                <div className="text-center flex flex-col mb-8">
                   {sec.data?.eyebrow && (
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+                    <span className="eyebrow mx-auto">
                       {sec.data.eyebrow}
                     </span>
                   )}
@@ -346,13 +346,13 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
           return (
             <section key={idx} className="py-12 bg-white">
               <div className="max-w-7xl mx-auto px-4">
-                <div className="text-center mb-8">
+                <div className="flex flex-col items-cente text-center mb-8">
                   {sec.data?.eyebrow && (
-                    <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+                    <span className="eyebrow mx-auto">
                       {sec.data.eyebrow}
                     </span>
                   )}
-                  <h2 className="text-3xl font-serif text-[#004B39] font-normal">
+                  <h2 className=" font-normal">
                     {sec.data?.title || "Trusted Travel Organizations"}
                   </h2>
                 </div>

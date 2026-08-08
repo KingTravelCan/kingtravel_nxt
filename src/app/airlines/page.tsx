@@ -188,7 +188,7 @@ export default function AirlinesPage() {
                     <div className="eyebrow uppercase text-xs font-bold tracking-widest text-[#DB9E30] justify-center mb-1">
                       {sec.data?.eyebrow || "OUR TRUSTED PARTNERS"}
                     </div>
-                    <h2 className="text-3xl font-serif text-[#004B39]">
+                    <h2 className="">
                       {sec.data?.title || "Airlines We Sourced Deals From"}
                     </h2>
                   </div>
@@ -207,7 +207,7 @@ export default function AirlinesPage() {
             return (
               <section key={idx} className="tint mt-12 py-20 bg-emerald-50/60 border-t border-emerald-100">
                 <div className="wrap text-center max-w-3xl mx-auto px-4">
-                  <h2 className="text-3xl font-serif text-[#004B39] mb-4">
+                  <h2 className=" mb-4">
                     {sec.data?.title || "Need Flight Booking Assistance?"}
                   </h2>
                   <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed font-light">
@@ -262,13 +262,13 @@ export default function AirlinesPage() {
           </section>
 
           <section id="flights" className="py-12 bg-white">
-            <div className="wrap"><div className="section-head center text-center mb-8"><div className="eyebrow uppercase text-xs font-bold tracking-widest text-[#DB9E30] justify-center mb-1">Our Trusted Partners</div><h2 className="text-3xl font-serif text-[#004B39]">Airlines We Sourced Deals From</h2></div></div>
+            <div className="wrap"><div className="section-head center text-center mb-8"><div className="eyebrow uppercase text-xs font-bold tracking-widest text-[#DB9E30] justify-center mb-1">Our Trusted Partners</div><h2 className="">Airlines We Sourced Deals From</h2></div></div>
             <MarqueeTrack type="airline" images={airlineLogos} />
           </section>
 
           <section className="tint mt-12 py-20 bg-emerald-50/60 border-t border-emerald-100">
             <div className="wrap text-center max-w-3xl mx-auto px-4">
-              <h2 className="text-3xl font-serif text-[#004B39] mb-4">Need Flight Booking Assistance?</h2>
+              <h2 className=" mb-4">Need Flight Booking Assistance?</h2>
               <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed font-light">Speak directly with our ticketing specialists to get custom quotes, group flight discounts, and immediate confirmations.</p>
               <Link href="/contact" className="inline-block bg-[#004B39] hover:bg-[#DB9E30] text-white hover:text-slate-900 font-extrabold px-8 py-3.5 rounded-xl shadow-md transition-all text-sm">Contact Flight Desk</Link>
             </div>

@@ -111,7 +111,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
               <p className="lead">{heroData.description}</p>
               <div className="hero-cta">
                 <a className="btn" href={heroData.primaryBtnLink || '#packages'}>
-                  {heroData.primaryBtnLabel || 'View Umrah Packages →'}
+                  {heroData.primaryBtnLabel || 'View Umrah Packages'}
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                     <path d="M5 12h14M13 6l6 6-6 6"></path>
                   </svg>
@@ -151,7 +151,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
 
         <div className="wrap">
           <div className="relative rounded-3xl shadow-xl bg-sage p-6 md:p-8 -mt-8">
-            <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#004B39] tracking-tight text-center mb-6">
+            <h2 className="text-2xl md:text-3xl font-serif tracking-tight text-center mb-6">
               Get a free Quote
             </h2>
             {quoteStatus && <p className="text-center text-emerald-800 font-semibold mb-6">{quoteStatus}</p>}

@@ -158,7 +158,7 @@ export default function AboutPage() {
                 <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-1.5">
                   {sec.data?.eyebrow || "ABOUT"}
                 </span>
-                <h2 className="text-3xl font-serif text-[#004B39] font-normal mb-3">
+                <h2 className="font-serif mb-3">
                   {sec.data?.title || "King Travel"}
                 </h2>
                 <p className="text-slate-700 text-sm leading-relaxed font-normal m-0">

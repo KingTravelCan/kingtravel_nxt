@@ -22,7 +22,7 @@ export default function VisaSolutionsSection({ data }: { data?: any }) {
           <div className="eyebrow uppercase text-xs font-bold tracking-widest text-[#DB9E30] mb-1">
             {data?.eyebrow || "EXPLORE OUR"}
           </div>
-          <h2 className="text-3xl font-serif text-[#004B39]">
+          <h2 className="">
             {data?.title || "Saudi Visa Solutions"}
           </h2>
         </div>

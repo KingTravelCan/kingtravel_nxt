@@ -83,7 +83,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
           {/* Left Column: Contact Details */}
           <div>
             <div className="mb-10">
-              <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-2">
+              <span className="eyebrow">
                 {data.eyebrow || "GET IN TOUCH"}
               </span>
               <h2 className="text-3xl md:text-4xl font-serif text-[#1e2f2b] font-normal mb-3">
