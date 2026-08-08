@@ -37,3 +37,9 @@ yarn-error.log*
 next-env.d.ts
 /scratch
 scratch/*
+# Scratch and audit scripts
+gather.ps1
+gather.sh
+find_admin_sections.js
+find_sections.js
+fix-db.js

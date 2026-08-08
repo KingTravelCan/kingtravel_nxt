@@ -72,6 +72,9 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
       status: editingPkg.status,
       shortDescription: editingPkg.shortDescription,
       fullDescription: editingPkg.fullDescription,
+      departureCity: editingPkg.departureCity,
+      destination: editingPkg.destination,
+      featuredImage: editingPkg.featuredImage,
     });
 
     if (res.success) {

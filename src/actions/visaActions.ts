@@ -106,6 +106,7 @@ export async function createVisaService(formData: FormData): Promise<{ success: 
     const shortDescription = formData.get('shortDescription') as string || '';
     const fullDescription = formData.get('fullDescription') as string || '';
     const processingTime = (formData.get('processingTime') as string) || '3-5 Business Days';
+    const requirements = formData.get('requirements') as string || '';
 
     if (!title) return { success: false, error: 'Title is required.' };
 
@@ -117,6 +118,7 @@ export async function createVisaService(formData: FormData): Promise<{ success: 
       shortDescription,
       fullDescription,
       processingTime,
+      requirements,
       imageUrl: '/img/saudi-visa-1.webp',
       isPublished: true,
     });

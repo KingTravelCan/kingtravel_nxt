@@ -16,58 +16,14 @@ function safeJsonParse<T>(jsonStr: any, fallback: T): T {
   }
 }
 
-const INITIAL_FRONTEND_PAGES = [
-  { title: 'Home Page', slug: '/' },
-  { title: 'About Us', slug: '/about' },
-  { title: 'Umrah Packages', slug: '/umrah-packages' },
-  { title: 'Hajj Packages', slug: '/hajj-packages' },
-  { title: 'Saudi Visa', slug: '/saudi-visa' },
-  { title: 'Airlines & Flights', slug: '/airlines' },
-  { title: 'Contact Us', slug: '/contact' },
-  { title: 'Deluxe Hajj 2027', slug: '/deluxe-hajj-2027' },
-  { title: 'Economy Hajj 2027', slug: '/economy-hajj-2027' },
-];
-
-// In-memory fallback cache when database table site_pages is not migrated
-const pageMemoryCache: Record<number, any> = {};
-INITIAL_FRONTEND_PAGES.forEach((p, idx) => {
-  pageMemoryCache[idx + 1] = {
-    id: idx + 1,
-    title: p.title,
-    slug: p.slug,
-    status: 'published' as const,
-    showInMenu: true,
-    parentPage: null,
-    sections: '[]',
-    richText: '',
-    metaTitle: p.title,
-    metaDescription: '',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  };
-});
-
-let pageOrderMemoryCache: number[] = [];
-
 export async function getPagesList() {
   try {
     let pages = await db.select().from(sitePages);
-    if (!pages || pages.length === 0) {
-      for (const p of INITIAL_FRONTEND_PAGES) {
-        await db.insert(sitePages).values({
-          title: p.title,
-          slug: p.slug,
-          status: 'published',
-          showInMenu: true,
-        });
-      }
-      pages = await db.select().from(sitePages);
-    }
-
+    
     // Apply stored reordering sequence if available
     try {
       const orderSetting = await db.select().from(siteSettings).where(eq(siteSettings.key, 'ordered_pages')).limit(1);
-      const orderIds: number[] = orderSetting && orderSetting.length > 0 ? safeJsonParse(orderSetting[0].value, pageOrderMemoryCache) : pageOrderMemoryCache;
+      const orderIds: number[] = orderSetting && orderSetting.length > 0 ? safeJsonParse(orderSetting[0].value, []) : [];
 
       if (orderIds && orderIds.length > 0) {
         const orderMap = new Map(orderIds.map((id, index) => [id, index]));
@@ -83,17 +39,8 @@ export async function getPagesList() {
 
     return pages;
   } catch (err) {
-    console.error('getPagesList DB query failed, returning fallback list:', err);
-    let cachedList = Object.values(pageMemoryCache);
-    if (pageOrderMemoryCache && pageOrderMemoryCache.length > 0) {
-      const orderMap = new Map(pageOrderMemoryCache.map((id, index) => [id, index]));
-      cachedList.sort((a: any, b: any) => {
-        const orderA = orderMap.has(a.id) ? (orderMap.get(a.id) as number) : 999;
-        const orderB = orderMap.has(b.id) ? (orderMap.get(b.id) as number) : 999;
-        return orderA - orderB;
-      });
-    }
-    return cachedList;
+    console.error('getPagesList DB query failed:', err);
+    throw new Error('Failed to fetch pages from database');
   }
 }
 
@@ -102,14 +49,13 @@ export async function getPageById(id: number) {
     const pages = await db.select().from(sitePages).where(eq(sitePages.id, id)).limit(1);
     if (pages && pages.length > 0) {
       const p = pages[0];
-      const seoRes = await db.select().from(siteSettings).where(eq(siteSettings.key, `page_seo_${id}`)).limit(1);
-      const seoData = seoRes && seoRes.length > 0 ? safeJsonParse(seoRes[0].value, null) : null;
+      const seoData = p.seoSettings ? safeJsonParse(p.seoSettings, null) : null;
       return { ...p, seoData };
     }
   } catch (err) {
-    console.error('getPageById DB query failed, checking memory cache:', err);
+    console.error('getPageById DB query failed:', err);
   }
-  return pageMemoryCache[id] || null;
+  return null;
 }
 
 export async function getPageBySlug(slug: string) {
@@ -117,15 +63,13 @@ export async function getPageBySlug(slug: string) {
     const pages = await db.select().from(sitePages).where(eq(sitePages.slug, slug)).limit(1);
     if (pages && pages.length > 0) {
       const p = pages[0];
-      const seoRes = await db.select().from(siteSettings).where(eq(siteSettings.key, `page_seo_${p.id}`)).limit(1);
-      const seoData = seoRes && seoRes.length > 0 ? safeJsonParse(seoRes[0].value, null) : null;
+      const seoData = p.seoSettings ? safeJsonParse(p.seoSettings, null) : null;
       return { ...p, seoData };
     }
   } catch (err) {
-    console.error('getPageBySlug DB query failed, checking memory cache:', err);
+    console.error('getPageBySlug DB query failed:', err);
   }
-  const cached = Object.values(pageMemoryCache).find(p => p.slug === slug);
-  return cached || null;
+  return null;
 }
 
 export async function savePageAction(formData: FormData) {
@@ -191,28 +135,6 @@ export async function savePageAction(formData: FormData) {
       }
     }
 
-    // Always update memory cache so getPageBySlug works instantly
-    const targetId = savedId || (Object.keys(pageMemoryCache).length + 1);
-    pageMemoryCache[targetId] = {
-      id: targetId,
-      title,
-      slug,
-      status,
-      showInMenu,
-      parentPage,
-      bannerBgImage,
-      bannerPosition,
-      bannerSize,
-      bannerTitle,
-      bannerDescription,
-      sections,
-      richText,
-      metaTitle,
-      metaDescription,
-      seoSettings,
-      updatedAt: new Date(),
-    };
-
     // Synchronize nav_items if slug or title changed
     try {
       const navRes = await db.select().from(siteSettings).where(eq(siteSettings.key, 'nav_items')).limit(1);
@@ -243,31 +165,8 @@ export async function savePageAction(formData: FormData) {
     revalidatePath('/', 'layout');
     return { success: true, pageId: savedId, error: undefined };
   } catch (err: any) {
-    console.warn('savePageAction DB query failed, saving to cache fallback:', err);
-    // Fallback save to memory cache so UI updates smoothly even without DB table
-    const targetId = id || (Object.keys(pageMemoryCache).length + 1);
-    pageMemoryCache[targetId] = {
-      id: targetId,
-      title,
-      slug,
-      status,
-      showInMenu,
-      parentPage,
-      bannerBgImage,
-      bannerPosition,
-      bannerSize,
-      bannerTitle,
-      bannerDescription,
-      sections,
-      richText,
-      metaTitle,
-      metaDescription,
-      updatedAt: new Date(),
-    };
-    revalidatePath('/admin/pages');
-    revalidatePath(slug);
-    revalidatePath('/', 'layout');
-    return { success: true, pageId: targetId, error: undefined, warning: 'Saved to session memory cache.' };
+    console.error('savePageAction DB query failed:', err);
+    return { success: false, error: err.message || 'Failed to save page' };
   }
 }
 
@@ -399,18 +298,16 @@ export async function saveFooterSettingsAction(footerData: any) {
 
 export async function deletePageAction(id: number) {
   try {
-    // Delete from DB
-    await db.delete(sitePages).where(eq(sitePages.id, id));
-    // Also delete from memory cache if present
-    delete pageMemoryCache[id];
-    revalidatePath('/admin/pages');
-    revalidatePath('/', 'layout');
+    const pages = await db.select().from(sitePages).where(eq(sitePages.id, id)).limit(1);
+    if (pages && pages.length > 0) {
+      await db.delete(sitePages).where(eq(sitePages.id, id));
+      revalidatePath('/admin/pages');
+      revalidatePath('/', 'layout');
+    }
     return { success: true };
   } catch (err: any) {
     console.error('deletePageAction DB query failed:', err);
-    delete pageMemoryCache[id];
-    revalidatePath('/admin/pages');
-    return { success: true };
+    return { success: false, error: err.message || 'Failed to delete page' };
   }
 }
 
@@ -566,7 +463,6 @@ export async function saveGlobalCssAction(css: string) {
 
 export async function updatePageOrderAction(orderedIds: number[]) {
   try {
-    pageOrderMemoryCache = orderedIds;
     const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'ordered_pages')).limit(1);
     if (existing && existing.length > 0) {
       await db.update(siteSettings).set({ value: JSON.stringify(orderedIds), updatedAt: new Date() }).where(eq(siteSettings.key, 'ordered_pages'));
@@ -577,7 +473,6 @@ export async function updatePageOrderAction(orderedIds: number[]) {
     return { success: true };
   } catch (err: any) {
     console.warn('updatePageOrderAction DB query failed:', err);
-    pageOrderMemoryCache = orderedIds;
     revalidatePath('/admin/pages');
     return { success: true };
   }
@@ -586,22 +481,11 @@ export async function updatePageOrderAction(orderedIds: number[]) {
 export async function updatePageStatusAction(id: number, status: 'published' | 'draft') {
   try {
     await db.update(sitePages).set({ status, updatedAt: new Date() }).where(eq(sitePages.id, id));
-    if (pageMemoryCache[id]) {
-      pageMemoryCache[id].status = status;
-      pageMemoryCache[id].updatedAt = new Date();
-    }
     revalidatePath('/admin/pages');
-    revalidatePath('/', 'layout');
     return { success: true };
   } catch (err: any) {
-    console.error('updatePageStatusAction DB error, updating memory cache:', err);
-    if (pageMemoryCache[id]) {
-      pageMemoryCache[id].status = status;
-      pageMemoryCache[id].updatedAt = new Date();
-    }
-    revalidatePath('/admin/pages');
-    revalidatePath('/', 'layout');
-    return { success: true };
+    console.error('updatePageStatusAction DB error:', err);
+    return { success: false, error: err.message || 'Failed to update status' };
   }
 }
 

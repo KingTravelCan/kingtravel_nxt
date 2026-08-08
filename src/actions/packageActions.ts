@@ -43,6 +43,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
     const status = (formData.get('status') as any) || 'available';
     const shortDescription = formData.get('shortDescription') as string || '';
     const fullDescription = formData.get('fullDescription') as string || '';
+    const inclusions = formData.get('inclusions') as string || '[]';
 
     if (!title) return { success: false, error: 'Package title is required.' };
 
@@ -58,14 +59,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
       status,
       shortDescription,
       fullDescription,
-      inclusions: JSON.stringify([
-        'Return Flights from Toronto',
-        'Luxury Ground Transportation',
-        'Free Ihram Kit',
-        'Registration & Visa Assistance',
-        'Imam Lead Guide & Seminar',
-        '5 Star Hotels Makkah & Madinah',
-      ]),
+      inclusions,
     });
 
     revalidatePath('/admin/packages');
