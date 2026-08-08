@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
-import { getPackagesByIds } from "@/actions/packageActions";
+import { getPackagesByType } from "@/actions/packageActions";
 
 export default function HajjPackagesSection({ data }: { data: any }) {
   const eyebrow = data?.eyebrow || "LUXURY HAJJ PACKAGES";
@@ -11,24 +11,16 @@ export default function HajjPackagesSection({ data }: { data: any }) {
     data?.description ||
     "Luxury Hajj 2027 Packages with 5-Star Hotels, VIP Services & Complete Spiritual Guidance.";
 
-  const packageIds: number[] = Array.isArray(data?.packageIds)
-    ? data.packageIds.map(Number).filter(Boolean)
-    : [];
-
   const [pkgs, setPkgs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(packageIds.length > 0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (packageIds.length === 0) {
-      setLoading(false);
-      return;
-    }
-    getPackagesByIds(packageIds)
+    // Automatically pulls every published Hajj package - no manual curation needed.
+    getPackagesByType("hajj")
       .then((rows) => setPkgs(rows))
       .catch(() => setPkgs([]))
       .finally(() => setLoading(false));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.packageIds?.join?.(",")]);
+  }, []);
 
   return (
     <section className="py-20 bg-[#fbfcf9]">

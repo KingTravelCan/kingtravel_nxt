@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { getAllPackages } from "@/actions/packageActions";
+import { getPackagesByType } from "@/actions/packageActions";
 
 // Fallback cards shown only if no Hajj packages exist yet in the database,
 // so the page never renders empty.
@@ -81,8 +81,7 @@ export default async function HajjPackagesPage() {
   let liveCards: any[] = [];
 
   try {
-    const allPackages = await getAllPackages();
-    const hajjPackages = allPackages.filter((pkg: any) => pkg.type === "hajj");
+    const hajjPackages = await getPackagesByType("hajj");
 
     liveCards = hajjPackages.map((pkg: any) => {
       const cd = pkg.cardData || {};
