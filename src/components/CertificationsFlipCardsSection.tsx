@@ -70,7 +70,7 @@ export default function CertificationsFlipCardsSection({ data }: CertificationsF
                       <img
                         src={item.logo}
                         alt={item.title || 'Certification Logo'}
-                        className="max-h-full max-w-full object-contain grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                        className="max-h-full max-w-full object-contain w-36 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
                       />
                     </div>
                   ) : (
