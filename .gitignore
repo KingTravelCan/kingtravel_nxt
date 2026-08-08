@@ -43,3 +43,4 @@ gather.sh
 find_admin_sections.js
 find_sections.js
 fix-db.js
+fix-admin-styles.js

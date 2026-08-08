@@ -3390,7 +3390,7 @@ function PageBuilderContent() {
                                     🏅 Certifications 3D Flip Cards Manager
                                   </span>
                                 </div>
-                                <div className="grid grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1 gap-2">
                                   <div>
                                     <label className="block text-[10px] font-bold text-slate-500 mb-1">EYEBROW TEXT</label>
                                     <input
@@ -3808,7 +3808,7 @@ function PageBuilderContent() {
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
                                   🗺️ Dual Office Google Maps Manager
                                 </span>
-                                <div className="grid grid-cols-2 gap-12">
+                                <div className="grid grid-cols-2 gap-8 p-4 bg-slate-50 border border-slate-200 rounded-lg mb-4">
                                   {/* Head Office Map Controls */}
                                   <div className="bg-slate-50 border border-slate-300 rounded-lg p-2.5 flex flex-col gap-2">
                                     <span className="text-xs font-bold text-slate-800">📍 Head Office Location</span>
@@ -3974,9 +3974,9 @@ function PageBuilderContent() {
                                     </div>
 
                                     {/* Section 1: Hero Featured Image & Top Meta (Header Block) */}
-                                    <div className="grid items-center bg-white">
+                                    <div className="grid grid-cols-[1fr_2fr] gap-6 items-start bg-white p-4 border border-slate-200 rounded-lg mt-2 mb-4">
                                       {/* Hero Image Thumbnail with Overlay 'X' Badge */}
-                                      <div className="relative">
+                                      <div className="relative h-48 rounded-lg overflow-hidden border border-slate-200">
                                         {pkg.heroImage ? (
                                           <>
                                             <img src={pkg.heroImage} alt="Hero" className="w-full h-full object-cover" />
@@ -3988,16 +3988,16 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], heroImage: '' };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="flex items-center justify-center cursor-pointer absolute"
+                                              className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer shadow-md hover:bg-red-600 z-10 text-xs font-bold"
                                               title="Remove Hero Image"
                                             >
                                               ✕
                                             </button>
                                           </>
                                         ) : (
-                                          <label className="flex flex-col items-center justify-center w-full h-full cursor-pointer text-[#004B39]">
-                                            <Upload className="w-4 h-4" />
-                                            <span className="font-bold">Upload Hero</span>
+                                          <label className="flex flex-col gap-2 items-center justify-center w-full h-full cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors">
+                                            <Upload className="w-5 h-5" />
+                                            <span className="font-bold text-xs">Upload Hero</span>
                                             <input
                                               type="file"
                                               accept="image/*"
@@ -4006,7 +4006,11 @@ function PageBuilderContent() {
                                                 const file = e.target.files?.[0];
                                                 if (file) {
                                                   const url = await uploadFileToFtp(file, 'uploads');
-                                                  if (url) updateSectionData(sec.id, 'image', url);
+                                                  if (url) {
+                                                    const pkgs = [...allPkgs];
+                                                    pkgs[pIdx] = { ...pkgs[pIdx], heroImage: url };
+                                                    updateSectionData(sec.id, 'items', pkgs);
+                                                  }
                                                 }
                                               }}
                                             />
@@ -4040,7 +4044,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], badgeTag: e.target.value };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                         </div>
@@ -4056,7 +4060,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], duration: e.target.value };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                           <div>
@@ -4069,7 +4073,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], flightRoute: e.target.value };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                         </div>
@@ -4077,16 +4081,16 @@ function PageBuilderContent() {
                                     </div>
 
                                     {/* Section 2: Side-by-Side Accommodations Grid (Makkah & Madinah) */}
-                                    <div className="grid grid-cols-2 gap-12">
+                                    <div className="grid grid-cols-2 gap-8 p-4 bg-slate-50 border border-slate-200 rounded-lg mb-4">
                                       {/* Makkah Accommodation Box */}
                                       <div className="flex flex-col">
                                         <span className="text-xs font-bold text-slate-800">
                                           🏨 Makkah Hotel & Details
                                         </span>
 
-                                        <div className="grid items-center">
+                                        <div className="grid grid-cols-[1fr_2fr] gap-4 items-start mt-2">
                                           {/* Makkah Image Thumbnail with Overlay 'X' */}
-                                          <div className="relative">
+                                          <div className="relative h-48 rounded-lg overflow-hidden border border-slate-200 mb-4">
                                             {pkg.makkahHotel?.image ? (
                                               <>
                                                 <img src={pkg.makkahHotel.image} alt="Makkah Hotel" className="w-full h-full object-cover" />
@@ -4098,15 +4102,16 @@ function PageBuilderContent() {
                                                     pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: '' } };
                                                     updateSectionData(sec.id, 'items', pkgs);
                                                   }}
-                                                  className="flex items-center justify-center cursor-pointer absolute"
+                                                  className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer shadow-md hover:bg-red-600 z-10 text-xs font-bold"
                                                   title="Remove Makkah Image"
                                                 >
                                                   ✕
                                                 </button>
                                               </>
                                             ) : (
-                                              <label className="flex items-center justify-center w-full h-full cursor-pointer bg-white">
-                                                <Upload className="w-3 h-3" />
+                                              <label className="flex flex-col gap-2 items-center justify-center w-full h-full cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors">
+                                                <Upload className="w-5 h-5" />
+                                                <span className="font-bold text-xs">Upload Makkah</span>
                                                 <input
                                                   type="file"
                                                   accept="image/*"
@@ -4115,7 +4120,11 @@ function PageBuilderContent() {
                                                     const file = e.target.files?.[0];
                                                     if (file) {
                                                       const url = await uploadFileToFtp(file, 'uploads');
-                                                      if (url) updateSectionData(sec.id, 'image', url);
+                                                      if (url) {
+                                                        const pkgs = [...allPkgs];
+                                                        pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), image: url } };
+                                                        updateSectionData(sec.id, 'items', pkgs);
+                                                      }
                                                     }
                                                   }}
                                                 />
@@ -4123,24 +4132,9 @@ function PageBuilderContent() {
                                             )}
                                           </div>
 
-                                          <label className="flex items-center justify-center font-bold cursor-pointer text-white">
-                                            <Upload className="w-3 h-3" /> Upload Photo
-                                            <input
-                                              type="file"
-                                              accept="image/*"
-                                              className="hidden"
-                                              onChange={async (e) => {
-                                                const file = e.target.files?.[0];
-                                                if (file) {
-                                                  const url = await uploadFileToFtp(file, 'uploads');
-                                                  if (url) updateSectionData(sec.id, 'image', url);
-                                                }
-                                              }}
-                                            />
-                                          </label>
-                                        </div>
 
-                                        <div className="grid grid-cols-2 gap-6">
+
+                                        <div className="grid grid-cols-1 gap-2">
                                           <div>
                                             <label className="block font-bold text-slate-500">MAKKAH HOTEL NAME</label>
                                             <input
@@ -4151,7 +4145,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), name: e.target.value } };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                           <div>
@@ -4164,7 +4158,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), location: e.target.value } };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                           <div>
@@ -4177,7 +4171,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), badge: e.target.value } };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                           <div>
@@ -4190,8 +4184,9 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], makkahHotel: { ...(pkgs[pIdx].makkahHotel || {}), nights: e.target.value } };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
+                                          </div>
                                           </div>
                                         </div>
                                       </div>
@@ -4202,9 +4197,9 @@ function PageBuilderContent() {
                                           🕌 Madinah Hotel & Details
                                         </span>
 
-                                        <div className="grid items-center">
+                                        <div className="grid grid-cols-[1fr_2fr] gap-4 items-start mt-2">
                                           {/* Madinah Image Thumbnail with Overlay 'X' */}
-                                          <div className="relative">
+                                          <div className="relative h-48 rounded-lg overflow-hidden border border-slate-200 mb-4">
                                             {pkg.madinahHotel?.image ? (
                                               <>
                                                 <img src={pkg.madinahHotel.image} alt="Madinah Hotel" className="w-full h-full object-cover" />
@@ -4216,15 +4211,16 @@ function PageBuilderContent() {
                                                     pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: '' } };
                                                     updateSectionData(sec.id, 'items', pkgs);
                                                   }}
-                                                  className="flex items-center justify-center cursor-pointer absolute"
+                                                  className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer shadow-md hover:bg-red-600 z-10 text-xs font-bold"
                                                   title="Remove Madinah Image"
                                                 >
                                                   ✕
                                                 </button>
                                               </>
                                             ) : (
-                                              <label className="flex items-center justify-center w-full h-full cursor-pointer bg-white">
-                                                <Upload className="w-3 h-3" />
+                                              <label className="flex flex-col gap-2 items-center justify-center w-full h-full cursor-pointer bg-slate-100 hover:bg-slate-200 text-slate-500 transition-colors">
+                                                <Upload className="w-5 h-5" />
+                                                <span className="font-bold text-xs">Upload Madinah</span>
                                                 <input
                                                   type="file"
                                                   accept="image/*"
@@ -4233,7 +4229,11 @@ function PageBuilderContent() {
                                                     const file = e.target.files?.[0];
                                                     if (file) {
                                                       const url = await uploadFileToFtp(file, 'uploads');
-                                                      if (url) updateSectionData(sec.id, 'image', url);
+                                                      if (url) {
+                                                        const pkgs = [...allPkgs];
+                                                        pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), image: url } };
+                                                        updateSectionData(sec.id, 'items', pkgs);
+                                                      }
                                                     }
                                                   }}
                                                 />
@@ -4241,24 +4241,9 @@ function PageBuilderContent() {
                                             )}
                                           </div>
 
-                                          <label className="flex items-center justify-center font-bold cursor-pointer text-white">
-                                            <Upload className="w-3 h-3" /> Upload Photo
-                                            <input
-                                              type="file"
-                                              accept="image/*"
-                                              className="hidden"
-                                              onChange={async (e) => {
-                                                const file = e.target.files?.[0];
-                                                if (file) {
-                                                  const url = await uploadFileToFtp(file, 'uploads');
-                                                  if (url) updateSectionData(sec.id, 'image', url);
-                                                }
-                                              }}
-                                            />
-                                          </label>
-                                        </div>
 
-                                        <div className="grid grid-cols-2 gap-6">
+
+                                        <div className="grid grid-cols-1 gap-2">
                                           <div>
                                             <label className="block font-bold text-slate-500">MADINAH HOTEL NAME</label>
                                             <input
@@ -4269,7 +4254,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), name: e.target.value } };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                           <div>
@@ -4282,7 +4267,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), location: e.target.value } };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                           <div>
@@ -4295,7 +4280,7 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), badge: e.target.value } };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
                                           </div>
                                           <div>
@@ -4308,15 +4293,16 @@ function PageBuilderContent() {
                                                 pkgs[pIdx] = { ...pkgs[pIdx], madinahHotel: { ...(pkgs[pIdx].madinahHotel || {}), nights: e.target.value } };
                                                 updateSectionData(sec.id, 'items', pkgs);
                                               }}
-                                              className="w-full"
+                                              className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                             />
+                                          </div>
                                           </div>
                                         </div>
                                       </div>
                                     </div>
 
                                     {/* Section 3: Pricing & Operator Footer Row (6-Grid Row) */}
-                                    <div className="grid bg-white">
+                                    <div className="grid grid-cols-3 gap-4 bg-white p-4 border border-slate-200 rounded-lg mb-4">
                                       <div>
                                         <label className="block font-bold text-slate-500">OPERATOR</label>
                                         <input
@@ -4327,7 +4313,7 @@ function PageBuilderContent() {
                                             pkgs[pIdx] = { ...pkgs[pIdx], operatorName: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          className="w-full"
+                                          className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                         />
                                       </div>
                                       <div>
@@ -4340,7 +4326,7 @@ function PageBuilderContent() {
                                             pkgs[pIdx] = { ...pkgs[pIdx], operatorRating: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          className="w-full"
+                                          className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                         />
                                       </div>
                                       <div>
@@ -4353,7 +4339,7 @@ function PageBuilderContent() {
                                             pkgs[pIdx] = { ...pkgs[pIdx], priceSubtext: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          className="w-full"
+                                          className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                         />
                                       </div>
                                       <div>
@@ -4366,7 +4352,7 @@ function PageBuilderContent() {
                                             pkgs[pIdx] = { ...pkgs[pIdx], price: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          className="font-extrabold w-full"
+                                          className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs font-extrabold"
                                         />
                                       </div>
                                       <div>
@@ -4379,7 +4365,7 @@ function PageBuilderContent() {
                                             pkgs[pIdx] = { ...pkgs[pIdx], btnLabel: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          className="w-full"
+                                          className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                         />
                                       </div>
                                       <div>
@@ -4392,7 +4378,7 @@ function PageBuilderContent() {
                                             pkgs[pIdx] = { ...pkgs[pIdx], btnLink: e.target.value };
                                             updateSectionData(sec.id, 'items', pkgs);
                                           }}
-                                          className="w-full"
+                                          className="w-full px-2 py-1.5 rounded border border-slate-300 text-xs"
                                         />
                                       </div>
                                     </div>
