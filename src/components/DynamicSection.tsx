@@ -11,7 +11,7 @@ export default function DynamicSection({ sec, idx }: { sec: any; idx: number }) 
 
   // PLACEMENT_1: Who We Are
 
-  // PLACEMENT_2: Exclusive Upcoming Umrah Packages
+  // PLACEMENT_2: Exclusive Umrah Packages
 
   // PLACEMENT_3: Select Preferred Travel Service
 

@@ -108,7 +108,7 @@ export default function CategoryDropdown({ value, onChange, className = '' }: Ca
       </button>
 
       {isOpen && (
-        <div className="z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden flex flex-col max-h-[300px]">
+        <div className="absolute z-50 w-full mt-2 bg-white border border-slate-200 rounded-xl shadow-lg overflow-hidden flex flex-col max-h-[300px]">
           <div className="overflow-y-auto flex-1 py-1">
             {categories.length === 0 ? (
               <div className="px-3 py-2 text-xs text-slate-500 text-center">No categories found</div>

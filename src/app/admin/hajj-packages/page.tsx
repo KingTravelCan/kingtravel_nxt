@@ -2,9 +2,9 @@ import { getCurrentSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import AdminLayout from '@/components/admin/AdminLayout';
 import { getAllPackages } from '@/actions/packageActions';
-import PackagesClient from './PackagesClient';
+import PackagesClient from '@/components/admin/PackagesClient';
 
-export default async function AdminPackagesPage() {
+export default async function AdminHajjPackagesPage() {
   const session = await getCurrentSession();
   if (!session) redirect('/letstravel');
 
@@ -12,7 +12,7 @@ export default async function AdminPackagesPage() {
 
   return (
     <AdminLayout user={session}>
-      <PackagesClient initialPackages={packagesList} />
+      <PackagesClient initialPackages={packagesList} defaultTab="hajj" />
     </AdminLayout>
   );
 }

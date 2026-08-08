@@ -15,6 +15,22 @@ export async function getAllPackages() {
   }
 }
 
+/** Fetch packages by an ordered array of IDs (preserves the given order). */
+export async function getPackagesByIds(ids: number[]): Promise<any[]> {
+  if (!ids || ids.length === 0) return [];
+  try {
+    const { inArray } = await import('drizzle-orm');
+    const rows = await db.select().from(packages).where(inArray(packages.id, ids));
+    // Preserve the caller-specified order
+    const map = new Map(rows.map((r) => [r.id, r]));
+    return ids.map((id) => map.get(id)).filter(Boolean) as any[];
+  } catch (err) {
+    console.error('getPackagesByIds DB error:', err);
+    return [];
+  }
+}
+
+
 
 export async function getPackageBySlug(slug: string) {
   try {
@@ -44,6 +60,8 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
     const shortDescription = formData.get('shortDescription') as string || '';
     const fullDescription = formData.get('fullDescription') as string || '';
     const inclusions = formData.get('inclusions') as string || '[]';
+    const cardDataStr = formData.get('cardData') as string || '';
+    const cardData = cardDataStr ? JSON.parse(cardDataStr) : null;
 
     if (!title) return { success: false, error: 'Package title is required.' };
 
@@ -60,6 +78,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
       shortDescription,
       fullDescription,
       inclusions,
+      cardData,
     });
 
     revalidatePath('/admin/packages');
@@ -88,6 +107,7 @@ export async function updatePackageAction(
     featuredImage?: string;
     departureCity?: string;
     destination?: string;
+    cardData?: any;
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {
@@ -103,6 +123,7 @@ export async function updatePackageAction(
       featuredImage: data.featuredImage,
       departureCity: data.departureCity,
       destination: data.destination,
+      cardData: data.cardData,
       updatedAt: new Date(),
     }).where(eq(packages.id, id));
 

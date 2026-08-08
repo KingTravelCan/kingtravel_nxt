@@ -45,8 +45,13 @@ const navItems = [
     icon: <Mail className="w-4 h-4" />,
   },
   {
-    label: 'Packages',
-    href: '/admin/packages',
+    label: 'Hajj Packages',
+    href: '/admin/hajj-packages',
+    icon: <Package className="w-4 h-4" />,
+  },
+  {
+    label: 'Umrah Packages',
+    href: '/admin/umrah-packages',
     icon: <Package className="w-4 h-4" />,
   },
   {
