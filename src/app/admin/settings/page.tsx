@@ -79,7 +79,6 @@ export default function AdminSettingsPage() {
   // Form states
   const [siteName, setSiteName] = useState('King Travel Canada');
   const [altText, setAltText] = useState('Official King Travel Canada Logo');
-  const [showSearchBar, setShowSearchBar] = useState(true);
   const [customCss, setCustomCss] = useState('/* Add custom CSS rules here */');
 
   // Navigation Builder State
@@ -1095,23 +1094,6 @@ export default function AdminSettingsPage() {
                 </div>
               </div>
 
-              {/* Visibility Toggles */}
-              <div className="border-b border-slate-100 pb-6">
-                <h3 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-4">
-                  👁 VISIBILITY TOGGLES
-                </h3>
-                <div className="flex flex-col gap-3.5">
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <div className="text-xs font-bold">Search Bar</div>
-                      <div className="text-[11px] text-slate-400">Show the search input in the header</div>
-                    </div>
-                    <Field orientation="horizontal">
-                      <Switch id="switch-search-bar" checked={showSearchBar} onChange={setShowSearchBar} />
-                    </Field>
-                  </div>
-                </div>
-              </div>
 
               {/* Bottom Action Save Bar */}
               <div className="flex justify-between items-center pt-4 border-t border-slate-100 mt-2">
@@ -1389,7 +1371,9 @@ export default function AdminSettingsPage() {
                           value={link.label || ''}
                           onChange={(e) => {
                             const updated = [...footerData.servicesLinks];
-                            updated[lIdx] = { ...updated[lIdx], label: e.target.value };
+                            const newLabel = e.target.value;
+                            const newUrl = '/' + newLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                            updated[lIdx] = { ...updated[lIdx], label: newLabel, url: newUrl };
                             setFooterData({ ...footerData, servicesLinks: updated });
                           }}
                           className="flex-1 p-1.5 rounded border border-slate-300 text-xs"
@@ -1452,7 +1436,9 @@ export default function AdminSettingsPage() {
                           value={link.label || ''}
                           onChange={(e) => {
                             const updated = [...footerData.sitemapLinks];
-                            updated[lIdx] = { ...updated[lIdx], label: e.target.value };
+                            const newLabel = e.target.value;
+                            const newUrl = '/' + newLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                            updated[lIdx] = { ...updated[lIdx], label: newLabel, url: newUrl };
                             setFooterData({ ...footerData, sitemapLinks: updated });
                           }}
                           className="flex-1 p-1.5 rounded border border-slate-300 text-xs"
@@ -3684,18 +3670,22 @@ export default function AdminSettingsPage() {
 
             <div className="flex flex-col gap-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Page / Menu Title</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Page Title</label>
                 <input
                   type="text"
                   value={editingItem.label || ''}
-                  onChange={(e) => setEditingItem({ ...editingItem, label: e.target.value })}
+                  onChange={(e) => {
+                    const newLabel = e.target.value;
+                    const newUrl = '/' + newLabel.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                    setEditingItem({ ...editingItem, label: newLabel, url: newUrl });
+                  }}
                   placeholder="e.g. About Us, Licenses, Hajj Packages"
                   className="w-full p-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1">Page URL / Slug Path</label>
+                <label className="block text-xs font-bold text-slate-700 mb-1">Page /Slug</label>
                 <input
                   type="text"
                   value={editingItem.url || ''}
