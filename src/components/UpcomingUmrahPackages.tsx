@@ -10,17 +10,17 @@ export default function UpcomingUmrahPackages({ data }: { data: any }) {
 
   return (
     <section className="py-20 bg-white">
-      <div className="max-w-[1400px] mx-auto px-4">
+      <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div>
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start">
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2
               className=""
               dangerouslySetInnerHTML={{ __html: title }}
             />
           </div>
-          <div className="max-w-sm text-gray-500 text-sm leading-relaxed border-l-2 border-gray-200 pl-4">
+          <div className="max-w-sm text-gray-500 text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
             {description}
           </div>
         </div>

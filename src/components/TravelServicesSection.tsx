@@ -21,7 +21,7 @@ export default function TravelServicesSection({ data }: { data: any }) {
 
   return (
     <section className="py-20 bg-[#f4f6ec]">
-      <div className="max-w-[1400px] mx-auto px-4">
+      <div className="max-w-[1400px] mx-auto px-5">
         <div className="text-center flex flex-col items-center mb-16">
           <h3 className="eyebrow">{eyebrow}</h3>
           <h2 

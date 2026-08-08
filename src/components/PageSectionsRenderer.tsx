@@ -162,7 +162,7 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
           if (items.length === 0) return null;
           return (
             <section key={idx} className="py-20 bg-[#f4f6ec]">
-              <div className="max-w-[1400px] mx-auto px-4">
+              <div className="max-w-[1400px] mx-auto px-5">
 
                 {/* Header (Two Columns) */}
                 <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">

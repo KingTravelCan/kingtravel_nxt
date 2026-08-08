@@ -561,10 +561,6 @@ header {
   margin: 0 auto;
 }
 
-.hero-media {
-  padding: 0 60px !important;
-}
-
 @media (min-width:1441px) {
   .hero-media {
     padding: 0 200px !important;
@@ -716,7 +712,7 @@ header {
 }
 
 @media (max-width:860px) {
-  .float-badge {
+  .badges {
     display: none;
   }
 }

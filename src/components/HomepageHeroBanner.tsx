@@ -149,8 +149,8 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
           </div>
         </div>
 
-        <div className="wrap">
-          <div className="relative rounded-3xl shadow-xl bg-sage p-6 md:p-8 -mt-8">
+        <div className="max-w-[1080px] mx-auto px-5">
+          <div className="relative rounded-3xl shadow-xl bg-sage p-6 md:p-8 max-md:mt-6 -mt-8">
             <h2 className="text-2xl md:text-3xl font-serif tracking-tight text-center mb-6">
               Get a free Quote
             </h2>

@@ -10,10 +10,10 @@ export default function HajjPackagesSection({ data }: { data: any }) {
 
   return (
     <section className="py-20 bg-[#fbfcf9]">
-      <div className="max-w-[1400px] mx-auto px-4">
+      <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
-          <div>
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start">
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2 className="">{title}</h2>
           </div>

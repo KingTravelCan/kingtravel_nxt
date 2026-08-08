@@ -83,7 +83,7 @@ export default function Header() {
           </div>
 
           {/* Desktop + Mobile Nav */}
-          <nav className={`flex gap-[20px] max-lg:gap-[10px] items-center max-lg:hidden max-lg:flex-col max-lg:absolute max-lg:top-full max-lg:left-0 max-lg:w-full max-lg:bg-white max-lg:p-[20px] max-lg:shadow-[0_4px_10px_rgba(0,0,0,0.1)] max-lg:gap-y-[15px] max-lg:items-start ${menuActive ? "!flex" : ""}`} id="navLinks">
+          <nav className={`flex gap-[20px] max-lg:gap-[10px] items-center max-xl:hidden max-lg:flex-col max-lg:absolute max-lg:top-full max-lg:left-0 max-lg:w-full max-lg:bg-white max-lg:p-[20px] max-lg:shadow-[0_4px_10px_rgba(0,0,0,0.1)] max-lg:gap-y-[15px] max-lg:items-start ${menuActive ? "!flex" : ""}`} id="navLinks">
             {navItems.map((item) => {
               const itemHref = item.url || item.href || '#';
               const itemLabel = item.label || item.title;
@@ -179,7 +179,7 @@ export default function Header() {
             </div>
 
             <button
-              className="hidden max-lg:flex max-lg:order-3 flex-col gap-[5px] cursor-pointer bg-transparent border-none p-0"
+              className="hidden max-xl:flex ml-5 max-lg:order-3 flex-col gap-[5px] cursor-pointer bg-transparent border-none p-0"
               id="menuToggle"
               aria-label="Toggle menu"
               onClick={() => {

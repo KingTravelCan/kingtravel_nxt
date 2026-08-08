@@ -16,7 +16,7 @@ export default function WhatWeProvideSection({ data }: { data: any }) {
 
   return (
     <section className="py-24 bg-white">
-      <div className="max-w-[1400px] mx-auto px-4">
+      <div className="max-w-[1400px] mx-auto px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Image */}
           <div className="order-2 lg:order-1">
