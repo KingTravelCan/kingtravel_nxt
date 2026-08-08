@@ -188,10 +188,13 @@ export default function TiptapEditor({
   };
 
   return (
-    <div className="flex flex-col rounded-xl border border-slate-300 overflow-hidden bg-white focus-within:border-[#004B39] transition-colors" style="
-    height: 700px;
-    overflow: scroll;
-">
+    <div
+  className="flex flex-col rounded-xl border border-slate-300 overflow-hidden bg-white focus-within:border-[#004B39] transition-colors"
+      style={{
+        height: "700px",
+        overflow: "auto",
+      }}
+    >
       {/* ── Toolbar ── */}
       <div className="flex flex-wrap items-center gap-0.5 px-2 py-1.5 bg-slate-50 border-b border-slate-200">
         {/* Paragraph / Heading picker */}
