@@ -264,32 +264,23 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
                           </g>
                         </svg>
                       </div>
+                      <span className="review-count">{sec.data?.reviewCount || "927"} Google reviews</span>
+                      {sec.data?.reviewLink && (
+                        <a
+                          href={sec.data.reviewLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="w-fit inline-block border border-white/40 text-white font-bold text-xs px-5 py-2.5 rounded-full hover:bg-white/10 transition-colors"
+                        >
+                          {sec.data?.ctaLabel || "Write A Review"}
+                        </a>
+                      )}
                     </div>
-                    <div className="flex items-center gap-1 text-amber-400 text-lg mb-1">
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
-                      <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /></svg>
-                    </div>
-                    <div className="text-xs font-medium text-slate-200 mb-5">
-                      {sec.data?.reviewCount || "927"} Google reviews
-                    </div>
-                    {sec.data?.reviewLink && (
-                      <a
-                        href={sec.data.reviewLink}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-fit inline-block border border-white/40 text-white font-bold text-xs px-5 py-2.5 rounded-full hover:bg-white/10 transition-colors"
-                      >
-                        {sec.data?.ctaLabel || "Write A Review"}
-                      </a>
-                    )}
                   </div>
-                </div>
-
-                <div className="lg:w-3/4 w-full mt-8">
-                  <TestimonialsCarousel />
+                  
+                  <div className="lg:w-3/4 w-full">
+                    <TestimonialsCarousel reviews={sec.data?.reviews} autoplaySpeed={sec.data?.autoplaySpeed} />
+                  </div>
                 </div>
               </div>
             </section>
