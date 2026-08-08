@@ -151,7 +151,7 @@ export default function Footer() {
         <div className="mt-[60px] pt-[24px] border-t border-white/20 flex flex-wrap justify-between gap-[12px] text-[14px] font-light text-[#bccfc6]">
           <span>{footerData.copyrightText || `© ${new Date().getFullYear()} King Travel Can LTD. All Rights Reserved.`}</span>
           <span>
-            {footerData.developerText || 'Design & Developed by DKS'}
+            {footerData.developerText || 'Design & Developed by'}
             {footerData.developerUrl && (
               <> <a href={footerData.developerUrl} target="_blank" rel="noopener noreferrer">DKS</a></>
             )}
