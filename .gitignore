@@ -47,3 +47,5 @@ fix-db.js
 fix-admin-styles.js
 test-db.ts
 test-save.ts
+fix.ts
+fix-db.js

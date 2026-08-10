@@ -1777,65 +1777,16 @@ export default function AdminSettingsPage() {
                   {/* Site Favicon Uploader & Preview */}
                   <div className="flex flex-col gap-2 pt-4 border-t border-slate-200/60">
                     <label className="block text-xs font-bold text-slate-700">Site Favicon</label>
-                    <div className="p-5 rounded-2xl border-2 border-dashed border-slate-300 bg-white flex flex-col items-center justify-center relative min-h-[110px] text-center">
-                      {identityData.favicon ? (
-                        <div className="flex items-center gap-3 bg-slate-50 px-4 py-2.5 rounded-xl border border-slate-200 shadow-xs max-w-full">
-                          <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 flex items-center justify-center p-1.5 shrink-0 shadow-2xs">
-                            <img
-                              key={identityData.favicon}
-                              src={identityData.favicon}
-                              alt=""
-                              className="max-w-full max-h-full object-contain"
-                            />
-                          </div>
-                          <div className="flex flex-col text-left overflow-hidden">
-                            <span className="text-[11px] font-bold text-slate-700">Active Favicon</span>
-                            <span className="text-[10px] text-slate-500 font-mono truncate max-w-[220px]" title={identityData.favicon}>
-                              {identityData.favicon}
-                            </span>
-                          </div>
-                        </div>
-                      ) : (
-                        <span className="text-xs text-slate-400 font-bold">Click to upload site favicon (.ico, .png, .svg)</span>
-                      )}
-                      <div className="flex gap-2 items-center mt-3">
-                        <label className="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold cursor-pointer border border-slate-300 flex items-center gap-1.5 transition-colors">
-                          <Upload className="w-3.5 h-3.5" /> {identityData.favicon ? 'Change Favicon Image' : 'Upload Favicon Image'}
-                          <input
-                            type="file"
-                            accept="image/*,.ico"
-                            className="hidden"
-                            onChange={async (e) => {
-                              const file = e.target.files?.[0];
-                              if (file) {
-                                const localPreviewUrl = URL.createObjectURL(file);
-                                setIdentityData((prev: any) => ({ ...prev, favicon: localPreviewUrl }));
-                                updateBrowserFavicon(localPreviewUrl);
-
-                                const url = await uploadFileToFtp(file, 'branding');
-                                if (url) {
-                                  const autoAlt = generateAutoAltText(file, identityData.siteName || 'Favicon');
-                                  setIdentityData((prev: any) => ({ ...prev, favicon: url, faviconAlt: autoAlt }));
-                                  updateBrowserFavicon(url);
-                                }
-                              }
-                            }}
-                          />
-                        </label>
-                        {identityData.favicon && (
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setIdentityData({ ...identityData, favicon: '' });
-                              updateBrowserFavicon('/img/favicon.ico');
-                            }}
-                            className="px-3 py-1 text-xs text-rose-600 hover:text-rose-700 font-semibold cursor-pointer border-none bg-transparent"
-                          >
-                            Remove Favicon
-                          </button>
-                        )}
-                      </div>
+                    <div className="w-[140px] h-[140px]">
+                      <ImageUploadWidget
+                        value={identityData.favicon || ''}
+                        onChange={(url) => {
+                          setIdentityData((prev: any) => ({ ...prev, favicon: url }));
+                          if (url) updateBrowserFavicon(url);
+                        }}
+                      />
                     </div>
+                    <span className="text-xs text-slate-400 font-bold mt-1">Recommended: .ico, .png, .svg</span>
                   </div>
                 </div>
               </div>
