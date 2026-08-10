@@ -42,7 +42,7 @@ export default function SoldOutPackagesSection({ data }: { data: any }) {
           </div>
           {description && (
             <div className="md:w-1/2">
-              <p className="text-gray-700 text-sm leading-relaxed max-w-lg pt-2">
+              <p className="max-w-sm text-gray-500 text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
                 {description}
               </p>
             </div>
