@@ -50,7 +50,7 @@ export default function SoldOutPackagesSection({ data }: { data: any }) {
 
         {/* Loading skeleton */}
         {loading && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
@@ -74,7 +74,7 @@ export default function SoldOutPackagesSection({ data }: { data: any }) {
 
         {/* Cards Grid */}
         {!loading && pkgs.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
             {pkgs.map((pkg: any, idx: number) => {
               const cd = pkg.cardData || {};
               const heroImage =
