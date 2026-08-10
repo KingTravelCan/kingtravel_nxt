@@ -141,7 +141,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
 
         </div>
 
-        <div className="mt-[60px] pt-[24px] border-t border-white/20 flex flex-wrap justify-between gap-[12px] text-[14px] font-light text-[#bccfc6]">
+        <div className="mt-[20px] md:mt-[60px] pt-[24px] border-t border-white/20 flex flex-wrap justify-center md:justify-between gap-[12px] text-[12px] md:text-[14px] font-light text-[#bccfc6]">
           <span>{footerData.copyrightText || `© ${new Date().getFullYear()} King Travel Can LTD. All Rights Reserved.`}</span>
           <span>
             {footerData.developerText || 'Design & Developed by'}
