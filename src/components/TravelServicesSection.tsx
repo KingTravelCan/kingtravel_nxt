@@ -38,18 +38,15 @@ export default function TravelServicesSection({ data }: { data: any }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((s: any, i: number) => (
-            <div key={i} className="bg-[#fcfdf9] rounded-[24px] p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-[#eef0e4] hover:-translate-y-1 transition-transform duration-300 cursor-pointer flex flex-col">
-              <div className="w-12 h-12 rounded-2xl bg-[#faeed8] flex items-center justify-center text-[#DB9E30] mb-6">
-                {typeof s.icon === 'string' && /[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{1F600}-\u{1F64F}\u{1F680}-\u{1F6FF}]/u.test(s.icon) ? (
-                  <span className="text-2xl">{s.icon}</span>
-                ) : (
-                  <DynamicIcon name={s.icon || 'Star'} className="w-5 h-5" />
-                )}
+            <div key={i} className="group bg-[var(--paper)] hover:transition-all duration-300 hover:bg-[var(--green)] rounded-[24px] p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-[#eef0e4] hover:-translate-y-1 transition-transform duration-300 cursor-pointer flex flex-col">
+              <div className="w-12 h-12 rounded-2xl bg-[#faeed8] group-hover:bg-[rgba(231,190,110,.18)] flex items-center justify-center text-[#DB9E30] group-hover:text-[var(--gold-lt)] mb-6">
+                <DynamicIcon name={s.icon || 'Star'} className="w-5 h-5" />
               </div>
-              <h4 className="text-[#1a2b25] font-serif text-lg mb-3">{s.title}</h4>
-              <p className="text-gray-500 text-sm leading-relaxed">{s.desc || s.description}</p>
+              <h4 className="text-[#1a2b25] group-hover:text-[var(--cream)] font-serif text-lg mb-3">{s.title}</h4>
+              <p className="text-gray-500 text-sm leading-relaxed group-hover:text-[#b7c3bd]">{s.desc || s.description}</p>
             </div>
           ))}
+          
         </div>
       </div>
     </section>
