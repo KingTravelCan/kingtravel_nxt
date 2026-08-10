@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import MarqueeTrack from '@/components/MarqueeTrack';
-import TestimonialsCarousel from '@/components/TestimonialsCarousel';
+// import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import DynamicIcon from '@/components/ui/DynamicIcon';
 import ContactFormSection from '@/components/ContactFormSection';
 import VisaSolutionsSection from '@/components/VisaSolutionsSection';
@@ -15,6 +15,7 @@ import WhatWeProvideSection from '@/components/WhatWeProvideSection';
 import HajjPackagesSection from '@/components/HajjPackagesSection';
 import CertificationsFlipCardsSection from '@/components/CertificationsFlipCardsSection';
 import SoldOutPackagesSection from '@/components/SoldOutPackagesSection';
+import Script from "next/script";
 export default function PageSectionsRenderer({ sections, pageData, initialPackageData }: { sections: any[]; pageData?: any; initialPackageData?: { umrah?: any[]; hajj?: any[]; all?: any[] } }) {
   if (!sections || !Array.isArray(sections)) return null;
 
@@ -283,7 +284,15 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                   </div>
                   
                   <div className="lg:w-3/4 w-full">
-                    <TestimonialsCarousel reviews={sec.data?.reviews} autoplaySpeed={sec.data?.autoplaySpeed} />
+                    <Script
+                      src="https://elfsightcdn.com/platform.js"
+                      strategy="afterInteractive"
+                    />
+
+                    <div
+                      className="elfsight-app-64c6bf2d-cdee-4dfd-a876-5576cbaa5bac"
+                      data-elfsight-app-lazy
+                    />
                   </div>
                 </div>
               </div>
