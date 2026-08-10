@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
-import { getPackagesByType } from "@/actions/packageActions";
-
-export default function UpcomingUmrahPackages({ data, initialPackages }: { data: any; initialPackages?: any[] }) {
+import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
+export default function UpcomingUmrahPackages({ data, initialPackages }: { data: any, initialPackages?: any }) {
   const eyebrow = data?.eyebrow || "EXCLUSIVE UPCOMING";
   const title = data?.title || "Umrah Packages<br />from Canada";
   const description =
@@ -15,15 +14,21 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
   const [loading, setLoading] = useState(!initialPackages);
 
   useEffect(() => {
-    if (initialPackages) return;
-    // Automatically pulls every published Umrah package - no manual curation needed.
-    getPackagesByType("umrah")
-      .then((rows) => setPkgs(rows))
-      .catch(() => setPkgs([]))
-      .finally(() => setLoading(false));
-  }, [initialPackages]);
+    const packageIds = data?.packageIds || [];
+    if (packageIds.length > 0) {
+      getPackagesByIds(packageIds)
+        .then((rows) => setPkgs(rows))
+        .catch(() => setPkgs([]))
+        .finally(() => setLoading(false));
+    } else {
+      getPackagesByType("umrah")
+        .then((rows) => setPkgs(rows))
+        .catch(() => setPkgs([]))
+        .finally(() => setLoading(false));
+    }
+  }, [data?.packageIds]);
   return (
-    <section className="py-20 bg-white">
+    <section className="py-10 bg-[#f1f5e6]">
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
@@ -80,9 +85,9 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
               const month = pkg.month || "";
               const price = pkg.startingPrice
                 ? Number(pkg.startingPrice).toLocaleString("en-CA", {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  })
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })
                 : "";
               const buttonUrl = cd.btnLink || `/package/${pkg.slug}`;
               const buttonText = cd.btnLabel || "BOOK NOW";
@@ -96,8 +101,8 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                   const parsed = JSON.parse(pkg.inclusions);
                   includes = Array.isArray(parsed)
                     ? parsed.map((item: any) =>
-                        typeof item === "string" ? item : item.text || ""
-                      )
+                      typeof item === "string" ? item : item.text || ""
+                    )
                     : [];
                 } catch {
                   includes = [];
@@ -107,11 +112,10 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
               return (
                 <div
                   key={pkg.id || idx}
-                  className={`${
-                    isGold
-                      ? "bg-[#DB9E30] hover:bg-[#FBF8F1] shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8"
-                      : "hover:bg-[#FBF8F1] border-1 border-[#ccc] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
-                  } rounded-[32px] overflow-hidden flex flex-col`}
+                  className={`${isGold
+                    ? "bg-[#DB9E30] hover:bg-[#FBF8F1] shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8"
+                    : "hover:bg-[#FBF8F1] border-1 border-[#ccc] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
+                    } rounded-[32px] overflow-hidden flex flex-col`}
                 >
                   <div className="relative h-48 w-full">
                     {heroImage && (
@@ -127,23 +131,20 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                   </div>
                   <div className="p-8 flex-1 flex flex-col">
                     <div
-                      className={`${
-                        isGold ? "" : "text-gray-500"
-                      } text-xs font-bold uppercase tracking-widest mb-2`}
+                      className={`${isGold ? "" : "text-gray-500"
+                        } text-xs font-bold uppercase tracking-widest mb-2`}
                     >
                       {month}
                     </div>
                     <h3 className="text-2xl font-serif mb-2">{pkg.title}</h3>
                     <div
-                      className={`${
-                        isGold ? "" : "text-[#DB9E30]"
-                      } font-black text-xl mb-6`}
+                      className={`${isGold ? "" : "text-[#DB9E30]"
+                        } font-black text-xl mb-6`}
                     >
                       CAD {price}{" "}
                       <span
-                        className={`text-sm font-medium ${
-                          isGold ? "" : "text-gray-500"
-                        }`}
+                        className={`text-sm font-medium ${isGold ? "" : "text-gray-500"
+                          }`}
                       >
                         / Person
                       </span>
@@ -185,14 +186,12 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                         return (
                           <li
                             key={i}
-                            className={`flex gap-3 text-sm ${
-                              isGold ? "" : "text-gray-600"
-                            }`}
+                            className={`flex gap-3 text-sm ${isGold ? "" : "text-gray-600"
+                              }`}
                           >
                             <Icon
-                              className={`w-4 h-4 shrink-0 ${
-                                isGold ? "" : "text-gray-400"
-                              }`}
+                              className={`w-4 h-4 shrink-0 ${isGold ? "" : "text-gray-400"
+                                }`}
                             />{" "}
                             {inc}
                           </li>
@@ -200,16 +199,38 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                       })}
                     </ul>
 
-                    <a
-                      href={buttonUrl}
-                      className={`w-full py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block ${
-                        isGold
+                    {cd.hasDetailPage ? (
+                      <div className="flex gap-2">
+                        <a
+                          href={`/package/${pkg.slug}`}
+                          className={`w-1/2 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 ${isGold
+                            ? "border-[#2c3e35] text-[#2c3e35] hover:bg-[#2c3e35] hover:text-white"
+                            : "border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30] hover:text-white"
+                            }`}
+                        >
+                          View Details
+                        </a>
+                        <a
+                          href={buttonUrl}
+                          className={`w-1/2 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block ${isGold
+                            ? "bg-[#2c3e35] hover:bg-[#1a2520] text-white"
+                            : "bg-[#DB9E30] hover:bg-[#c58d2a] text-white"
+                            }`}
+                        >
+                          {buttonText}
+                        </a>
+                      </div>
+                    ) : (
+                      <a
+                        href={buttonUrl}
+                        className={`w-full py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block ${isGold
                           ? "bg-[#2c3e35] hover:bg-[#1a2520] text-white"
                           : "bg-[#DB9E30] hover:bg-[#c58d2a] text-white"
-                      }`}
-                    >
-                      {buttonText}
-                    </a>
+                          }`}
+                      >
+                        {buttonText}
+                      </a>
+                    )}
                   </div>
                 </div>
               );

@@ -135,6 +135,7 @@ export async function updatePackageAction(
     departureCity?: string;
     destination?: string;
     cardData?: any;
+    detailPageData?: any;
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {

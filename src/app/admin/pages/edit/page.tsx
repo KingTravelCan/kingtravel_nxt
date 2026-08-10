@@ -64,6 +64,8 @@ const SECTION_CATALOG: SectionCategory[] = [
     items: [
       { type: 'Umrah Packages Grid', description: 'Database-driven Umrah package cards with price, hotel rating, and booking CTA.', pages: ['Umrah Packages', 'Homepage'] },
       { type: 'Hajj Services Grid', description: '4-column icon grid showcasing Hajj services (e.g. Pre-Hajj Meet-up, Buffet Meals, Transport, Scholar).', pages: ['Hajj Packages'] },
+      { type: 'Banner 4 Grids', description: 'Banner with 4 overlapping accreditation/feature cards.', pages: ['Hajj Packages', 'Umrah Packages'] },
+      { type: 'Packages Content (Rich Text)', description: 'Rich text editor with HTML support to describe Umrah & Hajj packages.', pages: ['Hajj Packages', 'Umrah Packages'] },
     ],
   },
   {
@@ -164,7 +166,7 @@ function PageBuilderContent() {
 
   const [allPackages, setAllPackages] = useState<any[]>([]);
   const [draggedPackageIdx, setDraggedPackageIdx] = useState<number | null>(null);
-  
+
   useEffect(() => {
     getAllPackages().then(setAllPackages).catch(console.error);
   }, []);
@@ -489,14 +491,14 @@ function PageBuilderContent() {
         eyebrow: 'Travel Services',
         title: 'Select your preferred travel service',
         items: [
-          { icon: 'star', title: 'Umrah Packages', description: 'Flexible departures with flights, stays, & guidance included.', link: '/umrah-packages' },
-          { icon: 'kaaba', title: 'Hajj Packages', description: 'Fully accredited pilgrimage packages, curated end to end.', link: '/hajj-packages' },
-          { icon: 'plane', title: 'Airline Tickets', description: 'Best-fare flights sourced from every route into Jeddah.', link: '/airlines' },
-          { icon: 'visa', title: 'Saudi Visa Services', description: 'Full visa processing, handled and confirmed before departure.', link: '/saudi-visa' },
-          { icon: 'hotel', title: 'Hotel Booking', description: '5-star stays within walking distance of the Haram.', link: '/contact' },
-          { icon: 'globe', title: 'Global Flight Reservations', description: 'Worldwide reliable flight bookings for any itinerary.', link: '/airlines' },
-          { icon: 'file', title: 'Travel Documentation', description: 'Guidance on every document your journey requires.', link: '/contact' },
-          { icon: 'users', title: 'Group & Private Tours', description: 'Private, guided, and fully customizable itineraries.', link: '/contact' },
+          { icon: 'Star', title: 'Umrah Packages', description: 'Flexible departures with flights, stays, & guidance included.', link: '/umrah-packages' },
+          { icon: 'Briefcase', title: 'Hajj Packages', description: 'Fully accredited pilgrimage packages, curated end to end.', link: '/hajj-packages' },
+          { icon: 'ArrowLeftRight', title: 'Airline Tickets', description: 'Best-fare flights sourced from every route into Jeddah.', link: '/airlines' },
+          { icon: 'CreditCard', title: 'Saudi Visa Services', description: 'Full visa processing, handled and confirmed before departure.', link: '/saudi-visa' },
+          { icon: 'Home', title: 'Hotel Booking', description: '5-star stays within walking distance of the Haram.', link: '/contact' },
+          { icon: 'Globe', title: 'Global Flight Reservations', description: 'Worldwide reliable flight bookings for any itinerary.', link: '/airlines' },
+          { icon: 'FileText', title: 'Travel Documentation', description: 'Guidance on every document your journey requires.', link: '/contact' },
+          { icon: 'User', title: 'Group & Private Tours', description: 'Private, guided, and fully customizable itineraries.', link: '/contact' },
         ],
       };
     } else if (type === 'What We Provide') {
@@ -526,6 +528,15 @@ function PageBuilderContent() {
         reviewCount: '927',
         reviewLink: 'https://maps.app.goo.gl/1BRUoBxtt4wWw58t6',
         ctaLabel: 'Write A Review',
+        apiKey: '',
+        placeId: '',
+        items: [
+          { id: 1, name: "tamim rahimi", time: "3 months ago", avatar: "/img/tamim.png", text: "I’m a man of few words. It was an amazing experience with the Umrah package in March 2026. Everything went as expected, with no surprises. There will be a huge list if I name everyone, so a big thanks to everyone. JazakAllah khair!" },
+          { id: 2, name: "Hiba M", time: "3 months ago", avatar: "/img/h.png", text: "My daughter and I just came back from a twelve day Umrah trip organized by King Travel. The trip was well planned and structured. We were very fortunate to have Imam Ismail Fetic as our guide who provided a wealth of knowledge and insights. The accomodation and the food were really nice. I highly recommend booking with King Travel." },
+          { id: 3, name: "Yusra Khan", time: "3 months ago", avatar: "/img/y.png", text: "It was a very nice experience going with King travel, imam Ismail Fetic was extremely helpful answering all of our questions and giving us lectures/stories about all the places we were going to. Would highly recommend this agency for Umrah." },
+          { id: 4, name: "Zeba H", time: "3 months ago", avatar: "/img/z.png", text: "We recently traveled with King Travels. Allhamdolilah it was amazing. No complains. They kept all the promises that were made to us. The 3 meals that were provided to us everyday were amazing. Our Imam Ismail Fetic and Br Irfan were amazing. Always available if help needed. Over all great group of people. Inshallah will travel with them again." },
+          { id: 5, name: "Musaibah Doola", time: "3 months ago", avatar: "/img/m.png", text: "I recently booked my Umrah with King Travels. It was an amazing experience. Starting with the price of the package it was very reasonable. They gave the best accommodations and food at both locations. Best was meeting with very good knowledgeable Imams and guided. Everything went well." }
+        ]
       };
     } else if (type === 'Hajj Services Grid') {
       defaultData = {
@@ -543,7 +554,16 @@ function PageBuilderContent() {
           { icon: '📖', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
         ],
       };
-    } else if (type === 'Text Block (Rich Text)') {
+    } else if (type === 'Banner 4 Grids') {
+      defaultData = {
+        items: [
+          { icon: 'Shield', title: 'ATOL PROTECTED' },
+          { icon: 'Building', title: 'SAUDI MINISTRY APPROVED' },
+          { icon: 'Plane', title: 'IATA ACCREDITED' },
+          { icon: 'Award', title: 'ABTA BONDED' },
+        ],
+      };
+    } else if (type === 'Text Block (Rich Text)' || type === 'Packages Content (Rich Text)') {
       defaultData = {
         content: '<p>Start writing your content here...</p>',
       };
@@ -651,10 +671,30 @@ function PageBuilderContent() {
       defaultData = {
         eyebrow: 'EXPLORE OUR',
         title: 'Saudi Visa Solutions',
-        items: []
+        items: [
+          { title: "Tourist Visa", description: "Only passport required. Explore the beauty and culture of Saudi Arabia effortlessly.", image: "/img/saudi-visa-1.webp" },
+          { title: "Umrah Visa", description: "Requires passport and PR Card or other proof of residence. Start your spiritual journey with official Umrah visa services.", image: "/img/saudi-visa-2.webp" },
+          { title: "Family Visit Visa", description: "Complete list of requirements sent via email. Reunite with your loved ones quickly and securely.", image: "/img/saudi-visa-3.jpg" },
+          { title: "Resident Iqama Visa", description: "Get all the requirements sent to your inbox. Simplify your residency process with expert guidance.", image: "/img/saudi-visa-4.webp" },
+          { title: "Business Visit Visa", description: "We'll email the full details you need. Expand your business horizons with an authorized visa service.", image: "/img/saudi-visa-5.webp" },
+          { title: "Work Visa", description: "Contact us for detailed requirements via email. Begin your career in Saudi Arabia with professional assistance.", image: "/img/saudi-visa-6.jpg" },
+          { title: "Personal Visit Visa", description: "Get in touch with us today to get the detailed requirements and fast-track your Saudi personal visit visa with our professional guidance.", image: "/img/riyadh.jpg" },
+        ]
+      };
+    } else if (type === 'Certifications Flip Cards') {
+      defaultData = {
+        eyebrow: 'WHY THEY MATTER',
+        title: 'OUR CERTIFICATIONS',
+        items: [
+          { logo: '/img/tico.svg', title: 'TICO', description: 'TICO regulates travel agencies in Ontario, protecting consumer prepaid funds and ensuring compliance with strict Canadian travel industry regulations.' },
+          { logo: '/img/iata.svg', title: 'IATA', description: 'Being an IATA accredited agency allows us to work directly with airlines, offering competitive airfares, seamless ticketing, and exclusive deals.' },
+          { logo: '/img/acta.svg', title: 'ACTA', description: 'ACTA membership advocates for ethical travel practices and professional excellence across the Canadian travel industry.' },
+          { logo: '/img/asta.svg', title: 'ASTA', description: 'ASTA certification connects us with global travel standards and verified international destination management networks.' },
+          { logo: '/img/atac.svg', title: 'ATAC', description: 'ATAC represents air transport excellence and safe aviation ticketing protocols across Canada.' },
+          { logo: '', title: 'Saudi Ministry of Foreign Affairs', description: 'Official Saudi Ministry authorization for processing Umrah, Hajj, business, and tourist visas directly from Canada.' }
+        ]
       };
     }
-
     const newSec: SectionItem = {
       id: String(Date.now()),
       type,
@@ -1539,7 +1579,7 @@ function PageBuilderContent() {
                         {editingSectionId === sec.id && (
                           <div className="pt-4 border-t border-slate-200 flex flex-col gap-3">
                             {/* Universal Section Header Block (Eyebrow, Heading, Description) - Hidden for Blog sections */}
-                            {sec.type !== 'Latest Blogs Grid' && sec.type !== 'Blog Posts Carousel' && sec.type !== 'Testimonials' && sec.type !== 'Hajj Services Grid' && sec.type !== 'Text Block (Rich Text)' && sec.type !== 'Sold Out Packages' && (
+                            {sec.type !== 'Latest Blogs Grid' && sec.type !== 'Blog Posts Carousel' && sec.type !== 'Testimonials' && sec.type !== 'Hajj Services Grid' && sec.type !== 'Text Block (Rich Text)' && sec.type !== 'Packages Content (Rich Text)' && sec.type !== 'Sold Out Packages' && (
                               <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col gap-2">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase flex items-center gap-1.5">
                                   ✏️ SECTION HEADING & BADGE CONTENT
@@ -1689,8 +1729,28 @@ function PageBuilderContent() {
                                       className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
                                     />
                                   </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">GOOGLE PLACES API KEY</label>
+                                    <input
+                                      type="password"
+                                      value={sec.data?.apiKey || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'apiKey', e.target.value)}
+                                      placeholder="API Key"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-mono text-slate-900 bg-white"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">GOOGLE PLACE ID</label>
+                                    <input
+                                      type="text"
+                                      value={sec.data?.placeId || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'placeId', e.target.value)}
+                                      placeholder="Place ID"
+                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-mono text-slate-900 bg-white"
+                                    />
+                                  </div>
                                   <div className="md:col-span-2">
-                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">GOOGLE REVIEWS LINK</label>
+                                    <label className="block text-[10px] font-bold text-slate-600 mb-1">GOOGLE REVIEWS LINK (For CTA Button)</label>
                                     <input
                                       type="text"
                                       value={sec.data?.reviewLink || ''}
@@ -1747,6 +1807,53 @@ function PageBuilderContent() {
                                           { value: '25+', label: 'Years Experience' }
                                         ])];
                                         currentItems[sIdx] = { ...currentItems[sIdx], label: e.target.value };
+                                        updateSectionData(sec.id, 'items', currentItems);
+                                      }}
+                                      className="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs"
+                                    />
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
+                            {sec.type === 'Banner 4 Grids' && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-2.5">
+                                <span className="text-[11px] font-extrabold text-[#004B39] uppercase">🖼 Banner 4 Grids Items (Lucide Icon & Title)</span>
+                                {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
+                                  { icon: 'Shield', title: 'ATOL PROTECTED' },
+                                  { icon: 'Building', title: 'SAUDI MINISTRY APPROVED' },
+                                  { icon: 'Plane', title: 'IATA ACCREDITED' },
+                                  { icon: 'Award', title: 'ABTA BONDED' },
+                                ]).map((stat: any, sIdx: number) => (
+                                  <div key={sIdx} className="grid grid-cols-[1fr_2fr] gap-2">
+                                    <input
+                                      type="text"
+                                      value={stat.icon || ''}
+                                      placeholder="Lucide Icon Name (e.g. Shield)"
+                                      onChange={(e) => {
+                                        const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
+                                          { icon: 'Shield', title: 'ATOL PROTECTED' },
+                                          { icon: 'Building', title: 'SAUDI MINISTRY APPROVED' },
+                                          { icon: 'Plane', title: 'IATA ACCREDITED' },
+                                          { icon: 'Award', title: 'ABTA BONDED' },
+                                        ])];
+                                        currentItems[sIdx] = { ...currentItems[sIdx], icon: e.target.value };
+                                        updateSectionData(sec.id, 'items', currentItems);
+                                      }}
+                                      className="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                    />
+                                    <input
+                                      type="text"
+                                      value={stat.title || ''}
+                                      placeholder="Title (e.g. ATOL PROTECTED)"
+                                      onChange={(e) => {
+                                        const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
+                                          { icon: 'Shield', title: 'ATOL PROTECTED' },
+                                          { icon: 'Building', title: 'SAUDI MINISTRY APPROVED' },
+                                          { icon: 'Plane', title: 'IATA ACCREDITED' },
+                                          { icon: 'Award', title: 'ABTA BONDED' },
+                                        ])];
+                                        currentItems[sIdx] = { ...currentItems[sIdx], title: e.target.value };
                                         updateSectionData(sec.id, 'items', currentItems);
                                       }}
                                       className="px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs"
@@ -2036,11 +2143,11 @@ function PageBuilderContent() {
                                     {sec.type === 'Sold Out Packages' ? '🛑 Sold Out' : ((sec.type === 'Hajj Packages' || sec.type === 'Upcoming Hajj Packages') ? '🕌 Hajj' : '🕋 Umrah')} Packages Selector
                                   </span>
                                 </div>
-                                
+
                                 <div className="text-[11px] text-slate-500 mb-2">
                                   Add packages from the dropdown below. Drag and drop to reorder.
                                 </div>
-                                
+
                                 <div className="flex flex-col gap-2">
                                   {/* Dropdown to add new packages */}
                                   <select
@@ -2077,10 +2184,10 @@ function PageBuilderContent() {
                                   {(sec.data?.packageIds || []).map((id: number, idx: number) => {
                                     const pkg = allPackages.find(p => p.id === id);
                                     if (!pkg) return null;
-                                    
+
                                     return (
-                                      <div 
-                                        key={id} 
+                                      <div
+                                        key={id}
                                         draggable
                                         onDragStart={(e) => {
                                           setDraggedPackageIdx(idx);
@@ -2366,7 +2473,7 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {sec.type === 'Text Block (Rich Text)' && (
+                            {(sec.type === 'Text Block (Rich Text)' || sec.type === 'Packages Content (Rich Text)') && (
                               <div className="bg-white border border-slate-200 rounded-xl p-3.5 flex flex-col gap-3 mt-1">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
                                   📝 Rich Text Content Editor
@@ -2985,7 +3092,7 @@ function PageBuilderContent() {
                                         </div>
 
                                         {/* Logo Upload & Preview */}
-                                        <div className="w-full flex justify-center py-2 bg-slate-50 rounded-md border border-slate-100">
+                                        <div className="w-full flex justify-center items-center py-2 bg-slate-50 rounded-md border border-slate-100">
                                           <ImageUploadWidget
                                             value={logoItem.src || ''}
                                             onChange={(url) => {
@@ -3726,78 +3833,7 @@ function PageBuilderContent() {
                             )}
 
 
-                            {(sec.type === 'Airlines') && (
-                              <div className="flex flex-col bg-white">
-                                <div className="flex justify-between items-center">
-                                  <span className="text-xs font-bold text-slate-800">
-                                    ✈️ Airlines MANAGER
-                                  </span>
-                                  <button
-                                    onClick={() => {
-                                      const currentLogos = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [])];
-                                      currentLogos.push({
-                                        image: "https://via.placeholder.com/150",
-                                        alt: "Airline Name"
-                                      });
-                                      updateSectionData(sec.id, 'items', currentLogos);
-                                    }}
-                                    className="font-extrabold cursor-pointer"
-                                  >
-                                    + Add Airline Logo
-                                  </button>
-                                </div>
 
-                                {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
-                                  { image: "/img/a-1.png", alt: "Saudi Airlines" },
-                                  { image: "/img/a-2.png", alt: "Emirates" }
-                                ]).map((logo: any, lIdx: number) => (
-                                  <div key={lIdx} className="bg-slate-50 border border-slate-300 rounded-lg p-2.5 flex flex-col gap-2 relative mt-4">
-                                    <div className="flex justify-between items-center">
-                                      <span className="text-[10px] font-extrabold text-slate-500">LOGO #{lIdx + 1}</span>
-                                      <button
-                                        onClick={() => {
-                                          const logos = [...sec.data?.items];
-                                          logos.splice(lIdx, 1);
-                                          updateSectionData(sec.id, 'items', logos);
-                                        }}
-                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
-                                        title="Remove Logo"
-                                      >
-                                        <Trash2 className="w-3 h-3" /> Remove
-                                      </button>
-                                    </div>
-                                    <div className="grid grid-cols-2 gap-4">
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">IMAGE URL</label>
-                                        <ImageUploadWidget
-                                          value={logo.image || ''}
-                                          onChange={(url) => {
-                                            const logos = [...sec.data?.items];
-                                            logos[lIdx] = { ...logos[lIdx], image: url };
-                                            updateSectionData(sec.id, 'items', logos);
-                                          }}
-                                          subfolder="flights"
-                                          compact={true}
-                                        />
-                                      </div>
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">ALT TEXT</label>
-                                        <input
-                                          type="text"
-                                          value={logo.alt || ''}
-                                          onChange={(e) => {
-                                            const logos = [...sec.data?.items];
-                                            logos[lIdx] = { ...logos[lIdx], alt: e.target.value };
-                                            updateSectionData(sec.id, 'items', logos);
-                                          }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                        />
-                                      </div>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
                           </div>
                         )}
                       </div>

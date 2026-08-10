@@ -2,9 +2,8 @@
 
 import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
-import { getPackagesByType } from "@/actions/packageActions";
-
-export default function HajjPackagesSection({ data, initialPackages }: { data: any; initialPackages?: any[] }) {
+import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
+export default function HajjPackagesSection({ data, initialPackages }: { data: any, initialPackages?: any }) {
   const eyebrow = data?.eyebrow || "LUXURY HAJJ PACKAGES";
   const title = data?.title || "Hajj Packages 2027";
   const description =
@@ -15,15 +14,21 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
   const [loading, setLoading] = useState(!initialPackages);
 
   useEffect(() => {
-    if (initialPackages) return;
-    // Automatically pulls every published Hajj package - no manual curation needed.
-    getPackagesByType("hajj")
-      .then((rows) => setPkgs(rows))
-      .catch(() => setPkgs([]))
-      .finally(() => setLoading(false));
-  }, [initialPackages]);
+    const packageIds = data?.packageIds || [];
+    if (packageIds.length > 0) {
+      getPackagesByIds(packageIds)
+        .then((rows) => setPkgs(rows))
+        .catch(() => setPkgs([]))
+        .finally(() => setLoading(false));
+    } else {
+      getPackagesByType("hajj")
+        .then((rows) => setPkgs(rows))
+        .catch(() => setPkgs([]))
+        .finally(() => setLoading(false));
+    }
+  }, [data?.packageIds]);
   return (
-    <section className="py-20 bg-[#fbfcf9]">
+    <section className="py-20 bg-[#f1f5e6]">
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
@@ -84,9 +89,9 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                 cd.priceSubtext || "FROM CAD / QUAD OCCUPANCY";
               const price = pkg.startingPrice
                 ? Number(pkg.startingPrice).toLocaleString("en-CA", {
-                    minimumFractionDigits: 0,
-                    maximumFractionDigits: 0,
-                  })
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })
                 : "12,995";
               const btnLabel = cd.btnLabel || `Book ${pkg.title}`;
               const btnLink = cd.btnLink || `/package/${pkg.slug}`;
@@ -221,12 +226,29 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                       </div>
                     </div>
 
-                    <a
-                      href={btnLink}
-                      className="w-full py-3.5 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
-                    >
-                      <LucideIcons.BookOpen className="w-4 h-4" /> {btnLabel}
-                    </a>
+                    {cd.hasDetailPage ? (
+                      <div className="flex flex-col sm:flex-row gap-2">
+                        <a
+                          href={`/package/${pkg.slug}`}
+                          className="w-full py-3.5 border-2 border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30] hover:text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                        >
+                          <LucideIcons.Info className="w-4 h-4" /> View Details
+                        </a>
+                        <a
+                          href={btnLink}
+                          className="w-full py-3.5 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                        >
+                          <LucideIcons.BookOpen className="w-4 h-4" /> {btnLabel}
+                        </a>
+                      </div>
+                    ) : (
+                      <a
+                        href={btnLink}
+                        className="w-full py-3.5 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                      >
+                        <LucideIcons.BookOpen className="w-4 h-4" /> {btnLabel}
+                      </a>
+                    )}
                   </div>
                 </div>
               );

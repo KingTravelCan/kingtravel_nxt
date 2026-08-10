@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import PageBanner from "@/components/PageBanner";
+import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 import { submitContactEnquiryAction } from "@/actions/enquiryActions";
 import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
 
@@ -410,9 +411,18 @@ export default function ContactPageClient({ initialPageData, initialFormConfig }
       <section className="max-w-7xl py-12 mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           <ContactFormSection data={formSec?.data} initialFormConfig={initialFormConfig} />
-          <ContactMapsSection data={sections.find(s => s.type === "Contact Maps" || s.type === "Google Maps" || s.type === "Contact Form + Maps")?.data} />
+          <ContactMapsSection data={sections.find((s: any) => s.type === "Contact Maps" || s.type === "Google Maps" || s.type === "Contact Form + Maps")?.data} />
         </div>
       </section>
+
+      {(() => {
+        const handledTypes = ["Contact Info Cards", "Contact Bar", "Contact Form", "Contact Maps", "Google Maps", "Contact Form + Maps"];
+        const unhandled = sections.filter((s: any) => !handledTypes.includes(s.type));
+        if (unhandled.length > 0) {
+          return <PageSectionsRenderer sections={unhandled} pageData={pageData} />;
+        }
+        return null;
+      })()}
     </main>
   );
 }

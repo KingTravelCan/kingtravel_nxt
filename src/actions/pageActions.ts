@@ -126,7 +126,7 @@ export async function savePageAction(formData: FormData) {
         richText: richText || null,
         metaTitle: metaTitle || null,
         metaDescription: metaDescription || null,
-        seoSettings: seoSettings || null,
+        seoSettings: seoSettings ? JSON.parse(seoSettings) : null,
         updatedAt: new Date(),
       }).where(eq(sitePages.id, id));
     } else {
@@ -145,7 +145,7 @@ export async function savePageAction(formData: FormData) {
         richText: richText || null,
         metaTitle: metaTitle || null,
         metaDescription: metaDescription || null,
-        seoSettings: seoSettings || null,
+        seoSettings: seoSettings ? JSON.parse(seoSettings) : null,
       }).$returningId();
       if (inserted && inserted.length > 0) {
         savedId = inserted[0].id;

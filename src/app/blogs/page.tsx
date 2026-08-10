@@ -2,6 +2,8 @@ import { getBlogsList } from '@/actions/blogActions';
 import PageBanner from '@/components/PageBanner';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import { getPageBySlug } from '@/actions/pageActions';
+import PageSectionsRenderer from '@/components/PageSectionsRenderer';
 
 export const metadata: Metadata = {
   title: 'Blog & Travel Guides | King Travel Canada',
@@ -33,6 +35,15 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 export default async function BlogsListingPage() {
   const allBlogs = await getBlogsList(true); // published only
+  const pageData = await getPageBySlug('/blogs');
+  let sections: any[] = [];
+  if (pageData?.sections) {
+    try {
+      sections = typeof pageData.sections === 'string' ? JSON.parse(pageData.sections) : pageData.sections;
+    } catch (e) {
+      console.error("Error parsing blogs page sections:", e);
+    }
+  }
 
   const featured = allBlogs[0] ?? null;
   const rest = allBlogs.slice(1);
@@ -40,8 +51,11 @@ export default async function BlogsListingPage() {
   return (
     <>
       <PageBanner
-        title='Our <em>Blog</em> & Travel Guides'
-        description="Insights, tips, and inspiration for your pilgrimage journey — written by the King Travel Canada team."
+        title={pageData?.bannerTitle || pageData?.title || 'Our <em>Blog</em> & Travel Guides'}
+        description={pageData?.bannerDescription || "Insights, tips, and inspiration for your pilgrimage journey — written by the King Travel Canada team."}
+        bgImage={pageData?.bannerBgImage}
+        position={pageData?.bannerPosition}
+        size={pageData?.bannerSize}
       />
 
       <section className="section-outer bg-sage">
@@ -166,6 +180,10 @@ export default async function BlogsListingPage() {
 
         </div>
       </section>
+
+      {sections && sections.length > 0 && (
+        <PageSectionsRenderer sections={sections} pageData={pageData} />
+      )}
     </>
   );
 }

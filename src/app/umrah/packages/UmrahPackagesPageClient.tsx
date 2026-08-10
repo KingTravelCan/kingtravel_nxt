@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PageBanner from "@/components/PageBanner";
+import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 
 const umrahCardsData = [
   {
@@ -276,6 +277,16 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
           ))}
         </div>
       </section>
+
+      {(() => {
+        try {
+          const parsed = typeof pageData?.sections === 'string' ? JSON.parse(pageData.sections) : (pageData?.sections || []);
+          if (parsed.length > 0) {
+             return <PageSectionsRenderer sections={parsed} pageData={pageData} />;
+          }
+        } catch (e) {}
+        return null;
+      })()}
     </div>
   );
 }
