@@ -35,18 +35,17 @@ export default function SoldOutPackagesSection({ data }: { data: any }) {
     <section className="py-20 bg-[#f4f6ec]">
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header (Two Columns) */}
-        <div className="flex flex-col md:flex-row justify-between items-start mb-16 gap-8">
-          <div className="md:w-1/2">
-            {eyebrow && <span className="eyebrow block">{eyebrow}</span>}
-            <h2 dangerouslySetInnerHTML={{ __html: title }} />
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start">
+            <h3 className="eyebrow">{eyebrow}</h3>
+            <h2
+              className=""
+              dangerouslySetInnerHTML={{ __html: title }}
+            />
           </div>
-          {description && (
-            <div className="md:w-1/2">
-              <p className="text-gray-700 text-sm leading-relaxed max-w-lg pt-2">
-                {description}
-              </p>
-            </div>
-          )}
+          <div className="max-w-sm text-gray-500 text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
+            {description}
+          </div>
         </div>
 
         {/* Loading skeleton */}
