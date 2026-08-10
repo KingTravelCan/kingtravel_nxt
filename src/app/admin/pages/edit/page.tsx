@@ -2282,7 +2282,7 @@ function PageBuilderContent() {
                                           currentServices.splice(sIdx, 1);
                                           updateSectionData(sec.id, 'items', currentServices);
                                         }}
-                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        className="border-0 bg-red-100 text-red-600 rounded p-2 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
                                         title="Remove Card"
                                       >
                                         <Trash2 className="w-3 h-3" /> Card
@@ -2421,7 +2421,7 @@ function PageBuilderContent() {
                                           updated.splice(sIdx, 1);
                                           updateSectionData(sec.id, 'items', updated);
                                         }}
-                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        className="border-0 bg-red-100 text-red-600 rounded p-2 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
                                         title="Remove card"
                                       >
                                         <Trash2 className="w-3 h-3" /> Remove
@@ -2618,7 +2618,7 @@ function PageBuilderContent() {
                                           currentVisas.splice(vIdx, 1);
                                           updateSectionData(sec.id, 'items', currentVisas);
                                         }}
-                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        className="border-0 bg-red-100 text-red-600 rounded p-2 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
                                         title="Remove Card"
                                       >
                                         <Trash2 className="w-3 h-3" /> Card
@@ -2732,7 +2732,7 @@ function PageBuilderContent() {
                                           currentSteps.splice(stIdx, 1);
                                           updateSectionData(sec.id, 'steps', currentSteps);
                                         }}
-                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        className="border-0 bg-red-100 text-red-600 rounded p-2 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
                                         title="Remove Step"
                                       >
                                         <Trash2 className="w-3 h-3" /> Step
@@ -2804,50 +2804,171 @@ function PageBuilderContent() {
                                   { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
                                   { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" }
                                 ]).map((fl: any, fIdx: number) => (
-                                  <div key={fIdx} className="bg-slate-50 border border-slate-300 rounded-lg p-2.5 flex flex-col gap-2">
-                                    <div className="flex justify-between items-center">
-                                      <span className="text-xs font-bold text-slate-800">FLIGHT #{fIdx + 1} ({fl.code || 'PIA'})</span>
+                                  <div key={fIdx} className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 flex flex-col gap-4 relative mt-2 group">
+                                    <div className="absolute top-2 right-2">
                                       <button
                                         onClick={() => {
                                           const currentFlights = [...sec.data?.items];
                                           currentFlights.splice(fIdx, 1);
                                           updateSectionData(sec.id, 'items', currentFlights);
                                         }}
-                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        className="border-0 bg-red-100/50 text-red-600 hover:text-red-500 rounded p-1.5 cursor-pointer transition-colors flex items-center"
                                         title="Remove Flight"
                                       >
-                                        <Trash2 className="w-3 h-3" /> Flight
+                                        <Trash2 className="w-4 h-4" />
                                       </button>
                                     </div>
-                                    <div className="grid">
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">CODE</label>
-                                        <input
-                                          type="text"
-                                          value={fl.code || ''}
-                                          onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
-                                            currentFlights[fIdx] = { ...currentFlights[fIdx], code: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentFlights);
-                                          }}
-                                          className="font-extrabold w-full"
-                                        />
+
+                                    <div className="flex flex-col md:flex-row items-center gap-6">
+                                      {/* Left Side: Logo & Airline */}
+                                      <div className="flex items-center gap-4 w-full md:w-[35%] pr-2">
+                                        <div className="w-16 h-16 shrink-0 rounded overflow-hidden">
+                                          <ImageUploadWidget
+                                            value={fl.logo || ''}
+                                            onChange={(url) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], logo: url };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                          />
+                                        </div>
+                                        <div className="flex flex-col gap-1 w-full relative">
+                                          <div className="flex items-center gap-2">
+                                            <input
+                                              type="text"
+                                              value={fl.code || ''}
+                                              onChange={(e) => {
+                                                const currentFlights = [...sec.data?.items];
+                                                currentFlights[fIdx] = { ...currentFlights[fIdx], code: e.target.value };
+                                                updateSectionData(sec.id, 'items', currentFlights);
+                                              }}
+                                              className="font-bold text-emerald-900 bg-emerald-50 px-2 py-1 rounded text-xs border border-transparent hover:border-emerald-200 focus:border-[#004B39] outline-none transition-colors w-16 text-center uppercase"
+                                              placeholder="CODE"
+                                              title="Airline Code"
+                                            />
+                                            <input
+                                              type="text"
+                                              value={fl.name || ''}
+                                              onChange={(e) => {
+                                                const currentFlights = [...sec.data?.items];
+                                                currentFlights[fIdx] = { ...currentFlights[fIdx], name: e.target.value };
+                                                updateSectionData(sec.id, 'items', currentFlights);
+                                              }}
+                                              className="font-bold text-slate-800 text-sm border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none transition-colors w-full bg-transparent p-0"
+                                              placeholder="Airline Name"
+                                              title="Airline Name"
+                                            />
+                                          </div>
+                                          <input
+                                            type="text"
+                                            value={fl.operatedBy || ''}
+                                            onChange={(e) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], operatedBy: e.target.value };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                            className="text-xs text-slate-500 border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none transition-colors w-full bg-transparent p-0"
+                                            placeholder="Operated By..."
+                                            title="Operated By"
+                                          />
+                                        </div>
                                       </div>
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">AIRLINE NAME</label>
-                                        <input
-                                          type="text"
-                                          value={fl.name || ''}
-                                          onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
-                                            currentFlights[fIdx] = { ...currentFlights[fIdx], name: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentFlights);
-                                          }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px] font-bold"
-                                        />
+
+                                      {/* Middle: Route & Time */}
+                                      <div className="flex items-center justify-between flex-1 w-full gap-2">
+                                        <div className="flex flex-col items-center flex-1">
+                                          <input
+                                            type="text"
+                                            value={fl.originCode || ''}
+                                            onChange={(e) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], originCode: e.target.value };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                            className="font-bold text-lg text-slate-800 text-center w-16 border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none bg-transparent p-0 uppercase"
+                                            placeholder="LHR"
+                                            title="Origin Code"
+                                          />
+                                          <input
+                                            type="text"
+                                            value={fl.originCity || ''}
+                                            onChange={(e) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], originCity: e.target.value };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                            className="text-xs text-slate-400 text-center w-20 border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none bg-transparent mt-0.5 p-0"
+                                            placeholder="London"
+                                            title="Origin City"
+                                          />
+                                        </div>
+
+                                        <div className="flex-1 flex items-center justify-center relative px-2 min-w-[40px]">
+                                          <div className="w-full border-t border-dashed border-slate-300 absolute top-1/2 -translate-y-1/2"></div>
+                                          <div className="w-6 h-6 rounded-full bg-blue-50 text-blue-400 flex items-center justify-center relative z-10">
+                                            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z" /></svg>
+                                          </div>
+                                        </div>
+
+                                        <div className="flex flex-col items-center flex-1">
+                                          <input
+                                            type="text"
+                                            value={fl.destCode || ''}
+                                            onChange={(e) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], destCode: e.target.value };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                            className="font-bold text-lg text-slate-800 text-center w-16 border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none bg-transparent p-0 uppercase"
+                                            placeholder="JED"
+                                            title="Destination Code"
+                                          />
+                                          <input
+                                            type="text"
+                                            value={fl.destCity || ''}
+                                            onChange={(e) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], destCity: e.target.value };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                            className="text-xs text-slate-400 text-center w-20 border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none bg-transparent mt-0.5 p-0"
+                                            placeholder="Jeddah"
+                                            title="Destination City"
+                                          />
+                                        </div>
+
+                                        <div className="w-px h-10 bg-slate-200 mx-2 hidden md:block"></div>
+
+                                        <div className="flex flex-col items-center w-16 shrink-0">
+                                          <input
+                                            type="text"
+                                            value={fl.time || ''}
+                                            onChange={(e) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], time: e.target.value };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                            className="font-bold text-[15px] text-slate-800 text-center w-full border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none bg-transparent p-0"
+                                            placeholder="14:20"
+                                            title="Flight Time"
+                                          />
+                                          <input
+                                            type="text"
+                                            value={fl.timeOriginCode || ''}
+                                            onChange={(e) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], timeOriginCode: e.target.value };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                            className="text-[10px] text-slate-400 mt-0.5 uppercase w-full text-center border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none bg-transparent p-0"
+                                            placeholder={fl.originCode || 'LHR'}
+                                            title="Time Origin Code"
+                                          />
+                                        </div>
                                       </div>
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">PRICE (CAD)</label>
+
+                                      {/* Right Side: Price & Button */}
+                                      <div className="flex flex-col items-end justify-center w-full md:w-1/4 shrink-0 gap-1.5 md:pl-2">
                                         <input
                                           type="text"
                                           value={fl.price || ''}
@@ -2856,90 +2977,38 @@ function PageBuilderContent() {
                                             currentFlights[fIdx] = { ...currentFlights[fIdx], price: e.target.value };
                                             updateSectionData(sec.id, 'items', currentFlights);
                                           }}
-                                          className="font-extrabold w-full text-[#004B39]"
+                                          className="font-bold text-lg md:text-xl text-slate-900 text-right w-full border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none bg-transparent p-0 placeholder:text-slate-300"
+                                          placeholder="CAD 1,250.00"
+                                          title="Price"
+                                        />
+                                        <input
+                                          type="text"
+                                          value={fl.bookingUrl || ''}
+                                          onChange={(e) => {
+                                            const currentFlights = [...sec.data?.items];
+                                            currentFlights[fIdx] = { ...currentFlights[fIdx], bookingUrl: e.target.value };
+                                            updateSectionData(sec.id, 'items', currentFlights);
+                                          }}
+                                          className="text-xs bg-[#004B39] text-white text-center font-bold px-3 py-2 rounded-md outline-none w-full border border-transparent focus:border-emerald-300 placeholder:text-white/50"
+                                          placeholder="Booking URL..."
+                                          title="Booking URL"
                                         />
                                       </div>
                                     </div>
 
-                                    <div className="grid">
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">FROM CODE</label>
-                                        <input
-                                          type="text"
-                                          value={fl.originCode || ''}
-                                          onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
-                                            currentFlights[fIdx] = { ...currentFlights[fIdx], originCode: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentFlights);
-                                          }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                        />
-                                      </div>
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">FROM CITY</label>
-                                        <input
-                                          type="text"
-                                          value={fl.originCity || ''}
-                                          onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
-                                            currentFlights[fIdx] = { ...currentFlights[fIdx], originCity: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentFlights);
-                                          }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                        />
-                                      </div>
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">TO CODE</label>
-                                        <input
-                                          type="text"
-                                          value={fl.destCode || ''}
-                                          onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
-                                            currentFlights[fIdx] = { ...currentFlights[fIdx], destCode: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentFlights);
-                                          }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                        />
-                                      </div>
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">TO CITY</label>
-                                        <input
-                                          type="text"
-                                          value={fl.destCity || ''}
-                                          onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
-                                            currentFlights[fIdx] = { ...currentFlights[fIdx], destCity: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentFlights);
-                                          }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                        />
-                                      </div>
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">FLIGHT TIME</label>
-                                        <input
-                                          type="text"
-                                          value={fl.time || ''}
-                                          onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
-                                            currentFlights[fIdx] = { ...currentFlights[fIdx], time: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentFlights);
-                                          }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                        />
-                                      </div>
-                                      <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">OPERATED BY</label>
-                                        <input
-                                          type="text"
-                                          value={fl.operatedBy || ''}
-                                          onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
-                                            currentFlights[fIdx] = { ...currentFlights[fIdx], operatedBy: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentFlights);
-                                          }}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                        />
-                                      </div>
+                                    <div className="border-t border-dashed border-slate-200 pt-3 mt-1 flex justify-between items-center text-[10px] text-slate-400 gap-4">
+                                      <span className="whitespace-nowrap">FLIGHT #{fIdx + 1}</span>
+                                      <input
+                                        type="text"
+                                        value={fl.priceSubtext || ''}
+                                        onChange={(e) => {
+                                          const currentFlights = [...sec.data?.items];
+                                          currentFlights[fIdx] = { ...currentFlights[fIdx], priceSubtext: e.target.value };
+                                          updateSectionData(sec.id, 'items', currentFlights);
+                                        }}
+                                        className="text-right w-full border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none bg-transparent p-0"
+                                        placeholder="Price Per Person (Incl. Taxes & Fees)"
+                                      />
                                     </div>
                                   </div>
                                 ))}
@@ -3767,7 +3836,7 @@ function PageBuilderContent() {
                                           reviews.splice(rIdx, 1);
                                           updateSectionData(sec.id, 'items', reviews);
                                         }}
-                                        className="border-0 bg-red-100 text-red-600 rounded p-1 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
+                                        className="border-0 bg-red-100 text-red-600 rounded p-2 text-xs cursor-pointer hover:bg-red-200 transition-colors flex items-center gap-1 font-semibold"
                                         title="Remove Review"
                                       >
                                         <Trash2 className="w-3 h-3" /> Remove

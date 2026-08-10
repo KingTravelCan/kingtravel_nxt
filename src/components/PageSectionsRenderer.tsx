@@ -15,7 +15,7 @@ import HajjPackagesSection from '@/components/HajjPackagesSection';
 import CertificationsFlipCardsSection from '@/components/CertificationsFlipCardsSection';
 import SoldOutPackagesSection from '@/components/SoldOutPackagesSection';
 import Banner4GridsSection from '@/components/Banner4GridsSection';
-import Script from "next/script";
+import { useEffect } from "react";
 export default function PageSectionsRenderer({ sections, pageData, initialPackageData }: { sections: any[], pageData?: any, initialPackageData?: any }) {
   if (!sections || !Array.isArray(sections)) return null;
 
@@ -74,9 +74,15 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6">
                         {/* Left: Airline Info */}
                         <div className="flex items-center gap-4 min-w-[280px]">
-                          <div className="bg-emerald-900 text-white font-bold px-3 py-2 rounded text-base tracking-wide flex items-center justify-center min-w-[54px] h-[44px]">
-                            {flight.code || "PIA"}
-                          </div>
+                          {flight.logo ? (
+                            <div className="w-[54px] h-[44px] relative rounded overflow-hidden shadow-sm shrink-0">
+                              <Image src={flight.logo} alt={flight.name || "Airline Logo"} fill className="object-cover" unoptimized />
+                            </div>
+                          ) : (
+                            <div className="bg-emerald-900 text-white font-bold px-3 py-2 rounded text-base tracking-wide flex items-center justify-center min-w-[54px] h-[44px]">
+                              {flight.code || "PIA"}
+                            </div>
+                          )}
                           <div>
                             <h4 className="font-bold text-gray-900 text-lg">{flight.name}</h4>
                             <p className="text-xs text-gray-500 font-medium mt-0.5">{flight.operatedBy || "Operated By PIA"}</p>
@@ -106,7 +112,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
 
                           <div className="text-center md:text-left">
                             <span className="block text-xl font-bold text-gray-900">{flight.time || "14:20"}</span>
-                            <span className="text-xs text-gray-400 font-medium">{flight.originCode || "LHR"}</span>
+                            <span className="text-xs text-gray-400 font-medium uppercase">{flight.timeOriginCode || flight.originCode || "LHR"}</span>
                           </div>
                         </div>
 
@@ -117,7 +123,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                             <span className="text-2xl font-extrabold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
                           </div>
                           <a
-                            href={`https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name)})`}
+                            href={flight.bookingUrl || `https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name || "PIA")})`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="bg-emerald-900 text-white hover:bg-[#DB9E30] hover:text-slate-900 font-bold py-3 px-8 rounded-lg tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
@@ -128,7 +134,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                       </div>
 
                       <div className="border-t border-dashed border-gray-300/80 pt-4 text-right">
-                        <span className="text-xs font-medium text-gray-500">Price Per Person (Incl. Taxes &amp; Fees)</span>
+                        <span className="text-xs font-medium text-gray-500">{flight.priceSubtext || "Price Per Person (Incl. Taxes & Fees)"}</span>
                       </div>
                     </div>
                   ))}
@@ -284,15 +290,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                   </div>
 
                   <div className="lg:w-3/4 w-full">
-                    <Script
-                      src="https://elfsightcdn.com/platform.js"
-                      strategy="afterInteractive"
-                    />
-
-                    <div
-                      className="elfsight-app-64c6bf2d-cdee-4dfd-a876-5576cbaa5bac"
-                      data-elfsight-app-lazy
-                    />
+                    <ElfsightWidget />
                   </div>
                 </div>
               </div>
@@ -438,4 +436,17 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
       })}
     </div>
   );
+}
+
+function ElfsightWidget() {
+  useEffect(() => {
+    if (!document.querySelector('script[src="https://elfsightcdn.com/platform.js"]')) {
+      const script = document.createElement("script");
+      script.src = "https://elfsightcdn.com/platform.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+
+  return <div className="elfsight-app-64c6bf2d-cdee-4dfd-a876-5576cbaa5bac" data-elfsight-app-lazy />;
 }
