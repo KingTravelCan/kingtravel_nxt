@@ -2822,43 +2822,33 @@ function PageBuilderContent() {
                                     <div className="flex flex-col md:flex-row items-center gap-6">
                                       {/* Left Side: Logo & Airline */}
                                       <div className="flex items-center gap-4 w-full md:w-[35%] pr-2">
-                                        <div className="w-16 h-16 shrink-0 rounded overflow-hidden">
-                                          <ImageUploadWidget
-                                            value={fl.logo || ''}
-                                            onChange={(url) => {
+                                        <div className="w-14 h-14 bg-[#004B39] text-white rounded flex items-center justify-center font-bold text-sm shrink-0">
+                                          <input
+                                            type="text"
+                                            value={fl.code || ''}
+                                            onChange={(e) => {
                                               const currentFlights = [...sec.data?.items];
-                                              currentFlights[fIdx] = { ...currentFlights[fIdx], logo: url };
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], code: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
+                                            className="bg-transparent text-white text-center w-full font-bold outline-none placeholder:text-white/50 uppercase"
+                                            placeholder="PIA"
+                                            title="Airline Code"
                                           />
                                         </div>
                                         <div className="flex flex-col gap-1 w-full relative">
-                                          <div className="flex items-center gap-2">
-                                            <input
-                                              type="text"
-                                              value={fl.code || ''}
-                                              onChange={(e) => {
-                                                const currentFlights = [...sec.data?.items];
-                                                currentFlights[fIdx] = { ...currentFlights[fIdx], code: e.target.value };
-                                                updateSectionData(sec.id, 'items', currentFlights);
-                                              }}
-                                              className="font-bold text-emerald-900 bg-emerald-50 px-2 py-1 rounded text-xs border border-transparent hover:border-emerald-200 focus:border-[#004B39] outline-none transition-colors w-16 text-center uppercase"
-                                              placeholder="CODE"
-                                              title="Airline Code"
-                                            />
-                                            <input
-                                              type="text"
-                                              value={fl.name || ''}
-                                              onChange={(e) => {
-                                                const currentFlights = [...sec.data?.items];
-                                                currentFlights[fIdx] = { ...currentFlights[fIdx], name: e.target.value };
-                                                updateSectionData(sec.id, 'items', currentFlights);
-                                              }}
-                                              className="font-bold text-slate-800 text-sm border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none transition-colors w-full bg-transparent p-0"
-                                              placeholder="Airline Name"
-                                              title="Airline Name"
-                                            />
-                                          </div>
+                                          <input
+                                            type="text"
+                                            value={fl.name || ''}
+                                            onChange={(e) => {
+                                              const currentFlights = [...sec.data?.items];
+                                              currentFlights[fIdx] = { ...currentFlights[fIdx], name: e.target.value };
+                                              updateSectionData(sec.id, 'items', currentFlights);
+                                            }}
+                                            className="font-bold text-slate-800 text-sm border-b border-transparent hover:border-slate-300 focus:border-[#004B39] outline-none transition-colors w-full bg-transparent p-0"
+                                            placeholder="Airline Name"
+                                            title="Airline Name"
+                                          />
                                           <input
                                             type="text"
                                             value={fl.operatedBy || ''}
