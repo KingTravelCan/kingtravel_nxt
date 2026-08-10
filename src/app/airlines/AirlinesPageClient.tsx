@@ -3,6 +3,7 @@
 import Link from "next/link";
 import MarqueeTrack from "@/components/MarqueeTrack";
 import PageBanner from "@/components/PageBanner";
+import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 
 const airlineLogos = [
   { src: "/img/a-1.png", alt: "Saudi Airlines" },
@@ -263,6 +264,15 @@ export default function AirlinesPageClient({ initialPageData }: { initialPageDat
           </section>
         </>
       )}
+
+      {(() => {
+        const handledTypes = ["Available Flights Grid", "Airlines", "Flight Assistance CTA"];
+        const unhandled = sections.filter((s: any) => !handledTypes.includes(s.type));
+        if (unhandled.length > 0) {
+          return <PageSectionsRenderer sections={unhandled} pageData={pageData} />;
+        }
+        return null;
+      })()}
     </main>
   );
 }

@@ -4,6 +4,7 @@
 # next.js
 /.next/
 /out/
+/.cursor/*
  
 # production
 /build
@@ -44,3 +45,5 @@ find_admin_sections.js
 find_sections.js
 fix-db.js
 fix-admin-styles.js
+test-db.ts
+test-save.ts

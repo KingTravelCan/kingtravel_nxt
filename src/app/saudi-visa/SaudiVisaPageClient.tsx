@@ -5,6 +5,7 @@ import Image from "next/image";
 import PageBanner from "@/components/PageBanner";
 
 import VisaSolutionsSection from "@/components/VisaSolutionsSection";
+import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 
 function VisaProcessStepsSection({ data }: { data?: any }) {
   return (
@@ -120,6 +121,15 @@ export default function SaudiVisaPageClient({ initialPageData }: { initialPageDa
             ) : (
               <VisaProcessStepsSection />
             )}
+
+            {(() => {
+              const handledTypes = ["Visa Solutions Grid", "Visa Cards", "Visa Process Steps", "3 Easy Steps"];
+              const unhandled = sections.filter((s: any) => !handledTypes.includes(s.type));
+              if (unhandled.length > 0) {
+                return <PageSectionsRenderer sections={unhandled} pageData={pageData} />;
+              }
+              return null;
+            })()}
           </>
         );
       })()}

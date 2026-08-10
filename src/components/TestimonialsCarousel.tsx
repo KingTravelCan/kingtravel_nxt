@@ -9,6 +9,7 @@ interface Review {
   time: string;
   avatar: string;
   text: string;
+  rating?: number;
 }
 
 const defaultReviews: Review[] = [
@@ -63,7 +64,49 @@ const defaultReviews: Review[] = [
   },
 ];
 
-export default function TestimonialsCarousel({ reviews = defaultReviews, autoplaySpeed = 3000 }: { reviews?: Review[], autoplaySpeed?: number }) {
+export default function TestimonialsCarousel({ 
+  reviews: initialReviews = defaultReviews, 
+  autoplaySpeed = 3000,
+  apiKey,
+  placeId
+}: { 
+  reviews?: Review[], 
+  autoplaySpeed?: number,
+  apiKey?: string,
+  placeId?: string
+}) {
+  const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [loading, setLoading] = useState(!!(apiKey && placeId));
+
+  useEffect(() => {
+    if (apiKey && placeId) {
+      const fetchReviews = async () => {
+        try {
+          const res = await fetch(`/api/reviews?apiKey=${apiKey}&placeId=${placeId}`);
+          const data = await res.json();
+          if (data.reviews && data.reviews.length > 0) {
+            const mappedReviews = data.reviews.map((r: any, index: number) => ({
+              id: index + 1,
+              name: r.author_name,
+              time: r.relative_time_description,
+              avatar: r.profile_photo_url || "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=150&auto=format&fit=crop&q=80",
+              text: r.text,
+              rating: r.rating
+            }));
+            setReviews(mappedReviews);
+          }
+        } catch (error) {
+          console.error("Error fetching google reviews:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchReviews();
+    } else {
+      setReviews(initialReviews);
+    }
+  }, [apiKey, placeId, initialReviews]);
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [expandedCards, setExpandedCards] = useState<Record<number, boolean>>({});
   const [visibleItems, setVisibleItems] = useState(3);
@@ -147,6 +190,18 @@ export default function TestimonialsCarousel({ reviews = defaultReviews, autopla
       trackEl.style.transform = `translateX(calc(-${currentIndex} * ((100% + 16px) / ${visibleItems})))`;
     }
   }, [currentIndex, visibleItems, trackEl]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20 w-full">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#004B39]"></div>
+      </div>
+    );
+  }
+
+  if (!reviews || reviews.length === 0) {
+    return null;
+  }
 
   return (
     <div

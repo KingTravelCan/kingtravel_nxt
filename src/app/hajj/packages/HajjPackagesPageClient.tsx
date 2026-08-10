@@ -6,6 +6,7 @@ import Link from "next/link";
 import PageBanner from "@/components/PageBanner";
 import PackageDetailModal, { PackageDetailData } from "@/components/PackageDetailModal";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
+import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 
 const hajjCardsData = [
   {
@@ -518,6 +519,17 @@ export default function HajjPackagesPageClient({ initialPageData }: { initialPag
             </div>
           </section>
         );
+      })()}
+      {(() => {
+        try {
+          const handledTypes = ['Packages Grid', 'Hajj Packages', 'Text Block (Rich Text)', 'Google Reviews / Testimonials'];
+          const parsed = typeof pageData?.sections === 'string' ? JSON.parse(pageData.sections) : (pageData?.sections || []);
+          const unhandled = parsed.filter((s: any) => !handledTypes.includes(s.type));
+          if (unhandled.length > 0) {
+             return <PageSectionsRenderer sections={unhandled} pageData={pageData} />;
+          }
+        } catch (e) {}
+        return null;
       })()}
     </div>
   );

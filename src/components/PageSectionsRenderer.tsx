@@ -3,7 +3,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import MarqueeTrack from '@/components/MarqueeTrack';
-import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import DynamicIcon from '@/components/ui/DynamicIcon';
 import ContactFormSection from '@/components/ContactFormSection';
 import VisaSolutionsSection from '@/components/VisaSolutionsSection';
@@ -15,7 +14,9 @@ import WhatWeProvideSection from '@/components/WhatWeProvideSection';
 import HajjPackagesSection from '@/components/HajjPackagesSection';
 import CertificationsFlipCardsSection from '@/components/CertificationsFlipCardsSection';
 import SoldOutPackagesSection from '@/components/SoldOutPackagesSection';
-export default function PageSectionsRenderer({ sections, pageData, initialPackageData }: { sections: any[]; pageData?: any; initialPackageData?: { umrah?: any[]; hajj?: any[]; all?: any[] } }) {
+import Banner4GridsSection from '@/components/Banner4GridsSection';
+import Script from "next/script";
+export default function PageSectionsRenderer({ sections, pageData, initialPackageData }: { sections: any[], pageData?: any, initialPackageData?: any }) {
   if (!sections || !Array.isArray(sections)) return null;
 
   return (
@@ -25,7 +26,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
         if (sec.type === 'Certifications Flip Cards' || sec.type === 'Our Certifications') {
           return <CertificationsFlipCardsSection key={idx} data={sec.data || {}} />;
         }
-        if (sec.type === 'Text Block (Rich Text)') {
+        if (sec.type === 'Text Block (Rich Text)' || sec.type === 'Packages Content (Rich Text)') {
           let content: string = sec.data?.content || '';
           if (!content) return null;
           content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, '\u00a0');
@@ -33,7 +34,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           if (innerM) { const inner = innerM[1].trim(); if (/^<(h[1-6]|ul|ol|blockquote)/.test(inner)) content = inner; }
           if (!content || content === '<p></p>') return null;
           return (
-            <section key={idx} className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-slate-100 max-w-5xl mx-auto my-8 w-full">
+            <section key={idx} className="p-6 md:p-8 max-w-5xl mx-auto w-full">
               <div
                 className="prose prose-slate prose-headings:font-serif prose-headings:text-[#004B39] prose-a:text-[#004B39] prose-strong:text-slate-900 max-w-none text-sm leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: content }}
@@ -281,9 +282,17 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                       )}
                     </div>
                   </div>
-                  
+
                   <div className="lg:w-3/4 w-full">
-                    <TestimonialsCarousel reviews={sec.data?.reviews} autoplaySpeed={sec.data?.autoplaySpeed} />
+                    <Script
+                      src="https://elfsightcdn.com/platform.js"
+                      strategy="afterInteractive"
+                    />
+
+                    <div
+                      className="elfsight-app-64c6bf2d-cdee-4dfd-a876-5576cbaa5bac"
+                      data-elfsight-app-lazy
+                    />
                   </div>
                 </div>
               </div>
@@ -293,12 +302,26 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
 
         // ── Airlines ──────────────────────────────────────────────────────────
         if (sec.type === "Airlines") {
-          const logos: { src: string; alt: string }[] = (sec.data?.logos || []).map((l: any) => ({
+          let logos: { src: string; alt: string }[] = (sec.data?.logos || []).map((l: any) => ({
             src: l.src || "",
             alt: l.alt || "",
           }));
+
+          if (logos.length === 0) {
+            logos = [
+              { src: '/img/a-1.png', alt: 'Saudi Airlines' },
+              { src: '/img/a-2.png', alt: 'Emirates' },
+              { src: '/img/a-3.png', alt: 'Qatar Airways' },
+              { src: '/img/a-4.png', alt: 'Turkish Airlines' },
+              { src: '/img/a-5.png', alt: 'Etihad Airways' },
+              { src: '/img/a-6.png', alt: 'EgyptAir' },
+              { src: '/img/a-7.png', alt: 'Royal Jordanian' },
+              { src: '/img/a-8.png', alt: 'Gulf Air' },
+              { src: '/img/a-9.png', alt: 'Air Canada' },
+            ];
+          }
           return (
-            <section key={idx} className="py-12 bg-[#f7f3ec] border-y border-[#e8e0d0]">
+            <section key={idx} className="py-12">
               <div className="max-w-7xl mx-auto px-4">
                 <div className="text-center flex flex-col mb-8">
                   {sec.data?.eyebrow && (
@@ -318,7 +341,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                     direction={sec.data?.direction || "left"}
                   />
                 ) : (
-                  <p className="text-center text-slate-400 text-sm">No airline logos configured yet.</p>
+                  <p className="text-center text-red-600 font-semibold text-base">No Airline Logos Configured Yet.</p>
                 )}
               </div>
             </section>
@@ -327,10 +350,22 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
 
         // ── Travel Organization ───────────────────────────────────────────────
         if (sec.type === "Travel Organization") {
-          const logos: { src: string; alt: string }[] = (sec.data?.logos || []).map((l: any) => ({
+          let logos: { src: string; alt: string }[] = (sec.data?.logos || []).map((l: any) => ({
             src: l.src || "",
             alt: l.alt || "",
           }));
+
+          if (logos.length === 0) {
+            logos = [
+              { src: '/img/orgs/acta.jpg', alt: 'ACTA' },
+              { src: '/img/orgs/tico.png', alt: 'TICO' },
+              { src: '/img/orgs/IATA-Logo.png', alt: 'IATA' },
+              { src: '/img/orgs/sata.png', alt: 'SATA' },
+              { src: '/img/orgs/hajj.png', alt: 'Ministry of Hajj' },
+              { src: '/img/orgs/atac.png', alt: 'ATAC' },
+              { src: '/img/orgs/asta.png', alt: 'ASTA' },
+            ];
+          }
           return (
             <section key={idx} className="py-12 bg-white">
               <div className="max-w-7xl mx-auto px-4">
@@ -392,6 +427,10 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
 
         if (sec.type === "Hajj Packages" || sec.type === "Packages Grid") {
           return <HajjPackagesSection key={idx} data={sec.data} initialPackages={initialPackageData?.hajj} />;
+        }
+
+        if (sec.type === "Banner 4 Grids") {
+          return <Banner4GridsSection key={idx} data={sec.data || {}} />;
         }
 
         // Return null for any unmapped sections

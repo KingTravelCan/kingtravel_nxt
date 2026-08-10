@@ -5,6 +5,7 @@ import DynamicIcon from "@/components/ui/DynamicIcon";
 export default function TravelServicesSection({ data }: { data: any }) {
   const eyebrow = data?.eyebrow || "SERVICES WE OFFER";
   const title = data?.title || "Select your preferred travel<br />service";
+  const subtitle = data?.subtitle || "";
   
   const defaultServices = [
     { title: 'Umrah Packages', desc: 'Flexible departures with flights, stays & guidance included.', icon: 'Star' },
@@ -28,6 +29,11 @@ export default function TravelServicesSection({ data }: { data: any }) {
             className=""
             dangerouslySetInnerHTML={{ __html: title }}
           />
+          {subtitle && (
+            <p className="text-gray-500 max-w-2xl mt-4 leading-relaxed">
+              {subtitle}
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

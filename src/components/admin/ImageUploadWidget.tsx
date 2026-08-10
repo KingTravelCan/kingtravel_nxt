@@ -69,12 +69,12 @@ export default function ImageUploadWidget({
 
       {/* Image Preview & Actions */}
       {value ? (
-        <div className={`relative group ${compact ? "w-16 h-12 shrink-0" : "w-full max-w-[200px] aspect-video"} bg-slate-100 rounded-lg overflow-hidden border border-slate-200`}>
+        <div className={`relative items-center group ${compact ? "w-40 h-18 shrink-0" : "w-full max-w-[200px] aspect-video"} bg-slate-100 rounded-lg overflow-hidden border border-slate-200`}>
           <Image
             src={value}
             alt="Preview"
             fill
-            className="object-cover"
+            className="object-contain"
             unoptimized
           />
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">

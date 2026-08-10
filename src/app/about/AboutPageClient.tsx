@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import PageBanner from "@/components/PageBanner";
 import CertificationsFlipCardsSection from "@/components/CertificationsFlipCardsSection";
+import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 
 export default function AboutPageClient({ initialPageData }: { initialPageData?: any }) {
   const pageData = initialPageData || null;
@@ -422,7 +423,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
           return <CertificationsFlipCardsSection key={idx} data={sec.data || {}} />;
         }
 
-        return null;
+        return <PageSectionsRenderer key={idx} sections={[sec]} pageData={pageData} />;
       })}
     </main>
   );
