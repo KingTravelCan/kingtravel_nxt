@@ -185,7 +185,7 @@ function ContactFormSection({ data }: { data?: any }) {
   };
 
   return (
-    <div className="relative rounded-3xl overflow-hidden shadow-xl shadow-slate-100/50 border border-gold bg-gold/5">
+    <div className="relative rounded-3xl overflow-hidden shadow-xl shadow-slate-100/50 bg-white">
       {isDisabled && (
         <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 text-center bg-slate-950/75 backdrop-blur-md border border-[#DB9E30]/40 rounded-3xl shadow-2xl">
           <div className="w-14 h-14 rounded-2xl bg-[#DB9E30]/10 border border-[#DB9E30]/30 flex items-center justify-center text-2xl mb-4 text-[#DB9E30]">
@@ -211,8 +211,8 @@ function ContactFormSection({ data }: { data?: any }) {
 
           {contactStatus && <p className="text-center text-emerald-800 font-semibold mb-6">{contactStatus}</p>}
 
-          <form noValidate className="flex flex-col gap-4" onSubmit={handleContactSubmit}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <form noValidate className="flex flex-col gap-6" onSubmit={handleContactSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="relative">
                 <input
                   type="text"
@@ -223,7 +223,7 @@ function ContactFormSection({ data }: { data?: any }) {
                     setContactForm({ ...contactForm, name: e.target.value });
                     if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
                   }}
-                  className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.name ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                  className={`peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.name ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
                     }`}
                 />
                 <label
@@ -246,7 +246,7 @@ function ContactFormSection({ data }: { data?: any }) {
                     setContactForm({ ...contactForm, email: e.target.value });
                     if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
                   }}
-                  className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                  className={`peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
                     }`}
                 />
                 <label
@@ -266,7 +266,7 @@ function ContactFormSection({ data }: { data?: any }) {
                   placeholder=" "
                   value={contactForm.phone}
                   onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                  className="peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
+                  className="peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
                 />
                 <label
                   htmlFor="phone"
@@ -283,7 +283,7 @@ function ContactFormSection({ data }: { data?: any }) {
                   placeholder=" "
                   value={contactForm.website}
                   onChange={(e) => setContactForm({ ...contactForm, website: e.target.value })}
-                  className="peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
+                  className="peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
                 />
                 <label
                   htmlFor="website"
@@ -304,12 +304,12 @@ function ContactFormSection({ data }: { data?: any }) {
                   setContactForm({ ...contactForm, message: e.target.value });
                   if (errors.message) setErrors((prev) => ({ ...prev, message: "" }));
                 }}
-                className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                className={`peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
                   }`}
               ></textarea>
               <label
                 htmlFor="message"
-                className={`absolute left-3 top-7 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-7 peer-focus:top-0 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.message ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"
+                className={`absolute left-3 top-3 text-slate-400 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs peer-focus:text-emerald-800 font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.message ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"
                   }`}
               >
                 How can we help you?
