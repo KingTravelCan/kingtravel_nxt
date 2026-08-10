@@ -4,24 +4,24 @@ import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
 import { getPackagesByType } from "@/actions/packageActions";
 
-export default function HajjPackagesSection({ data }: { data: any }) {
+export default function HajjPackagesSection({ data, initialPackages }: { data: any; initialPackages?: any[] }) {
   const eyebrow = data?.eyebrow || "LUXURY HAJJ PACKAGES";
   const title = data?.title || "Hajj Packages 2027";
   const description =
     data?.description ||
     "Luxury Hajj 2027 Packages with 5-Star Hotels, VIP Services & Complete Spiritual Guidance.";
 
-  const [pkgs, setPkgs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
+  const [loading, setLoading] = useState(!initialPackages);
 
   useEffect(() => {
+    if (initialPackages) return;
     // Automatically pulls every published Hajj package - no manual curation needed.
     getPackagesByType("hajj")
       .then((rows) => setPkgs(rows))
       .catch(() => setPkgs([]))
       .finally(() => setLoading(false));
-  }, []);
-
+  }, [initialPackages]);
   return (
     <section className="py-20 bg-[#fbfcf9]">
       <div className="max-w-[1400px] mx-auto px-5">

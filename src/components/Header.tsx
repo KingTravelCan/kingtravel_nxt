@@ -1,10 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { getNavItems, getSiteIdentity } from "@/actions/pageActions";
 
 const DEFAULT_NAV_ITEMS = [
   { id: '1', label: 'Home', url: '/', level: 1, children: [] },
@@ -16,29 +15,13 @@ const DEFAULT_NAV_ITEMS = [
   { id: '7', label: 'Contact', url: '/contact', level: 1, children: [] },
 ];
 
-export default function Header() {
+export default function Header({ initialNavItems = DEFAULT_NAV_ITEMS, initialIdentity = null }: { initialNavItems?: any[]; initialIdentity?: any }) {
   const [menuActive, setMenuActive] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
-  const [navItems, setNavItems] = useState<any[]>(DEFAULT_NAV_ITEMS);
-  const [identityData, setIdentityData] = useState<any>(null);
+  const navItems = initialNavItems?.length ? initialNavItems : DEFAULT_NAV_ITEMS;
+  const identityData = initialIdentity;
   const pathname = usePathname();
 
-  useEffect(() => {
-    let isMounted = true;
-    getNavItems().then((items) => {
-      if (isMounted && items && Array.isArray(items) && items.length > 0) {
-        setNavItems(items);
-      }
-    });
-    getSiteIdentity().then((data) => {
-      if (isMounted && data) {
-        setIdentityData(data);
-      }
-    });
-    return () => {
-      isMounted = false;
-    };
-  }, []);
 
   if (pathname?.startsWith("/admin") || pathname === "/letstravel") {
     return null;

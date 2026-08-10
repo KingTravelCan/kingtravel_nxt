@@ -7,7 +7,7 @@ import RevealOnScroll from "@/components/RevealOnScroll";
 import FrontendMaintenanceWrapper from "@/components/FrontendMaintenanceWrapper";
 import DisclaimerPopupModal from "@/components/DisclaimerPopupModal";
 import FaviconSync from "@/components/FaviconSync";
-import { getSiteIdentity, getLoginAuthSettings } from "@/actions/pageActions";
+import { getSiteIdentity, getLoginAuthSettings, getNavItems, getFooterData } from "@/actions/pageActions";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,8 +29,12 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const identity = await getSiteIdentity();
-  const loginAuth = await getLoginAuthSettings();
+  const [identity, loginAuth, navItems, footerData] = await Promise.all([
+    getSiteIdentity(),
+    getLoginAuthSettings(),
+    getNavItems(),
+    getFooterData(),
+  ]);
   const faviconUrl = identity?.favicon || "/img/favicon.ico";
   const initialMaintenanceMode = loginAuth?.maintenanceMode ?? false;
 
@@ -59,10 +63,10 @@ export default async function RootLayout({
       <body suppressHydrationWarning>
         <FaviconSync faviconUrl={faviconUrl} />
         <FrontendMaintenanceWrapper initialMaintenanceMode={initialMaintenanceMode}>
-          <Header />
+          <Header initialNavItems={navItems} initialIdentity={identity} />
           {children}
-          <Footer />
-          <WhatsAppFloat />
+          <Footer initialFooterData={footerData} />
+          <WhatsAppFloat initialIdentity={identity} />
           <FloatingShareBar />
           <RevealOnScroll />
           <DisclaimerPopupModal />

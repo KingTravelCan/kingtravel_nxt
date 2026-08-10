@@ -1,20 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { getFooterData } from "@/actions/pageActions";
 
-export default function Footer() {
-  const [footerData, setFooterData] = useState<any>({});
+export default function Footer({ initialFooterData = {} }: { initialFooterData?: any }) {
+  const footerData = initialFooterData || {};
   const pathname = usePathname();
 
-  useEffect(() => {
-    getFooterData().then((data) => {
-      if (data) setFooterData(data);
-    });
-  }, []);
 
   if (pathname?.startsWith("/admin") || pathname === "/letstravel") {
     return null;

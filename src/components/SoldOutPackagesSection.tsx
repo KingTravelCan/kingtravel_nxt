@@ -5,7 +5,7 @@ import * as LucideIcons from "lucide-react";
 import DynamicIcon from "@/components/ui/DynamicIcon";
 import { getPackagesByIds } from "@/actions/packageActions";
 
-export default function SoldOutPackagesSection({ data }: { data: any }) {
+export default function SoldOutPackagesSection({ data, initialPackages }: { data: any; initialPackages?: any[] }) {
   const eyebrow = data?.eyebrow || "";
   const title = data?.title || "Packages Officially<br />Sold Out";
   const description = data?.description || "";
@@ -14,10 +14,11 @@ export default function SoldOutPackagesSection({ data }: { data: any }) {
     ? data.packageIds.map(Number).filter(Boolean)
     : [];
 
-  const [pkgs, setPkgs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(packageIds.length > 0);
+  const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
+  const [loading, setLoading] = useState(!initialPackages && packageIds.length > 0);
 
   useEffect(() => {
+    if (initialPackages) return;
     if (packageIds.length === 0) {
       setLoading(false);
       return;
@@ -27,7 +28,7 @@ export default function SoldOutPackagesSection({ data }: { data: any }) {
       .catch(() => setPkgs([]))
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.packageIds?.join?.(",")]);
+  }, [data?.packageIds?.join?.(","), initialPackages]);
 
   if (!loading && pkgs.length === 0) return null;
 

@@ -454,14 +454,26 @@ export async function getDefaultShareTools() {
 
 let shareToolsMemoryCache: any = null;
 
-export async function getShareTools() {
-  try {
-    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'share_tools')).limit(1);
-    if (res && res.length > 0) {
-      const parsed = safeJsonParse(res[0].value, shareToolsMemoryCache || getDefaultShareTools());
+async function fetchShareToolsFromDb() {
+  const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'share_tools')).limit(1);
+  if (res && res.length > 0) {
+    const parsed = safeJsonParse(res[0].value, null);
+    if (parsed) {
       shareToolsMemoryCache = parsed;
       return parsed;
     }
+  }
+  return shareToolsMemoryCache || await getDefaultShareTools();
+}
+
+export async function getShareTools() {
+  try {
+    const getCachedShareTools = unstable_cache(
+      fetchShareToolsFromDb,
+      ['share-tools'],
+      { tags: ['share-tools'], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    return await getCachedShareTools();
   } catch (err) {
     console.error('getShareTools DB query failed:', err);
   }
@@ -478,10 +490,12 @@ export async function saveShareToolsAction(data: any) {
       await db.insert(siteSettings).values({ key: 'share_tools', value: JSON.stringify(data) });
     }
     revalidatePath('/', 'layout');
+    revalidateTag('share-tools', 'max');
     return { success: true };
   } catch (err: any) {
     console.warn('saveShareToolsAction DB query failed, saving to cache fallback:', err);
     revalidatePath('/', 'layout');
+    revalidateTag('share-tools', 'max');
     return { success: true, warning: 'Saved to session memory cache.' };
   }
 }
@@ -554,14 +568,26 @@ export async function getDefaultLoginAuthSettings() {
   };
 }
 
-export async function getLoginAuthSettings() {
-  try {
-    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'login_auth_settings')).limit(1);
-    if (res && res.length > 0) {
-      const parsed = safeJsonParse(res[0].value, loginAuthMemoryCache || getDefaultLoginAuthSettings());
+async function fetchLoginAuthSettingsFromDb() {
+  const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'login_auth_settings')).limit(1);
+  if (res && res.length > 0) {
+    const parsed = safeJsonParse(res[0].value, null);
+    if (parsed) {
       loginAuthMemoryCache = parsed;
       return parsed;
     }
+  }
+  return loginAuthMemoryCache || await getDefaultLoginAuthSettings();
+}
+
+export async function getLoginAuthSettings() {
+  try {
+    const getCachedLoginAuthSettings = unstable_cache(
+      fetchLoginAuthSettingsFromDb,
+      ['login-auth-settings'],
+      { tags: ['login-auth-settings'], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    return await getCachedLoginAuthSettings();
   } catch (err) {
     console.warn('getLoginAuthSettings DB query failed, using defaults or cache:', err);
   }
@@ -578,10 +604,14 @@ export async function saveLoginAuthSettingsAction(data: any) {
       await db.insert(siteSettings).values({ key: 'login_auth_settings', value: JSON.stringify(data) });
     }
     revalidatePath('/letstravel');
+    revalidatePath('/', 'layout');
+    revalidateTag('login-auth-settings', 'max');
     return { success: true };
   } catch (err: any) {
     console.warn('saveLoginAuthSettingsAction DB query failed:', err);
     revalidatePath('/letstravel');
+    revalidatePath('/', 'layout');
+    revalidateTag('login-auth-settings', 'max');
     return { success: true };
   }
 }
@@ -788,32 +818,37 @@ export async function slugifyPackageTitle(title: string): Promise<string> {
 export async function getPackageDetailsAction(packageSlug: string) {
   try {
     const cleanSlug = packageSlug.toLowerCase().trim();
+    const getCachedPackageDetails = unstable_cache(
+      async () => {
+        const pages = await getPagesList();
+        for (const page of pages) {
+          if (page.sections) {
+            let parsedSections: any[] = [];
+            try {
+              parsedSections = typeof page.sections === 'string' ? JSON.parse(page.sections) : page.sections;
+            } catch (e) { }
 
-    // 1. Search database sitePages
-    const pages = await getPagesList();
-    for (const page of pages) {
-      if (page.sections) {
-        let parsedSections: any[] = [];
-        try {
-          parsedSections = typeof page.sections === 'string' ? JSON.parse(page.sections) : page.sections;
-        } catch (e) { }
-
-        if (Array.isArray(parsedSections)) {
-          for (const sec of parsedSections) {
-            if (sec.data?.items && Array.isArray(sec.data.items)) {
-              for (const item of sec.data.items) {
-                const itemSlug = await slugifyPackageTitle(item.title || '');
-                const itemId = String(item.id || '').toLowerCase();
-                if (itemSlug === cleanSlug || itemId === cleanSlug || itemSlug.includes(cleanSlug)) {
-                  return item;
+            if (Array.isArray(parsedSections)) {
+              for (const sec of parsedSections) {
+                if (sec.data?.items && Array.isArray(sec.data.items)) {
+                  for (const item of sec.data.items) {
+                    const itemSlug = await slugifyPackageTitle(item.title || '');
+                    const itemId = String(item.id || '').toLowerCase();
+                    if (itemSlug === cleanSlug || itemId === cleanSlug || itemSlug.includes(cleanSlug)) {
+                      return item;
+                    }
+                  }
                 }
               }
             }
           }
         }
-      }
-    }
-    return null;
+        return null;
+      },
+      ['package-details', cleanSlug],
+      { tags: ['pages', `package-details-${cleanSlug}`], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    return await getCachedPackageDetails();
   } catch (err: any) {
     console.error('getPackageDetailsAction failed:', err);
     return null;
@@ -845,6 +880,8 @@ export async function savePageSeoAction(pageId: number | string, seoData: any) {
 
     revalidatePath('/admin/pages');
     revalidatePath('/admin/dashboard');
+    revalidateTag('page-seo', 'max');
+    revalidateTag(`page-seo-${pageId}`, 'max');
     return { success: true };
   } catch (err: any) {
     console.error('savePageSeoAction error:', err);
@@ -855,11 +892,18 @@ export async function savePageSeoAction(pageId: number | string, seoData: any) {
 export async function getPageSeoAction(pageId: number | string) {
   try {
     const key = `page_seo_${pageId}`;
-    const rows = await db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1);
-    if (rows && rows.length > 0) {
-      return safeJsonParse(rows[0].value, null);
-    }
-    return null;
+    const getCachedPageSeo = unstable_cache(
+      async () => {
+        const rows = await db.select().from(siteSettings).where(eq(siteSettings.key, key)).limit(1);
+        if (rows && rows.length > 0) {
+          return safeJsonParse(rows[0].value, null);
+        }
+        return null;
+      },
+      ['page-seo', String(pageId)],
+      { tags: ['page-seo', `page-seo-${pageId}`], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    return await getCachedPageSeo();
   } catch (err) {
     return null;
   }

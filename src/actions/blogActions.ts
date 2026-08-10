@@ -3,7 +3,7 @@
 import { db } from '@/db';
 import { blogPosts, siteSettings } from '@/db/schema';
 import { eq, desc, ne } from 'drizzle-orm';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
 
 // ─── Auto-slugify title ────────────────────────────────────────────────────
 export async function slugifyBlogTitle(title: string): Promise<string> {
@@ -18,15 +18,26 @@ export async function slugifyBlogTitle(title: string): Promise<string> {
 // ─── GET ALL BLOGS ─────────────────────────────────────────────────────────
 export async function getBlogsList(publishedOnly = false) {
   try {
-    const rows = await db
+    if (publishedOnly) {
+      const getCachedPublishedBlogs = unstable_cache(
+        async () => {
+          const rows = await db
+            .select()
+            .from(blogPosts)
+            .where(eq(blogPosts.isPublished, true))
+            .orderBy(desc(blogPosts.createdAt));
+          return rows;
+        },
+        ['published-blogs'],
+        { tags: ['blogs'], revalidate: 300 }
+      );
+      return await getCachedPublishedBlogs();
+    }
+
+    return await db
       .select()
       .from(blogPosts)
       .orderBy(desc(blogPosts.createdAt));
-
-    if (publishedOnly) {
-      return rows.filter((b) => b.isPublished);
-    }
-    return rows;
   } catch (err) {
     console.error('getBlogsList DB error:', err);
     throw new Error('Failed to fetch blogs from database');
@@ -36,13 +47,19 @@ export async function getBlogsList(publishedOnly = false) {
 // ─── GET SINGLE BLOG BY SLUG ───────────────────────────────────────────────
 export async function getBlogBySlug(slug: string) {
   try {
-    const rows = await db
-      .select()
-      .from(blogPosts)
-      .where(eq(blogPosts.slug, slug))
-      .limit(1);
-    
-    return rows.length > 0 ? rows[0] : null;
+    const getCachedBlog = unstable_cache(
+      async () => {
+        const rows = await db
+          .select()
+          .from(blogPosts)
+          .where(eq(blogPosts.slug, slug))
+          .limit(1);
+        return rows.length > 0 ? rows[0] : null;
+      },
+      ['blog-by-slug', slug],
+      { tags: ['blogs', `blog-${slug}`], revalidate: 300 }
+    );
+    return await getCachedBlog();
   } catch (err) {
     console.error('getBlogBySlug DB error:', err);
     throw new Error('Failed to fetch blog by slug');
@@ -116,6 +133,8 @@ export async function saveBlogAction(data: BlogSavePayload) {
       revalidatePath('/blogs');
       revalidatePath(`/blogs/${slug}`);
       revalidatePath('/admin/blogs');
+      revalidateTag('blogs', 'max');
+      revalidateTag(`blog-${slug}`, 'max');
       return { success: true, blogId: id };
     } else {
       const insertData: any = {
@@ -138,6 +157,8 @@ export async function saveBlogAction(data: BlogSavePayload) {
       
       revalidatePath('/blogs');
       revalidatePath('/admin/blogs');
+      revalidateTag('blogs', 'max');
+      revalidateTag(`blog-${slug}`, 'max');
       return { success: true, blogId: savedId };
     }
   } catch (err: any) {
@@ -152,6 +173,7 @@ export async function deleteBlogAction(id: number) {
     await db.delete(blogPosts).where(eq(blogPosts.id, id));
     revalidatePath('/blogs');
     revalidatePath('/admin/blogs');
+    revalidateTag('blogs', 'max');
     return { success: true };
   } catch (err: any) {
     console.error('deleteBlogAction DB error:', err);
@@ -168,6 +190,8 @@ export async function saveBlogSeoAction(blogId: number, seoData: any) {
     }).where(eq(blogPosts.id, blogId));
     
     revalidatePath('/admin/blogs');
+    revalidateTag('blogs', 'max');
+    revalidateTag(`blog-seo-${blogId}`, 'max');
     return { success: true };
   } catch (err: any) {
     console.error('saveBlogSeoAction error:', err);
@@ -178,11 +202,18 @@ export async function saveBlogSeoAction(blogId: number, seoData: any) {
 // ─── BLOG SEO — GET ────────────────────────────────────────────────────────
 export async function getBlogSeoAction(blogId: number) {
   try {
-    const rows = await db.select({ seoSettings: blogPosts.seoSettings }).from(blogPosts).where(eq(blogPosts.id, blogId)).limit(1);
-    if (rows && rows.length > 0) {
-      return rows[0].seoSettings || null;
-    }
-    return null;
+    const getCachedBlogSeo = unstable_cache(
+      async () => {
+        const rows = await db.select({ seoSettings: blogPosts.seoSettings }).from(blogPosts).where(eq(blogPosts.id, blogId)).limit(1);
+        if (rows && rows.length > 0) {
+          return rows[0].seoSettings || null;
+        }
+        return null;
+      },
+      ['blog-seo', String(blogId)],
+      { tags: ['blogs', `blog-seo-${blogId}`], revalidate: 300 }
+    );
+    return await getCachedBlogSeo();
   } catch (err) {
     console.error('getBlogSeoAction error:', err);
     return null;
@@ -192,13 +223,20 @@ export async function getBlogSeoAction(blogId: number) {
 // ─── GET RELATED BLOGS (exclude current) ──────────────────────────────────
 export async function getRelatedBlogs(excludeSlug: string, limit = 6) {
   try {
-    const rows = await db
-      .select()
-      .from(blogPosts)
-      .where(eq(blogPosts.isPublished, true))
-      .orderBy(desc(blogPosts.createdAt))
-      .limit(limit + 1);
-    return rows.filter((b) => b.slug !== excludeSlug).slice(0, limit);
+    const getCachedRelatedBlogs = unstable_cache(
+      async () => {
+        const rows = await db
+          .select()
+          .from(blogPosts)
+          .where(eq(blogPosts.isPublished, true))
+          .orderBy(desc(blogPosts.createdAt))
+          .limit(limit + 1);
+        return rows.filter((b) => b.slug !== excludeSlug).slice(0, limit);
+      },
+      ['related-blogs', excludeSlug, String(limit)],
+      { tags: ['blogs'], revalidate: 300 }
+    );
+    return await getCachedRelatedBlogs();
   } catch (err) {
     console.error('getRelatedBlogs DB error:', err);
     return [];

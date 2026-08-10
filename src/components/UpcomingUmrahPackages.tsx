@@ -4,24 +4,24 @@ import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
 import { getPackagesByType } from "@/actions/packageActions";
 
-export default function UpcomingUmrahPackages({ data }: { data: any }) {
+export default function UpcomingUmrahPackages({ data, initialPackages }: { data: any; initialPackages?: any[] }) {
   const eyebrow = data?.eyebrow || "EXCLUSIVE UPCOMING";
   const title = data?.title || "Umrah Packages<br />from Canada";
   const description =
     data?.description ||
     "Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking – contact us before reserving.";
 
-  const [pkgs, setPkgs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
+  const [loading, setLoading] = useState(!initialPackages);
 
   useEffect(() => {
+    if (initialPackages) return;
     // Automatically pulls every published Umrah package - no manual curation needed.
     getPackagesByType("umrah")
       .then((rows) => setPkgs(rows))
       .catch(() => setPkgs([]))
       .finally(() => setLoading(false));
-  }, []);
-
+  }, [initialPackages]);
   return (
     <section className="py-20 bg-white">
       <div className="max-w-[1400px] mx-auto px-5">

@@ -15,7 +15,7 @@ import WhatWeProvideSection from '@/components/WhatWeProvideSection';
 import HajjPackagesSection from '@/components/HajjPackagesSection';
 import CertificationsFlipCardsSection from '@/components/CertificationsFlipCardsSection';
 import SoldOutPackagesSection from '@/components/SoldOutPackagesSection';
-export default function PageSectionsRenderer({ sections, pageData }: { sections: any[], pageData?: any }) {
+export default function PageSectionsRenderer({ sections, pageData, initialPackageData }: { sections: any[]; pageData?: any; initialPackageData?: { umrah?: any[]; hajj?: any[]; all?: any[] } }) {
   if (!sections || !Array.isArray(sections)) return null;
 
   return (
@@ -158,7 +158,11 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
 
         // ── Sold Out Packages ─────────────────────────────────────────────────
         if (sec.type === "Sold Out Packages") {
-          return <SoldOutPackagesSection key={idx} data={sec.data} />;
+          const ids = Array.isArray(sec.data?.packageIds) ? sec.data.packageIds.map(Number).filter(Boolean) : [];
+          const initialSoldOut = initialPackageData?.all
+            ? ids.map((id: number) => initialPackageData.all?.find((pkg: any) => Number(pkg.id) === id)).filter(Boolean)
+            : undefined;
+          return <SoldOutPackagesSection key={idx} data={sec.data} initialPackages={initialSoldOut} />;
         }
 
         // ── Testimonials ──────────────────────────────────────────────────────
@@ -375,7 +379,7 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
         }
 
         if (sec.type === "Upcoming Umrah Packages" || sec.type === "Umrah Packages" || sec.type === "Umrah Packages Grid") {
-          return <UpcomingUmrahPackages key={idx} data={sec.data} />;
+          return <UpcomingUmrahPackages key={idx} data={sec.data} initialPackages={initialPackageData?.umrah} />;
         }
 
         if (sec.type === "Travel Services" || sec.type === "Services Grid" || sec.type === "Umrah Services Grid" || sec.type === "Hajj Services Grid") {
@@ -387,7 +391,7 @@ export default function PageSectionsRenderer({ sections, pageData }: { sections:
         }
 
         if (sec.type === "Hajj Packages" || sec.type === "Packages Grid") {
-          return <HajjPackagesSection key={idx} data={sec.data} />;
+          return <HajjPackagesSection key={idx} data={sec.data} initialPackages={initialPackageData?.hajj} />;
         }
 
         // Return null for any unmapped sections

@@ -8,18 +8,13 @@ import { getSiteIdentity } from "@/actions/pageActions";
 const DEFAULT_URL = "https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20your%20services!";
 const DEFAULT_LABEL = "Chat on WhatsApp";
 
-export default function WhatsAppFloat() {
+export default function WhatsAppFloat({ initialIdentity }: { initialIdentity?: any }) {
   const pathname = usePathname();
-  const [href, setHref] = useState(DEFAULT_URL);
-  const [label, setLabel] = useState(DEFAULT_LABEL);
+  const [href, setHref] = useState(initialIdentity?.whatsappFloatUrl || DEFAULT_URL);
+  const [label, setLabel] = useState(initialIdentity?.whatsappFloatLabel || DEFAULT_LABEL);
 
   useEffect(() => {
-    getSiteIdentity().then((data) => {
-      if (data?.whatsappFloatUrl) setHref(data.whatsappFloatUrl);
-      if (data?.whatsappFloatLabel) setLabel(data.whatsappFloatLabel);
-    });
-
-    // Also respond to live identity updates dispatched from the admin panel
+    // Respond to live identity updates dispatched from the admin panel.
     const onUpdate = () => {
       getSiteIdentity().then((data) => {
         if (data?.whatsappFloatUrl) setHref(data.whatsappFloatUrl);
