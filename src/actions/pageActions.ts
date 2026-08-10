@@ -360,7 +360,7 @@ export async function getDefaultSiteIdentity() {
     tagline: 'Trusted Hajj & Umrah Pilgrimage Travel Agency in Canada',
     logo: '/img/logo.png',
     logoAlt: 'King Travel Canada Logo',
-    favicon: '/img/favicon.ico',
+    favicon: '/img/favicon.png',
     faviconAlt: 'King Travel Favicon',
   };
 }

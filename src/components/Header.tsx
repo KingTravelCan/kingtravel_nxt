@@ -83,7 +83,8 @@ export default function Header() {
           </div>
 
           {/* Desktop + Mobile Nav */}
-          <nav className={`flex gap-[20px] max-lg:gap-[10px] items-center max-xl:hidden max-lg:flex-col max-lg:absolute max-lg:top-full max-lg:left-0 max-lg:w-full max-lg:bg-white max-lg:p-[20px] max-lg:shadow-[0_4px_10px_rgba(0,0,0,0.1)] max-lg:gap-y-[15px] max-lg:items-start ${menuActive ? "!flex" : ""}`} id="navLinks">
+          {/* <nav className={`flex gap-[20px] max-lg:gap-[10px] items-center max-xl:hidden max-lg:flex-col max-lg:absolute max-lg:top-full max-lg:left-0 max-lg:w-full max-lg:bg-white max-lg:p-[20px] max-lg:shadow-[0_4px_10px_rgba(0,0,0,0.1)] max-lg:gap-y-[15px] max-lg:items-start ${menuActive ? "!flex" : ""}`} id="navLinks"> */}
+            <nav className={`flex gap-[20px] max-xl:gap-[10px] items-center max-xl:hidden max-xl:flex-col max-xl:absolute max-xl:top-full max-xl:left-0 max-xl:w-full max-xl:bg-white max-xl:p-[20px] max-lg:shadow-[0_4px_10px_rgba(0,0,0,0.1)] max-xl:gap-y-[15px] max-xl:items-start ${menuActive ? "!flex" : ""}`} id="navLinks">
             {navItems.map((item) => {
               const itemHref = item.url || item.href || '#';
               const itemLabel = item.label || item.title;
@@ -97,7 +98,7 @@ export default function Header() {
                     key={item.id || itemHref}
                     href={itemHref}
                     onClick={() => setMenuActive(false)}
-                    className={`text-[#333333] text-[16px] max-lg:text-[13px] max-lg:w-full max-lg:py-[8px] max-lg:border-b max-lg:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-[#DB9E30] ${isActive ? "!text-[#DB9E30] font-bold" : ""}`}
+                    className={`text-[#333333] text-[16px] max-xl:text-[14px] max-xl:w-full max-xl:py-[8px] max-xl:border-b max-xl:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-[#DB9E30] ${isActive ? "!text-[#DB9E30] font-bold" : ""}`}
                   >
                     {itemLabel}
                   </Link>
@@ -108,10 +109,10 @@ export default function Header() {
               return (
                 <div
                   key={item.id || itemHref}
-                  className={`dropdown-parent${openDropdown === mobKey ? " mob-open" : ""}`}
+                  className={`w-full xl:w-auto dropdown-parent${openDropdown === mobKey ? " mob-open" : ""}`}
                 >
                   <span
-                    className="cursor-pointer flex items-center"
+                    className="cursor-pointer flex items-center xl:gap-0 gap-4"
                     onClick={() => {
                       if (window.innerWidth < 1024) {
                         setOpenDropdown(openDropdown === mobKey ? null : mobKey);
@@ -121,7 +122,7 @@ export default function Header() {
                     <Link
                       href={itemHref}
                       onClick={() => setMenuActive(false)}
-                      className={`text-[#333333] text-[16px] max-lg:text-[13px] max-lg:w-full max-lg:py-[8px] max-lg:border-b max-lg:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-[#DB9E30] ${isParentActive ? "!text-[#DB9E30] font-bold" : ""}`}
+                      className={`w-full xl:w-auto text-[#333333] text-[16px] max-xl:text-[14px] max-xl:w-full max-xl:py-[8px] max-xl:border-b max-xl:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-[#DB9E30] ${isParentActive ? "!text-[#DB9E30] font-bold" : ""}`}
                     >
                       {itemLabel}
                     </Link>

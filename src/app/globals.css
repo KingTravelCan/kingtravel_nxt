@@ -2084,10 +2084,18 @@ section#flights {
   vertical-align: middle;
   transition: transform 0.2s;
 }
-
-.dropdown-parent:hover .nav-arrow {
+@media (max-width: 1280px) {
+.nav-arrow {
+  @apply p-1 px-2;
+background:#eee;
+}
+}
+@media (min-width: 1280px) {
+ .dropdown-parent:hover .nav-arrow {
   transform: rotate(180deg);
 }
+}
+
 
 @media (max-width: 1023px) {
   .dropdown-menu {

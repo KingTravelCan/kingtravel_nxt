@@ -12,7 +12,7 @@ import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const identity = await getSiteIdentity();
-  const faviconUrl = identity?.favicon || "/img/favicon.ico";
+  const faviconUrl = identity?.favicon || "/img/favicon.png";
   return {
     title: identity?.siteName || "King Travel Canada",
     description: identity?.tagline || "Licensed Hajj & Umrah pilgrimage operator in Canada offering 5-star packages, visa consultation, and direct flights.",
