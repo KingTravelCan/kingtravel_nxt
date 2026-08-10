@@ -21,12 +21,12 @@ export default function Footer() {
   }
 
   return (
-    <footer id="footer-place" className="bg-[#004B39] text-[#bccfc6] py-[70px] pb-[30px] text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-[#DB9E30]">
+    <footer id="footer-place" className="px-5 bg-[#004B39] text-[#bccfc6] py-[70px] pb-[30px] text-[14px] md:text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-[#DB9E30]">
       <div className="max-w-[1280px] mx-auto ">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-[40px] lg:gap-[50px]">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-x-[20px] gap-y-[40px] lg:gap-[50px]">
 
           {/* ── Column 1: Brand + tagline + social + trust badges ── */}
-          <div>
+          <div className="col-span-2 md:col-span-1 lg:col-span-1">
             <div className="flex gap-[10px] items-center mb-[25px]">
               <Link href="/">
                 {footerData.logo ? (
@@ -47,7 +47,7 @@ export default function Footer() {
                 )}
               </Link>
             </div>
-            <p className="max-w-[310px] font-light leading-[1.7]">
+            <p className="max-w-[310px] sm:max-w-none lg:max-w-[310px] font-light leading-[1.7]">
               {footerData.tagline || 'A licensed Canadian agency dedicated to Hajj & Umrah travel — trusted, certified, and built for pilgrims.'}
             </p>
 
@@ -82,7 +82,7 @@ export default function Footer() {
 
             {/* Trust Badges */}
             {footerData.trustBadges && footerData.trustBadges.length > 0 && (
-              <div className="flex items-center gap-2 mt-4">
+              <div className="flex flex-wrap items-center gap-2 mt-4">
                 {footerData.trustBadges.map((badge: any, bIdx: number) => (
                   <div key={bIdx} className="bg-white rounded-lg flex items-center justify-center h-12 w-12">
                     {badge.icon ? (
@@ -101,7 +101,7 @@ export default function Footer() {
           </div>
 
           {/* ── Column 2: Services ── */}
-          <div>
+          <div className="col-span-1 md:col-span-1 lg:col-span-1">
             <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.servicesTitle || 'SERVICES'}</h5>
             <ul className="list-none p-0 m-0">
               {(footerData.servicesLinks || []).map((link: any, sIdx: number) => (
@@ -113,7 +113,7 @@ export default function Footer() {
           </div>
 
           {/* ── Column 3: Sitemap ── */}
-          <div>
+          <div className="col-span-1 md:col-span-1 lg:col-span-1">
             <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.sitemapTitle || 'SITEMAP'}</h5>
             <ul className="list-none p-0 m-0">
               {(footerData.sitemapLinks || []).map((link: any, mIdx: number) => (
@@ -125,7 +125,7 @@ export default function Footer() {
           </div>
 
           {/* ── Column 4: Customer Support ── */}
-          <div>
+          <div className="col-span-2 md:col-span-1 lg:col-span-1">
             <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.supportTitle || '24/7 CUSTOMER SUPPORT'}</h5>
             <ul className="list-none p-0 m-0">
               {(footerData.supportItems || []).map((item: any, cIdx: number) => (
