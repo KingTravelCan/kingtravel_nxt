@@ -138,17 +138,17 @@ export default function SoldOutPackagesSection({ data }: { data: any }) {
                       {pkg.type === "hajj" ? <LucideIcons.Tent className="w-3.5 h-3.5" /> : <LucideIcons.MoonStar className="w-3.5 h-3.5" />}
                       {monthLabel}
                     </div>
-                    <h3 className="text-[28px] font-serif text-[#1a2b25] mb-2 leading-tight">
+                    <h3 className="text-2xl font-serif mb-2">
                       {pkg.title}
                     </h3>
-                    <div className="text-[#1a2b25] font-black text-2xl mb-8 flex items-baseline gap-1">
+                    <div className="text-[#DB9E30] font-black text-xl mb-6">
                       {price}{" "}
                       <span className="text-sm font-medium text-gray-500">
                         {priceUnit}
                       </span>
                     </div>
 
-                    <div className="text-[10px] font-black text-[#DB9E30] uppercase tracking-widest mb-5">
+                    <div className="incl-label">
                       {includesText}
                     </div>
 
