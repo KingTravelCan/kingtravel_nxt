@@ -83,7 +83,7 @@ const hajjCardsData = [
   },
 ];
 
-export default function HajjPackagesPageClient({ initialPageData }: { initialPageData?: any }) {
+export default function HajjPackagesPageClient({ initialPageData, packages = [] }: { initialPageData?: any, packages?: any[] }) {
   const pageData = initialPageData || null;
   const [selectedDetailPkg, setSelectedDetailPkg] = useState<PackageDetailData | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -154,8 +154,8 @@ export default function HajjPackagesPageClient({ initialPageData }: { initialPag
       <section className="packages-grid-container py-12 max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {(() => {
-            let cards = hajjCardsData;
-            if (pageData?.sections) {
+            let cards = packages && packages.length > 0 ? packages : hajjCardsData;
+            if (pageData?.sections && (!packages || packages.length === 0)) {
               try {
                 const parsed = typeof pageData.sections === "string" ? JSON.parse(pageData.sections) : pageData.sections;
                 const hajjSec = Array.isArray(parsed) && parsed.find((s: any) => s.type === "Hajj Packages Grid" || s.type === "Hajj Cards");
@@ -166,12 +166,12 @@ export default function HajjPackagesPageClient({ initialPageData }: { initialPag
             }
 
             return cards.map((card: any, idx: number) => {
-              const badgeTag = card.badgeTag || "HAJJ 2027";
-              const duration = card.duration || "14Days";
-              const flightRoute = card.flightRoute || "FROM CANADA ➔ TO SAUDIA";
-              const heroImage = card.heroImage || "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg";
+              const badgeTag = card.badgeTag || (card.month ? `HAJJ ${card.month}` : "HAJJ 2027");
+              const duration = card.duration || card.detailPageData?.durationText || card.month || "14Days";
+              const flightRoute = card.flightRoute || "FROM CANADA ✈ TO SAUDIA";
+              const heroImage = card.thumbnail || card.heroImage || "https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg";
               const title = card.title || "Hajj Package 2027";
-              const rawPrice = card.price || "12,995";
+              const rawPrice = (card.startingPrice || card.price || "12,995").toString();
               const price = rawPrice.startsWith("CAD") ? rawPrice : `CAD ${rawPrice.replace("$", "").trim()}`;
               const priceSubtext = card.priceSubtext || "FROM CAD / QUAD OCCUPANCY";
               const operatorName = card.operatorName || "King Travel";
@@ -191,7 +191,7 @@ export default function HajjPackagesPageClient({ initialPageData }: { initialPag
               const madinahBadge = card.madinahHotel?.badge || "Breakfast";
               const madinahNights = card.madinahHotel?.nights || "6 Nights";
 
-              const pkgSlug = card.id || title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+              const pkgSlug = card.slug || card.id || title.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 
               return (
                 <article key={card.id || idx} className="bg-white rounded-[2rem] overflow-hidden shadow-lg border border-slate-100 flex flex-col group transition-all duration-300 hover:shadow-2xl">

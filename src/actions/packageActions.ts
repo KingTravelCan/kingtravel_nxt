@@ -78,6 +78,7 @@ export async function getPackageBySlug(slug: string) {
 export async function createPackage(formData: FormData): Promise<{ success: boolean; error?: string }> {
   try {
     const title = formData.get('title') as string;
+    const customSlug = formData.get('slug') as string;
     const type = (formData.get('type') as 'umrah' | 'hajj') || 'umrah';
     const month = formData.get('month') as string || 'Flexible 2026';
     const startingPrice = (formData.get('startingPrice') as string) || '1995.00';
@@ -91,7 +92,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
 
     if (!title) return { success: false, error: 'Package title is required.' };
 
-    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now().toString().slice(-4);
+    const slug = customSlug ? customSlug : title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now().toString().slice(-4);
 
     await db.insert(packages).values({
       title,
@@ -124,6 +125,7 @@ export async function updatePackageAction(
   id: number,
   data: {
     title: string;
+    slug?: string;
     type: 'umrah' | 'hajj';
     month?: string;
     startingPrice?: string;
@@ -141,6 +143,7 @@ export async function updatePackageAction(
   try {
     await db.update(packages).set({
       title: data.title,
+      slug: data.slug,
       type: data.type,
       month: data.month,
       startingPrice: data.startingPrice,
@@ -152,6 +155,7 @@ export async function updatePackageAction(
       departureCity: data.departureCity,
       destination: data.destination,
       cardData: data.cardData,
+      detailPageData: data.detailPageData,
       updatedAt: new Date(),
     }).where(eq(packages.id, id));
 

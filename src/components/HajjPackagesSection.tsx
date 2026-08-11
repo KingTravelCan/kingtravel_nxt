@@ -73,8 +73,14 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
         {!loading && pkgs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {pkgs.map((pkg: any, idx: number) => {
-              // cardData holds the display-specific fields set in /admin/hajj-packages
-              const cd = pkg.cardData || {};
+              let cd = pkg.cardData || {};
+              if (typeof cd === 'string') {
+                try {
+                  cd = JSON.parse(cd);
+                } catch (e) {
+                  cd = {};
+                }
+              }
               const heroImage =
                 cd.bannerImage ||
                 pkg.featuredImage ||
@@ -94,7 +100,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                 })
                 : "12,995";
               const btnLabel = cd.btnLabel || `Book ${pkg.title}`;
-              const btnLink = cd.btnLink || `/package/${pkg.slug}`;
+              const btnLink = `/${pkg.slug || pkg.id}`;
               const makkahHotel = cd.makkahHotel;
               const madinahHotel = cd.madinahHotel;
 
@@ -226,29 +232,15 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                       </div>
                     </div>
 
-                    {cd.hasDetailPage ? (
-                      <div className="flex flex-col sm:flex-row gap-2">
-                        <a
-                          href={`/package/${pkg.slug}`}
-                          className="w-full py-3.5 border-2 border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30] hover:text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
-                        >
-                          <LucideIcons.Info className="w-4 h-4" /> View Details
-                        </a>
-                        <a
-                          href={btnLink}
-                          className="w-full py-3.5 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
-                        >
-                          <LucideIcons.BookOpen className="w-4 h-4" /> {btnLabel}
-                        </a>
-                      </div>
-                    ) : (
+                    <div className="flex flex-col sm:flex-row gap-2">
+
                       <a
                         href={btnLink}
                         className="w-full py-3.5 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
                       >
                         <LucideIcons.BookOpen className="w-4 h-4" /> {btnLabel}
                       </a>
-                    )}
+                    </div>
                   </div>
                 </div>
               );

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import DashboardSeoCenterSection from '@/components/admin/DashboardSeoCenterSection';
 import { ActivityItem } from '@/actions/activityActions';
@@ -244,6 +245,16 @@ export default function DashboardClient({
 }: DashboardClientProps) {
   const [timeRange, setTimeRange] = useState<'Today' | '7 Days' | '30 Days'>('Today');
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
+  const router = useRouter();
+
+  // Polling for real-time updates
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      router.refresh();
+    }, 15000); // 15 seconds
+
+    return () => clearInterval(intervalId);
+  }, [router]);
 
   // Animated counters state
   const [animatedValues, setAnimatedValues] = useState({

@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import * as LucideIcons from "lucide-react";
 import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
 export default function UpcomingUmrahPackages({ data, initialPackages }: { data: any, initialPackages?: any }) {
+  const pathname = usePathname();
   const eyebrow = data?.eyebrow || "EXCLUSIVE UPCOMING";
   const title = data?.title || "Umrah Packages<br />from Canada";
   const description =
@@ -76,7 +78,14 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
         {!loading && pkgs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
             {pkgs.map((pkg: any, idx: number) => {
-              const cd = pkg.cardData || {};
+              let cd = pkg.cardData || {};
+              if (typeof cd === 'string') {
+                try {
+                  cd = JSON.parse(cd);
+                } catch (e) {
+                  cd = {};
+                }
+              }
               // isActiveCard can be stored in cardData, fallback to isFeatured
               const isGold = cd.isActiveCard ?? pkg.isFeatured ?? false;
               const heroImage =
@@ -89,7 +98,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                   maximumFractionDigits: 0,
                 })
                 : "";
-              const buttonUrl = cd.btnLink || `/package/${pkg.slug}`;
+              const buttonUrl = `/${pkg.slug || pkg.id}`;
               const buttonText = cd.btnLabel || "BOOK NOW";
 
               // Parse inclusions: stored as JSON string or array
@@ -199,38 +208,26 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                       })}
                     </ul>
 
-                    {cd.hasDetailPage ? (
-                      <div className="flex gap-2">
-                        <a
-                          href={`/package/${pkg.slug}`}
-                          className={`w-1/2 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 ${isGold
-                            ? "border-[#2c3e35] text-[#2c3e35] hover:bg-[#2c3e35] hover:text-white"
-                            : "border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30] hover:text-white"
-                            }`}
-                        >
-                          View Details
-                        </a>
-                        <a
-                          href={buttonUrl}
-                          className={`w-1/2 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block ${isGold
-                            ? "bg-[#2c3e35] hover:bg-[#1a2520] text-white"
-                            : "bg-[#DB9E30] hover:bg-[#c58d2a] text-white"
-                            }`}
-                        >
-                          {buttonText}
-                        </a>
-                      </div>
-                    ) : (
+                    <div className="flex gap-2">
                       <a
-                        href={buttonUrl}
-                        className={`w-full py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block ${isGold
+                        href={`/${pkg.slug || pkg.id}`}
+                        className={`flex-1 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 ${isGold
+                          ? "border-[#2c3e35] text-[#2c3e35] hover:bg-[#2c3e35]/10"
+                          : "border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30]/10"
+                          }`}
+                      >
+                        View Detail
+                      </a>
+                      <a
+                        href={cd.btnLink || buttonUrl}
+                        className={`flex-1 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block ${isGold
                           ? "bg-[#2c3e35] hover:bg-[#1a2520] text-white"
                           : "bg-[#DB9E30] hover:bg-[#c58d2a] text-white"
                           }`}
                       >
                         {buttonText}
                       </a>
-                    )}
+                    </div>
                   </div>
                 </div>
               );
@@ -238,14 +235,16 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
           </div>
         )}
 
-        <div className="flex justify-center mt-12">
-          <a
-            href="/umrah-packages"
-            className="px-8 py-3.5 border-2 border-[#004B39] text-[#004B39] font-bold text-xs uppercase tracking-widest rounded-full hover:bg-[#004B39] hover:text-white transition-all flex items-center gap-3"
-          >
-            SEE ALL PACKAGES <span>→</span>
-          </a>
-        </div>
+        {pathname !== "/umrah-packages" && (
+          <div className="flex justify-center mt-12">
+            <a
+              href="/umrah-packages"
+              className="px-8 py-3.5 border-2 border-[#004B39] text-[#004B39] font-bold text-xs uppercase tracking-widest rounded-full hover:bg-[#004B39] hover:text-white transition-all flex items-center gap-3"
+            >
+              SEE ALL PACKAGES <span>→</span>
+            </a>
+          </div>
+        )}
       </div>
     </section>
   );

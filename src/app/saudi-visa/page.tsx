@@ -101,16 +101,16 @@ export default async function SaudiVisaPage() {
 
       {/* ================= DYNAMIC OR FALLBACK SECTIONS ================= */}
       {(() => {
-        const hasVisaSolutions = sections.some((s: any) => s.type === "Visa Solutions Grid" || s.type === "Visa Cards");
+        const hasVisaSolutions = sections.some((s: any) => s.type === "Visa Solutions Grid" || s.type === "Visa Cards" || s.type === "Visa Solutions");
         const hasVisaSteps = sections.some((s: any) => s.type === "Visa Process Steps" || s.type === "3 Easy Steps");
-        const handledTypes = ["Visa Solutions Grid", "Visa Cards", "Visa Process Steps", "3 Easy Steps"];
+        const handledTypes = ["Visa Solutions Grid", "Visa Cards", "Visa Solutions", "Visa Process Steps", "3 Easy Steps"];
         const unhandledSections = sections.filter(s => !handledTypes.includes(s.type));
 
         return (
           <>
             {hasVisaSolutions ? (
               sections
-                .filter((s: any) => s.type === "Visa Solutions Grid" || s.type === "Visa Cards")
+                .filter((s: any) => s.type === "Visa Solutions Grid" || s.type === "Visa Cards" || s.type === "Visa Solutions")
                 .map((sec: any, idx: number) => <VisaSolutionsSection key={idx} data={sec.data} />)
             ) : (
               <VisaSolutionsSection />

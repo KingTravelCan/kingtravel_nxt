@@ -4,6 +4,8 @@ import { getPackagesByType } from "@/actions/packageActions";
 import PageBanner from "@/components/PageBanner";
 import PageSeoHead from "@/components/PageSeoHead";
 import PageSectionsRenderer from "@/components/PageSectionsRenderer";
+import { getPackageDetailsAction, getPageSeoAction } from "@/actions/pageActions";
+import PackageDetailPageClient from "@/app/package/[slug]/PackageDetailPageClient";
 
 export default async function DynamicPage({
   params,
@@ -14,7 +16,25 @@ export default async function DynamicPage({
   const slugPath = `/${slug.join("/")}`;
   const page = await getPageBySlug(slugPath);
 
-  if (!page || page.status === "draft") notFound();
+  if (!page || page.status === "draft") {
+    // Fallback: check if the slug matches a package
+    if (slug.length === 1) {
+      const packageData = await getPackageDetailsAction(slug[0]).catch(() => null);
+      if (packageData) {
+        const seoData = packageData.id 
+          ? await getPageSeoAction(`pkg_${packageData.id}`).catch(() => null)
+          : null;
+        return (
+          <PackageDetailPageClient 
+            initialSlug={slug[0]} 
+            initialPackage={packageData} 
+            initialSeo={seoData} 
+          />
+        );
+      }
+    }
+    notFound();
+  }
 
   let sections: any[] = [];
   if (page.sections) {

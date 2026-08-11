@@ -2,8 +2,28 @@
 
 import { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
+import TiptapEditor from './TiptapEditor';
+import ImageUploadWidget from './ImageUploadWidget';
 
 export interface DetailPageData {
+  durationText?: string;
+  departure?: string;
+  destination?: string;
+  exclusiveBadge?: string;
+  makkahHotel?: {
+    name: string;
+    location: string;
+    badge: string;
+    nights: string;
+    image: string;
+  };
+  madinahHotel?: {
+    name: string;
+    location: string;
+    badge: string;
+    nights: string;
+    image: string;
+  };
   overview: {
     groupTitle: string;
     items: string[];
@@ -15,6 +35,12 @@ export interface DetailPageData {
 }
 
 export const defaultDetailPageData: DetailPageData = {
+  durationText: '',
+  departure: '',
+  destination: '',
+  exclusiveBadge: '',
+  makkahHotel: { name: '', location: '', badge: '', nights: '', image: '' },
+  madinahHotel: { name: '', location: '', badge: '', nights: '', image: '' },
   overview: [],
   highlights: [],
   eligibility: [],
@@ -24,10 +50,12 @@ export const defaultDetailPageData: DetailPageData = {
 
 export default function DetailPageDataFields({
   data,
-  onChange
+  onChange,
+  onHotelSync
 }: {
   data: DetailPageData;
   onChange: (newData: DetailPageData) => void;
+  onHotelSync?: (hotelKey: 'makkahHotel' | 'madinahHotel', field: string, val: string) => void;
 }) {
   const d = data || defaultDetailPageData;
 
@@ -35,9 +63,104 @@ export default function DetailPageDataFields({
     onChange({ ...d, [field]: val });
   };
 
+  const updateHotel = (hotelKey: 'makkahHotel' | 'madinahHotel', field: string, val: string) => {
+    const current = d[hotelKey] || { name: '', location: '', badge: '', nights: '', image: '' };
+    update(hotelKey, { ...current, [field]: val });
+    if (onHotelSync) onHotelSync(hotelKey, field, val);
+  };
+
   return (
     <div className="col-span-full space-y-8 animate-in fade-in duration-300">
       
+      {/* Top Banner Fields */}
+      <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <h4 className="col-span-full text-sm font-extrabold text-slate-900 uppercase tracking-wide">Top Banner Info</h4>
+        
+        <div>
+          <label className="text-[10px] font-bold text-slate-500 mb-1 block">DURATION TEXT</label>
+          <input type="text" value={d.durationText || ''} onChange={e => update('durationText', e.target.value)} placeholder="e.g. 17 DAYS / 16 NIGHTS" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-slate-500 mb-1 block">DEPARTURE</label>
+          <input type="text" value={d.departure || ''} onChange={e => update('departure', e.target.value)} placeholder="e.g. CANADA" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-slate-500 mb-1 block">DESTINATION</label>
+          <input type="text" value={d.destination || ''} onChange={e => update('destination', e.target.value)} placeholder="e.g. SAUDIA" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+        </div>
+        <div>
+          <label className="text-[10px] font-bold text-slate-500 mb-1 block">EXCLUSIVE BADGE</label>
+          <input type="text" value={d.exclusiveBadge || ''} onChange={e => update('exclusiveBadge', e.target.value)} placeholder="e.g. EXCLUSIVE PACKAGE" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+        </div>
+      </div>
+
+      {/* Premium Accommodations */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Makkah Hotel */}
+        <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
+          <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Makkah Hotel</h4>
+          <div>
+            <label className="text-[10px] font-bold text-slate-500 mb-1 block">HOTEL NAME</label>
+            <input type="text" value={d.makkahHotel?.name || ''} onChange={e => updateHotel('makkahHotel', 'name', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+          </div>
+          <div>
+            <label className="text-[10px] font-bold text-slate-500 mb-1 block">LOCATION</label>
+            <input type="text" value={d.makkahHotel?.location || ''} onChange={e => updateHotel('makkahHotel', 'location', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] font-bold text-slate-500 mb-1 block">BOARD (BADGE)</label>
+              <input type="text" value={d.makkahHotel?.badge || ''} onChange={e => updateHotel('makkahHotel', 'badge', e.target.value)} placeholder="e.g. Breakfast & Dinner Inc." className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+            </div>
+            <div>
+              <label className="text-[10px] font-bold text-slate-500 mb-1 block">NIGHTS</label>
+              <input type="text" value={d.makkahHotel?.nights || ''} onChange={e => updateHotel('makkahHotel', 'nights', e.target.value)} placeholder="e.g. 6 Nights Stay" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+            </div>
+          </div>
+          <div>
+            <label className="text-[10px] font-bold text-slate-500 mb-1 block">IMAGE URL</label>
+            <ImageUploadWidget
+              value={d.makkahHotel?.image || ''}
+              onChange={(url) => updateHotel('makkahHotel', 'image', url)}
+              subfolder="hotels"
+              compact={true}
+            />
+          </div>
+        </div>
+
+        {/* Madinah Hotel */}
+        <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 space-y-4">
+          <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Madinah Hotel</h4>
+          <div>
+            <label className="text-[10px] font-bold text-slate-500 mb-1 block">HOTEL NAME</label>
+            <input type="text" value={d.madinahHotel?.name || ''} onChange={e => updateHotel('madinahHotel', 'name', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+          </div>
+          <div>
+            <label className="text-[10px] font-bold text-slate-500 mb-1 block">LOCATION</label>
+            <input type="text" value={d.madinahHotel?.location || ''} onChange={e => updateHotel('madinahHotel', 'location', e.target.value)} className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-[10px] font-bold text-slate-500 mb-1 block">BOARD (BADGE)</label>
+              <input type="text" value={d.madinahHotel?.badge || ''} onChange={e => updateHotel('madinahHotel', 'badge', e.target.value)} placeholder="e.g. Breakfast & Dinner Inc." className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+            </div>
+            <div>
+              <label className="text-[10px] font-bold text-slate-500 mb-1 block">NIGHTS</label>
+              <input type="text" value={d.madinahHotel?.nights || ''} onChange={e => updateHotel('madinahHotel', 'nights', e.target.value)} placeholder="e.g. 6 Nights Stay" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+            </div>
+          </div>
+          <div>
+            <label className="text-[10px] font-bold text-slate-500 mb-1 block">IMAGE URL</label>
+            <ImageUploadWidget
+              value={d.madinahHotel?.image || ''}
+              onChange={(url) => updateHotel('madinahHotel', 'image', url)}
+              subfolder="hotels"
+              compact={true}
+            />
+          </div>
+        </div>
+      </div>
+
       {/* Overview Builder */}
       <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
         <h4 className="text-sm font-extrabold text-slate-900 mb-4 uppercase tracking-wide">Package Overview</h4>
@@ -68,36 +191,17 @@ export default function DetailPageDataFields({
               </div>
 
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-slate-500 mb-1 block">TIMELINE ITEMS</label>
-                {group.items.map((item, iIdx) => (
-                  <div key={iIdx} className="flex gap-2">
-                    <input
-                      type="text"
-                      value={item}
-                      onChange={e => {
-                        const newO = [...d.overview];
-                        newO[gIdx].items[iIdx] = e.target.value;
-                        update('overview', newO);
-                      }}
-                      className="flex-1 px-3 py-2 rounded-lg border border-slate-200 text-xs"
-                      placeholder="01 Dhul-Hijjah Check in..."
-                    />
-                    <button type="button" onClick={() => {
-                      const newO = [...d.overview];
-                      newO[gIdx].items.splice(iIdx, 1);
-                      update('overview', newO);
-                    }} className="text-red-400 hover:text-red-600 px-2 shrink-0">
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
-                <button type="button" onClick={() => {
-                  const newO = [...d.overview];
-                  newO[gIdx].items.push('');
-                  update('overview', newO);
-                }} className="text-xs font-bold text-[#004B39] flex items-center gap-1 mt-2 hover:underline">
-                  <Plus className="w-3 h-3" /> Add Timeline Item
-                </button>
+                <label className="text-[10px] font-bold text-slate-500 mb-1 block">TIMELINE ITEMS (One per line)</label>
+                <textarea
+                  value={(group.items || []).join('\n')}
+                  onChange={e => {
+                    const newO = [...d.overview];
+                    newO[gIdx].items = e.target.value.split('\n');
+                    update('overview', newO);
+                  }}
+                  className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs min-h-[100px] outline-none focus:border-[#004B39] font-sans"
+                  placeholder="01 Dhul-Hijjah Check in...&#10;02 Dhul-Hijjah Rest..."
+                />
               </div>
             </div>
           ))}

@@ -77,7 +77,14 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
         {!loading && pkgs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
             {pkgs.map((pkg: any, idx: number) => {
-              const cd = pkg.cardData || {};
+              let cd = pkg.cardData || {};
+              if (typeof cd === 'string') {
+                try {
+                  cd = JSON.parse(cd);
+                } catch (e) {
+                  cd = {};
+                }
+              }
               const heroImage =
                 cd.bannerImage ||
                 pkg.featuredImage ||

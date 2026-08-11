@@ -49,3 +49,5 @@ test-db.ts
 test-save.ts
 fix.ts
 fix-db.js
+src/scratch/sync_hotels.ts
+check.ts

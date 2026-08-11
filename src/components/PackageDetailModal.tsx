@@ -42,6 +42,9 @@ export interface PackageDetailData {
   eligibility?: string;
   importantNotice?: string;
   faqs?: Array<{ question: string; answer: string }>;
+  detailPageData?: any;
+  month?: string;
+  startingPrice?: string | number;
 }
 
 interface PackageDetailModalProps {
@@ -57,32 +60,37 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
 
   if (!isOpen || !pkg) return null;
 
+  const detailData = pkg.detailPageData || {};
+
   const title = pkg.title || "ECONOMY HAJJ PACKAGE 2027";
-  const durationText = pkg.durationText || `${pkg.duration || "14 DAYS"} / 13 NIGHTS`;
-  const departure = pkg.departure || "CANADA";
-  const destination = pkg.destination || "SAUDIA";
-  const price = pkg.price || "12,995";
+  const durationText = detailData.durationText || pkg.durationText || `${pkg.duration || pkg.month || "14 DAYS"} / 13 NIGHTS`;
+  const departure = detailData.departure || pkg.departure || "CANADA";
+  const destination = detailData.destination || pkg.destination || "SAUDIA";
+  const rawPrice = (pkg.startingPrice || pkg.price || "12,995").toString();
+  const price = rawPrice.startsWith("CAD") ? rawPrice.replace("CAD", "").trim() : rawPrice.replace("$", "").trim();
   const priceSubtext = pkg.priceSubtext || "PER PERSON, QUAD OCCUPANCY";
-  const exclusiveBadge = pkg.exclusiveBadge || "EXCLUSIVE PACKAGE";
-  const currencyCode = pkg.currencyCode || "CAD";
+  const exclusiveBadge = detailData.exclusiveBadge || pkg.exclusiveBadge || "EXCLUSIVE PACKAGE";
+  const currencyCode = detailData.currencyCode || pkg.currencyCode || "CAD";
 
   const operatorName = pkg.operatorName || "King Travel";
   const operatorRating = pkg.operatorRating || "4.4/5";
   const operatorReviews = pkg.operatorReviews || "928 verified reviews";
 
-  const makkahImg = pkg.makkahHotel?.image || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg";
-  const makkahName = pkg.makkahHotel?.name || "5 Star Luxury Hotel";
-  const makkahLoc = pkg.makkahHotel?.location || "Walking distance to Al-Haram";
-  const makkahBadge = pkg.makkahHotel?.badge || "Breakfast & Dinner Inc.";
-  const makkahNights = pkg.makkahHotel?.nights || "6 Nights Stay";
+  const makkahHotel = detailData.makkahHotel || pkg.makkahHotel || {};
+  const makkahImg = makkahHotel?.image || makkahHotel?.image_url || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg";
+  const makkahName = makkahHotel?.name || "5 Star Luxury Hotel";
+  const makkahLoc = makkahHotel?.location || "Walking distance to Al-Haram";
+  const makkahBadge = makkahHotel?.badge || "Breakfast & Dinner Inc.";
+  const makkahNights = makkahHotel?.nights || "6 Nights Stay";
 
-  const madinahImg = pkg.madinahHotel?.image || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg";
-  const madinahName = pkg.madinahHotel?.name || "5 Star Luxury Hotel";
-  const madinahLoc = pkg.madinahHotel?.location || "Near Masjid Al-Nabawi courtyard";
-  const madinahBadge = pkg.madinahHotel?.badge || "Breakfast & Dinner Inc.";
-  const madinahNights = pkg.madinahHotel?.nights || "6 Nights Stay";
+  const madinahHotel = detailData.madinahHotel || pkg.madinahHotel || {};
+  const madinahImg = madinahHotel?.image || madinahHotel?.image_url || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg";
+  const madinahName = madinahHotel?.name || "5 Star Luxury Hotel";
+  const madinahLoc = madinahHotel?.location || "Near Masjid Al-Nabawi courtyard";
+  const madinahBadge = madinahHotel?.badge || "Breakfast & Dinner Inc.";
+  const madinahNights = madinahHotel?.nights || "6 Nights Stay";
 
-  const overviewText = pkg.overview || `DURING STAY AT MADINAH - Hotel close to Haram (Breakfast & Dinner)
+  const overviewText = detailData.overview || pkg.overview || `DURING STAY AT MADINAH - Hotel close to Haram (Breakfast & Dinner)
 01 Dhul-Hajjah Check in at Madinah hotel and spend time in Prophet's Mosque
 02 Dhul-Hajjah Spend time in Haram
 03 Dhul-Hajjah Leave for Ziarat in Madinah at 08:00 am
@@ -99,15 +107,13 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 14 Dhul-Hajjah Check out from Aziziya and leave for Jeddah airport for departure to Toronto.`;
 
   const defaultHighlights = [
-    "Group Will Be Led By A Qualified Imam",
-    "Free Complete Ahram Kit Provided To Pilgrims",
-    "Before Departure we offer Seminar with Dinner & Hajj under the Imam Guidance",
-    "Flexible Dates are Available",
-    "Qurbani Not Included"
+    { text: "Group Will Be Led By A Qualified Imam", isCross: false },
+    { text: "Free Complete Ahram Kit Provided To Pilgrims", isCross: false },
+    { text: "Before Departure we offer Seminar with Dinner & Hajj under the Imam Guidance", isCross: false },
+    { text: "Flexible Dates are Available", isCross: false },
+    { text: "Qurbani Not Included", isCross: true }
   ];
-  const highlightsList = pkg.highlights
-    ? pkg.highlights.split("\n").filter((l) => l.trim())
-    : defaultHighlights;
+  const activeHighlights = (detailData.highlights && detailData.highlights.length > 0) ? detailData.highlights : defaultHighlights;
 
   const defaultEligibility = [
     "Canadian & U.S. citizens with Pakistan Passports.",
@@ -115,11 +121,9 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
     "All Foreign Passport holders with Pakistan Passports.",
     "Side trips to Pakistan or any other destination available with an additional cost."
   ];
-  const eligibilityList = pkg.eligibility
-    ? pkg.eligibility.split("\n").filter((l) => l.trim())
-    : defaultEligibility;
+  const activeEligibility = (detailData.eligibility && detailData.eligibility.length > 0) ? detailData.eligibility : defaultEligibility;
 
-  const importantNotice = pkg.importantNotice || "To secure your Hajj visa slot, please make sure your Canadian passport is valid for at least 6 months beyond travel dates, and you have completed all mandatory immunizations required by the Saudi Ministry of Hajj.";
+  const importantNotice = detailData.importantBooking || pkg.importantNotice || "To secure your Hajj visa slot, please make sure your Canadian passport is valid for at least 6 months beyond travel dates, and you have completed all mandatory immunizations required by the Saudi Ministry of Hajj.";
 
   const defaultFaqs = [
     {
@@ -131,7 +135,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
       answer: "Yes, round-trip flights from Canada to Saudi Arabia are fully included in the package pricing."
     }
   ];
-  const faqs = (pkg.faqs && pkg.faqs.length > 0) ? pkg.faqs : defaultFaqs;
+  const faqs = (detailData.faqs && detailData.faqs.length > 0) ? detailData.faqs : ((pkg.faqs && pkg.faqs.length > 0) ? pkg.faqs : defaultFaqs);
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -283,31 +287,32 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                 Package Overview
               </h3>
               <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-md space-y-6">
-                {overviewText.split("\n\n").map((block, bIdx) => {
-                  const lines = block.split("\n").filter((l) => l.trim());
-                  if (lines.length === 0) return null;
-                  const heading = lines[0];
-                  const details = lines.slice(1);
-
-                  return (
-                    <div key={bIdx} className="relative pl-6 border-l-2 border-[#004B39] space-y-2">
-                      <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#004B39] border-2 border-white" />
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
-                        {heading}
-                      </h4>
-                      {details.length > 0 && (
-                        <ul className="space-y-1.5 pt-1">
-                          {details.map((d, dIdx) => (
-                            <li key={dIdx} className="text-xs sm:text-sm text-slate-600 leading-relaxed flex items-start gap-2">
-                              <span className="text-[#DB9E30] font-bold text-xs mt-0.5">•</span>
-                              <span>{d}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  );
-                })}
+                {(!detailData.overview || detailData.overview.length === 0) ? (
+                  <div className="text-sm text-slate-500">No overview data provided.</div>
+                ) : (
+                  detailData.overview.map((group: any, bIdx: number) => {
+                    if (!group.groupTitle) return null;
+                    const details = group.items ? group.items.filter(Boolean) : [];
+                    return (
+                      <div key={bIdx} className="relative pl-6 border-l-2 border-[#004B39] space-y-2">
+                        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#004B39] border-2 border-white" />
+                        <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
+                          {group.groupTitle}
+                        </h4>
+                        {details.length > 0 && (
+                          <ul className="space-y-1.5 pt-1">
+                            {details.map((d: string, dIdx: number) => (
+                              <li key={dIdx} className="text-xs sm:text-sm text-slate-600 leading-relaxed flex items-start gap-2">
+                                <span className="text-[#DB9E30] font-bold text-xs mt-0.5">•</span>
+                                <span>{d}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    );
+                  })
+                )}
               </div>
             </div>
 
@@ -319,8 +324,8 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                   <Star className="w-5 h-5 fill-amber-400 text-amber-500" /> Package Highlights
                 </h3>
                 <ul className="space-y-3">
-                  {highlightsList.map((hl, idx) => {
-                    const isNotIncluded = hl.toLowerCase().includes("not included");
+                  {activeHighlights.map((hl: any, idx: number) => {
+                    const isNotIncluded = hl.isCross;
                     return (
                       <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
                         {isNotIncluded ? (
@@ -329,7 +334,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                           <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
                         )}
                         <span className={isNotIncluded ? "text-slate-500 line-through" : "font-medium"}>
-                          {hl}
+                          {hl.text}
                         </span>
                       </li>
                     );
@@ -343,7 +348,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                   <Check className="w-5 h-5 text-emerald-600" /> Eligibility Requirements
                 </h3>
                 <ul className="space-y-3">
-                  {eligibilityList.map((el, idx) => (
+                  {activeEligibility.map((el: string, idx: number) => (
                     <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
                       <span className="text-emerald-600 font-bold shrink-0 text-base leading-none">✓</span>
                       <span className="font-medium">{el}</span>
@@ -360,20 +365,21 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
               </div>
               <div className="space-y-1">
                 <h4 className="font-bold text-amber-950 text-sm">Important Booking Notice</h4>
-                <p className="text-xs text-amber-900/80 leading-relaxed font-medium">
-                  {importantNotice}
-                </p>
+                <div 
+                  className="text-xs text-amber-900/80 leading-relaxed font-medium prose prose-sm max-w-none"
+                  dangerouslySetInnerHTML={{ __html: importantNotice }}
+                />
               </div>
             </div>
 
             {/* 5. Frequently Asked Questions (Accordion) */}
             <div>
-              <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
-                Frequently Asked Questions
-              </h3>
-              <div className="space-y-3">
-                {faqs.map((faq, idx) => {
-                  const isOpenItem = openFaqIdx === idx;
+            <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5 flex items-center gap-2">
+              <AlertCircle className="w-6 h-6 text-emerald-600" /> Frequently Asked Questions
+            </h3>
+            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden">
+              {faqs.map((faq: any, idx: number) => {
+                const isOpenItem = openFaqIdx === idx;
                   return (
                     <div
                       key={idx}

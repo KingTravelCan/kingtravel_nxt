@@ -7,6 +7,7 @@ import { Trash2, Edit2, Plus, Sparkles, Sliders, X, BookOpen, Hotel, Plane } fro
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 import ImageUploadWidget from '@/components/admin/ImageUploadWidget';
 import DetailPageDataFields from '@/components/admin/DetailPageDataFields';
+import Link from 'next/link';
 
 interface PackagesClientProps {
   initialPackages: any[];
@@ -25,7 +26,6 @@ const defaultHajjCardData = {
   btnLabel: 'Book Hajj 2027',
   btnLink: '/contact',
   priceSubtext: 'FROM CAD / QUAD OCCUPANCY',
-  hasDetailPage: false,
   makkahHotel: { image: '', name: '5 Star Hotel in Makkah', location: 'Near to Haram', badge: 'Breakfast', nights: '6 Nights' },
   madinahHotel: { image: '', name: '5 Star Hotel in Madinah', location: 'Near to Masjid Nabawi', badge: 'Breakfast', nights: '6 Nights' },
 };
@@ -35,8 +35,9 @@ const defaultUmrahCardData = {
   isActiveCard: false,
   btnLabel: 'BOOK NOW',
   btnLink: '/contact',
-  hasDetailPage: false,
   includes: ['Return Flights from Toronto', '5 Star Hotel in Makkah', '5 Star Hotel in Madinah', 'Visa & Registration', 'Imam & Guide'],
+  makkahHotel: { image: '', name: '5 Star Hotel in Makkah', location: 'Near to Haram', badge: 'Breakfast', nights: '5 Nights' },
+  madinahHotel: { image: '', name: '5 Star Hotel in Madinah', location: 'Near to Masjid Nabawi', badge: 'Breakfast', nights: '5 Nights' },
 };
 
 function getDefaultCardData(type: 'hajj' | 'umrah') {
@@ -48,8 +49,22 @@ function getDefaultCardData(type: 'hajj' | 'umrah') {
 function HajjCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v: any) => void }) {
   const cd = pkgData.cardData || defaultHajjCardData;
   const updateCD = (f: string, v: any) => setPkgData({ ...pkgData, cardData: { ...cd, [f]: v } });
-  const updateMak = (f: string, v: any) => updateCD('makkahHotel', { ...(cd.makkahHotel || {}), [f]: v });
-  const updateMad = (f: string, v: any) => updateCD('madinahHotel', { ...(cd.madinahHotel || {}), [f]: v });
+  const updateMak = (f: string, v: any) => {
+    const updatedHotel = { ...(cd.makkahHotel || {}), [f]: v };
+    setPkgData({
+      ...pkgData,
+      cardData: { ...cd, makkahHotel: updatedHotel },
+      detailPageData: { ...(pkgData.detailPageData || {}), makkahHotel: updatedHotel }
+    });
+  };
+  const updateMad = (f: string, v: any) => {
+    const updatedHotel = { ...(cd.madinahHotel || {}), [f]: v };
+    setPkgData({
+      ...pkgData,
+      cardData: { ...cd, madinahHotel: updatedHotel },
+      detailPageData: { ...(pkgData.detailPageData || {}), madinahHotel: updatedHotel }
+    });
+  };
 
   return (
     <div className="col-span-full space-y-5 p-5 border border-amber-200 bg-amber-50/40 rounded-2xl">
@@ -167,6 +182,23 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
   const cd = pkgData.cardData || defaultUmrahCardData;
   const updateCD = (f: string, v: any) => setPkgData({ ...pkgData, cardData: { ...cd, [f]: v } });
 
+  const updateMak = (f: string, v: any) => {
+    const updatedHotel = { ...(cd.makkahHotel || {}), [f]: v };
+    setPkgData({
+      ...pkgData,
+      cardData: { ...cd, makkahHotel: updatedHotel },
+      detailPageData: { ...(pkgData.detailPageData || {}), makkahHotel: updatedHotel }
+    });
+  };
+  const updateMad = (f: string, v: any) => {
+    const updatedHotel = { ...(cd.madinahHotel || {}), [f]: v };
+    setPkgData({
+      ...pkgData,
+      cardData: { ...cd, madinahHotel: updatedHotel },
+      detailPageData: { ...(pkgData.detailPageData || {}), madinahHotel: updatedHotel }
+    });
+  };
+
   const includes: string[] = Array.isArray(cd.includes) ? cd.includes : [];
 
   const updateIncludes = (idx: number, val: string) => {
@@ -200,15 +232,74 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
           </div>
           <div className="flex items-center gap-3">
             <input
-              id="isActiveCard"
+              id="isActiveCardUmrah"
               type="checkbox"
               checked={!!cd.isActiveCard}
               onChange={e => updateCD('isActiveCard', e.target.checked)}
               className="w-4 h-4 rounded accent-[#DB9E30]"
             />
-            <label htmlFor="isActiveCard" className="text-xs font-bold text-slate-700 cursor-pointer">
+            <label htmlFor="isActiveCardUmrah" className="text-xs font-bold text-slate-700 cursor-pointer">
               Featured / Gold card style
             </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Hotels */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {/* Makkah Hotel */}
+        <div className="bg-white p-4 rounded-xl border border-slate-200">
+          <h5 className="text-[10px] font-extrabold text-slate-700 mb-3 flex items-center gap-1.5">
+            <Hotel className="w-3 h-3 text-amber-600" /> Makkah Hotel
+          </h5>
+          <div className="space-y-2.5">
+            <ImageUploadWidget value={cd.makkahHotel?.image || ''} onChange={(url) => updateMak('image', url)} subfolder="packages" />
+            <div>
+              <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">HOTEL NAME</label>
+              <input type="text" value={cd.makkahHotel?.name || ''} onChange={e => updateMak('name', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+            </div>
+            <div>
+              <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">LOCATION SUBTEXT</label>
+              <input type="text" value={cd.makkahHotel?.location || ''} onChange={e => updateMak('location', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
+                <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+              </div>
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
+                <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Madinah Hotel */}
+        <div className="bg-white p-4 rounded-xl border border-slate-200">
+          <h5 className="text-[10px] font-extrabold text-slate-700 mb-3 flex items-center gap-1.5">
+            <Hotel className="w-3 h-3 text-emerald-600" /> Madinah Hotel
+          </h5>
+          <div className="space-y-2.5">
+            <ImageUploadWidget value={cd.madinahHotel?.image || ''} onChange={(url) => updateMad('image', url)} subfolder="packages" />
+            <div>
+              <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">HOTEL NAME</label>
+              <input type="text" value={cd.madinahHotel?.name || ''} onChange={e => updateMad('name', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+            </div>
+            <div>
+              <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">LOCATION SUBTEXT</label>
+              <input type="text" value={cd.madinahHotel?.location || ''} onChange={e => updateMad('location', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+            </div>
+            <div className="grid grid-cols-2 gap-2">
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
+                <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+              </div>
+              <div>
+                <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
+                <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -253,8 +344,6 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
 
 export default function PackagesClient({ initialPackages, defaultTab }: PackagesClientProps) {
   const [packagesList, setPackagesList] = useState<any[]>(initialPackages);
-  const [editingPkg, setEditingPkg] = useState<any | null>(null);
-  const [editTab, setEditTab] = useState<'basic' | 'detail'>('basic');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedSeoPkg, setSelectedSeoPkg] = useState<any | null>(null);
   const [isCreating, setIsCreating] = useState(false);
@@ -264,6 +353,7 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
 
   const blankPkg = (type: 'hajj' | 'umrah') => ({
     title: '',
+    slug: '',
     type,
     month: 'Flexible 2026',
     startingPrice: '1995.00',
@@ -283,6 +373,7 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
     e.preventDefault();
     const formData = new FormData();
     formData.append('title', newPkg.title);
+    formData.append('slug', newPkg.slug);
     formData.append('type', newPkg.type);
     formData.append('month', newPkg.month);
     formData.append('startingPrice', newPkg.startingPrice);
@@ -303,33 +394,7 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
     }
   };
 
-  const handleUpdate = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!editingPkg) return;
-    setIsSubmitting(true);
-    const res = await updatePackageAction(editingPkg.id, {
-      title: editingPkg.title,
-      type: editingPkg.type,
-      month: editingPkg.month,
-      startingPrice: editingPkg.startingPrice,
-      starRating: editingPkg.starRating,
-      status: editingPkg.status,
-      shortDescription: editingPkg.shortDescription,
-      fullDescription: editingPkg.fullDescription,
-      cardData: editingPkg.cardData,
-      detailPageData: editingPkg.detailPageData,
-    });
-    setIsSubmitting(false);
-    if (res.success) {
-      setPackagesList(prev => prev.map(p => (p.id === editingPkg.id ? editingPkg : p)));
-      setEditingPkg(null);
-      setEditTab('basic');
-      setSaveMsg('Package updated successfully!');
-      setTimeout(() => setSaveMsg(null), 3000);
-    } else {
-      alert(res.error || 'Failed to update package.');
-    }
-  };
+
 
   const handleDeleteInitiate = (id: number, title: string) => {
     setConfirmConfig({
@@ -388,240 +453,6 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
         </div>
       </div>
 
-      {/* ── Edit Package Modal ──────────────────────────────────────────────── */}
-      {editingPkg && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-start justify-center p-4 overflow-y-auto">
-          <div className="bg-white rounded-3xl w-full max-w-2xl shadow-2xl border border-slate-200 animate-in zoom-in-95 my-8">
-            {/* Modal Header */}
-            <div className="flex justify-between items-center px-6 py-4 border-b border-slate-100 sticky top-0 bg-white rounded-t-3xl z-10">
-              <div className="flex items-center gap-6">
-                <h3 className="text-base font-extrabold text-slate-900 m-0 flex items-center gap-2">
-                  <Edit2 className="w-4 h-4 text-[#DB9E30]" />
-                  Edit {editingPkg.type === 'hajj' ? 'Hajj' : 'Umrah'} Package
-                </h3>
-                <div className="flex bg-slate-100 rounded-lg p-1 hidden sm:flex">
-                  <button type="button" onClick={() => setEditTab('basic')} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${editTab === 'basic' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>Basic & Card Info</button>
-                  <button type="button" onClick={() => setEditTab('detail')} className={`px-4 py-1.5 rounded-md text-xs font-bold transition-all ${editTab === 'detail' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>Detail Page Content</button>
-                </div>
-              </div>
-              <button
-                type="button"
-                onClick={() => {
-                  setEditingPkg(null);
-                  setEditTab('basic');
-                }}
-                className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-800 flex items-center justify-center border-none cursor-pointer transition-all shrink-0"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            </div>
-            
-            {/* Mobile Tabs */}
-            <div className="flex bg-slate-100 rounded-lg p-1 mx-6 mt-4 sm:hidden">
-              <button type="button" onClick={() => setEditTab('basic')} className={`flex-1 px-4 py-1.5 rounded-md text-xs font-bold transition-all ${editTab === 'basic' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>Basic & Card</button>
-              <button type="button" onClick={() => setEditTab('detail')} className={`flex-1 px-4 py-1.5 rounded-md text-xs font-bold transition-all ${editTab === 'detail' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-700'}`}>Detail Page</button>
-            </div>
-
-            {/* Modal Body */}
-            <form onSubmit={handleUpdate} className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              
-              {editTab === 'basic' && (
-                <>
-                  {/* Package Title */}
-                  <div className="col-span-full">
-                    <label className="text-xs font-bold text-slate-700 block mb-1">Package Title *</label>
-                    <input
-                      type="text"
-                      value={editingPkg.title}
-                      onChange={e => setEditingPkg({ ...editingPkg, title: e.target.value })}
-                      required
-                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-                    />
-                  </div>
-
-                  {/* Type */}
-                  <div>
-                    <label className="text-xs font-bold text-slate-700 block mb-1">Type</label>
-                    <select
-                      value={editingPkg.type}
-                      onChange={e => setEditingPkg({ ...editingPkg, type: e.target.value as any, cardData: getDefaultCardData(e.target.value as any) })}
-                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
-                    >
-                      <option value="umrah">🕋 Umrah Package</option>
-                      <option value="hajj">🕌 Hajj Package</option>
-                    </select>
-                  </div>
-
-                  {/* Month */}
-                  {editingPkg.type === 'umrah' && (
-                    <div>
-                      <label className="text-xs font-bold text-slate-700 block mb-1">Travel Month / Duration</label>
-                      <input
-                        type="text"
-                        value={editingPkg.month || ''}
-                        onChange={e => setEditingPkg({ ...editingPkg, month: e.target.value })}
-                        className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-                      />
-                    </div>
-                  )}
-
-                  {/* Price */}
-                  <div>
-                    <label className="text-xs font-bold text-slate-700 block mb-1">Starting Price (CAD)</label>
-                    <input
-                      type="text"
-                      value={editingPkg.startingPrice || ''}
-                      onChange={e => setEditingPkg({ ...editingPkg, startingPrice: e.target.value })}
-                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-                    />
-                  </div>
-
-                  {/* Status — Sold Out toggle + other statuses */}
-                  <div className="col-span-full">
-                    <label className="text-xs font-bold text-slate-700 block mb-2">Availability Status</label>
-                    <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-                      {/* Sold Out toggle switch */}
-                      <label className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 cursor-pointer transition-all select-none ${editingPkg.status === 'sold_out'
-                        ? 'border-red-400 bg-red-50'
-                        : 'border-slate-200 bg-slate-50 hover:border-slate-300'
-                        }`}>
-                        <div className="relative shrink-0">
-                          <input
-                            type="checkbox"
-                            className="sr-only"
-                            checked={editingPkg.status === 'sold_out'}
-                            onChange={e =>
-                              setEditingPkg({
-                                ...editingPkg,
-                                status: e.target.checked ? 'sold_out' : 'available',
-                              })
-                            }
-                          />
-                          <div className={`w-10 h-5 rounded-full transition-colors duration-200 ${editingPkg.status === 'sold_out' ? 'bg-red-500' : 'bg-slate-300'
-                            }`} />
-                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${editingPkg.status === 'sold_out' ? 'translate-x-5' : 'translate-x-0'
-                            }`} />
-                        </div>
-                        <span className={`text-xs font-extrabold uppercase tracking-wider ${editingPkg.status === 'sold_out' ? 'text-red-600' : 'text-slate-500'
-                          }`}>
-                          {editingPkg.status === 'sold_out' ? '🔴 Sold Out' : 'Mark as Sold Out'}
-                        </span>
-                      </label>
-
-                      {/* Has Detail Page toggle switch */}
-                      <label className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 cursor-pointer transition-all select-none ${
-                        editingPkg.cardData?.hasDetailPage
-                          ? 'border-[#004B39] bg-emerald-50'
-                          : 'border-slate-200 bg-slate-50 hover:border-slate-300'
-                      }`}>
-                        <div className="relative shrink-0">
-                          <input
-                            type="checkbox"
-                            className="sr-only"
-                            checked={!!editingPkg.cardData?.hasDetailPage}
-                            onChange={(e) =>
-                              setEditingPkg({
-                                ...editingPkg,
-                                cardData: {
-                                  ...editingPkg.cardData,
-                                  hasDetailPage: e.target.checked
-                                }
-                              })
-                            }
-                          />
-                          <div className={`w-10 h-5 rounded-full transition-colors duration-200 ${
-                            editingPkg.cardData?.hasDetailPage ? 'bg-[#004B39]' : 'bg-slate-300'
-                          }`} />
-                          <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${
-                            editingPkg.cardData?.hasDetailPage ? 'translate-x-5' : 'translate-x-0'
-                          }`} />
-                        </div>
-                        <span className={`text-xs font-extrabold uppercase tracking-wider ${
-                          editingPkg.cardData?.hasDetailPage ? 'text-[#004B39]' : 'text-slate-500'
-                        }`}>
-                          {editingPkg.cardData?.hasDetailPage ? 'Has Detail Page' : 'No Detail Page'}
-                        </span>
-                      </label>
-                    </div>
-                    {/* Other statuses — only visible when not sold_out */}
-                    {editingPkg.status !== 'sold_out' && (
-                      <select
-                        value={editingPkg.status || 'available'}
-                        onChange={e => setEditingPkg({ ...editingPkg, status: e.target.value as any })}
-                        className="flex-1 mt-3 sm:mt-0 px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
-                      >
-                        <option value="available">● Available</option>
-                        <option value="coming_soon">● Coming Soon</option>
-                        <option value="draft">● Draft</option>
-                      </select>
-                    )}
-                  </div>
-
-                  {/* Star Rating */}
-                  <div>
-                    <label className="text-xs font-bold text-slate-700 block mb-1">Hotel Star Rating</label>
-                    <select
-                      value={editingPkg.starRating || '5 Star'}
-                      onChange={e => setEditingPkg({ ...editingPkg, starRating: e.target.value })}
-                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
-                    >
-                      <option value="5 Star">5 Star Luxury</option>
-                      <option value="4 Star">4 Star Premium</option>
-                      <option value="3 Star">3 Star Standard</option>
-                    </select>
-                  </div>
-
-                  <div className="col-span-full">
-                    <label className="text-xs font-bold text-slate-700 block mb-1">Short Summary</label>
-                    <input
-                      type="text"
-                      value={editingPkg.shortDescription || ''}
-                      onChange={e => setEditingPkg({ ...editingPkg, shortDescription: e.target.value })}
-                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-                    />
-                  </div>
-
-                  {/* Dynamic card fields */}
-                  {editingPkg.type === 'hajj' ? (
-                    <HajjCardFields pkgData={editingPkg} setPkgData={setEditingPkg} />
-                  ) : (
-                    <UmrahCardFields pkgData={editingPkg} setPkgData={setEditingPkg} />
-                  )}
-                </>
-              )}
-
-              {editTab === 'detail' && (
-                <DetailPageDataFields
-                  data={editingPkg.detailPageData}
-                  onChange={newData => setEditingPkg({ ...editingPkg, detailPageData: newData })}
-                />
-              )}
-
-              <div className="col-span-full flex justify-end gap-3 pt-3 border-t border-slate-100 mt-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setEditingPkg(null);
-                    setEditTab('basic');
-                  }}
-                  className="px-5 py-2.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border-none cursor-pointer hover:bg-slate-200 transition-colors"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="px-7 py-2.5 rounded-full text-xs font-extrabold bg-[#004B39] text-white border-none cursor-pointer shadow-md hover:bg-[#003229] transition-colors disabled:opacity-50"
-                >
-                  {isSubmitting ? 'Saving...' : 'Save Changes'}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div >
-      )
-}
-
 {/* ── Create Package Form ─────────────────────────────────────────────── */ }
 {
   isCreating && (
@@ -637,10 +468,32 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
             type="text"
             placeholder={activeTab === 'hajj' ? 'e.g. Economy Hajj Package 2027' : 'e.g. 5 Star September Umrah Package 2026'}
             value={newPkg.title}
-            onChange={e => setNewPkg({ ...newPkg, title: e.target.value })}
+            onChange={e => {
+              const title = e.target.value;
+              const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+              setNewPkg({ ...newPkg, title, slug });
+            }}
             required
             className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
           />
+        </div>
+
+        {/* Slug Field */}
+        <div className="col-span-full">
+          <label className="text-xs font-bold text-slate-700 block mb-1">Page Slug *</label>
+          <div className="flex">
+            <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 text-slate-500 sm:text-xs">
+              /{activeTab === 'hajj' ? 'hajj-packages' : 'umrah-packages'}/
+            </span>
+            <input
+              type="text"
+              placeholder="e.g. 5-star-september-umrah-package"
+              value={newPkg.slug}
+              onChange={(e) => setNewPkg({ ...newPkg, slug: e.target.value })}
+              required
+              className="flex-1 w-full px-3.5 py-2.5 border border-slate-200 rounded-r-xl text-xs outline-none focus:border-[#004B39]"
+            />
+          </div>
         </div>
 
         {/* <div>
@@ -678,41 +531,6 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
             required
             className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
           />
-        </div>
-
-        <div className="col-span-full">
-          <label className="text-xs font-bold text-slate-700 block mb-2">Package Options</label>
-          <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-            <label className={`flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 cursor-pointer transition-all select-none ${newPkg.cardData?.hasDetailPage
-                ? 'border-[#004B39] bg-emerald-50'
-                : 'border-slate-200 bg-slate-50 hover:border-slate-300'
-              }`}>
-              <div className="relative shrink-0">
-                <input
-                  type="checkbox"
-                  className="sr-only"
-                  checked={!!newPkg.cardData?.hasDetailPage}
-                  onChange={(e) =>
-                    setNewPkg({
-                      ...newPkg,
-                      cardData: {
-                        ...newPkg.cardData,
-                        hasDetailPage: e.target.checked
-                      }
-                    })
-                  }
-                />
-                <div className={`w-10 h-5 rounded-full transition-colors duration-200 ${newPkg.cardData?.hasDetailPage ? 'bg-[#004B39]' : 'bg-slate-300'
-                  }`} />
-                <div className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${newPkg.cardData?.hasDetailPage ? 'translate-x-5' : 'translate-x-0'
-                  }`} />
-              </div>
-              <span className={`text-xs font-extrabold uppercase tracking-wider ${newPkg.cardData?.hasDetailPage ? 'text-[#004B39]' : 'text-slate-500'
-                }`}>
-                {newPkg.cardData?.hasDetailPage ? 'Has Detail Page' : 'No Detail Page'}
-              </span>
-            </label>
-          </div>
         </div>
 
         {newPkg.type === 'umrah' && (
@@ -845,17 +663,13 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
                             <Sliders className="w-3 h-3" />
                             <span>SEO</span>
                           </button>
-                          <button
-                            type="button"
-                            onClick={() => setEditingPkg({
-                              ...pkg,
-                              cardData: pkg.cardData || getDefaultCardData(pkg.type),
-                            })}
+                          <Link
+                            href={`/admin/packages/${pkg.id}`}
                             title="Edit Package"
                             className="w-7 h-7 rounded-full bg-slate-100 hover:bg-[#004B39] text-slate-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all"
                           >
                             <Edit2 className="w-3.5 h-3.5" />
-                          </button>
+                          </Link>
                           <button
                             type="button"
                             onClick={() => handleDeleteInitiate(pkg.id, pkg.title)}

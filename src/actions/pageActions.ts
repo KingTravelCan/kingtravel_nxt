@@ -817,6 +817,7 @@ export async function slugifyPackageTitle(title: string): Promise<string> {
 
 export async function getPackageDetailsAction(packageSlug: string) {
   try {
+    if (!packageSlug) return null;
     const cleanSlug = packageSlug.toLowerCase().trim();
     const getCachedPackageDetails = unstable_cache(
       async () => {

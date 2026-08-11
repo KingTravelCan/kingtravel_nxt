@@ -134,34 +134,34 @@ function resolvePackage(rawSlug: string, foundPkg: any) {
     priceSubtext: "PER PERSON, QUAD OCCUPANCY",
     makkahHotel: isDeluxe
       ? {
-          name: "5 Star Fairmont Makkah",
-          location: "Near to Haram",
-          image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5-XnMVZK4gPR2fok2UHalB4MgmobfdO0bUKh_VXGHMGYe_A7NQaaZ748&s=10",
-          badge: "Breakfast & Dinner Inc.",
-          nights: "8 Nights Stay",
-        }
+        name: "5 Star Fairmont Makkah",
+        location: "Near to Haram",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5-XnMVZK4gPR2fok2UHalB4MgmobfdO0bUKh_VXGHMGYe_A7NQaaZ748&s=10",
+        badge: "Breakfast & Dinner Inc.",
+        nights: "8 Nights Stay",
+      }
       : {
-          name: "5 Star Hotel in Makkah",
-          location: "Near to Haram",
-          image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg",
-          badge: "Breakfast",
-          nights: "6 Nights Stay",
-        },
+        name: "5 Star Hotel in Makkah",
+        location: "Near to Haram",
+        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg",
+        badge: "Breakfast",
+        nights: "6 Nights Stay",
+      },
     madinahHotel: isDeluxe
       ? {
-          name: "5 Star Dar Al Eman Madinah",
-          location: "Near to Masjid Nabawi",
-          image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=300&q=80",
-          badge: "Breakfast & Dinner Inc.",
-          nights: "7 Nights Stay",
-        }
+        name: "5 Star Dar Al Eman Madinah",
+        location: "Near to Masjid Nabawi",
+        image: "https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=300&q=80",
+        badge: "Breakfast & Dinner Inc.",
+        nights: "7 Nights Stay",
+      }
       : {
-          name: "5 Star Hotel in Madinah",
-          location: "Near to Masjid Nabawi",
-          image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg",
-          badge: "Breakfast",
-          nights: "6 Nights Stay",
-        },
+        name: "5 Star Hotel in Madinah",
+        location: "Near to Masjid Nabawi",
+        image: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg",
+        badge: "Breakfast",
+        nights: "6 Nights Stay",
+      },
   };
 }
 
@@ -177,7 +177,7 @@ export default function PackageDetailPageClient({
   const rawSlug = initialSlug;
   const [pkg] = useState<any>(() => resolvePackage(rawSlug, initialPackage));
   const [fullName, setFullName] = useState("");
-  const [phone, setPhone] = useState("+1 905 624 8344");
+  const [phone, setPhone] = useState("+1 ");
   const [email, setEmail] = useState("");
   const [adults, setAdults] = useState("1");
   const [childrenCount, setChildrenCount] = useState("0");
@@ -265,9 +265,11 @@ export default function PackageDetailPageClient({
       title = `${title} Package`;
     }
   }
-  const durationText = pkg.durationText || `${pkg.duration || "14 DAYS"} / 13 NIGHTS`;
-  const departure = pkg.departure || "CANADA";
-  const destination = pkg.destination || "SAUDIA";
+  const detailData = pkg.detailPageData || {};
+
+  const durationText = detailData.durationText || pkg.durationText || `${pkg.duration || "14 DAYS"} / 13 NIGHTS`;
+  const departure = detailData.departure || pkg.departure || "CANADA";
+  const destination = detailData.destination || pkg.destination || "SAUDIA";
   const price = (pkg.price || "12,995").replace("CAD", "").trim();
   const priceSubtext = pkg.priceSubtext || "PER PERSON, QUAD OCCUPANCY";
   const exclusiveBadge = pkg.exclusiveBadge || "EXCLUSIVE PACKAGE";
@@ -277,58 +279,63 @@ export default function PackageDetailPageClient({
   const operatorRating = pkg.operatorRating || "4.4/5";
   const operatorReviews = pkg.operatorReviews || "928 verified reviews";
 
-  const makkahImg = pkg.makkahHotel?.image || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg";
-  const makkahName = pkg.makkahHotel?.name || "5 Star Luxury Hotel";
-  const makkahLoc = pkg.makkahHotel?.location || "Walking distance to Al-Haram";
-  const makkahBadge = pkg.makkahHotel?.badge || "Breakfast & Dinner Inc.";
-  const makkahNights = pkg.makkahHotel?.nights || "6 Nights Stay";
+  const makkahImg = detailData.makkahHotel?.image || pkg.makkahHotel?.image || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg";
+  const makkahName = detailData.makkahHotel?.name || pkg.makkahHotel?.name || "5 Star Luxury Hotel";
+  const makkahLoc = detailData.makkahHotel?.location || pkg.makkahHotel?.location || "Walking distance to Al-Haram";
+  const makkahBadge = detailData.makkahHotel?.badge || pkg.makkahHotel?.badge || "Breakfast & Dinner Inc.";
+  const makkahNights = detailData.makkahHotel?.nights || pkg.makkahHotel?.nights || "6 Nights Stay";
 
-  const madinahImg = pkg.madinahHotel?.image || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg";
-  const madinahName = pkg.madinahHotel?.name || "5 Star Luxury Hotel";
-  const madinahLoc = pkg.madinahHotel?.location || "Near Masjid Al-Nabawi courtyard";
-  const madinahBadge = pkg.madinahHotel?.badge || "Breakfast & Dinner Inc.";
-  const madinahNights = pkg.madinahHotel?.nights || "6 Nights Stay";
+  const madinahImg = detailData.madinahHotel?.image || pkg.madinahHotel?.image || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg";
+  const madinahName = detailData.madinahHotel?.name || pkg.madinahHotel?.name || "5 Star Luxury Hotel";
+  const madinahLoc = detailData.madinahHotel?.location || pkg.madinahHotel?.location || "Near Masjid Al-Nabawi courtyard";
+  const madinahBadge = detailData.madinahHotel?.badge || pkg.madinahHotel?.badge || "Breakfast & Dinner Inc.";
+  const madinahNights = detailData.madinahHotel?.nights || pkg.madinahHotel?.nights || "6 Nights Stay";
 
-  const overviewText = pkg.overview || `DURING STAY AT MADINAH - Hotel close to Haram (Breakfast & Dinner)
-01 Dhul-Hajjah Check in at Madinah hotel and spend time in Prophet's Mosque
-02 Dhul-Hajjah Spend time in Haram
-03 Dhul-Hajjah Leave for Ziarat in Madinah at 08:00 am
-04 Dhul-Hajjah Check out from Madinah and Leave for Makkah Aziziya by air-conditioned coach
+  const overviewArray = detailData.overview?.length > 0 ? detailData.overview : [
+    {
+      heading: "DURING STAY AT MADINAH - Hotel close to Haram (Breakfast & Dinner)",
+      details: [
+        "01 Dhul-Hajjah Check in at Madinah hotel and spend time in Prophet's Mosque",
+        "02 Dhul-Hajjah Spend time in Haram",
+        "03 Dhul-Hajjah Leave for Ziarat in Madinah at 08:00 am",
+        "04 Dhul-Hajjah Check out from Madinah and Leave for Makkah Aziziya by air-conditioned coach"
+      ]
+    },
+    {
+      heading: "DURING STAY AT AZIZIYA - Hotel (Full Board)",
+      details: ["04 - 07 Dhul-Hajjah Stay at Aziziya Accommodation."]
+    },
+    {
+      heading: "DURING STAY AT MINA - Near Jamarat Maktab-A-Category (Full Board)",
+      details: ["07 - 12 Dhul-Hajjah Rituals at Mina / Arafat / Muzalfa."]
+    },
+    {
+      heading: "DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)",
+      details: [
+        "12 to 14 Dhul-Hajjah Stay and preparation for departure.",
+        "14 Dhul-Hajjah Check out from Aziziya and leave for Jeddah airport for departure to Toronto."
+      ]
+    }
+  ];
 
-DURING STAY AT AZIZIYA - Hotel (Full Board)
-04 - 07 Dhul-Hajjah Stay at Aziziya Accommodation.
-
-DURING STAY AT MINA - Near Jamarat Maktab-A-Category (Full Board)
-07 - 12 Dhul-Hajjah Rituals at Mina / Arafat / Muzalfa.
-
-DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
-12 to 14 Dhul-Hajjah Stay and preparation for departure.
-14 Dhul-Hajjah Check out from Aziziya and leave for Jeddah airport for departure to Toronto.`;
-
-  const defaultHighlights = [
+  const highlightsList = detailData.highlights?.length > 0 ? detailData.highlights : [
     "Group Will Be Led By A Qualified Imam",
     "Free Complete Ahram Kit Provided To Pilgrims",
     "Before Departure we offer Seminar with Dinner & Hajj under the Imam Guidance",
     "Flexible Dates are Available",
     "Qurbani Not Included"
   ];
-  const highlightsList = pkg.highlights
-    ? pkg.highlights.split("\n").filter((l: string) => l.trim())
-    : defaultHighlights;
 
-  const defaultEligibility = [
+  const eligibilityList = detailData.eligibility?.length > 0 ? detailData.eligibility : [
     "Canadian & U.S. citizens with Pakistan Passports.",
     "Pakistani Passport holders with Canadian PR or American Green Cards.",
     "All Foreign Passport holders with Pakistan Passports.",
     "Side trips to Pakistan or any other destination available with an additional cost."
   ];
-  const eligibilityList = pkg.eligibility
-    ? pkg.eligibility.split("\n").filter((l: string) => l.trim())
-    : defaultEligibility;
 
-  const importantNotice = pkg.importantNotice || "To secure your visa slot, please make sure your Canadian passport is valid for at least 6 months beyond travel dates, and you have completed all mandatory immunizations required by the Saudi Ministry of Hajj.";
+  const importantNotice = detailData.importantNotice || "To secure your visa slot, please make sure your Canadian passport is valid for at least 6 months beyond travel dates, and you have completed all mandatory immunizations required by the Saudi Ministry of Hajj.";
 
-  const defaultFaqs = [
+  const faqs = detailData.faqs?.length > 0 ? detailData.faqs : [
     {
       question: "Can I upgrade to double or triple occupancy?",
       answer: "Yes! Upgrades to Double or Triple occupancy are available upon request. Please select your occupancy preference or contact our support team during booking."
@@ -338,7 +345,6 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
       answer: "Yes, round-trip flights from Canada to Saudi Arabia are fully included in the package pricing."
     }
   ];
-  const faqs = (pkg.faqs && pkg.faqs.length > 0) ? pkg.faqs : defaultFaqs;
 
   return (
     <div className="bg-[#faf7f2] min-h-screen text-slate-800">
@@ -506,11 +512,9 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                 Package Overview
               </h3>
               <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-md space-y-6">
-                {overviewText.split("\n\n").map((block: string, bIdx: number) => {
-                  const lines = block.split("\n").filter((l) => l.trim());
-                  if (lines.length === 0) return null;
-                  const heading = lines[0];
-                  const details = lines.slice(1);
+                {overviewArray.map((block: any, bIdx: number) => {
+                  const heading = block.heading;
+                  const details = block.details || [];
 
                   return (
                     <div key={bIdx} className="relative pl-6 border-l-2 border-[#004B39] space-y-2">
@@ -520,7 +524,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                       </h4>
                       {details.length > 0 && (
                         <ul className="space-y-1.5 pt-1">
-                          {details.map((d, dIdx) => (
+                          {details.map((d: string, dIdx: number) => (
                             <li key={dIdx} className="text-xs sm:text-sm text-slate-600 leading-relaxed flex items-start gap-2">
                               <span className="text-[#DB9E30] font-bold text-xs mt-0.5">•</span>
                               <span>{d}</span>
@@ -683,7 +687,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                     </label>
                     <input
                       type="tel"
-                      placeholder="+1 905 624 8344"
+                      placeholder="Mobile #"
                       value={phone}
                       onChange={(e) => {
                         setPhone(e.target.value);
@@ -779,19 +783,34 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     Select Start Date
                   </label>
-                  <input
-                    type="date"
-                    min={todayDateStr}
-                    value={selectedDate}
-                    onChange={(e) => {
-                      setSelectedDate(e.target.value);
-                      if (errors.selectedDate) setErrors((prev) => ({ ...prev, selectedDate: false }));
-                    }}
-                    className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.selectedDate
-                      ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                      : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                      }`}
-                  />
+                  <div className="relative">
+                    <div
+                      className={`w-full border rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all flex items-center justify-between ${errors.selectedDate
+                        ? "border-red-500 bg-red-50/50 text-red-900"
+                        : "bg-slate-50 border-slate-200 text-slate-800"
+                        }`}
+                    >
+                      <span className={selectedDate ? "text-slate-900" : "text-slate-400"}>
+                        {selectedDate
+                          ? (() => {
+                            const [year, month, day] = selectedDate.split('-');
+                            return new Date(Number(year), Number(month) - 1, Number(day)).toLocaleDateString('en-US', { month: 'long', day: '2-digit', year: 'numeric' });
+                          })()
+                          : "e.g. March 25, 2025"}
+                      </span>
+                      <Calendar className="w-4 h-4 text-slate-400" />
+                    </div>
+                    <input
+                      type="date"
+                      min={todayDateStr}
+                      value={selectedDate}
+                      onChange={(e) => {
+                        setSelectedDate(e.target.value);
+                        if (errors.selectedDate) setErrors((prev) => ({ ...prev, selectedDate: false }));
+                      }}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                    />
+                  </div>
                   {errors.selectedDate && (
                     <span className="text-[10px] font-bold text-red-600 mt-1 block">Please select a valid start date.</span>
                   )}
