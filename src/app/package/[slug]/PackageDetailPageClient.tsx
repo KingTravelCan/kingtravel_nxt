@@ -540,44 +540,49 @@ export default function PackageDetailPageClient({
             </div>
 
             {/* 3. Package Highlights & Eligibility (Side-by-Side Cards) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Highlights */}
-              <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
-                <h3 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
-                  <Star className="w-5 h-5 fill-amber-400 text-amber-500" /> Package Highlights
-                </h3>
-                <ul className="space-y-3">
-                  {highlightsList.map((hl: string, idx: number) => {
-                    const isNotIncluded = hl.toLowerCase().includes("not included");
-                    return (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                        {isNotIncluded ? (
-                          <span className="text-red-500 font-bold shrink-0 text-base leading-none">✕</span>
-                        ) : (
-                          <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
-                        )}
-                        <span className={isNotIncluded ? "text-slate-500 line-through" : "font-medium"}>
-                          {hl}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+            <div>
+              <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
+                Highlights & Eligibility
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Highlights */}
+                <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
+                  <h3 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
+                    <Star className="w-5 h-5 fill-amber-400 text-amber-500" /> Package Highlights
+                  </h3>
+                  <ul className="space-y-3">
+                    {highlightsList.map((hl: string, idx: number) => {
+                      const isNotIncluded = hl.toLowerCase().includes("not included");
+                      return (
+                        <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                          {isNotIncluded ? (
+                            <span className="text-red-500 font-bold shrink-0 text-base leading-none">✕</span>
+                          ) : (
+                            <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
+                          )}
+                          <span className={isNotIncluded ? "text-slate-500 line-through" : "font-medium"}>
+                            {hl}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
 
-              {/* Eligibility Requirements */}
-              <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
-                <h3 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
-                  <Check className="w-5 h-5 text-emerald-600" /> Eligibility Requirements
-                </h3>
-                <ul className="space-y-3">
-                  {eligibilityList.map((el: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                      <span className="text-emerald-600 font-bold shrink-0 text-base leading-none">✓</span>
-                      <span className="font-medium">{el}</span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Eligibility Requirements */}
+                <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
+                  <h3 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
+                    <Check className="w-5 h-5 text-emerald-600" /> Eligibility Requirements
+                  </h3>
+                  <ul className="space-y-3">
+                    {eligibilityList.map((el: string, idx: number) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                        <span className="text-emerald-600 font-bold shrink-0 text-base leading-none">✓</span>
+                        <span className="font-medium">{el}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
 
