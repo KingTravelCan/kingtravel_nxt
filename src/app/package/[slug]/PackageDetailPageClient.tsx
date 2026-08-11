@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, TicketPercent, AlertCircle, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
+import { getPackageDetailsAction, getPageSeoAction } from "@/actions/pageActions";
 import { submitPackageBookingEnquiryAction } from "@/actions/enquiryActions";
 import PageSeoHead from "@/components/PageSeoHead";
 import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
@@ -840,8 +841,25 @@ export default function PackageDetailPageClient({
             </div>
           </div>
 
+          {/* Fixed Footer for Mobile */}
+          <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 p-4 lg:hidden z-40 flex items-center justify-between shadow-2xl">
+            <div>
+              <p className="text-xs text-slate-500 font-bold">Estimated Total</p>
+              <p className="text-lg font-black text-slate-900">{currencyCode} {price}</p>
+            </div>
+            <button
+              onClick={() => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                setTimeout(() => document.querySelector('form')?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+              }}
+              className="bg-gold text-black font-bold py-3 px-6 rounded-xl text-sm tracking-wide"
+            >
+              Book Now
+            </button>
+          </div>
         </div>
       </div>
+
       <SubmissionSuccessModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}

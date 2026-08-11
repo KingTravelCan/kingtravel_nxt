@@ -179,14 +179,14 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
     });
   };
 
-  const includes: string[] = Array.isArray(cd.includes) ? cd.includes : [];
+  const includes: any[] = (Array.isArray(cd.includes) ? cd.includes : []).map(inc => typeof inc === 'string' ? { icon: 'CheckCircle', text: inc } : inc);
 
-  const updateIncludes = (idx: number, val: string) => {
+  const updateIncludes = (idx: number, val: any) => {
     const next = [...includes];
     next[idx] = val;
     updateCD('includes', next);
   };
-  const addInclude = () => updateCD('includes', [...includes, '']);
+  const addInclude = () => updateCD('includes', [...includes, { icon: 'CheckCircle', text: '' }]);
   const removeInclude = (idx: number) => updateCD('includes', includes.filter((_, i) => i !== idx));
 
   return (
@@ -288,8 +288,15 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
             <div key={idx} className="flex items-center gap-2">
               <input
                 type="text"
-                value={inc}
-                onChange={e => updateIncludes(idx, e.target.value)}
+                value={inc.icon || ''}
+                onChange={e => updateIncludes(idx, { ...inc, icon: e.target.value })}
+                placeholder="Lucide Icon (e.g. Plane)"
+                className="w-1/3 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs"
+              />
+              <input
+                type="text"
+                value={inc.text || ''}
+                onChange={e => updateIncludes(idx, { ...inc, text: e.target.value })}
                 placeholder="e.g. Return Flights from Toronto"
                 className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs"
               />

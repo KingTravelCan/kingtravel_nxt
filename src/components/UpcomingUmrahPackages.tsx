@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import * as LucideIcons from "lucide-react";
 import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
+import PackageBookingModal from "@/components/PackageBookingModal";
 export default function UpcomingUmrahPackages({ data, initialPackages }: { data: any, initialPackages?: any }) {
   const pathname = usePathname();
   const eyebrow = data?.eyebrow || "EXCLUSIVE UPCOMING";
@@ -14,9 +15,20 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
 
   const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
   const [loading, setLoading] = useState(!initialPackages);
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
+  const [selectedPkgForBooking, setSelectedPkgForBooking] = useState<any>(null);
 
   useEffect(() => {
     const packageIds = data?.packageIds || [];
+    
+    // If we have initialPackages and no specific packageIds are selected, 
+    // we don't need to fetch on mount, because the server already gave us all packages.
+    if (initialPackages && packageIds.length === 0) {
+      setPkgs(initialPackages);
+      setLoading(false);
+      return;
+    }
+
     if (packageIds.length > 0) {
       getPackagesByIds(packageIds)
         .then((rows) => setPkgs(rows))
@@ -161,36 +173,30 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
 
                     <div className="incl-label">PACKAGE INCLUDES</div>
                     <ul className="space-y-4 mb-8 flex-1">
-                      {includes.map((inc: string, i: number) => {
-                        const firstWord = inc.split(" ")[0].toLowerCase();
+                      {includes.map((inc: any, i: number) => {
                         let Icon = LucideIcons.CheckCircle;
-                        if (firstWord === "return" || firstWord === "flights")
-                          Icon = LucideIcons.Plane;
-                        else if (
-                          firstWord === "luxury" ||
-                          firstWord === "transport"
-                        )
-                          Icon = LucideIcons.Bus;
-                        else if (
-                          firstWord === "free" ||
-                          firstWord === "ihram"
-                        )
-                          Icon = LucideIcons.Gift;
-                        else if (
-                          firstWord === "registration" ||
-                          firstWord === "visa"
-                        )
-                          Icon = LucideIcons.FileText;
-                        else if (
-                          firstWord === "imam" ||
-                          firstWord === "guide"
-                        )
-                          Icon = LucideIcons.Users;
-                        else if (
-                          firstWord === "5" ||
-                          firstWord === "hotel"
-                        )
-                          Icon = LucideIcons.Hotel;
+                        let text = "";
+
+                        if (typeof inc === 'string') {
+                          text = inc;
+                          const firstWord = text.split(" ")[0].toLowerCase();
+                          if (firstWord === "return" || firstWord === "flights")
+                            Icon = LucideIcons.Plane;
+                          else if (firstWord === "luxury" || firstWord === "transport")
+                            Icon = LucideIcons.Bus;
+                          else if (firstWord === "free" || firstWord === "ihram")
+                            Icon = LucideIcons.Gift;
+                          else if (firstWord === "registration" || firstWord === "visa")
+                            Icon = LucideIcons.FileText;
+                          else if (firstWord === "imam" || firstWord === "guide")
+                            Icon = LucideIcons.Users;
+                          else if (firstWord === "5" || firstWord === "hotel")
+                            Icon = LucideIcons.Hotel;
+                        } else {
+                          text = inc.text || "";
+                          // @ts-ignore
+                          Icon = LucideIcons[inc.icon] || LucideIcons.CheckCircle;
+                        }
 
                         return (
                           <li
@@ -202,7 +208,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                               className={`w-4 h-4 shrink-0 ${isGold ? "" : "text-gray-400"
                                 }`}
                             />{" "}
-                            {inc}
+                            <span className="leading-tight">{text}</span>
                           </li>
                         );
                       })}
@@ -211,22 +217,25 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                     <div className="flex gap-2">
                       <a
                         href={`/${pkg.slug}`}
-                        className={`flex-1 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 ${isGold
+                        className={`flex-1 py-3 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 ${isGold
                           ? "border-[#2c3e35] text-[#2c3e35] hover:bg-[#2c3e35]/10"
                           : "border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30]/10"
                           }`}
                       >
                         View Detail
                       </a>
-                      <a
-                        href={cd.btnLink || buttonUrl}
-                        className={`flex-1 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block ${isGold
+                      <button
+                        onClick={() => {
+                          setSelectedPkgForBooking(pkg);
+                          setBookingModalOpen(true);
+                        }}
+                        className={`flex-1 py-3 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 border-transparent cursor-pointer ${isGold
                           ? "bg-[#2c3e35] hover:bg-[#1a2520] text-white"
                           : "bg-[#DB9E30] hover:bg-[#c58d2a] text-white"
                           }`}
                       >
                         {buttonText}
-                      </a>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -246,6 +255,12 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
           </div>
         )}
       </div>
+
+      <PackageBookingModal
+        isOpen={bookingModalOpen}
+        onClose={() => setBookingModalOpen(false)}
+        pkg={selectedPkgForBooking}
+      />
     </section>
   );
 }

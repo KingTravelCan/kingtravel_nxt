@@ -18,11 +18,11 @@ export async function getPackagesByType(type: 'umrah' | 'hajj'): Promise<any[]> 
         return await db
           .select()
           .from(packages)
-          .where(and(eq(packages.type, type), ne(packages.status, 'draft')))
+          .where(and(eq(packages.type, type), ne(packages.status, 'draft'), ne(packages.status, 'sold_out')))
           .orderBy(desc(packages.createdAt));
       },
-      ['packages-by-type', type],
-      { tags: ['packages', `packages-${type}`], revalidate: 120 }
+      ['packages-by-type-v2', type],
+      { tags: ['packages', `packages-${type}-v2`], revalidate: 120 }
     );
     return (await getCachedPackages()) || [];
   } catch (err) {
@@ -38,6 +38,27 @@ export async function getAllPackages() {
   } catch (err) {
     console.error('getAllPackages DB error:', err);
     throw new Error('Failed to fetch packages from database');
+  }
+}
+
+export async function getSoldOutPackages() {
+  try {
+    const { unstable_cache } = await import('next/cache');
+    const getCached = unstable_cache(
+      async () => {
+        return await db
+          .select()
+          .from(packages)
+          .where(eq(packages.status, 'sold_out'))
+          .orderBy(desc(packages.createdAt));
+      },
+      ['packages-soldout'],
+      { tags: ['packages', 'packages-soldout'], revalidate: 120 }
+    );
+    return (await getCached()) || [];
+  } catch (err) {
+    console.error('getSoldOutPackages DB error:', err);
+    return [];
   }
 }
 
