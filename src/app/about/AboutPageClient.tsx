@@ -178,7 +178,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
           return (
             <div key={idx} className="wrap">
               <section className="about-section reveal">
-                <div className="grid-2">
+                <div className="grid-2 about_page_why_choose">
                   <div className="about-image">
                     <Image
                       src={sec.data?.image || "https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80"}
@@ -225,7 +225,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
                   <span className="section-tag">{sec.data?.eyebrow || "WHAT WE PROVIDE"}</span>
                   <h2 className="section-title">{sec.data?.title || "Our Premium Travel Services"}</h2>
                 </div>
-                <div className="grid-2 md:grid-2 gap-6 reveal">
+                <div className="flex flex-col md:grid md:grid-cols-2 gap-6 reveal">
                   {svcs.map((item: any, i: number) => (
                     <div key={i} className="about-service-card">
                       <div className="flex items-center gap-3">
@@ -356,51 +356,51 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
           );
         }
 
-        // Section Type 5: Airlines Marquee (Our Trusted Partners)
-        if (sec.type === "Airlines Marquee" || sec.type === "Partners Marquee" || sec.type === "Airlines we work with") {
-          const defaultAirlines = [
-            { src: "/img/a-1.png", alt: "PIA" },
-            { src: "/img/a-2.png", alt: "Saudia" },
-            { src: "/img/a-3.png", alt: "Air France" },
-            { src: "/img/a-4.png", alt: "Qatar Airways" },
-            { src: "/img/a-5.png", alt: "KLM" },
-            { src: "/img/a-6.png", alt: "Air Canada" },
-            { src: "/img/a-7.png", alt: "Emirates" },
-            { src: "/img/a-8.png", alt: "Etihad" },
-            { src: "/img/a-9.png", alt: "Turkish Airlines" },
-          ];
-          return (
-            <section key={idx} id="flights" className="py-12">
-              <div className="wrap">
-                <div className="section-head center text-center mb-8">
-                  <div className="eyebrow uppercase text-xs font-bold tracking-widest text-[#DB9E30] justify-center mb-1">
-                    {sec.data?.eyebrow || "OUR TRUSTED PARTNERS"}
-                  </div>
-                  <h2 className="">
-                    {sec.data?.title || "Airlines we work with"}
-                  </h2>
-                </div>
-              </div>
-              <div className="marquee-widget">
-                <div className="marquee-wrapper overflow-hidden">
-                  <div className="marquee-track airline flex gap-8 items-center justify-around flex-wrap px-4">
-                    {defaultAirlines.map((img, i) => (
-                      <div key={i} className="marquee-item p-2">
-                        <Image
-                          src={img.src}
-                          alt={img.alt}
-                          width={140}
-                          height={60}
-                          className="w-auto h-[40px] object-contain"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </section>
-          );
-        }
+        // // Section Type 5: Airlines Marquee (Our Trusted Partners)
+        // if (sec.type === "Airlines Marquee" || sec.type === "Partners Marquee" || sec.type === "Airlines we work with") {
+        //   const defaultAirlines = [
+        //     { src: "/img/a-1.png", alt: "PIA" },
+        //     { src: "/img/a-2.png", alt: "Saudia" },
+        //     { src: "/img/a-3.png", alt: "Air France" },
+        //     { src: "/img/a-4.png", alt: "Qatar Airways" },
+        //     { src: "/img/a-5.png", alt: "KLM" },
+        //     { src: "/img/a-6.png", alt: "Air Canada" },
+        //     { src: "/img/a-7.png", alt: "Emirates" },
+        //     { src: "/img/a-8.png", alt: "Etihad" },
+        //     { src: "/img/a-9.png", alt: "Turkish Airlines" },
+        //   ];
+        //   return (
+        //     <section key={idx} id="flights" className="py-12">
+        //       <div className="wrap">
+        //         <div className="section-head center text-center mb-8">
+        //           <div className="eyebrow uppercase text-xs font-bold tracking-widest text-[#DB9E30] justify-center mb-1">
+        //             {sec.data?.eyebrow || "OUR TRUSTED PARTNERS"}
+        //           </div>
+        //           <h2 className="">
+        //             {sec.data?.title || "Airlines we work with"}
+        //           </h2>
+        //         </div>
+        //       </div>
+        //       {/* <div className="marquee-widget">
+        //         <div className="">
+        //           <div className="marquee-track airline flex gap-8 items-center justify-around flex-wrap px-4">
+        //             {defaultAirlines.map((img, i) => (
+        //               <div key={i} className="marquee-item p-2">
+        //                 <Image
+        //                   src={img.src}
+        //                   alt={img.alt}
+        //                   width={140}
+        //                   height={60}
+        //                   className="w-auto h-[40px] object-contain"
+        //                 />
+        //               </div>
+        //             ))}
+        //           </div>
+        //         </div>
+        //       </div> */}
+        //     </section>
+        //   );
+        // }
 
         if (sec.type === 'Text Block (Rich Text)') {
           let content: string = sec.data?.content || '';

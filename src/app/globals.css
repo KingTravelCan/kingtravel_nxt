@@ -1561,14 +1561,14 @@ section#flights {
   color: var(--dark);
 }
 
-.features-list li::before {
+/* .features-list li::before {
   content: "✓";
   color: var(--accent);
   font-weight: bold;
   position: absolute;
   left: 0;
   top: 0;
-}
+} */
 
 .services-section {
   background-color: var(--light-bg);
@@ -2646,6 +2646,10 @@ select {
 @media (max-width:480px) {
     .contact-chip {
       display: none;
+    }
+    .about_page_why_choose {
+      display: flex !important;
+      flex-direction: column;
     }
 
     .txt a {
