@@ -197,7 +197,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             </article>
 
             {/* ── Related Posts Sidebar ── */}
-            <aside className="lg:sticky lg:top-6">
+            <aside className="lg:top-6">
               <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
                 <div className="px-5 py-4 border-b border-slate-100 flex items-center">
                   {/* <span className="w-1 h-5 bg-[#004B39] rounded-full inline-block" /> */}

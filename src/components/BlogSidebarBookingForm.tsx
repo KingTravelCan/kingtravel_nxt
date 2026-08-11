@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TicketPercent, Calendar } from "lucide-react";
 import { submitPackageBookingEnquiryAction } from "@/actions/enquiryActions";
+import { getPackagesByType } from "@/actions/packageActions";
 import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
 
 export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: string }) {
@@ -15,6 +16,11 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
   const [selectedDate, setSelectedDate] = useState("");
   const [bookingStatus, setBookingStatus] = useState("");
 
+  const [packageType, setPackageType] = useState<"hajj" | "umrah">("umrah");
+  const [availablePackages, setAvailablePackages] = useState<any[]>([]);
+  const [selectedPackageId, setSelectedPackageId] = useState("");
+  const [packagesLoading, setPackagesLoading] = useState(true);
+
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMsg, setModalMsg] = useState("");
   const [modalRef, setModalRef] = useState("");
@@ -23,8 +29,38 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
     fullName: false,
     phone: false,
     email: false,
+    selectedPackage: false,
     selectedDate: false,
   });
+
+  useEffect(() => {
+    let cancelled = false;
+
+    setPackagesLoading(true);
+    setSelectedPackageId("");
+
+    getPackagesByType(packageType)
+      .then((rows) => {
+        if (cancelled) return;
+
+        // Only packages that are currently available can be selected.
+        const available = (rows || []).filter(
+          (pkg: any) => pkg.status === "available"
+        );
+
+        setAvailablePackages(available);
+      })
+      .catch(() => {
+        if (!cancelled) setAvailablePackages([]);
+      })
+      .finally(() => {
+        if (!cancelled) setPackagesLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [packageType]);
 
   const todayDateStr = new Date().toISOString().split("T")[0];
 
@@ -37,6 +73,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
       fullName: !fullName.trim(),
       phone: !phone.trim(),
       email: !email.trim(),
+      selectedPackage: !selectedPackageId,
       selectedDate: !selectedDate.trim(),
     };
     setErrors(newErrors);
@@ -48,8 +85,15 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
 
     setBookingStatus("Submitting your inquiry...");
 
+    const selectedPackage = availablePackages.find(
+      (pkg: any) => String(pkg.id) === selectedPackageId
+    );
+
     const res = await submitPackageBookingEnquiryAction({
-      packageName: `Blog Enquiry: ${blogTitle || 'General'}`,
+      packageId: Number(selectedPackageId),
+      packageName:
+        selectedPackage?.title ||
+        `${packageType === "hajj" ? "Hajj" : "Umrah"} Package`,
       fullName,
       phone,
       email,
@@ -68,6 +112,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
       setAdults("1");
       setChildrenCount("0");
       setInfantsCount("0");
+      setSelectedPackageId("");
       setSelectedDate("");
 
       setModalMsg(res.message || "Your inquiry has been submitted.");
@@ -154,6 +199,95 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
             />
             {errors.email && (
               <span className="text-[10px] font-bold text-red-600 mt-1 block">Please fill out this field.</span>
+            )}
+          </div>
+        </div>
+
+        {/* Hajj / Umrah Package Selection */}
+        <div className="space-y-3">
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1.5">
+              Journey Type
+            </label>
+
+            <div className="grid grid-cols-2 gap-2 p-1 bg-slate-100 rounded-xl">
+              <button
+                type="button"
+                onClick={() => {
+                  setPackageType("hajj");
+                  setSelectedPackageId("");
+                  if (errors.selectedPackage) {
+                    setErrors((prev) => ({ ...prev, selectedPackage: false }));
+                  }
+                }}
+                className={`py-2.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
+                  packageType === "hajj"
+                    ? "bg-[#004B39] text-white shadow-sm"
+                    : "bg-transparent text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                Hajj
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setPackageType("umrah");
+                  setSelectedPackageId("");
+                  if (errors.selectedPackage) {
+                    setErrors((prev) => ({ ...prev, selectedPackage: false }));
+                  }
+                }}
+                className={`py-2.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
+                  packageType === "umrah"
+                    ? "bg-[#004B39] text-white shadow-sm"
+                    : "bg-transparent text-slate-500 hover:text-slate-800"
+                }`}
+              >
+                Umrah
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-slate-700 mb-1">
+              Select {packageType === "hajj" ? "Hajj" : "Umrah"} Package
+            </label>
+
+            <select
+              value={selectedPackageId}
+              disabled={packagesLoading}
+              onChange={(e) => {
+                setSelectedPackageId(e.target.value);
+                if (errors.selectedPackage) {
+                  setErrors((prev) => ({ ...prev, selectedPackage: false }));
+                }
+              }}
+              className={`w-full border rounded-xl px-3.5 py-2.5 text-xs font-medium focus:outline-none transition-all cursor-pointer ${
+                errors.selectedPackage
+                  ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
+                  : "bg-slate-50 border-slate-200 text-slate-800 focus:ring-2 focus:ring-[#004B39]"
+              }`}
+            >
+              <option value="">
+                {packagesLoading
+                  ? "Loading packages..."
+                  : availablePackages.length === 0
+                    ? `No available ${packageType === "hajj" ? "Hajj" : "Umrah"} packages`
+                    : `Select a ${packageType === "hajj" ? "Hajj" : "Umrah"} package`}
+              </option>
+
+              {availablePackages.map((pkg: any) => (
+                <option key={pkg.id} value={String(pkg.id)}>
+                  {pkg.title}
+                </option>
+              ))}
+            </select>
+
+            {errors.selectedPackage && (
+              <span className="text-[10px] font-bold text-red-600 mt-1 block">
+                Please select a package.
+              </span>
             )}
           </div>
         </div>
