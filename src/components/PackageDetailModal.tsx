@@ -202,10 +202,10 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 
         {/* ================= MAIN CONTENT BODY (2-COL GRID) ================= */}
         <div className="p-4 sm:p-8 md:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-10 items-start">
-          
+
           {/* LEFT COLUMN: Accommodations, Overview, Highlights, Eligibility, FAQs */}
           <div className="lg:col-span-8 flex flex-col gap-10">
-            
+
             {/* 1. Premium Accommodations */}
             <div>
               <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5 flex items-center gap-2">
@@ -323,42 +323,43 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Highlights */}
-              <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
-                <h3 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
-                  <Star className="w-5 h-5 fill-amber-400 text-amber-500" /> Package Highlights
-                </h3>
-                <ul className="space-y-3">
-                  {activeHighlights.map((hl: any, idx: number) => {
-                    const isNotIncluded = hl.isCross;
-                    return (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                        {isNotIncluded ? (
-                          <span className="text-red-500 font-bold shrink-0 text-base leading-none">✕</span>
-                        ) : (
-                          <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
-                        )}
-                        <span className={isNotIncluded ? "text-slate-500 line-through" : "font-medium"}>
-                          {hl.text}
-                        </span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              </div>
+                <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
+                  <h3 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
+                    <Star className="w-5 h-5 fill-amber-400 text-amber-500" /> Package Highlights
+                  </h3>
+                  <ul className="space-y-3">
+                    {activeHighlights.map((hl: any, idx: number) => {
+                      const isNotIncluded = hl.isCross;
+                      return (
+                        <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                          {isNotIncluded ? (
+                            <span className="text-red-500 font-bold shrink-0 text-base leading-none">✕</span>
+                          ) : (
+                            <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
+                          )}
+                          <span className={isNotIncluded ? "text-slate-500 line-through" : "font-medium"}>
+                            {hl.text}
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
 
-              {/* Eligibility Requirements */}
-              <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
-                <h3 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
-                  <Check className="w-5 h-5 text-emerald-600" /> Eligibility Requirements
-                </h3>
-                <ul className="space-y-3">
-                  {activeEligibility.map((el: string, idx: number) => (
-                    <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                      <span className="text-emerald-600 font-bold shrink-0 text-base leading-none">✓</span>
-                      <span className="font-medium">{el}</span>
-                    </li>
-                  ))}
-                </ul>
+                {/* Eligibility Requirements */}
+                <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
+                  <h3 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
+                    <Check className="w-5 h-5 text-emerald-600" /> Eligibility Requirements
+                  </h3>
+                  <ul className="space-y-3">
+                    {activeEligibility.map((el: string, idx: number) => (
+                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                        <span className="text-emerald-600 font-bold shrink-0 text-base leading-none">✓</span>
+                        <span className="font-medium">{el}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
 
@@ -369,7 +370,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
               </div>
               <div className="space-y-1">
                 <h4 className="font-bold text-amber-950 text-sm">Important Booking Notice</h4>
-                <div 
+                <div
                   className="text-xs text-amber-900/80 leading-relaxed font-medium prose prose-sm max-w-none"
                   dangerouslySetInnerHTML={{ __html: importantNotice }}
                 />
@@ -378,12 +379,12 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 
             {/* 5. Frequently Asked Questions (Accordion) */}
             <div>
-            <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5 flex items-center gap-2">
-              <AlertCircle className="w-6 h-6 text-emerald-600" /> Frequently Asked Questions
-            </h3>
-            <div className="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden">
-              {faqs.map((faq: any, idx: number) => {
-                const isOpenItem = openFaqIdx === idx;
+              <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5 flex items-center gap-2">
+                <AlertCircle className="w-6 h-6 text-emerald-600" /> Frequently Asked Questions
+              </h3>
+              <div className="bg-white rounded-2xl border border-slate-200/80 shadow-md overflow-hidden">
+                {faqs.map((faq: any, idx: number) => {
+                  const isOpenItem = openFaqIdx === idx;
                   return (
                     <div
                       key={idx}
@@ -418,7 +419,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
           {/* RIGHT COLUMN: Operator Badge & Booking Form (Sticky Sidebar) */}
           <div className="lg:col-span-4 sticky top-20 space-y-6">
             <div className="bg-white rounded-3xl p-6 border border-slate-200/90 shadow-xl space-y-6">
-              
+
               {/* Operator Badge Header */}
               <div className="flex justify-between items-start pb-4 border-b border-slate-100">
                 <div>
@@ -433,7 +434,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 
               {/* Booking Input Form */}
               <form onSubmit={handleBookingSubmit} className="space-y-4">
-                
+
                 {/* Date Picker */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
