@@ -186,13 +186,12 @@ export default function DetailPageDataFields({
       {/* Important Booking */}
       <div className="bg-amber-50 rounded-2xl p-5 border border-amber-200">
         <h4 className="text-sm font-extrabold text-amber-900 mb-2 uppercase tracking-wide">Important Booking Note</h4>
-        <textarea
-          value={d.importantBooking || ''}
-          onChange={e => update('importantBooking', e.target.value)}
-          rows={3}
-          placeholder="To secure your visa slot, please make sure..."
-          className="w-full px-3 py-2 rounded-lg border border-amber-300 text-xs focus:border-amber-500 outline-none"
-        />
+        <div className="bg-white rounded-lg border border-amber-300 overflow-hidden">
+          <TiptapEditor
+            value={d.importantBooking || ''}
+            onChange={(val) => update('importantBooking', val)}
+          />
+        </div>
       </div>
 
       {/* FAQs */}
