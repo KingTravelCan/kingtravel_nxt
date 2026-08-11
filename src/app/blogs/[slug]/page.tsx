@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import BlogSidebarBookingForm from '@/components/BlogSidebarBookingForm';
+import { getPackagesByType } from '@/actions/packageActions';
 
 const FALLBACK_THUMB = 'https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg';
 
@@ -76,6 +77,19 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   if (!blog || !blog.isPublished) notFound();
 
   const relatedBlogs = await getRelatedBlogs(slug, 6);
+
+  const [umrahPackageRows, hajjPackageRows] = await Promise.all([
+    getPackagesByType('umrah'),
+    getPackagesByType('hajj'),
+  ]);
+
+  const umrahPackages = (umrahPackageRows || []).filter(
+    (pkg: any) => pkg.status === 'available'
+  );
+
+  const hajjPackages = (hajjPackageRows || []).filter(
+    (pkg: any) => pkg.status === 'available'
+  );
   const displayDate = formatDate(blog.publishedAt || blog.createdAt);
   const catClass = CATEGORY_COLORS[blog.category ?? ''] ?? 'bg-emerald-100 text-emerald-700 border-emerald-200';
 
@@ -233,6 +247,24 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 </div>
               </div>
 
+              {/* Umrah Packages */}
+              <div className="mt-8">
+                <SidebarPackageSection
+                  title="Umrah Packages"
+                  packages={umrahPackages}
+                  emptyText="No Umrah packages available."
+                />
+              </div>
+
+              {/* Hajj Packages */}
+              <div className="mt-8">
+                <SidebarPackageSection
+                  title="Hajj Packages"
+                  packages={hajjPackages}
+                  emptyText="No Hajj packages available."
+                />
+              </div>
+
               {/* Booking Form Widget */}
               <div className="mt-8">
                 <BlogSidebarBookingForm blogTitle={blog.title} />
@@ -242,6 +274,102 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         </div>
       </section>
     </>
+  );
+}
+
+
+function SidebarPackageSection({
+  title,
+  packages,
+  emptyText,
+}: {
+  title: string;
+  packages: any[];
+  emptyText: string;
+}) {
+  return (
+    <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+      <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
+        <span className="text-lg font-extrabold text-slate-900">{title}</span>
+        <span className="text-[10px] font-bold uppercase tracking-wider text-[#DB9E30]">
+          {packages.length} Available
+        </span>
+      </div>
+
+      {packages.length === 0 ? (
+        <div className="px-5 py-6 text-center text-xs text-slate-400">
+          {emptyText}
+        </div>
+      ) : (
+        <div className="divide-y divide-slate-100">
+          {packages.map((pkg: any) => {
+            let cardData: any = pkg.cardData || {};
+
+            if (typeof cardData === 'string') {
+              try {
+                cardData = JSON.parse(cardData);
+              } catch {
+                cardData = {};
+              }
+            }
+
+            const image =
+              cardData?.bannerImage ||
+              pkg.featuredImage ||
+              '/img/saudi-visa-1.webp';
+
+            const price = pkg.startingPrice
+              ? Number(pkg.startingPrice).toLocaleString('en-CA', {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })
+              : null;
+
+            return (
+              <div key={pkg.id} className="p-4">
+                <div className="flex gap-3">
+                  <Link
+                    href={`/${pkg.slug}`}
+                    className="relative w-24 h-20 shrink-0 rounded-xl overflow-hidden bg-slate-100 no-underline"
+                  >
+                    <img
+                      src={image}
+                      alt={pkg.title || title}
+                      className="w-full h-full object-cover"
+                    />
+                  </Link>
+
+                  <div className="flex-1 min-w-0">
+                    <Link
+                      href={`/${pkg.slug}`}
+                      className="block text-sm font-extrabold text-slate-800 leading-snug hover:text-[#004B39] transition-colors no-underline line-clamp-2"
+                    >
+                      {pkg.title}
+                    </Link>
+
+                    <div className="mt-1.5">
+                      <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wide">
+                        From
+                      </span>
+                      <div className="text-sm font-black text-[#004B39]">
+                        {price ? `CAD ${price}` : 'Contact for price'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <Link
+                  href={`/${pkg.slug}`}
+                  className="mt-3 flex w-full items-center justify-center rounded-xl border border-[#004B39]/20 py-2.5 text-[11px] font-extrabold text-[#004B39] hover:bg-[#004B39] hover:text-white hover:border-[#004B39] transition-all no-underline"
+                >
+                  View Details →
+                </Link>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }
 

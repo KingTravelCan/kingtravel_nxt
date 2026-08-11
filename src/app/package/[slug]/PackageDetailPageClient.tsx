@@ -221,7 +221,7 @@ export default function PackageDetailPageClient({
         children: parseInt(childrenCount, 10),
         infants: parseInt(infantsCount, 10),
         startDate: selectedDate,
-        totalPrice: pkg?.price || "7,499",
+        totalPrice: String(pkg?.startingPrice ?? pkg?.price ?? ""),
       });
 
       if (res.success) {
@@ -271,10 +271,20 @@ export default function PackageDetailPageClient({
   const durationText = detailData.durationText || pkg.durationText || `${pkg.duration || "14 DAYS"} / 13 NIGHTS`;
   const departure = detailData.departure || pkg.departure || "CANADA";
   const destination = detailData.destination || pkg.destination || "SAUDIA";
-  const price = (pkg.price || "12,995").replace("CAD", "").trim();
+  // Database packages store the package price in `startingPrice`.
+  // `pkg.price` is kept only as a fallback for older/static package objects.
+  const rawPrice = pkg.startingPrice ?? pkg.price ?? "12,995";
+  const numericPrice = Number(String(rawPrice).replace(/[^0-9.]/g, ""));
+  const price = Number.isFinite(numericPrice)
+    ? numericPrice.toLocaleString("en-CA", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    : String(rawPrice).replace("CAD", "").replace("$", "").trim();
+
   const priceSubtext = pkg.priceSubtext || "PER PERSON, QUAD OCCUPANCY";
   const exclusiveBadge = pkg.exclusiveBadge || "EXCLUSIVE PACKAGE";
-  const currencyCode = pkg.currencyCode || "CAD";
+  const currencyCode = pkg.currency || pkg.currencyCode || "CAD";
 
   const operatorName = pkg.operatorName || "King Travel";
   const operatorRating = pkg.operatorRating || "4.4/5";
@@ -375,7 +385,7 @@ export default function PackageDetailPageClient({
                 '@type': 'Offer',
                 url: `/package/${rawSlug}`,
                 priceCurrency: 'CAD',
-                price: (pkg.price || price || '12995').replace(/,/g, ''),
+                price: String(pkg.startingPrice ?? pkg.price ?? price ?? '12995').replace(/,/g, ''),
                 priceValidUntil: '2027-12-31',
                 availability: 'https://schema.org/InStock',
                 seller: {
