@@ -2,6 +2,7 @@ import { getBlogBySlug, getRelatedBlogs, getBlogSeoAction } from '@/actions/blog
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import BlogSidebarBookingForm from '@/components/BlogSidebarBookingForm';
 
 const FALLBACK_THUMB = 'https://antiquewhite-stinkbug-399384.hostingersite.com/wp-content/uploads/2026/05/Umrah_packages_202605092201.jpeg';
 
@@ -200,7 +201,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
                 <div className="px-5 py-4 border-b border-slate-100 flex items-center">
                   {/* <span className="w-1 h-5 bg-[#004B39] rounded-full inline-block" /> */}
-                  <h2 className="text-xl font-extrabold text-ink m-0">Other Articles</h2>
+                  <span className="text-xl font-extrabold m-0">Other Articles</span>
                 </div>
 
                 {relatedBlogs.length === 0 ? (
@@ -230,6 +231,11 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                     View All Articles →
                   </Link>
                 </div>
+              </div>
+
+              {/* Booking Form Widget */}
+              <div className="mt-8">
+                <BlogSidebarBookingForm blogTitle={blog.title} />
               </div>
             </aside>
           </div>

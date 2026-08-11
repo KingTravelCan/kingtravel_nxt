@@ -39,9 +39,9 @@ export default function PackageBookingModal({
 
   const price = pkg?.startingPrice
     ? Number(pkg.startingPrice).toLocaleString("en-CA", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })
     : "12,995";
   const currencyCode = cd.currencyCode || "CAD";
   const badgeTag = cd.badgeTag || "Package";
@@ -94,22 +94,22 @@ export default function PackageBookingModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-[100] flex justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-white top-6 max-h-[90vh] overflow-y-auto rounded-2xl w-full max-w-[420px] shadow-2xl relative flex flex-col my-auto shrink-0">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full transition-colors"
+          className="absolute top-4 right-4 z-10 w-7 h-7 flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors shadow-sm"
         >
-          <X className="w-5 h-5" />
+          <X className="w-4 h-4" />
         </button>
 
-        <div className="p-6 md:p-8 overflow-y-auto">
-          <div className="text-center mb-6">
-            <h3 className="text-2xl font-serif font-bold text-slate-900 mb-2">Book {pkg?.title || "Umrah Package"}</h3>
-            <p className="text-slate-500 text-sm">Please fill out the form below to initiate your booking inquiry.</p>
+        <div className="p-5 md:p-6 overflow-y-auto scrollbar-hide">
+          <div className="text-center mb-5 px-6 md:px-8 pt-6">
+            <h3 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-1.5 leading-tight">Book {pkg?.title || "Umrah Package"}</h3>
+            <p className="text-slate-500 text-xs">Please fill out the form below to initiate your booking inquiry.</p>
           </div>
 
-          <form onSubmit={handleBookingSubmit} noValidate className="space-y-4">
+          <form onSubmit={handleBookingSubmit} noValidate className="space-y-3">
             {bookingStatus && (
               <p className="text-xs font-bold text-emerald-800 bg-emerald-50 border border-emerald-200 p-2.5 rounded-xl text-center">
                 {bookingStatus}
@@ -129,11 +129,10 @@ export default function PackageBookingModal({
                   setFullName(e.target.value);
                   if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: false }));
                 }}
-                className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                  errors.fullName
-                    ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                    : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                }`}
+                className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.fullName
+                  ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
+                  : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+                  }`}
               />
               {errors.fullName && (
                 <span className="text-[10px] font-bold text-red-600 mt-1 block">Please fill out this field.</span>
@@ -154,11 +153,10 @@ export default function PackageBookingModal({
                     setPhone(e.target.value);
                     if (errors.phone) setErrors((prev) => ({ ...prev, phone: false }));
                   }}
-                  className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                    errors.phone
-                      ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                      : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                  }`}
+                  className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.phone
+                    ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
+                    : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+                    }`}
                 />
                 {errors.phone && (
                   <span className="text-[10px] font-bold text-red-600 mt-1 block">Please fill out this field.</span>
@@ -176,11 +174,10 @@ export default function PackageBookingModal({
                     setEmail(e.target.value);
                     if (errors.email) setErrors((prev) => ({ ...prev, email: false }));
                   }}
-                  className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                    errors.email
-                      ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                      : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                  }`}
+                  className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.email
+                    ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
+                    : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+                    }`}
                 />
                 {errors.email && (
                   <span className="text-[10px] font-bold text-red-600 mt-1 block">Please fill out this field.</span>
@@ -248,21 +245,20 @@ export default function PackageBookingModal({
               </label>
               <div className="relative">
                 <div
-                  className={`w-full border rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all flex items-center justify-between ${
-                    errors.selectedDate
-                      ? "border-red-500 bg-red-50/50 text-red-900"
-                      : "bg-slate-50 border-slate-200 text-slate-800"
-                  }`}
+                  className={`w-full border rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all flex items-center justify-between ${errors.selectedDate
+                    ? "border-red-500 bg-red-50/50 text-red-900"
+                    : "bg-slate-50 border-slate-200 text-slate-800"
+                    }`}
                 >
                   <span className={selectedDate ? "text-slate-900" : "text-slate-400"}>
                     {selectedDate
                       ? (() => {
-                          const [year, month, day] = selectedDate.split("-");
-                          return new Date(Number(year), Number(month) - 1, Number(day)).toLocaleDateString(
-                            "en-US",
-                            { month: "long", day: "2-digit", year: "numeric" }
-                          );
-                        })()
+                        const [year, month, day] = selectedDate.split("-");
+                        return new Date(Number(year), Number(month) - 1, Number(day)).toLocaleDateString(
+                          "en-US",
+                          { month: "long", day: "2-digit", year: "numeric" }
+                        );
+                      })()
                       : "e.g. March 25, 2025"}
                   </span>
                   <Calendar className="w-4 h-4 text-slate-400" />
