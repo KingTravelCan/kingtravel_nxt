@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
 import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
+import PackageBookingModal from "@/components/PackageBookingModal";
 export default function HajjPackagesSection({ data, initialPackages }: { data: any, initialPackages?: any }) {
   const eyebrow = data?.eyebrow || "LUXURY HAJJ PACKAGES";
   const title = data?.title || "Hajj Packages 2027";
@@ -12,6 +13,8 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
 
   const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
   const [loading, setLoading] = useState(!initialPackages);
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
+  const [selectedPkgForBooking, setSelectedPkgForBooking] = useState<any>(null);
 
   useEffect(() => {
     const packageIds = data?.packageIds || [];
@@ -108,8 +111,6 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                   maximumFractionDigits: 0,
                 })
                 : "12,995";
-              const btnLabel = cd.btnLabel || `Book ${pkg.title}`;
-              const btnLink = `/${pkg.slug}`;
               const makkahHotel = cd.makkahHotel;
               const madinahHotel = cd.madinahHotel;
 
@@ -242,13 +243,23 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-2">
-
                       <a
-                        href={btnLink}
-                        className="w-full py-3.5 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                        href={`/${pkg.slug}`}
+                        className="flex-1 py-3.5 border-2 border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30]/10 text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
                       >
-                        <LucideIcons.BookOpen className="w-4 h-4" /> {btnLabel}
+                        <LucideIcons.Eye className="w-4 h-4" /> View Detail
                       </a>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setSelectedPkgForBooking(pkg);
+                          setBookingModalOpen(true);
+                        }}
+                        className="flex-1 py-3.5 bg-[#DB9E30] hover:bg-[#c58d2a] text-white text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
+                      >
+                        <LucideIcons.BookOpen className="w-4 h-4" /> Book Hajj 2027
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -257,6 +268,12 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
           </div>
         )}
       </div>
+
+      <PackageBookingModal
+        isOpen={bookingModalOpen}
+        onClose={() => setBookingModalOpen(false)}
+        pkg={selectedPkgForBooking}
+      />
     </section>
   );
 }
