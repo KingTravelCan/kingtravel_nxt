@@ -179,15 +179,26 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
     });
   };
 
-  const includes: string[] = Array.isArray(cd.includes) ? cd.includes : [];
+  const includes: string[] = Array.isArray(cd.includes)
+    ? cd.includes
+    : [];
 
   const updateIncludes = (idx: number, val: string) => {
-    const next = [...includes];
+    const next: string[] = [...includes];
     next[idx] = val;
     updateCD('includes', next);
   };
-  const addInclude = () => updateCD('includes', [...includes, '']);
-  const removeInclude = (idx: number) => updateCD('includes', includes.filter((_, i) => i !== idx));
+
+  const addInclude = () => {
+    updateCD('includes', [...includes, '']);
+  };
+
+  const removeInclude = (idx: number) => {
+    updateCD(
+      'includes',
+      includes.filter((_: string, i: number) => i !== idx)
+    );
+  };
 
   return (
     <div className="col-span-full space-y-5 p-5 border border-emerald-200 bg-emerald-50/30 rounded-2xl">
@@ -284,7 +295,7 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
           </button>
         </div>
         <div className="space-y-2">
-          {includes.map((inc, idx) => (
+          {includes.map((inc: string, idx: number) => (
             <div key={idx} className="flex items-center gap-2">
               <input
                 type="text"

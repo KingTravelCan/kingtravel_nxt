@@ -2623,6 +2623,10 @@ select {
       align-items: center;
       text-align: center;
     }
+    .about_page_why_choose {
+      flex-direction: column;
+      display: flex !important;
+    }
 }
 
 @media (max-width:560px) {
