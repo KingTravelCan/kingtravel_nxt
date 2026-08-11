@@ -192,13 +192,13 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
 
   const includes: IncludeItem[] = Array.isArray(cd.includes)
     ? cd.includes.map((item: any) =>
-        typeof item === 'string'
-          ? { icon: 'Check', text: item }
-          : {
-              icon: item?.icon || 'Check',
-              text: item?.text || '',
-            }
-      )
+      typeof item === 'string'
+        ? { icon: 'Check', text: item }
+        : {
+          icon: item?.icon || 'Check',
+          text: item?.text || '',
+        }
+    )
     : [];
 
   const updateIncludes = (idx: number, val: IncludeItem) => {
@@ -345,7 +345,7 @@ interface EditPackageClientProps {
 
 export default function EditPackageClient({ packageData }: EditPackageClientProps) {
   const router = useRouter();
-  
+
   const parseJSON = (data: any, defaultVal: any) => {
     if (!data) return defaultVal;
     if (typeof data === 'string') {
@@ -388,7 +388,7 @@ export default function EditPackageClient({ packageData }: EditPackageClientProp
     });
     setIsSubmitting(false);
     if (res.success) {
-      setSaveMsg('Package updated successfully!');
+      setSaveMsg('Package Updated Successfully!');
       setTimeout(() => setSaveMsg(null), 3000);
     } else {
       alert(res.error || 'Failed to update package.');
@@ -413,25 +413,23 @@ export default function EditPackageClient({ packageData }: EditPackageClientProp
           <button
             type="button"
             onClick={() => setActiveTab('basic')}
-            className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-              activeTab === 'basic' ? 'bg-gold text-primary shadow' : 'text-slate-500 hover:text-slate-700'
-            }`}
+            className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${activeTab === 'basic' ? 'bg-gold text-primary shadow' : 'text-slate-500 hover:text-slate-700'
+              }`}
           >
             Basic & Card Info
           </button>
           <button
             type="button"
             onClick={() => setActiveTab('detail')}
-            className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${
-              activeTab === 'detail' ? 'bg-gold text-primary shadow' : 'text-slate-500 hover:text-slate-700'
-            }`}
+            className={`px-6 py-2.5 rounded-xl text-sm font-bold transition-all ${activeTab === 'detail' ? 'bg-gold text-primary shadow' : 'text-slate-500 hover:text-slate-700'
+              }`}
           >
             Detail Page Content
           </button>
         </div>
 
         <form onSubmit={handleUpdate} className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-          
+
 
           {activeTab === 'basic' && (
             <>
