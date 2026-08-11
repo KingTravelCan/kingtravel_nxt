@@ -97,7 +97,7 @@ export default function VisaSolutionsSection({ data }: { data?: any }) {
 
                 <Link
                   href="/contact"
-                  className="mt-5 inline-flex items-center justify-center bg-[#004B39] text-white font-bold text-sm px-6 py-3 rounded-full hover:bg-[#00372a] transition-colors"
+                  className="mt-5 inline-flex items-center justify-center bg-[#db9e30] text-black font-bold text-sm px-6 py-3 rounded-full hover:bg-[#00372a] transition-colors"
                 >
                   Apply Now
                 </Link>
