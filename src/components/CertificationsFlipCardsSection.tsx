@@ -61,10 +61,10 @@ export default function CertificationsFlipCardsSection({ data }: CertificationsF
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {items.map((item, idx) => (
             <div key={idx} className="h-64 w-full group [perspective:1000px]">
-              <div className="relative h-full w-full rounded-[32px] transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-sm hover:shadow-xl">
+              <div className="group relative h-full w-full rounded-[32px] transition-transform duration-700 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)] shadow-sm hover:shadow-xl">
                 
                 {/* Front Side */}
-                <div className="absolute inset-0 h-full w-full rounded-[32px] bg-white p-8 backface-hidden flex items-center justify-center border border-gray-100 z-10">
+                <div className="absolute inset-0 h-full w-full rounded-[32px] bg-white p-8 backface-hidden flex items-center justify-center border border-gray-100 z-10 opacity-100 transition-opacity duration-300 delay-100 group-hover:opacity-0 group-hover:delay-0">
                   {item.logo ? (
                     <div className="relative w-4/5 h-4/5 flex items-center justify-center">
                       <img
@@ -86,7 +86,7 @@ export default function CertificationsFlipCardsSection({ data }: CertificationsF
                   </p>
                 </div>
                 
-              </div>
+</div>
             </div>
           ))}
         </div>

@@ -230,6 +230,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                     <option>Umrah Package</option>
                     <option>Hajj Package</option>
                     <option>Flight Only</option>
+                    <option>Saudi Visa</option>
                   </select>
                 </div>
 
