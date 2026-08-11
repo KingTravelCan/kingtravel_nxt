@@ -20,14 +20,33 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
 
   useEffect(() => {
     const packageIds = data?.packageIds || [];
-    
-    // If we have initialPackages and no specific packageIds are selected, 
-    // we don't need to fetch on mount, because the server already gave us all packages.
+    const isUmrahListingPage = pathname === "/umrah-packages";
+
+    // The main Umrah listing page must always show every non-draft, non-sold-out
+    // Umrah package from the database. Ignore CMS-selected packageIds here.
+    if (isUmrahListingPage) {
+      if (initialPackages) {
+        setPkgs(initialPackages);
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      getPackagesByType("umrah")
+        .then((rows) => setPkgs(rows))
+        .catch(() => setPkgs([]))
+        .finally(() => setLoading(false));
+      return;
+    }
+
+    // On other pages, keep supporting manually selected packages.
     if (initialPackages && packageIds.length === 0) {
       setPkgs(initialPackages);
       setLoading(false);
       return;
     }
+
+    setLoading(true);
 
     if (packageIds.length > 0) {
       getPackagesByIds(packageIds)
@@ -40,7 +59,10 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
         .catch(() => setPkgs([]))
         .finally(() => setLoading(false));
     }
-  }, [data?.packageIds]);
+  }, [data?.packageIds, initialPackages, pathname]);
+
+  // Homepage should only show the first 4 Umrah packages.
+  const displayedPkgs = pathname === "/" ? pkgs.slice(0, 4) : pkgs;
   return (
     <section className="py-10 bg-[#f1f5e6]">
       <div className="max-w-[1400px] mx-auto px-5">
@@ -89,7 +111,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
         {/* Packages Grid */}
         {!loading && pkgs.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch">
-            {pkgs.map((pkg: any, idx: number) => {
+            {displayedPkgs.map((pkg: any, idx: number) => {
               let cd = pkg.cardData || {};
               if (typeof cd === 'string') {
                 try {
