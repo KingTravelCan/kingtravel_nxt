@@ -98,7 +98,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                   maximumFractionDigits: 0,
                 })
                 : "";
-              const buttonUrl = `/${pkg.slug || pkg.id}`;
+              const buttonUrl = `/${pkg.slug}`;
               const buttonText = cd.btnLabel || "BOOK NOW";
 
               // Parse inclusions: stored as JSON string or array
@@ -210,7 +210,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
 
                     <div className="flex gap-2">
                       <a
-                        href={`/${pkg.slug || pkg.id}`}
+                        href={`/${pkg.slug}`}
                         className={`flex-1 py-4 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 ${isGold
                           ? "border-[#2c3e35] text-[#2c3e35] hover:bg-[#2c3e35]/10"
                           : "border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30]/10"

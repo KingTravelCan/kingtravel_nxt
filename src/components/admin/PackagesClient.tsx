@@ -226,10 +226,6 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
             <label className="text-[10px] font-bold text-slate-500 mb-1 block">BUTTON LABEL</label>
             <input type="text" value={cd.btnLabel || ''} onChange={e => updateCD('btnLabel', e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs" />
           </div>
-          <div>
-            <label className="text-[10px] font-bold text-slate-500 mb-1 block">BUTTON LINK</label>
-            <input type="text" value={cd.btnLink || ''} onChange={e => updateCD('btnLink', e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs" />
-          </div>
           <div className="flex items-center gap-3">
             <input
               id="isActiveCardUmrah"
@@ -483,7 +479,7 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
           <label className="text-xs font-bold text-slate-700 block mb-1">Page Slug *</label>
           <div className="flex">
             <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 text-slate-500 sm:text-xs">
-              /{activeTab === 'hajj' ? 'hajj-packages' : 'umrah-packages'}/
+              /
             </span>
             <input
               type="text"

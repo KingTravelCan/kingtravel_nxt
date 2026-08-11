@@ -92,7 +92,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
 
     if (!title) return { success: false, error: 'Package title is required.' };
 
-    const slug = customSlug ? customSlug : title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '') + '-' + Date.now().toString().slice(-4);
+    const slug = customSlug ? customSlug : title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
     await db.insert(packages).values({
       title,
@@ -113,7 +113,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
     revalidatePath('/umrah-packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/');
-    revalidateTag('packages', 'max');
+    revalidateTag('packages');
     return { success: true };
   } catch (error: any) {
     console.error('Error creating package:', error);
@@ -164,7 +164,7 @@ export async function updatePackageAction(
     revalidatePath('/umrah-packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/');
-    revalidateTag('packages', 'max');
+    revalidateTag('packages');
     return { success: true };
   } catch (error: any) {
     console.error('Error updating package:', error);
@@ -177,7 +177,9 @@ export async function updatePackageStatus(id: number, status: 'available' | 'sol
     await db.update(packages).set({ status, updatedAt: new Date() }).where(eq(packages.id, id));
     revalidatePath('/admin/packages');
     revalidatePath('/');
-    revalidateTag('packages', 'max');
+    revalidatePath('/hajj-packages');
+    revalidatePath('/umrah-packages');
+    revalidateTag('packages');
   } catch (error) {
     console.error('Error updating package status:', error);
   }
@@ -188,7 +190,9 @@ export async function deletePackage(id: number): Promise<void> {
     await db.delete(packages).where(eq(packages.id, id));
     revalidatePath('/admin/packages');
     revalidatePath('/');
-    revalidateTag('packages', 'max');
+    revalidatePath('/hajj-packages');
+    revalidatePath('/umrah-packages');
+    revalidateTag('packages');
   } catch (error) {
     console.error('Error deleting package:', error);
   }

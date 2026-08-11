@@ -83,9 +83,10 @@ export default async function HajjPackagesPage() {
   let liveCards: any[] = [];
   let pageData: any = null;
   let pageSections: any[] = [];
+  let hajjPackages: any[] = [];
 
   try {
-    const hajjPackages = await getPackagesByType("hajj");
+    hajjPackages = await getPackagesByType("hajj");
 
     liveCards = hajjPackages.map((pkg: any) => {
       const cd = pkg.cardData || {};
@@ -137,7 +138,7 @@ export default async function HajjPackagesPage() {
       </section>
 
       {pageSections.length > 0 && (
-        <PageSectionsRenderer sections={pageSections} pageData={pageData} />
+        <PageSectionsRenderer sections={pageSections} pageData={pageData} initialPackageData={{ hajj: liveCards.length > 0 ? hajjPackages : undefined }} />
       )}
     </main>
   );

@@ -15,6 +15,15 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
 
   useEffect(() => {
     const packageIds = data?.packageIds || [];
+    
+    // If we have initialPackages and no specific packageIds are selected, 
+    // we don't need to fetch on mount, because the server already gave us all packages.
+    if (initialPackages && packageIds.length === 0) {
+      setPkgs(initialPackages);
+      setLoading(false);
+      return;
+    }
+
     if (packageIds.length > 0) {
       getPackagesByIds(packageIds)
         .then((rows) => setPkgs(rows))
@@ -26,7 +35,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
         .catch(() => setPkgs([]))
         .finally(() => setLoading(false));
     }
-  }, [data?.packageIds]);
+  }, [data?.packageIds, initialPackages]);
   return (
     <section className="py-20 bg-[#f1f5e6]">
       <div className="max-w-[1400px] mx-auto px-5">
@@ -100,7 +109,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                 })
                 : "12,995";
               const btnLabel = cd.btnLabel || `Book ${pkg.title}`;
-              const btnLink = `/${pkg.slug || pkg.id}`;
+              const btnLink = `/${pkg.slug}`;
               const makkahHotel = cd.makkahHotel;
               const madinahHotel = cd.madinahHotel;
 
