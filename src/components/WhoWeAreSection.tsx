@@ -45,15 +45,15 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 max-sm:grid-cols-3 sm:grid-cols-3 gap-4">
               <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
-                <div className="text-[#DB9E30] font-serif text-xl sm:text-2xl mb-1">25+</div>
+                <div className="text-[#DB9E30] font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">25+</div>
                 <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Years Serving Canada</div>
               </div>
               <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
-                <div className="text-[#DB9E30] font-serif text-xl sm:text-2xl mb-1">10,000+</div>
+                <div className="text-[#DB9E30] font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">10,000+</div>
                 <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Pilgrims Guided</div>
               </div>
               <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
-                <div className="text-[#DB9E30] font-serif text-xl sm:text-2xl mb-1">5★</div>
+                <div className="text-[#DB9E30] font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">5★</div>
                 <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Hotels, Every Package</div>
               </div>
             </div>

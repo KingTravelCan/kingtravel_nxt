@@ -43,7 +43,7 @@ export default function MarqueeTrack({ type, images, speedMs = 35000, direction 
                     alt={img.alt || "Partner logo"}
                     width={200}
                     height={80}
-                    className="w-auto h-auto max-w-full"
+                    className="w-auto h-auto max-w-full mb-wt-home"
                   />
                 )}
               </div>

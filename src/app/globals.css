@@ -152,11 +152,7 @@ section{
     font-weight: 600;
     margin-bottom: 12px;
 }
-@media (max-width:720px) {
-  .wrap {
-    padding: 0 22px;
-  }
-}
+
 
 h1,
 h2,
@@ -371,12 +367,7 @@ h2{
   }
 }
 
-@media (max-width: 768px) {
-  .marquee-item {
-    width: 200px;
-    padding: 0 12px;
-  }
-}
+
 
 /* ============ HEADER ============ */
 header {
@@ -511,70 +502,11 @@ header {
     height: 100%;
 }
 
-@media (max-width: 1200px) {
-  .logo img {
-    max-width: 220px;
-  }
 
-  .navlinks {
-    gap: 10px;
-  }
 
-  .navlinks a {
-    font-size: 13px;
-  }
-}
 
-@media (max-width: 1023px) {
-  .menu-toggle {
-    display: flex;
-    order: 3;
-  }
 
-  .nav-right {
-    order: 2;
-    margin-left: auto;
-    margin-right: 15px;
-  }
 
-  .navlinks {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    width: 100%;
-    background-color: #ffffff;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    gap: 15px;
-    align-items: flex-start;
-  }
-
-  .navlinks.active {
-    display: flex;
-  }
-
-  .navlinks a {
-    width: 100%;
-    padding: 8px 0;
-    border-bottom: 1px solid #eee;
-  }
-}
-
-@media (max-width: 480px) {
-  .contact-chip {
-    display: none;
-  }
-
-  .txt a {
-    font-size: 13px;
-  }
-
-  .wa-ico img {
-    width: 24px;
-  }
-}
 
 /* ============ HERO ============ */
 .hero {
@@ -588,22 +520,9 @@ header {
   margin: 0 auto;
 }
 
-@media (min-width:1441px) {
-  .hero-media {
-    padding: 0 200px !important;
-  }
-}
 
-@media (max-width:720px) {
-  .logo img {
-    width: 180px !important;
-    height: auto !important;
-  }
 
-  .hero-inner {
-    padding: 0px;
-  }
-}
+
 
 .hero-media {
   position: relative;
@@ -738,21 +657,9 @@ header {
   top: 65%;
 }
 
-@media (max-width:860px) {
-  .badges {
-    display: none;
-  }
-}
 
-@media (max-width:720px) {
-  .hero-media {
-    min-height: 560px;
-  }
 
-  .hero-content {
-    padding: 44px 0 34px;
-  }
-}
+
 
 .search-card {
   position: relative;
@@ -825,34 +732,7 @@ header {
   width: 150px;
 }
 
-@media (max-width:900px) {
-  .search-card {
-    margin: 26px auto 0;
-    border-radius: var(--r-md);
-    padding: 28px 24px;
-  }
 
-  .search-row,
-  .search-row+.search-row {
-    grid-template-columns: 1fr;
-    row-gap: 20px;
-  }
-
-  .search-card .field {
-    border-right: none !important;
-    border-bottom: 1px solid var(--line);
-    padding-bottom: 14px;
-  }
-
-  .search-card .submit-cell {
-    grid-column: 1/-1;
-    padding-left: 0;
-  }
-
-  .search-card .submit-cell .btn {
-    width: 100%;
-  }
-}
 
 /* ============ SECTION SHELLS ============ */
 /* section {
@@ -905,12 +785,7 @@ section#flights {
   max-width: none;
 }
 
-@media (max-width:760px) {
-  .section-head.split {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
+
 
 .section-dark {
   background: var(--green);
@@ -1003,12 +878,7 @@ section#flights {
   align-items: center;
 }
 
-@media (max-width:900px) {
-  .about-split {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
-}
+
 
 .about-figure {
   position: relative;
@@ -1051,30 +921,9 @@ section#flights {
   line-height: 1.5;
 }
 
-@media (max-width:900px) {
-  .about-figure .float-card {
-    left: 60%;
-    bottom: -10%;
-  }
-}
 
-@media (max-width:560px) {
-  .logo-row img {
-    width: 80px;
-    height: auto;
-  }
 
-  #flights .logo-row img {
-    width: 150px;
-    height: auto;
-  }
 
-  .about-figure .float-card {
-    position: static;
-    margin-top: 16px;
-    max-width: none;
-  }
-}
 
 .about-copy p {
   color: var(--ink-soft);
@@ -1116,11 +965,7 @@ section#flights {
   line-height: 1.4;
 }
 
-@media (max-width:480px) {
-  .stat-cards {
-    flex-direction: column;
-  }
-}
+
 
 /* ============ PACKAGE CARDS ============ */
 .pkg-scroller {
@@ -1129,24 +974,11 @@ section#flights {
   gap: 20px;
 }
 
-@media (min-width:1024px) {
-  .pkg-scroller.three {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-}
 
-@media (max-width:980px) {
-  .pkg-scroller {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 
-@media (max-width:640px) {
-  .pkg-scroller {
-    grid-template-columns: 1fr;
-  }
-}
+
+
+
 
 .pkg-card {
   border-radius: var(--r-lg);
@@ -1372,11 +1204,7 @@ section#flights {
   cursor: default;
 }
 
-@media (max-width:860px) {
-  .svc-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
+
 
 .svc-tile {
   background: var(--paper);
@@ -1451,12 +1279,7 @@ section#flights {
   align-items: center;
 }
 
-@media (max-width:900px) {
-  .provide-split {
-    grid-template-columns: 1fr;
-    gap: 36px;
-  }
-}
+
 
 .provide-img {
   border-radius: var(--r-lg);
@@ -1518,17 +1341,7 @@ section#flights {
   transition: opacity .6s ease-out, transform .6s ease-out;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .js-reveal .reveal:not(.in) {
-    opacity: 0;
-    transform: translateY(16px);
-  }
 
-  .js-reveal .reveal.in {
-    opacity: 1 !important;
-    transform: translateY(0) !important;
-  }
-}
 
 .field select,
 .search-card select {
@@ -1985,46 +1798,9 @@ section#flights {
   color: #555555;
 }
 
-@media (max-width: 992px) {
-  .visa-grid-bottom {
-    grid-template-columns: 1fr;
-    gap: 50px;
-  }
 
-  .visa-info-pane {
-    padding-right: 0;
-    text-align: center;
-  }
 
-  .visa-contact-details {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-  }
 
-  .visa-steps-pane::before {
-    display: none;
-  }
-
-  .step-badge {
-    display: none;
-  }
-}
-
-@media (max-width: 576px) {
-  .visa-contact-details {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .visa-step-card {
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-    text-align: center;
-  }
-}
 
 /* ============ HEADER NAVIGATION DROPDOWN ============ */
 .dropdown-parent {
@@ -2085,43 +1861,11 @@ section#flights {
   vertical-align: middle;
   transition: transform 0.2s;
 }
-@media (max-width: 1280px) {
-.nav-arrow {
-  @apply p-1 px-2;
-background:#eee;
-}
-}
-@media (min-width: 1280px) {
- .dropdown-parent:hover .nav-arrow {
-  transform: rotate(180deg);
-}
-}
 
 
-@media (max-width: 1023px) {
-  .dropdown-menu {
-    position: static;
-    transform: none !important;
-    opacity: 1;
-    pointer-events: auto;
-    box-shadow: none;
-    border: none;
-    border-left: 3px solid #DB9E30;
-    border-radius: 0;
-    background: #f9f6ef;
-    margin: 4px 0 8px 10px;
-    display: none;
-  }
 
-  .dropdown-parent.mob-open .dropdown-menu {
-    display: block;
-  }
 
-  .dropdown-menu a {
-    padding: 8px 14px;
-    font-size: 13px !important;
-  }
-}
+
 
 /* ============ UMRAH PACKAGES PAGE CUSTOM STYLES ============ */
 .umrah-page-wrapper {
@@ -2177,12 +1921,7 @@ background:#eee;
   gap: 20px;
 }
 
-@media (max-width: 768px) {
-  .badge-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-}
+
 
 .badge-card {
   background: #ffffff;
@@ -2231,17 +1970,9 @@ background:#eee;
   gap: 32px;
 }
 
-@media (max-width: 1024px) {
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
 
-@media (max-width: 640px) {
-  .cards-grid {
-    grid-template-columns: 1fr;
-  }
-}
+
+
 
 /* Card Component */
 .custom-pkg-card {
@@ -2571,19 +2302,9 @@ background:#eee;
   margin-top: 40px;
 }
 
-@media (max-width: 1024px) {
-  .visa-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-}
 
-@media (max-width: 640px) {
-  .visa-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
+
+
 
 .visa-card {
   background: #ffffff;
@@ -2648,3 +2369,335 @@ select {
   color: #949494;
   /* slate-900 */
 }
+
+/* ============================================================
+   RESPONSIVE MEDIA QUERIES
+   Reorganized and duplicate breakpoints combined.
+   ============================================================ */
+
+@media (max-width:1280px) {
+  .nav-arrow {
+    @apply p-1 px-2;
+  background:#eee;
+  }
+}
+
+@media (max-width:1200px) {
+    .logo img {
+      max-width: 220px;
+    }
+
+    .navlinks {
+      gap: 10px;
+    }
+
+    .navlinks a {
+      font-size: 13px;
+    }
+}
+
+@media (max-width:1024px) {
+    .cards-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .visa-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+}
+
+@media (max-width:1023px) {
+    .menu-toggle {
+      display: flex;
+      order: 3;
+    }
+
+    .nav-right {
+      order: 2;
+      margin-left: auto;
+      margin-right: 15px;
+    }
+
+    .navlinks {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      width: 100%;
+      background-color: #ffffff;
+      padding: 20px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      gap: 15px;
+      align-items: flex-start;
+    }
+
+    .navlinks.active {
+      display: flex;
+    }
+
+    .navlinks a {
+      width: 100%;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .dropdown-menu {
+      position: static;
+      transform: none !important;
+      opacity: 1;
+      pointer-events: auto;
+      box-shadow: none;
+      border: none;
+      border-left: 3px solid #DB9E30;
+      border-radius: 0;
+      background: #f9f6ef;
+      margin: 4px 0 8px 10px;
+      display: none;
+    }
+
+    .dropdown-parent.mob-open .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-menu a {
+      padding: 8px 14px;
+      font-size: 13px !important;
+    }
+}
+
+@media (max-width:992px) {
+    .visa-grid-bottom {
+      grid-template-columns: 1fr;
+      gap: 50px;
+    }
+
+    .visa-info-pane {
+      padding-right: 0;
+      text-align: center;
+    }
+
+    .visa-contact-details {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .visa-steps-pane::before {
+      display: none;
+    }
+
+    .step-badge {
+      display: none;
+    }
+}
+
+@media (max-width:980px) {
+    .pkg-scroller {
+      grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width:900px) {
+    .search-card {
+      margin: 26px auto 0;
+      border-radius: var(--r-md);
+      padding: 28px 24px;
+    }
+
+    .search-row,
+    .search-row+.search-row {
+      grid-template-columns: 1fr;
+      row-gap: 20px;
+    }
+
+    .search-card .field {
+      border-right: none !important;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 14px;
+    }
+
+    .search-card .submit-cell {
+      grid-column: 1/-1;
+      padding-left: 0;
+    }
+
+    .search-card .submit-cell .btn {
+      width: 100%;
+    }
+
+    .about-split {
+      grid-template-columns: 1fr;
+      gap: 40px;
+    }
+
+    .about-figure .float-card {
+      left: 60%;
+      bottom: -10%;
+    }
+
+    .provide-split {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+}
+
+@media (max-width:860px) {
+    .badges {
+      display: none;
+    }
+
+    .svc-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width:768px) {
+    .marquee-item {
+      width: 200px;
+      padding: 0 12px;
+    }
+
+    .badge-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+}
+
+@media (max-width:760px) {
+    .section-head.split {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+}
+
+@media (max-width:720px) {
+    .wrap {
+      padding: 0 22px;
+    }
+
+    .logo img {
+      width: 180px !important;
+      height: auto !important;
+    }
+
+    .hero-inner {
+      padding: 0px;
+    }
+
+    .hero-media {
+      min-height: 560px;
+    }
+
+    .hero-content {
+      padding: 44px 0 34px;
+    }
+}
+
+@media (max-width:640px) {
+    .pkg-scroller {
+      grid-template-columns: 1fr;
+    }
+
+    .cards-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .visa-grid {
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+}
+
+@media (max-width:576px) {
+    .visa-contact-details {
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .visa-step-card {
+      flex-direction: column;
+      gap: 15px;
+      align-items: center;
+      text-align: center;
+    }
+}
+
+@media (max-width:560px) {
+    .logo-row img {
+      width: 80px;
+      height: auto;
+    }
+
+    #flights .logo-row img {
+      width: 150px;
+      height: auto;
+    }
+
+    .about-figure .float-card {
+      position: static;
+      margin-top: 16px;
+      max-width: none;
+    }
+}
+
+@media (max-width:480px) {
+    .contact-chip {
+      display: none;
+    }
+
+    .txt a {
+      font-size: 13px;
+    }
+
+    .wa-ico img {
+      width: 24px;
+    }
+
+    .stat-cards {
+      flex-direction: column;
+    }
+    .mb-wt-home{
+      width: 240px;
+    }
+}
+
+@media (min-width:1024px) {
+    .pkg-scroller.three {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+}
+
+@media (min-width:1280px) {
+   .dropdown-parent:hover .nav-arrow {
+    transform: rotate(180deg);
+  }
+}
+
+@media (min-width:1441px) {
+    .hero-media {
+      padding: 0 200px !important;
+    }
+}
+
+@media (max-width:400px) and (min-width:320px) {
+   .mb-wwa-yellow-font{
+    font-size: 12px !important;
+   }
+}
+
+@media (prefers-reduced-motion:no-preference) {
+    .js-reveal .reveal:not(.in) {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+
+    .js-reveal .reveal.in {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+}
+

@@ -133,7 +133,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
             { value: `${counts.experience}+`, label: "Years Experience" },
           ];
           return (
-            <div key={idx} className="max-w-5xl mx-auto px-4 -mt-12 relative z-20 mb-8">
+            <div key={idx} className="max-w-7xl mx-auto px-4 -mt-12 relative z-20 mb-8">
               <div className="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x divide-slate-100">
                 {items.map((it: any, i: number) => (
                   <div key={i} className="flex flex-col items-center justify-center p-2">
@@ -150,7 +150,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
         if (sec.type === "Intro") {
           return (
             <div key={idx} className="wrap my-8">
-              <div className="bg-[#f2f5e8] border border-[#e4ebd3] rounded-2xl p-8 max-w-5xl mx-auto shadow-xs">
+              <div className="bg-[#f2f5e8] border border-[#e4ebd3] rounded-2xl p-8 max-w-7xl mx-auto shadow-xs">
                 <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-1.5">
                   {sec.data?.eyebrow || "ABOUT"}
                 </span>
