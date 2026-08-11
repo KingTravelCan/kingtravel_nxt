@@ -237,18 +237,7 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
             <label className="text-[10px] font-bold text-slate-500 mb-1 block">BUTTON LABEL</label>
             <input type="text" value={cd.btnLabel || ''} onChange={e => updateCD('btnLabel', e.target.value)} className="w-full px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs" />
           </div>
-          <div className="flex items-center gap-3">
-            <input
-              id="isActiveCardUmrah"
-              type="checkbox"
-              checked={!!cd.isActiveCard}
-              onChange={e => updateCD('isActiveCard', e.target.checked)}
-              className="w-4 h-4 rounded accent-[#DB9E30]"
-            />
-            <label htmlFor="isActiveCardUmrah" className="text-xs font-bold text-slate-700 cursor-pointer">
-              Featured / Gold card style
-            </label>
-          </div>
+
         </div>
       </div>
 

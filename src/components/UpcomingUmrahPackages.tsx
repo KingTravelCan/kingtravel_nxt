@@ -120,8 +120,8 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                   cd = {};
                 }
               }
-              // isActiveCard can be stored in cardData, fallback to isFeatured
-              const isGold = cd.isActiveCard ?? pkg.isFeatured ?? false;
+              // Apply gold style automatically to every even-numbered card (2nd, 4th, etc.) based on order index
+              const isGold = idx % 2 !== 0;
               const heroImage =
                 cd.bannerImage || pkg.featuredImage || "";
               const starRating = pkg.starRating || cd.starRating || "5 Star";
