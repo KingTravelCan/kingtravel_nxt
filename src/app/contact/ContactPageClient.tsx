@@ -303,11 +303,10 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                     }));
                   }
                 }}
-                className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${
-                  errors.message
-                    ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
-                    : "border-slate-300 focus:border-emerald-800"
-                }`}
+                className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message
+                  ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
+                  : "border-slate-300 focus:border-emerald-800"
+                  }`}
               />
 
               <label
@@ -322,10 +321,9 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                   peer-[:not(:placeholder-shown)]:left-0
                   peer-[:not(:placeholder-shown)]:text-xs
                   font-semibold
-                  ${
-                    errors.message
-                      ? "text-red-600 peer-focus:text-red-600"
-                      : "text-slate-400 peer-focus:text-emerald-800"
+                  ${errors.message
+                    ? "text-red-600 peer-focus:text-red-600"
+                    : "text-slate-400 peer-focus:text-emerald-800"
                   }
                 `}
               >
@@ -342,7 +340,7 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
             <div>
               <button
                 type="submit"
-                className="group w-full bg-[#004B39] text-white font-bold py-4 px-8 rounded-xl shadow-md hover:bg-gold hover:text-black active:scale-[0.99] transition-all duration-200 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer"
+                className="group w-full bg-gold hover:bg-primary text-black hover:text-white font-bold py-4 px-8 rounded-xl shadow-md hover:shadow-md active:scale-[0.99] transition-all duration-200 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>SEND MESSAGE</span>
                 <i className="fa-solid fa-paper-plane text-xs group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform"></i>

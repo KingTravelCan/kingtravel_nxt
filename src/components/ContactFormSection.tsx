@@ -79,7 +79,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
     <section className="py-20 bg-[#F1F1ED]">
       <div className="max-w-7xl mx-auto px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          
+
           {/* Left Column: Contact Details */}
           <div className="contact-info">
             <div className="mb-10">
@@ -96,15 +96,15 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                 <div>
                   <h4 className="">Landlines:</h4>
                   <div className="">
-                    {data.tollFree || "+1 800-844-5464"}<br/>
-                    {data.localNum1 || "+1 905-624-8555"}<br/>
+                    {data.tollFree || "+1 800-844-5464"}<br />
+                    {data.localNum1 || "+1 905-624-8555"}<br />
                     {data.localNum2 || "+1 905-624-8344"}
                   </div>
                 </div>
                 <div>
                   <h4 className="">Whatsapp:</h4>
                   <div className="">
-                    {data.waReservation || "+1 905-624-8344"} - <span className="text-xs font-normal">Reservation</span><br/>
+                    {data.waReservation || "+1 905-624-8344"} - <span className="text-xs font-normal">Reservation</span><br />
                     {data.waVisa || "+1 647-982-8555"} - <span className="text-xs font-normal">Saudi Visa</span>
                   </div>
                 </div>
@@ -126,7 +126,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
 
               <div>
                 <h4 className="">Head Office</h4>
-                <div 
+                <div
                   className=" leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: data.headOffice || "1325 Eglinton Ave E Ste 218,<br/>Mississauga, ON L4W 4L9, Canada" }}
                 />
@@ -134,7 +134,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
 
               <div>
                 <h4 className="">Branch Office</h4>
-                <div 
+                <div
                   className=" leading-relaxed"
                   dangerouslySetInnerHTML={{ __html: data.branchOffice || "22 Ontario St S,<br/>Milton, ON L9T 2M6, Canada" }}
                 />
@@ -222,7 +222,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-[#DB9E30] hover:bg-[#c48d2a] text-[#1e2f2b] font-bold py-4 px-6 rounded-lg shadow-md transition-all duration-300 tracking-wider uppercase text-xs cursor-pointer text-center"
+                  className="w-full bg-[#DB9E30] hover:bg-primary text-black hover:text-white font-bold py-4 px-6 rounded-lg shadow-md transition-all duration-300 tracking-wider uppercase text-xs cursor-pointer text-center"
                 >
                   Send Enquiry
                 </button>

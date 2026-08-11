@@ -253,7 +253,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                         }}
                         className={`flex-1 py-3 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 border-transparent cursor-pointer ${isGold
                           ? "bg-[#2c3e35] hover:bg-[#1a2520] text-white"
-                          : "bg-[#DB9E30] hover:bg-[#c58d2a] text-white"
+                          : "bg-[#DB9E30] hover:bg-[#c58d2a] text-black"
                           }`}
                       >
                         {buttonText}
