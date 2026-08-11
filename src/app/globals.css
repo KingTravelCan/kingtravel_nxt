@@ -326,7 +326,7 @@ h2{
 
 .marquee-wrapper {
   width: 100%;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .marquee-track.travel {
