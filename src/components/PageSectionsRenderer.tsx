@@ -12,6 +12,8 @@ import UpcomingUmrahPackages from '@/components/UpcomingUmrahPackages';
 import TravelServicesSection from '@/components/TravelServicesSection';
 import WhatWeProvideSection from '@/components/WhatWeProvideSection';
 import HajjPackagesSection from '@/components/HajjPackagesSection';
+import ContactInfoCardsSection from '@/components/ContactInfoCardsSection';
+import ContactMapsSection from '@/components/ContactMapsSection';
 import CertificationsFlipCardsSection from '@/components/CertificationsFlipCardsSection';
 import SoldOutPackagesSection from '@/components/SoldOutPackagesSection';
 import Banner4GridsSection from '@/components/Banner4GridsSection';
@@ -399,7 +401,13 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
         }
 
         // ── Contact ───────────────────────────────────────────────────────────
-        if (sec.type === "Contact") {
+        if (sec.type === "Contact Info Cards" || sec.type === "Contact Bar") {
+          return <ContactInfoCardsSection key={idx} data={sec.data || {}} />;
+        }
+        if (sec.type === "Contact Maps" || sec.type === "Google Maps") {
+          return <ContactMapsSection key={idx} data={sec.data || {}} />;
+        }
+        if (sec.type === "Contact Form" || sec.type === "Contact Form + Maps" || sec.type === "Contact") {
           return <ContactFormSection key={idx} data={sec.data || {}} />;
         }
 

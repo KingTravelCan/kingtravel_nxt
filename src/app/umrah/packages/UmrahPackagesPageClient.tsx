@@ -83,7 +83,7 @@ const umrahCardsData = [
 
 import PackageDetailModal, { PackageDetailData } from "@/components/PackageDetailModal";
 
-export default function UmrahPackagesPageClient({ initialPageData }: { initialPageData?: any }) {
+export default function UmrahPackagesPageClient({ initialPageData, packages = [] }: { initialPageData?: any, packages?: any[] }) {
   const pageData = initialPageData || null;
   const [selectedDetailPkg, setSelectedDetailPkg] = useState<PackageDetailData | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -151,13 +151,26 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
       {/* ================= MAIN PACKAGES GRID ================= */}
       <section className="packages-grid-container">
         <div className="cards-grid">
-          {umrahCardsData.map((card) => (
+          {(() => {
+            let cards = packages && packages.length > 0 ? packages : umrahCardsData;
+            return cards.map((card: any) => {
+              const badgeTag = card.badgeTag || (card.month ? `UMRAH ${card.month}` : "UMRAH 2026");
+              const duration = card.duration || card.detailPageData?.durationText || card.month || "14Days";
+              const heroImage = card.thumbnail || card.heroImage || "https://images.unsplash.com/photo-1590490360182-c33d57733427?q=80&w=1170&auto=format&fit=crop";
+              const title = card.title || "Umrah Package 2026";
+              const rawPrice = (card.startingPrice || card.price || "12,995").toString();
+              const price = rawPrice.startsWith("CAD") ? rawPrice : `CAD ${rawPrice.replace("$", "").trim()}`;
+              
+              const makkahHotel = card.detailPageData?.makkahHotel || card.makkahHotel || { name: "5 Star Hotel", location: "Near Haram", image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=300&q=80", badge: "Breakfast", nights: "5 Nights" };
+              const madinahHotel = card.detailPageData?.madinahHotel || card.madinahHotel || { name: "5 Star Hotel", location: "Near Masjid", image: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=300&q=80", badge: "Breakfast", nights: "5 Nights" };
+
+              return (
             <article key={card.id} className="custom-pkg-card">
               {/* Hero Header Image */}
               <div className="card-hero-img-wrap">
                 <Image
-                  src={card.heroImage}
-                  alt={card.title}
+                  src={heroImage}
+                  alt={title}
                   fill
                   sizes="(max-width: 768px) 100vw, 33vw"
                   className="object-cover"
@@ -169,11 +182,11 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
                 <div className="card-hero-tags">
                   <div className="tag-black">
                     <i className="fa-solid fa-kaaba text-[#DB9E30]"></i>
-                    <span>Umrah 2026</span>
+                    <span>{badgeTag}</span>
                   </div>
                   <div className="tag-gold">
                     <i className="fa-solid fa-calendar-days"></i>
-                    <span>{card.duration}</span>
+                    <span>{duration}</span>
                   </div>
                 </div>
 
@@ -182,7 +195,7 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
                   <div className="route-subtext">
                     <i className="fa-solid fa-plane text-xs"></i> FROM CANADA <i className="fa-solid fa-arrow-right text-[10px]"></i> TO SAUDIA
                   </div>
-                  <h2 className="card-main-title">{card.title}</h2>
+                  <h2 className="card-main-title">{title}</h2>
                 </div>
               </div>
 
@@ -195,8 +208,8 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
                   <div className="hotel-strip makkah">
                     <div className="hotel-thumb">
                       <Image
-                        src={card.makkahHotel.image}
-                        alt={card.makkahHotel.name}
+                        src={makkahHotel.image}
+                        alt={makkahHotel.name}
                         fill
                         className="object-cover"
                         unoptimized
@@ -204,17 +217,17 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
                       <span className="city-badge-overlay mk">Makkah</span>
                     </div>
                     <div className="hotel-details">
-                      <div className="hotel-name">{card.makkahHotel.name}</div>
+                      <div className="hotel-name">{makkahHotel.name}</div>
                       <div className="hotel-location">
                         <i className="fa-solid fa-location-dot text-[#004B39]"></i>
-                        <span>{card.makkahHotel.location}</span>
+                        <span>{makkahHotel.location}</span>
                       </div>
                       <div className="hotel-tags">
                         <span className="tag-pill-dark">
                           <i className="fa-solid fa-utensils text-[8px]"></i>
-                          <span>{card.makkahHotel.badge}</span>
+                          <span>{makkahHotel.badge}</span>
                         </span>
-                        <span className="tag-pill-light">{card.makkahHotel.nights}</span>
+                        <span className="tag-pill-light">{makkahHotel.nights}</span>
                       </div>
                     </div>
                   </div>
@@ -223,8 +236,8 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
                   <div className="hotel-strip madinah">
                     <div className="hotel-thumb">
                       <Image
-                        src={card.madinahHotel.image}
-                        alt={card.madinahHotel.name}
+                        src={madinahHotel.image}
+                        alt={madinahHotel.name}
                         fill
                         className="object-cover"
                         unoptimized
@@ -232,17 +245,17 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
                       <span className="city-badge-overlay md">Madinah</span>
                     </div>
                     <div className="hotel-details">
-                      <div className="hotel-name">{card.madinahHotel.name}</div>
+                      <div className="hotel-name">{madinahHotel.name}</div>
                       <div className="hotel-location">
                         <i className="fa-solid fa-location-dot text-[#DB9E30]"></i>
-                        <span>{card.madinahHotel.location}</span>
+                        <span>{madinahHotel.location}</span>
                       </div>
                       <div className="hotel-tags">
                         <span className="tag-pill-dark">
                           <i className="fa-solid fa-utensils text-[8px]"></i>
-                          <span>{card.madinahHotel.badge}</span>
+                          <span>{madinahHotel.badge}</span>
                         </span>
-                        <span className="tag-pill-light">{card.madinahHotel.nights}</span>
+                        <span className="tag-pill-light">{madinahHotel.nights}</span>
                       </div>
                     </div>
                   </div>
@@ -265,7 +278,7 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
                   </div>
 
                   <Link
-                    href={`/package/${card.id || card.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
+                    href={`/package/${card.slug || card.id || card.title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}
                     className="w-full bg-[#DB9E30] hover:bg-[#b88222] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer mt-2"
                   >
                     <i className="fa-solid fa-passport"></i>
@@ -273,8 +286,10 @@ export default function UmrahPackagesPageClient({ initialPageData }: { initialPa
                   </Link>
                 </div>
               </div>
-            </article>
-          ))}
+              </article>
+              );
+            });
+          })()}
         </div>
       </section>
 
