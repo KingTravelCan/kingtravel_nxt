@@ -299,8 +299,15 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
             <div key={idx} className="flex items-center gap-2">
               <input
                 type="text"
-                value={inc}
-                onChange={e => updateIncludes(idx, e.target.value)}
+                value={inc.icon || ''}
+                onChange={e => updateIncludes(idx, { ...inc, icon: e.target.value })}
+                placeholder="Lucide Icon (e.g. Plane)"
+                className="w-1/3 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs"
+              />
+              <input
+                type="text"
+                value={inc.text || ''}
+                onChange={e => updateIncludes(idx, { ...inc, text: e.target.value })}
                 placeholder="e.g. Return Flights from Toronto"
                 className="flex-1 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs"
               />

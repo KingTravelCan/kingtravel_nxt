@@ -165,12 +165,14 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
         }
 
 
-        // ── Sold Out Packages ─────────────────────────────────────────────────
         if (sec.type === "Sold Out Packages") {
           const ids = Array.isArray(sec.data?.packageIds) ? sec.data.packageIds.map(Number).filter(Boolean) : [];
-          const initialSoldOut = initialPackageData?.all
-            ? ids.map((id: number) => initialPackageData.all?.find((pkg: any) => Number(pkg.id) === id)).filter(Boolean)
-            : undefined;
+          let initialSoldOut = undefined;
+          if (initialPackageData?.all) {
+            initialSoldOut = ids.length > 0 
+              ? ids.map((id: number) => initialPackageData.all?.find((pkg: any) => Number(pkg.id) === id)).filter(Boolean)
+              : initialPackageData.all.filter((pkg: any) => pkg.status === 'sold_out');
+          }
           return <SoldOutPackagesSection key={idx} data={sec.data} initialPackages={initialSoldOut} />;
         }
 

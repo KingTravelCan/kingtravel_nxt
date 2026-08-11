@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
 import DynamicIcon from "@/components/ui/DynamicIcon";
-import { getPackagesByIds } from "@/actions/packageActions";
+import { getPackagesByIds, getSoldOutPackages } from "@/actions/packageActions";
 
 export default function SoldOutPackagesSection({ data, initialPackages }: { data: any; initialPackages?: any[] }) {
   const eyebrow = data?.eyebrow || "";
@@ -15,16 +15,27 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
     : [];
 
   const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
-  const [loading, setLoading] = useState(!initialPackages && packageIds.length > 0);
+  const [loading, setLoading] = useState(!(initialPackages && initialPackages.length > 0));
 
   useEffect(() => {
-    if (initialPackages) return;
+    if (initialPackages && initialPackages.length > 0) return;
+    
     if (packageIds.length === 0) {
-      setLoading(false);
+      getSoldOutPackages()
+        .then((rows) => setPkgs(rows))
+        .catch(() => setPkgs([]))
+        .finally(() => setLoading(false));
       return;
     }
+
     getPackagesByIds(packageIds)
-      .then((rows) => setPkgs(rows))
+      .then((rows) => {
+        if (rows.length === 0) {
+          // If the hardcoded IDs are deleted/invalid, fallback to all sold out packages
+          return getSoldOutPackages().then(setPkgs);
+        }
+        setPkgs(rows);
+      })
       .catch(() => setPkgs([]))
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -163,7 +174,9 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
                     {includes && includes.length > 0 && (
                       <ul className="space-y-4 mb-2 flex-1">
                         {includes.map((inc: any, j: number) => {
-                          let iconName = inc.icon || getIconForText(inc.text || "");
+                          const isString = typeof inc === 'string';
+                          const text = isString ? inc : (inc.text || "");
+                          let iconName = (!isString && inc.icon) ? inc.icon : getIconForText(text);
                           return (
                             <li
                               key={j}
@@ -173,7 +186,7 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
                                 name={iconName}
                                 className="w-4 h-4 text-gray-400 shrink-0"
                               />
-                              <span>{inc.text}</span>
+                              <span>{text}</span>
                             </li>
                           );
                         })}
