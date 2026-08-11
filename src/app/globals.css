@@ -108,7 +108,7 @@ button {
 .wrap {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 0 40px;
+  padding: 0 20px;
 }
 .section-outer{
   @apply py-10 px-5
