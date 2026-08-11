@@ -295,19 +295,48 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                 value={contactForm.message}
                 onChange={(e) => {
                   setContactForm({ ...contactForm, message: e.target.value });
-                  if (errors.message) setErrors((prev) => ({ ...prev, message: "" }));
+
+                  if (errors.message) {
+                    setErrors((prev) => ({
+                      ...prev,
+                      message: "",
+                    }));
+                  }
                 }}
-                className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
-                  }`}
-              ></textarea>
+                className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${
+                  errors.message
+                    ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
+                    : "border-slate-300 focus:border-emerald-800"
+                }`}
+              />
+
               <label
                 htmlFor="message"
-                className={`absolute left-3 top-7 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-7 peer-focus:top-0 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:top-0 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.message ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"
-                  }`}
+                className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none
+                  peer-placeholder-shown:text-base
+                  peer-placeholder-shown:top-3
+                  peer-focus:-top-4
+                  peer-focus:left-0
+                  peer-focus:text-xs
+                  peer-[:not(:placeholder-shown)]:-top-4
+                  peer-[:not(:placeholder-shown)]:left-0
+                  peer-[:not(:placeholder-shown)]:text-xs
+                  font-semibold
+                  ${
+                    errors.message
+                      ? "text-red-600 peer-focus:text-red-600"
+                      : "text-slate-400 peer-focus:text-emerald-800"
+                  }
+                `}
               >
                 How can we help you?
               </label>
-              {errors.message && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.message}</span>}
+
+              {errors.message && (
+                <span className="text-red-600 text-xs font-semibold mt-1 block">
+                  {errors.message}
+                </span>
+              )}
             </div>
 
             <div>
