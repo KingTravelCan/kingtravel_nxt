@@ -27,7 +27,13 @@ const defaultUmrahCardData = {
   isActiveCard: false,
   btnLabel: 'BOOK NOW',
   btnLink: '/contact',
-  includes: ['Return Flights from Toronto', '5 Star Hotel in Makkah', '5 Star Hotel in Madinah', 'Visa & Registration', 'Imam & Guide'],
+  includes: [
+    { icon: 'Plane', text: 'Return Flights from Toronto' },
+    { icon: 'Hotel', text: '5 Star Hotel in Makkah' },
+    { icon: 'Hotel', text: '5 Star Hotel in Madinah' },
+    { icon: 'FileCheck', text: 'Visa & Registration' },
+    { icon: 'Users', text: 'Imam & Guide' },
+  ],
   makkahHotel: { image: '', name: '5 Star Hotel in Makkah', location: 'Near to Haram', badge: 'Breakfast', nights: '5 Nights' },
   madinahHotel: { image: '', name: '5 Star Hotel in Madinah', location: 'Near to Masjid Nabawi', badge: 'Breakfast', nights: '5 Nights' },
 };
@@ -179,24 +185,39 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
     });
   };
 
-  const includes: string[] = Array.isArray(cd.includes)
-    ? cd.includes
+  type IncludeItem = {
+    icon: string;
+    text: string;
+  };
+
+  const includes: IncludeItem[] = Array.isArray(cd.includes)
+    ? cd.includes.map((item: any) =>
+        typeof item === 'string'
+          ? { icon: 'Check', text: item }
+          : {
+              icon: item?.icon || 'Check',
+              text: item?.text || '',
+            }
+      )
     : [];
 
-  const updateIncludes = (idx: number, val: string) => {
-    const next: string[] = [...includes];
+  const updateIncludes = (idx: number, val: IncludeItem) => {
+    const next: IncludeItem[] = [...includes];
     next[idx] = val;
     updateCD('includes', next);
   };
 
   const addInclude = () => {
-    updateCD('includes', [...includes, '']);
+    updateCD('includes', [
+      ...includes,
+      { icon: 'Check', text: '' },
+    ]);
   };
 
   const removeInclude = (idx: number) => {
     updateCD(
       'includes',
-      includes.filter((_: string, i: number) => i !== idx)
+      includes.filter((_: IncludeItem, i: number) => i !== idx)
     );
   };
 
@@ -295,7 +316,7 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
           </button>
         </div>
         <div className="space-y-2">
-          {includes.map((inc: string, idx: number) => (
+          {includes.map((inc: IncludeItem, idx: number) => (
             <div key={idx} className="flex items-center gap-2">
               <input
                 type="text"
