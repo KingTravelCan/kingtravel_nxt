@@ -176,7 +176,7 @@ export default function CertificationsFlipCardsSection({
                     relative
                     h-full
                     w-full
-                    rounded-[32px]
+                    rounded-3xl
                     transition-transform
                     duration-700
                     [transform-style:preserve-3d]
@@ -202,7 +202,7 @@ export default function CertificationsFlipCardsSection({
                       inset-0
                       h-full
                       w-full
-                      rounded-[32px]
+                      rounded-3xl
                       bg-white
                       p-8
                       flex
@@ -264,7 +264,7 @@ export default function CertificationsFlipCardsSection({
                       inset-0
                       h-full
                       w-full
-                      rounded-[32px]
+                      rounded-3xl
                       bg-[#004B39]
                       text-white
                       p-8

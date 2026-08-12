@@ -66,7 +66,7 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-100 animate-pulse"
+                className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 animate-pulse"
               >
                 <div className="h-[220px] bg-gray-200" />
                 <div className="p-8 space-y-4">
@@ -135,7 +135,7 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
               return (
                 <article
                   key={pkg.id || idx}
-                  className="bg-white rounded-[32px] overflow-hidden shadow-sm border border-gray-100 flex flex-col group transition-shadow hover:shadow-md relative"
+                  className="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100 flex flex-col group transition-shadow hover:shadow-md relative"
                 >
                   {/* SOLD OUT BADGE OVERLAY */}
                   <div className="absolute top-4 right-4 z-10 bg-red-600 text-white px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest shadow-md flex items-center gap-1">
