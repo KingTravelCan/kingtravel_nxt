@@ -1,5 +1,5 @@
 import { db } from '@/db';
-import { siteSettings } from '@/db/schema';
+import { siteSettings, emailDeliveryLogs } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { getResponsiveEmailTemplateHtml, formatFieldLabel } from './emailTemplate';
 
@@ -116,15 +116,47 @@ export async function dispatchFormEmails(
     if (adminResult.status === 'fulfilled') {
       adminSent = true;
       console.log(`✅ [Email Dispatcher] Admin notification sent to ${adminRecipientEmail}`);
+      try {
+        await db.insert(emailDeliveryLogs).values({
+          formId: formName,
+          status: 'Delivered',
+          sentTo: adminRecipientEmail,
+          details: 'Notification sent successfully via SMTP',
+        });
+      } catch (logErr) { console.error('Failed to log admin email success', logErr); }
     } else {
       console.error(`❌ [Email Dispatcher] Failed to send Admin email:`, adminResult.reason?.message || adminResult.reason);
+      try {
+        await db.insert(emailDeliveryLogs).values({
+          formId: formName,
+          status: 'Failed',
+          sentTo: adminRecipientEmail,
+          details: adminResult.reason?.message || 'SMTP Error',
+        });
+      } catch (logErr) { console.error('Failed to log admin email error', logErr); }
     }
 
     if (userResult.status === 'fulfilled' && userResult.value !== null) {
       userSent = true;
       console.log(`✅ [Email Dispatcher] User confirmation sent to ${userEmail}`);
+      try {
+        await db.insert(emailDeliveryLogs).values({
+          formId: formName,
+          status: 'Delivered',
+          sentTo: userEmail.trim(),
+          details: 'User confirmation sent successfully via SMTP',
+        });
+      } catch (logErr) { console.error('Failed to log user email success', logErr); }
     } else if (userResult.status === 'rejected') {
       console.error(`❌ [Email Dispatcher] Failed to send User email to ${userEmail}:`, userResult.reason?.message || userResult.reason);
+      try {
+        await db.insert(emailDeliveryLogs).values({
+          formId: formName,
+          status: 'Failed',
+          sentTo: userEmail.trim(),
+          details: userResult.reason?.message || 'SMTP Error',
+        });
+      } catch (logErr) { console.error('Failed to log user email error', logErr); }
     } else {
       console.log(`ℹ️ [Email Dispatcher] No user email entered. User confirmation email skipped.`);
     }

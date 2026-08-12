@@ -543,20 +543,22 @@ export default function EditPackageClient({ packageData }: EditPackageClientProp
                       {editingPkg.status === 'sold_out' ? '🔴 Sold Out' : 'Mark as Sold Out'}
                     </span>
                   </label>
-
-
+                  {editingPkg.status !== 'sold_out' && (
+                    <select
+                      value={editingPkg.status || 'available'}
+                      onChange={e => setEditingPkg({ ...editingPkg, status: e.target.value as any })}
+                      className={`flex-1 px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:border-[#004B39] bg-white ${
+                        editingPkg.status === 'available' ? '!text-emerald-600' :
+                        editingPkg.status === 'coming_soon' ? '!text-amber-500' :
+                        '!text-slate-500'
+                      }`}
+                    >
+                      <option value="available" className="text-emerald-600 font-semibold">● Available</option>
+                      <option value="coming_soon" className="text-amber-500 font-semibold">● Coming Soon</option>
+                      <option value="draft" className="text-slate-500 font-semibold">● Draft</option>
+                    </select>
+                  )}
                 </div>
-                {editingPkg.status !== 'sold_out' && (
-                  <select
-                    value={editingPkg.status || 'available'}
-                    onChange={e => setEditingPkg({ ...editingPkg, status: e.target.value as any })}
-                    className="flex-1 mt-3 sm:mt-0 px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
-                  >
-                    <option value="available">● Available</option>
-                    <option value="coming_soon">● Coming Soon</option>
-                    <option value="draft">● Draft</option>
-                  </select>
-                )}
               </div>
 
               {/* Star Rating */}
