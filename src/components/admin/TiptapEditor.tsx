@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import Underline from '@tiptap/extension-underline';
-import Link from '@tiptap/extension-link';
 import TextAlign from '@tiptap/extension-text-align';
 
 interface TiptapEditorProps {
@@ -106,11 +104,11 @@ export default function TiptapEditor({
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      Underline,
-      Link.configure({
-        openOnClick: false,
-        HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' },
+      StarterKit.configure({
+        link: {
+          openOnClick: false,
+          HTMLAttributes: { rel: 'noopener noreferrer', target: '_blank' },
+        },
       }),
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
@@ -209,10 +207,7 @@ export default function TiptapEditor({
   };
 
   return (
-    <div
-  className="flex flex-col rounded-xl border border-slate-300 overflow-hidden bg-white focus-within:border-[#004B39] transition-colors" style={{
-    height: "700px",
-  }}>
+    <div className="flex flex-col rounded-xl border border-slate-300 overflow-hidden bg-white focus-within:border-[#004B39] transition-colors">
       {/* ── Toolbar ── */}
       <div className="shrink-0 flex flex-wrap items-center gap-0.5 px-2 py-1.5 bg-slate-50 border-b border-slate-200">
         {/* Paragraph / Heading picker */}

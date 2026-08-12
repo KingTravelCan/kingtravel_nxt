@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, TicketPercent, AlertCircle, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
+import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, TicketPercent, AlertCircle, ChevronDown, ChevronUp, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
 import { getPackageDetailsAction, getPageSeoAction } from "@/actions/pageActions";
 import { submitPackageBookingEnquiryAction } from "@/actions/enquiryActions";
 import PageSeoHead from "@/components/PageSeoHead";
@@ -195,6 +195,7 @@ export default function PackageDetailPageClient({
   const [modalOpen, setModalOpen] = useState(false);
   const [modalMsg, setModalMsg] = useState("");
   const [modalRef, setModalRef] = useState("");
+  const [galleryOpenIndex, setGalleryOpenIndex] = useState<number | null>(null);
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -277,9 +278,9 @@ export default function PackageDetailPageClient({
   const numericPrice = Number(String(rawPrice).replace(/[^0-9.]/g, ""));
   const price = Number.isFinite(numericPrice)
     ? numericPrice.toLocaleString("en-CA", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
+    })
     : String(rawPrice).replace("CAD", "").replace("$", "").trim();
 
   const priceSubtext = pkg.priceSubtext || "PER PERSON, QUAD OCCUPANCY";
@@ -345,6 +346,36 @@ export default function PackageDetailPageClient({
   ];
 
   const importantNotice = detailData.importantNotice || "To secure your visa slot, please make sure your Canadian passport is valid for at least 6 months beyond travel dates, and you have completed all mandatory immunizations required by the Saudi Ministry of Hajj.";
+
+  // Gallery is intentionally Umrah-only. Existing Hajj pages are unchanged.
+  const rawPackagesGallery = pkg.packagesGallery ?? [];
+  const parseRawGallery = (raw: any): any[] => {
+    if (Array.isArray(raw)) return raw;
+    if (typeof raw === "string") {
+      try {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  };
+
+  const packagesGallery: string[] = parseRawGallery(rawPackagesGallery)
+    .flatMap((url: any) => (typeof url === "string" ? url.split(",") : []))
+    .map((url) => url.trim())
+    .filter(Boolean);
+
+  const showPreviousGalleryImage = () => {
+    if (galleryOpenIndex === null || packagesGallery.length === 0) return;
+    setGalleryOpenIndex((galleryOpenIndex - 1 + packagesGallery.length) % packagesGallery.length);
+  };
+
+  const showNextGalleryImage = () => {
+    if (galleryOpenIndex === null || packagesGallery.length === 0) return;
+    setGalleryOpenIndex((galleryOpenIndex + 1) % packagesGallery.length);
+  };
 
   const faqs = detailData.faqs?.length > 0 ? detailData.faqs : [
     {
@@ -570,7 +601,7 @@ export default function PackageDetailPageClient({
                           ) : (
                             <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
                           )}
-                          <span className={isNotIncluded ? "text-slate-500 line-through" : "font-medium"}>
+                          <span className={isNotIncluded ? "text-red-500" : "font-medium"}>
                             {hl}
                           </span>
                         </li>
@@ -596,7 +627,47 @@ export default function PackageDetailPageClient({
               </div>
             </div>
 
-            {/* 4. Important Booking Notice */}
+            {/* 4. Package Gallery */}
+            {packagesGallery.length > 0 && (
+              <div>
+                <div className="flex items-end justify-between gap-4 mb-5">
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800">
+                      Package Gallery
+                    </h3>
+                    <p className="text-xs text-slate-500 mt-1">
+                      Click any image to view it in full size.
+                    </p>
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                    {packagesGallery.length} {packagesGallery.length === 1 ? "Photo" : "Photos"}
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {packagesGallery.map((imageUrl, imageIdx) => (
+                    <button
+                      key={`${imageUrl}-${imageIdx}`}
+                      type="button"
+                      onClick={() => setGalleryOpenIndex(imageIdx)}
+                      className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-slate-200 bg-slate-100 shadow-sm group cursor-zoom-in"
+                      aria-label={`Open gallery image ${imageIdx + 1}`}
+                    >
+                      <Image
+                        src={imageUrl}
+                        alt={`${title} gallery image ${imageIdx + 1}`}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                        unoptimized
+                      />
+                      <span className="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition-colors" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 5. Important Booking Notice */}
             <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-5 sm:p-6 flex items-start gap-4 shadow-sm">
               <div className="p-2.5 bg-amber-500/10 rounded-xl shrink-0">
                 <AlertCircle className="w-6 h-6 text-amber-700" />
@@ -609,7 +680,7 @@ export default function PackageDetailPageClient({
               </div>
             </div>
 
-            {/* 5. Frequently Asked Questions (Accordion) */}
+            {/* 6. Frequently Asked Questions (Accordion) */}
             <div>
               <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
                 Frequently Asked Questions
@@ -874,6 +945,71 @@ export default function PackageDetailPageClient({
           </div>
         </div>
       </div>
+
+      {galleryOpenIndex !== null && packagesGallery[galleryOpenIndex] && (
+        <div
+          className="fixed inset-0 z-[100000] bg-black/90 flex items-center justify-center p-4 sm:p-8"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Package gallery viewer"
+          onClick={() => setGalleryOpenIndex(null)}
+        >
+          <button
+            type="button"
+            onClick={() => setGalleryOpenIndex(null)}
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 w-11 h-11 rounded-full bg-red-600 hover:bg-red-700 text-white flex items-center justify-center cursor-pointer z-20"
+            aria-label="Close gallery"
+          >
+            <X className="w-6 h-6" />
+          </button>
+
+          {packagesGallery.length > 1 && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                showPreviousGalleryImage();
+              }}
+              className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gold hover:bg-primary text-black hover:text-white flex items-center justify-center cursor-pointer z-20"
+              aria-label="Previous gallery image"
+            >
+              <ChevronLeft className="w-7 h-7" />
+            </button>
+          )}
+
+          <div
+            className="relative w-full max-w-5xl h-[70vh] sm:h-[82vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Image
+              src={packagesGallery[galleryOpenIndex]}
+              alt={`${title} gallery image ${galleryOpenIndex + 1}`}
+              fill
+              className="object-contain"
+              unoptimized
+              priority
+            />
+          </div>
+
+          {packagesGallery.length > 1 && (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                showNextGalleryImage();
+              }}
+              className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-gold hover:bg-primary text-black hover:text-white flex items-center justify-center cursor-pointer z-20"
+              aria-label="Next gallery image"
+            >
+              <ChevronRight className="w-7 h-7" />
+            </button>
+          )}
+
+          <div className="absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 text-black text-xs font-bold bg-gold px-3 py-1.5 rounded-full">
+            {galleryOpenIndex + 1} / {packagesGallery.length}
+          </div>
+        </div>
+      )}
 
       <SubmissionSuccessModal
         isOpen={modalOpen}

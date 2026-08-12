@@ -111,11 +111,17 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
     const cardDataStr = formData.get('cardData') as string || '';
     const cardData = cardDataStr ? JSON.parse(cardDataStr) : null;
 
+    // Umrah-only gallery. Hajj creation does not read or write this field.
+    const packagesGalleryStr = formData.get('packagesGallery') as string || '';
+    const packagesGallery = packagesGalleryStr
+      ? JSON.parse(packagesGalleryStr)
+      : null;
+
     if (!title) return { success: false, error: 'Package title is required.' };
 
     const slug = customSlug ? customSlug : title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
 
-    await db.insert(packages).values({
+    const insertData: any = {
       title,
       type,
       slug,
@@ -127,7 +133,12 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
       fullDescription,
       inclusions,
       cardData,
-    });
+    };
+
+    // Keep Hajj inserts exactly as before.
+    insertData.packagesGallery = packagesGallery;
+
+    await db.insert(packages).values(insertData);
 
     revalidatePath('/admin/packages');
     revalidatePath('/hajj-packages');
@@ -159,10 +170,11 @@ export async function updatePackageAction(
     destination?: string;
     cardData?: any;
     detailPageData?: any;
+    packagesGallery?: string[];
   }
 ): Promise<{ success: boolean; error?: string }> {
   try {
-    await db.update(packages).set({
+    const updateData: any = {
       title: data.title,
       slug: data.slug,
       type: data.type,
@@ -178,7 +190,14 @@ export async function updatePackageAction(
       cardData: data.cardData,
       detailPageData: data.detailPageData,
       updatedAt: new Date(),
-    }).where(eq(packages.id, id));
+    };
+
+    // Umrah-only update. Hajj rows never have packages_gallery touched.
+    if (data.packagesGallery !== undefined) {
+      updateData.packagesGallery = data.packagesGallery;
+    }
+
+    await db.update(packages).set(updateData).where(eq(packages.id, id));
 
     revalidatePath('/admin/packages');
     revalidatePath('/hajj-packages');

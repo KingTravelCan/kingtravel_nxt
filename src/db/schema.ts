@@ -60,6 +60,7 @@ export const packages = mysqlTable('packages', {
   exclusions: text('exclusions'),
   cardData: json('card_data'),
   detailPageData: json('detail_page_data'),
+  packagesGallery: json('packages_gallery'),
   seoSettings: json('seo_settings'),
   createdAt: timestamp('created_at').defaultNow(),
   updatedAt: timestamp('updated_at').defaultNow().onUpdateNow(),

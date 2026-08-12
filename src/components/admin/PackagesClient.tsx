@@ -113,7 +113,6 @@ function HajjCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v:
           </div>
         </div>
       </div>
-
       {/* Hotels */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Makkah Hotel */}
@@ -134,17 +133,11 @@ function HajjCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v:
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Icon (e.g. Utensils)" value={cd.makkahHotel?.badgeIcon || ''} onChange={e => updateMak('badgeIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
-                  <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
-                </div>
+                <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
               </div>
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Icon (e.g. Moon)" value={cd.makkahHotel?.nightsIcon || ''} onChange={e => updateMak('nightsIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
-                  <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
-                </div>
+                <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
               </div>
             </div>
           </div>
@@ -168,17 +161,11 @@ function HajjCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v:
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Icon (e.g. Utensils)" value={cd.madinahHotel?.badgeIcon || ''} onChange={e => updateMad('badgeIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
-                  <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
-                </div>
+                <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
               </div>
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Icon (e.g. Moon)" value={cd.madinahHotel?.nightsIcon || ''} onChange={e => updateMad('nightsIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
-                  <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
-                </div>
+                <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
               </div>
             </div>
           </div>
@@ -242,6 +229,7 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
         </div>
       </div>
 
+
       {/* Hotels */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Makkah Hotel */}
@@ -262,17 +250,11 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Icon (e.g. Utensils)" value={cd.makkahHotel?.badgeIcon || ''} onChange={e => updateMak('badgeIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
-                  <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
-                </div>
+                <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
               </div>
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Icon (e.g. Moon)" value={cd.makkahHotel?.nightsIcon || ''} onChange={e => updateMak('nightsIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
-                  <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
-                </div>
+                <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
               </div>
             </div>
           </div>
@@ -296,17 +278,11 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Icon (e.g. Utensils)" value={cd.madinahHotel?.badgeIcon || ''} onChange={e => updateMad('badgeIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
-                  <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
-                </div>
+                <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
               </div>
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
-                <div className="flex gap-2">
-                  <input type="text" placeholder="Icon (e.g. Moon)" value={cd.madinahHotel?.nightsIcon || ''} onChange={e => updateMad('nightsIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
-                  <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
-                </div>
+                <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
               </div>
             </div>
           </div>
@@ -379,6 +355,7 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
     inclusions: '[]',
     cardData: getDefaultCardData(type),
     detailPageData: {},
+    packagesGallery: [],
   });
 
   const [newPkg, setNewPkg] = useState(() => blankPkg(defaultTab));
@@ -397,6 +374,8 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
     formData.append('fullDescription', newPkg.fullDescription);
     formData.append('inclusions', newPkg.inclusions);
     if (newPkg.cardData) formData.append('cardData', JSON.stringify(newPkg.cardData));
+    const gallery = (Array.isArray(newPkg.packagesGallery) ? newPkg.packagesGallery : []).filter(Boolean);
+    formData.append('packagesGallery', JSON.stringify(gallery));
 
     const res = await createPackage(formData);
     if (res.success) {
@@ -469,50 +448,50 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
         </div>
       </div>
 
-{/* ── Create Package Form ─────────────────────────────────────────────── */ }
-{
-  isCreating && (
-    <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm animate-in fade-in mb-2">
-      <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider mb-5 flex items-center gap-2">
-        <Sparkles className="w-4 h-4 text-[#DB9E30]" />
-        Add New {activeTab === 'hajj' ? 'Hajj' : 'Umrah'} Package
-      </h3>
-      <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="col-span-full">
-          <label className="text-xs font-bold text-slate-700 block mb-1">Package Title *</label>
-          <input
-            type="text"
-            placeholder={activeTab === 'hajj' ? 'e.g. Economy Hajj Package 2027' : 'e.g. 5 Star September Umrah Package 2026'}
-            value={newPkg.title}
-            onChange={e => {
-              const title = e.target.value;
-              const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-              setNewPkg({ ...newPkg, title, slug });
-            }}
-            required
-            className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-          />
-        </div>
+      {/* ── Create Package Form ─────────────────────────────────────────────── */}
+      {
+        isCreating && (
+          <div className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm animate-in fade-in mb-2">
+            <h3 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider mb-5 flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#DB9E30]" />
+              Add New {activeTab === 'hajj' ? 'Hajj' : 'Umrah'} Package
+            </h3>
+            <form onSubmit={handleCreate} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="col-span-full">
+                <label className="text-xs font-bold text-slate-700 block mb-1">Package Title *</label>
+                <input
+                  type="text"
+                  placeholder={activeTab === 'hajj' ? 'e.g. Economy Hajj Package 2027' : 'e.g. 5 Star September Umrah Package 2026'}
+                  value={newPkg.title}
+                  onChange={e => {
+                    const title = e.target.value;
+                    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+                    setNewPkg({ ...newPkg, title, slug });
+                  }}
+                  required
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
+                />
+              </div>
 
-        {/* Slug Field */}
-        <div className="col-span-full">
-          <label className="text-xs font-bold text-slate-700 block mb-1">Page Slug *</label>
-          <div className="flex">
-            <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 text-slate-500 sm:text-xs">
-              /
-            </span>
-            <input
-              type="text"
-              placeholder="e.g. 5-star-september-umrah-package"
-              value={newPkg.slug}
-              onChange={(e) => setNewPkg({ ...newPkg, slug: e.target.value })}
-              required
-              className="flex-1 w-full px-3.5 py-2.5 border border-slate-200 rounded-r-xl text-xs outline-none focus:border-[#004B39]"
-            />
-          </div>
-        </div>
+              {/* Slug Field */}
+              <div className="col-span-full">
+                <label className="text-xs font-bold text-slate-700 block mb-1">Page Slug *</label>
+                <div className="flex">
+                  <span className="inline-flex items-center px-3 rounded-l-xl border border-r-0 border-slate-200 bg-slate-50 text-slate-500 sm:text-xs">
+                    /
+                  </span>
+                  <input
+                    type="text"
+                    placeholder="e.g. 5-star-september-umrah-package"
+                    value={newPkg.slug}
+                    onChange={(e) => setNewPkg({ ...newPkg, slug: e.target.value })}
+                    required
+                    className="flex-1 w-full px-3.5 py-2.5 border border-slate-200 rounded-r-xl text-xs outline-none focus:border-[#004B39]"
+                  />
+                </div>
+              </div>
 
-        {/* <div>
+              {/* <div>
               <label className="text-xs font-bold text-slate-700 block mb-1">Package Type</label>
               <select
                 value={newPkg.type}
@@ -524,87 +503,87 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
               </select>
             </div> */}
 
-        {newPkg.type === 'umrah' && (
-          <div>
-            <label className="text-xs font-bold text-slate-700 block mb-1">Month / Travel Dates *</label>
-            <input
-              type="text"
-              placeholder="e.g. September 2026 (14 Nights)"
-              value={newPkg.month}
-              onChange={e => setNewPkg({ ...newPkg, month: e.target.value })}
-              className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-            />
+              {newPkg.type === 'umrah' && (
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1">Month / Travel Dates *</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. September 2026 (14 Nights)"
+                    value={newPkg.month}
+                    onChange={e => setNewPkg({ ...newPkg, month: e.target.value })}
+                    className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
+                  />
+                </div>
+              )}
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Starting Price (CAD) *</label>
+                <input
+                  type="text"
+                  placeholder="2695.00"
+                  value={newPkg.startingPrice}
+                  onChange={e => setNewPkg({ ...newPkg, startingPrice: e.target.value })}
+                  required
+                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
+                />
+              </div>
+
+              {newPkg.type === 'umrah' && (
+                <>
+                  <div>
+                    <label className="text-xs font-bold text-slate-700 block mb-1">Hotel Star Rating</label>
+                    <select
+                      value={newPkg.starRating}
+                      onChange={e => setNewPkg({ ...newPkg, starRating: e.target.value })}
+                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
+                    >
+                      <option value="5 Star">5 Star Luxury</option>
+                      <option value="4 Star">4 Star Premium</option>
+                      <option value="3 Star">3 Star Standard</option>
+                    </select>
+                  </div>
+
+                  <div className="col-span-full">
+                    <label className="text-xs font-bold text-slate-700 block mb-1">Short Summary</label>
+                    <input
+                      type="text"
+                      placeholder="Brief package highlight description"
+                      value={newPkg.shortDescription}
+                      onChange={e => setNewPkg({ ...newPkg, shortDescription: e.target.value })}
+                      className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
+                    />
+                  </div>
+                </>
+              )}
+
+              {/* Dynamic card fields per type */}
+              {newPkg.type === 'hajj' ? (
+                <HajjCardFields pkgData={newPkg} setPkgData={setNewPkg} />
+              ) : (
+                <UmrahCardFields pkgData={newPkg} setPkgData={setNewPkg} />
+              )}
+
+              <div className="col-span-full flex justify-end gap-3 pt-3 border-t border-slate-100 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsCreating(false)}
+                  className="px-5 py-2.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border-none cursor-pointer hover:bg-slate-200 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-7 py-2.5 rounded-full text-xs font-extrabold bg-[#004B39] text-white border-none cursor-pointer shadow-md hover:bg-[#003229] transition-colors"
+                >
+                  Publish Package
+                </button>
+              </div>
+            </form>
           </div>
-        )}
+        )
+      }
 
-        <div>
-          <label className="text-xs font-bold text-slate-700 block mb-1">Starting Price (CAD) *</label>
-          <input
-            type="text"
-            placeholder="2695.00"
-            value={newPkg.startingPrice}
-            onChange={e => setNewPkg({ ...newPkg, startingPrice: e.target.value })}
-            required
-            className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-          />
-        </div>
-
-        {newPkg.type === 'umrah' && (
-          <>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Hotel Star Rating</label>
-              <select
-                value={newPkg.starRating}
-                onChange={e => setNewPkg({ ...newPkg, starRating: e.target.value })}
-                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39] bg-white"
-              >
-                <option value="5 Star">5 Star Luxury</option>
-                <option value="4 Star">4 Star Premium</option>
-                <option value="3 Star">3 Star Standard</option>
-              </select>
-            </div>
-
-            <div className="col-span-full">
-              <label className="text-xs font-bold text-slate-700 block mb-1">Short Summary</label>
-              <input
-                type="text"
-                placeholder="Brief package highlight description"
-                value={newPkg.shortDescription}
-                onChange={e => setNewPkg({ ...newPkg, shortDescription: e.target.value })}
-                className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-              />
-            </div>
-          </>
-        )}
-
-        {/* Dynamic card fields per type */}
-        {newPkg.type === 'hajj' ? (
-          <HajjCardFields pkgData={newPkg} setPkgData={setNewPkg} />
-        ) : (
-          <UmrahCardFields pkgData={newPkg} setPkgData={setNewPkg} />
-        )}
-
-        <div className="col-span-full flex justify-end gap-3 pt-3 border-t border-slate-100 mt-2">
-          <button
-            type="button"
-            onClick={() => setIsCreating(false)}
-            className="px-5 py-2.5 rounded-full text-xs font-bold bg-slate-100 text-slate-700 border-none cursor-pointer hover:bg-slate-200 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            type="submit"
-            className="px-7 py-2.5 rounded-full text-xs font-extrabold bg-[#004B39] text-white border-none cursor-pointer shadow-md hover:bg-[#003229] transition-colors"
-          >
-            Publish Package
-          </button>
-        </div>
-      </form>
-    </div>
-  )
-}
-
-{/* ── Packages Table ──────────────────────────────────────────────────── */ }
+      {/* ── Packages Table ──────────────────────────────────────────────────── */}
       <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
@@ -630,8 +609,8 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
                   const isSoldOut = pkg.status === 'sold_out';
                   return (
                     <tr key={pkg.id} className={`transition-colors border-b ${isSoldOut
-                        ? 'bg-red-50/50 border-red-100 hover:bg-red-50/80'
-                        : 'border-slate-100 hover:bg-slate-50/60'
+                      ? 'bg-red-50/50 border-red-100 hover:bg-red-50/80'
+                      : 'border-slate-100 hover:bg-slate-50/60'
                       }`}>
                       <td className="py-3.5 px-4">
                         <div className={`font-bold ${isSoldOut ? 'text-red-700' : 'text-slate-900'}`}>{pkg.title}</div>
@@ -644,8 +623,8 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
                       </td>
                       <td className="py-3.5 px-4">
                         <span className={`text-[10px] font-extrabold px-2.5 py-0.5 rounded-full uppercase border ${pkg.type === 'hajj'
-                            ? 'bg-amber-50 text-amber-800 border-amber-200'
-                            : 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                          ? 'bg-amber-50 text-amber-800 border-amber-200'
+                          : 'bg-emerald-50 text-emerald-800 border-emerald-200'
                           }`}>
                           {pkg.type === 'hajj' ? '🕌 Hajj' : '🕋 Umrah'}
                         </span>
@@ -659,10 +638,10 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
                       <td className="py-3.5 px-4">
                         <span
                           className={`inline-block px-2.5 py-1 rounded-full text-[10px] font-extrabold capitalize border-2 transition-all ${isSoldOut
-                              ? 'bg-red-100 text-red-700 border-red-400 shadow-sm'
-                              : pkg.status === 'available'
-                                ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                                : 'bg-slate-100 text-slate-600 border-slate-300'
+                            ? 'bg-red-100 text-red-700 border-red-400 shadow-sm'
+                            : pkg.status === 'available'
+                              ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                              : 'bg-slate-100 text-slate-600 border-slate-300'
                             }`}
                         >
                           {isSoldOut ? '🔴 Sold Out' : `● ${pkg.status || 'available'}`}

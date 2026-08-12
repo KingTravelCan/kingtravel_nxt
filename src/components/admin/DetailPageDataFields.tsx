@@ -55,11 +55,15 @@ export const defaultDetailPageData: DetailPageData = {
 export default function DetailPageDataFields({
   data,
   onChange,
-  onHotelSync
+  onHotelSync,
+  packagesGallery = [],
+  onGalleryChange
 }: {
   data: DetailPageData;
   onChange: (newData: DetailPageData) => void;
   onHotelSync?: (hotelKey: 'makkahHotel' | 'madinahHotel', field: string, val: string) => void;
+  packagesGallery?: string[];
+  onGalleryChange?: (gallery: string[]) => void;
 }) {
   const d = data || defaultDetailPageData;
 
@@ -75,11 +79,11 @@ export default function DetailPageDataFields({
 
   return (
     <div className="col-span-full space-y-8 animate-in fade-in duration-300">
-      
+
       {/* Top Banner Fields */}
       <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <h4 className="col-span-full text-sm font-extrabold text-slate-900 uppercase tracking-wide">Top Banner Info</h4>
-        
+
         <div>
           <label className="text-[10px] font-bold text-slate-500 mb-1 block">DURATION TEXT</label>
           <input type="text" value={d.durationText || ''} onChange={e => update('durationText', e.target.value)} placeholder="e.g. 17 DAYS / 16 NIGHTS" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
@@ -303,6 +307,92 @@ export default function DetailPageDataFields({
         </div>
       </div>
 
+      {/* Package Gallery */}
+      <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200">
+        <div className="flex items-center justify-between mb-4">
+          <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wide">Package Gallery</h4>
+          <div>
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              className="hidden"
+              id="bulk-gallery-upload"
+              onChange={async (e) => {
+                const files = Array.from(e.target.files || []);
+                if (!files.length) return;
+                
+                const uploadPromises = files.map(async (file) => {
+                  const formData = new FormData();
+                  formData.append('file', file);
+                  formData.append('subfolder', 'packages/gallery');
+                  try {
+                    const res = await fetch('/api/admin/upload', {
+                      method: 'POST',
+                      body: formData,
+                    });
+                    const data = await res.json();
+                    if (data.success && data.url) {
+                      return data.url;
+                    }
+                  } catch (err) {
+                    console.error('Bulk upload failed for', file.name, err);
+                  }
+                  return null;
+                });
+                
+                const results = await Promise.all(uploadPromises);
+                const newUrls = results.filter((url): url is string => url !== null);
+                
+                if (newUrls.length > 0) {
+                  onGalleryChange?.([...packagesGallery.filter(url => url !== ''), ...newUrls]);
+                }
+                
+                e.target.value = '';
+              }}
+            />
+            <label
+              htmlFor="bulk-gallery-upload"
+              className="text-[10px] font-extrabold text-amber-700 border border-amber-300 bg-amber-50 hover:bg-amber-100 px-2.5 py-1 rounded-full transition-colors cursor-pointer block"
+            >
+              + Add Bulk Images
+            </label>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+          {packagesGallery.map((imageUrl: string, galleryIdx: number) => (
+            <div key={galleryIdx} className="relative rounded-xl border border-slate-200 p-3 bg-white">
+              <ImageUploadWidget
+                value={imageUrl || ''}
+                onChange={(url) => {
+                  const next = [...packagesGallery];
+                  next[galleryIdx] = url;
+                  onGalleryChange?.(next);
+                }}
+                subfolder="packages/gallery"
+                hideDeleteButton={true}
+              />
+              <button
+                type="button"
+                onClick={() => {
+                  const next = packagesGallery.filter((_, idx) => idx !== galleryIdx);
+                  onGalleryChange?.(next);
+                }}
+                className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center border-none cursor-pointer shadow"
+                title="Remove gallery image"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          ))}
+        </div>
+
+        {packagesGallery.length === 0 && (
+          <p className="text-xs text-slate-400 italic mt-2">No gallery images added yet.</p>
+        )}
+      </div>
+
       {/* Important Booking */}
       <div className="bg-amber-50 rounded-2xl p-5 border border-amber-200">
         <h4 className="text-sm font-extrabold text-amber-900 mb-2 uppercase tracking-wide">Important Booking Note</h4>
@@ -327,7 +417,7 @@ export default function DetailPageDataFields({
               }} className="absolute top-4 right-4 text-red-500 hover:text-red-700 bg-red-50 rounded-md p-1.5">
                 <Trash2 className="w-4 h-4" />
               </button>
-              
+
               <div className="mb-2">
                 <label className="text-[10px] font-bold text-slate-500 mb-1 block">QUESTION</label>
                 <input
@@ -363,7 +453,7 @@ export default function DetailPageDataFields({
           </button>
         </div>
       </div>
-      
+
     </div>
   );
 }

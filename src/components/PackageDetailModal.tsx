@@ -340,7 +340,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                           ) : (
                             <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
                           )}
-                          <span className={isNotIncluded ? "text-slate-500 line-through" : "font-medium"}>
+                          <span className={isNotIncluded ? "text-red-500" : "font-medium"}>
                             {hl.text}
                           </span>
                         </li>

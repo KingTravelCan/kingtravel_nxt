@@ -41,15 +41,8 @@ export async function uploadToFtp(
   }
 
   try {
-    // Sanitize filename and create unique timestamped name
-    const ext = path.extname(originalFilename) || '.png';
-    const cleanBaseName = path
-      .basename(originalFilename, ext)
-      .toLowerCase()
-      .replace(/[^\w-]/g, '');
-    const timestamp = Date.now();
-    const uniqueFilename = `${cleanBaseName || 'media'}-${timestamp}${ext.toLowerCase()}`;
-
+    // Use the filename provided by the caller to ensure consistency with local storage
+    const uniqueFilename = originalFilename;
     const dateFolder = new Date().toISOString().slice(0, 7); // e.g., "2026-08"
     const relativeDir = `${subfolder}/${dateFolder}`.replace(/^\/+|\/+$/g, '');
     const targetDir = `${ftpRootDir.replace(/\/$/, '')}/${relativeDir}`;
