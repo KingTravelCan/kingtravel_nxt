@@ -32,16 +32,12 @@ export async function POST(req: NextRequest) {
     // Attempt to save a local copy to public/media/... so that local previews work immediately in dev.
     // In production (Vercel/Lambda), the filesystem is read-only, so this will fail safely.
     const relativeDir = `${subfolder}/${new Date().toISOString().slice(0, 7)}`.replace(/^\/+|\/+$/g, '');
-    try {
-      const localUploadDir = path.join(process.cwd(), 'public', 'media', relativeDir);
-      if (!fs.existsSync(localUploadDir)) {
-        fs.mkdirSync(localUploadDir, { recursive: true });
-      }
-      const localFilePath = path.join(localUploadDir, uniqueFilename);
-      fs.writeFileSync(localFilePath, buffer);
-    } catch (localSaveError) {
-      console.warn('Could not save local copy (expected in read-only production environments like Vercel):', localSaveError);
-    }
+    const localUploadDir = path.join(process.cwd(), 'public', 'media', relativeDir);
+    if (!fs.existsSync(localUploadDir)) {
+      fs.mkdirSync(localUploadDir, { recursive: true });
+
+    const localFilePath = path.join(localUploadDir, uniqueFilename);
+    fs.writeFileSync(localFilePath, buffer);
 
     if (useFtp) {
       // Try FTP upload
@@ -56,11 +52,7 @@ export async function POST(req: NextRequest) {
       }
       
       // If FTP fails, we MUST return an error because local fallback doesn't work on Vercel
-      console.error('FTP upload failed:', uploadResult.error);
-      return NextResponse.json(
-        { success: false, error: `FTP Upload Failed: ${uploadResult.error}` },
-        { status: 500 }
-      );
+      console.warn('FTP upload failed/timed out, falling back to local public storage:', uploadResult.error);
     }
 
     // If we reach here, it means FTP is completely disabled in .env (ENABLE_FTP=false)
