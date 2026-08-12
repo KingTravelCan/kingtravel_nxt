@@ -54,10 +54,16 @@ export async function POST(req: NextRequest) {
           relativePath: uploadResult.relativePath,
         });
       }
-      console.warn('FTP upload failed/timed out, falling back to local public storage:', uploadResult.error);
+      
+      // If FTP fails, we MUST return an error because local fallback doesn't work on Vercel
+      console.error('FTP upload failed:', uploadResult.error);
+      return NextResponse.json(
+        { success: false, error: `FTP Upload Failed: ${uploadResult.error}` },
+        { status: 500 }
+      );
     }
 
-    // If we reach here, it means FTP is disabled or it failed
+    // If we reach here, it means FTP is completely disabled in .env (ENABLE_FTP=false)
     const localPublicUrl = `/media/${relativeDir}/${uniqueFilename}`;
 
     return NextResponse.json({
