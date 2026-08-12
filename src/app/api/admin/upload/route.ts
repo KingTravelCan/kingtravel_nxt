@@ -29,14 +29,19 @@ export async function POST(req: NextRequest) {
       .replace(/[^\w-]/g, '');
     const uniqueFilename = `${cleanBaseName || 'media'}-${Date.now()}${ext.toLowerCase()}`;
 
-    // ALWAYS save a local copy to public/media/... so that local previews work immediately
+    // Attempt to save a local copy to public/media/... so that local previews work immediately in dev.
+    // In production (Vercel/Lambda), the filesystem is read-only, so this will fail safely.
     const relativeDir = `${subfolder}/${new Date().toISOString().slice(0, 7)}`.replace(/^\/+|\/+$/g, '');
-    const localUploadDir = path.join(process.cwd(), 'public', 'media', relativeDir);
-    if (!fs.existsSync(localUploadDir)) {
-      fs.mkdirSync(localUploadDir, { recursive: true });
+    try {
+      const localUploadDir = path.join(process.cwd(), 'public', 'media', relativeDir);
+      if (!fs.existsSync(localUploadDir)) {
+        fs.mkdirSync(localUploadDir, { recursive: true });
+      }
+      const localFilePath = path.join(localUploadDir, uniqueFilename);
+      fs.writeFileSync(localFilePath, buffer);
+    } catch (localSaveError) {
+      console.warn('Could not save local copy (expected in read-only production environments like Vercel):', localSaveError);
     }
-    const localFilePath = path.join(localUploadDir, uniqueFilename);
-    fs.writeFileSync(localFilePath, buffer);
 
     if (useFtp) {
       // Try FTP upload
