@@ -86,7 +86,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
             {[1, 2, 3, 4].map((i) => (
               <div
                 key={i}
-                className="bg-white border border-gray-200 rounded-[32px] overflow-hidden animate-pulse"
+                className="bg-white border border-gray-200 rounded-3xl overflow-hidden animate-pulse"
               >
                 <div className="h-48 bg-gray-200" />
                 <div className="p-8 space-y-4">
@@ -156,9 +156,9 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                 <div
                   key={pkg.id || idx}
                   className={`${isGold
-                    ? "bg-gold hover:bg-paper transition-[transform,box-shadow] duration-400 shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8"
-                    : "hover:bg-[#FBF8F1] transition-[transform,box-shadow] duration-400 border-1 border-[#ccc] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
-                    } rounded-[32px] overflow-hidden flex flex-col`}
+                    ? "bg-gold hover:bg-paper transition duration-400 shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:-mt-8 xl:mb-8"
+                    : "hover:bg-[#FBF8F1] transition-[transform,box-shadow] duration-400 border-1 border-[#ccc] transition duration-400 bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
+                    } rounded-3xl overflow-hidden flex flex-col`}
                 >
                   <div className="relative h-48 w-full">
                     {heroImage && (
