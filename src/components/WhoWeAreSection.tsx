@@ -10,7 +10,7 @@ export default function WhoWeAreSection({ data }: { data: any }) {
   const reviewText = data?.reviewText || "\"Every detail handled — from visa to hotel, steps from the Haram.\"";
 
   return (
-    <section className="py-16 md:py-24 bg-[#f4f6ec]">
+    <section className="py-16 md:py-24 bg-sage">
       <div className="max-w-[1400px] mx-auto px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* Left: Image */}

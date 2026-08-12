@@ -1,8 +1,62 @@
 @import "tailwindcss";
 
+/* ============ DESIGN TOKENS ============ */
+:root {
+  /* Brand & Base Colors */
+  --ink: #132723;
+  /* --ink-2: #1c352f; */
+  --ink-soft: #2e2e2e;
+  --ink-light: color-mix(in srgb, var(--ink), #ffffff 50%);
+  
+  /* --green: #004B39; */
+  /* --green-light: color-mix(in srgb, var(--green), #ffffff 80%); */
+  
+  --gold: #DB9E30;
+  --gold-lt: #E7BE6E;
+  --gold-soft: #f5e7c8;
+  --yellow-light: color-mix(in srgb, var(--gold), #ffffff 80%);
+  
+  --cream: #F5EFE1;
+  --sage: #F1F5E5;
+  --paper: #FBF8F1;
+  --gray: #EAEAE4;
+  --line: #E4DAC0;
+  --light-bg: #F4F6F5;
+  --dark: #222222;
+  --white: #ffffff;
+
+  /* Functional Color Aliases */
+  --primary: #004B39;
+  /* --primary-light: #125c40; */
+  --primary-light: color-mix(in srgb, var(--primary) 77%, #ffffff);
+  --accent: var(--gold);
+  --accent-hover: #bfa030;
+
+  /* Typography */
+  --serif: 'Marcellus', serif;
+  --sans: 'Plus Jakarta Sans', sans-serif;
+
+  /* Geometry & Layout */
+  --maxw: 1280px;
+  --r-lg: 28px;
+  --r-md: 18px;
+  --r-sm: 10px;
+  --arrow-btn-offset: -14px;
+  --phone-space: 30px;
+
+  /* Elevation & Motion */
+  --shadow-soft: 0 20px 50px -25px rgba(19, 39, 35, 0.35);
+  --shadow-card: 0 14px 34px -18px rgba(19, 39, 35, 0.28);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  --transition: all 0.3s ease;
+}
+
+/* ============ TAILWIND V4 THEME MAPPING ============ */
 @theme {
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-light: var(--ink-light);
   --color-cream: var(--cream);
   --color-sage: var(--sage);
   --color-paper: var(--paper);
@@ -11,62 +65,16 @@
   --color-gold-lt: var(--gold-lt);
   --color-gold-soft: var(--gold-soft);
   --color-line: var(--line);
-  --color-green: var(--green);
+  --color-yellow-light: var(--yellow-light);
   --color-primary: var(--primary);
   --color-primary-light: var(--primary-light);
   --color-accent: var(--accent);
   --color-accent-hover: var(--accent-hover);
   --color-dark: var(--dark);
   --color-light-bg: var(--light-bg);
-  --color-green-light: var(--green-light);
-  --color-yellow-light: var(--yellow-light);
-  --color-ink-soft: var(--ink-soft);
 
   --font-serif: var(--serif);
   --font-sans: var(--sans);
-}
-
-
-/* ============ TOKENS ============ */
-:root {
-  --ink: #132723;
-  --ink-light: color-mix(in srgb, var(--ink), white 50%);
-  --ink-2: #1c352f;
-  --cream: #F5EFE1;
-  --sage: #F1F5E5;
-  --paper: #FBF8F1;
-  --gray: #EAEAE4;
-  --gold: #DB9E30;
-  --gold-lt: #E7BE6E;
-  --gold-soft: #f5e7c8;
-  --line: #E4DAC0;
-  --green: #004B39;
-  --primary: var(--green);
-  --primary-light: #125c40;
-  --accent: var(--gold);
-  --accent-hover: #bfa030;
-  --dark: #222222;
-  --light-bg: #F4F6F5;
-
-  --green-light: color-mix(in srgb, var(--green), white 80%);
-  --yellow-light: color-mix(in srgb, var(--gold), white 80%);
-  --ink-soft: #2e2e2e;
-  --white: #ffffff;
-
-  --serif: 'Marcellus', serif;
-  --sans: 'Plus Jakarta Sans', sans-serif;
-
-  --maxw: 1280px;
-  --r-lg: 28px;
-  --r-md: 18px;
-  --r-sm: 10px;
-  --shadow-soft: 0 20px 50px -25px rgba(19, 39, 35, .35);
-  --shadow-card: 0 14px 34px -18px rgba(19, 39, 35, .28);
-  --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  --transition: all 0.3s ease;
-
-  --arrow-btn-offset: -14px;
-  --phone-space: 30px;
 }
 
 
@@ -821,7 +829,7 @@ section#flights {
 
 
 .section-dark {
-  background: var(--green);
+  background: var(--primary);
   position: relative;
 }
 
@@ -1252,7 +1260,7 @@ section#flights {
 }
 
 .svc-tile:hover {
-  background: var(--green);
+  background: var(--primary);
   color: var(--cream);
   transform: translateY(-6px);
 }

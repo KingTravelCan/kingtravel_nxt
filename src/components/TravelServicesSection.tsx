@@ -21,7 +21,7 @@ export default function TravelServicesSection({ data }: { data: any }) {
   const services = data?.items?.length ? data.items : defaultServices;
 
   return (
-    <section className="py-20 bg-[#f4f6ec]">
+    <section className="py-20 bg-sage">
       <div className="max-w-[1400px] mx-auto px-5">
         <div className="text-center flex flex-col items-center mb-16">
           <h3 className="eyebrow">{eyebrow}</h3>
@@ -38,7 +38,7 @@ export default function TravelServicesSection({ data }: { data: any }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((s: any, i: number) => (
-            <div key={i} className="group bg-[var(--paper)] hover:transition-all duration-300 hover:bg-[var(--green)] rounded-[24px] p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-[#eef0e4] hover:-translate-y-1 transition-transform duration-300 cursor-pointer flex flex-col">
+            <div key={i} className="group bg-[var(--paper)] hover:transition-all duration-300 hover:bg-[var(--primary)] rounded-[24px] p-8 shadow-[0_4px_20px_rgb(0,0,0,0.03)] border border-[#eef0e4] hover:-translate-y-1 transition-transform duration-300 cursor-pointer flex flex-col">
               <div className="w-12 h-12 rounded-2xl bg-[#faeed8] group-hover:bg-[rgba(231,190,110,.18)] flex items-center justify-center text-[#DB9E30] group-hover:text-[var(--gold-lt)] mb-6">
                 <DynamicIcon name={s.icon || 'Star'} className="w-5 h-5" />
               </div>

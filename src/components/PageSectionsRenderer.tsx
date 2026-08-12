@@ -179,7 +179,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
         // ── Testimonials ──────────────────────────────────────────────────────
         if (sec.type === "Testimonials") {
           return (
-            <section key={idx} className="py-14 bg-[#004B39]">
+            <section key={idx} className="py-14 bg-primary">
               <div className="max-w-7xl mx-auto px-4">
                 <div className="text-center flex flex-col mb-10">
                   {sec.data?.eyebrow && (

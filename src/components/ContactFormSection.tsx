@@ -76,7 +76,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
   };
 
   return (
-    <section className="py-20 bg-[#F1F1ED]">
+    <section className="py-20 bg-gray">
       <div className="max-w-7xl mx-auto px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 

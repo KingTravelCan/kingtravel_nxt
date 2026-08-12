@@ -64,7 +64,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
   // Homepage should only show the first 4 Umrah packages.
   const displayedPkgs = pathname === "/" ? pkgs.slice(0, 4) : pkgs;
   return (
-    <section className="py-10 bg-[#f1f5e6]">
+    <section className="py-10">
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
@@ -156,7 +156,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                 <div
                   key={pkg.id || idx}
                   className={`${isGold
-                    ? "bg-[#DB9E30] hover:bg-[#FBF8F1] shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8"
+                    ? "bg-gold hover:bg-paper transition-[transform,box-shadow] duration-400 shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8"
                     : "hover:bg-[#FBF8F1] border-1 border-[#ccc] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
                     } rounded-[32px] overflow-hidden flex flex-col`}
                 >

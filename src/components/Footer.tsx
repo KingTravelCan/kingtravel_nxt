@@ -14,7 +14,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
   }
 
   return (
-    <footer id="footer-place" className="px-5 bg-[#004B39] text-[#bccfc6] py-[70px] pb-[30px] text-[14px] md:text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-[#DB9E30]">
+    <footer id="footer-place" className="px-5 bg-primary text-[#bccfc6] py-[70px] pb-[30px] text-[14px] md:text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-[#DB9E30]">
       <div className="max-w-[1280px] mx-auto ">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-x-[20px] gap-y-[40px] lg:gap-[50px]">
 
@@ -48,9 +48,9 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
             {footerData.socialLinks && footerData.socialLinks.length > 0 && (
               <div className="mt-[15px] flex items-center gap-[10px]">
                 <b className="font-bold">Follow Us:</b>
-                <ul className="flex gap-[10px] p-0 m-0 list-none">
+                <ul className="flex gap-[10px] items-center p-0 m-0 list-none">
                   {footerData.socialLinks.map((item: any, idx: number) => (
-                    <li key={idx} className="mb-0">
+                    <li key={idx} className="flex items-center mb-0">
                       <a
                         href={item.url || '#'}
                         target={item.openInNewTab ? "_blank" : "_self"}
