@@ -75,7 +75,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
               dangerouslySetInnerHTML={{ __html: title }}
             />
           </div>
-          <div className="max-w-sm text-gray-500 text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
+          <div className="max-w-sm text-ink-soft text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
             {description}
           </div>
         </div>
@@ -157,7 +157,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                   key={pkg.id || idx}
                   className={`${isGold
                     ? "bg-gold hover:bg-paper transition-[transform,box-shadow] duration-400 shadow-[0_8px_30px_rgb(0,0,0,0.12)] mt-0 xl:mt-8"
-                    : "hover:bg-[#FBF8F1] border-1 border-[#ccc] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
+                    : "hover:bg-[#FBF8F1] transition-[transform,box-shadow] duration-400 border-1 border-[#ccc] bg-white shadow-[0_8px_30px_rgb(0,0,0,0.08)]"
                     } rounded-[32px] overflow-hidden flex flex-col`}
                 >
                   <div className="relative h-48 w-full">
@@ -186,7 +186,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                     >
                       CAD {price}{" "}
                       <span
-                        className={`text-sm font-medium ${isGold ? "" : "text-gray-500"
+                        className={`text-sm font-medium ${isGold ? "" : "text-ink-soft"
                           }`}
                       >
                         / Person
@@ -223,11 +223,11 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                         return (
                           <li
                             key={i}
-                            className={`flex gap-3 text-sm ${isGold ? "" : "text-[#2e2e2e]"
+                            className={`flex gap-3 text-sm ${isGold ? "" : "text-ink-soft"
                               }`}
                           >
                             <Icon
-                              className={`w-4 h-4 shrink-0 ${isGold ? "" : "text-[#2e2e2e"
+                              className={`w-4 h-4 shrink-0 ${isGold ? "" : "text-ink-soft"
                                 }`}
                             />{" "}
                             <span className="leading-tight">{text}</span>
@@ -239,10 +239,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                     <div className="flex gap-2">
                       <a
                         href={`/${pkg.slug}`}
-                        className={`flex-1 py-3 text-center text-xs font-black rounded-md uppercase tracking-widest transition-colors block border-2 ${isGold
-                          ? "border-[#2d3e34] text-[#2d3e34] hover:bg-[#2c3e35]/5"
-                          : "border-[#545454] text-[#545454] hover:bg-[#545454]/5"
-                          }`}
+                        className={`flex-1 py-3 text-center text-xs font-black rounded-md uppercase tracking-widest transition-colors block border-2 border-ink-soft text-ink-soft hover:bg-ink-soft/5`}
                       >
                         View Detail
                       </a>
@@ -253,7 +250,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                         }}
                         className={`flex-1 py-3 text-center text-xs font-black rounded-md uppercase tracking-widest transition-colors block border-2 border-transparent cursor-pointer ${isGold
                           ? "bg-ink-soft hover:bg-ink text-white"
-                          : "bg-gold hover:bg-[#c58d2a] text-black"
+                          : "bg-gold hover:bg-gold-lt text-black"
                           }`}
                       >
                         {buttonText}

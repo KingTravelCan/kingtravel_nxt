@@ -33,7 +33,7 @@ export default function WhatWeProvideSection({ data }: { data: any }) {
           <div className="order-1 lg:order-2">
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2 
-              className="text-4xl md:text-5xl font-serif text-[#004B39] leading-[1.15] mb-12"
+              className="text-4xl md:text-5xl font-serif text-ink leading-[1.15] mb-12"
               dangerouslySetInnerHTML={{ __html: title }}
             />
 
@@ -44,8 +44,8 @@ export default function WhatWeProvideSection({ data }: { data: any }) {
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <div>
-                    <h4 className="text-[#1a2b25] font-serif text-lg mb-2">{item.title}</h4>
-                    <p className="text-gray-500 text-sm leading-relaxed">
+                    <h4 className="text-ink font-serif text-lg mb-2">{item.title}</h4>
+                    <p className="text-ink-soft text-sm leading-relaxed">
                       {item.desc || item.description}
                     </p>
                   </div>

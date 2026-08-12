@@ -49,7 +49,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2 className="">{title}</h2>
           </div>
-          <div className="max-w-sm text-gray-500 text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
+          <div className="max-w-sm text-ink-soft text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
             {description}
           </div>
         </div>
@@ -130,16 +130,16 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                     {/* Badges */}
-                    <div className="absolute top-4 left-4 flex items-center gap-1.5 text-white text-[10px] font-bold tracking-wider">
+                    <div className="absolute top-4 left-4 flex items-center gap-1.5 text-white text-[11px] font-bold tracking-wider">
                       <LucideIcons.Shield className="w-3 h-3" /> {badgeTag}
                     </div>
-                    <div className="absolute top-4 right-4 bg-gold text-[#1a2b25] px-3 py-1 rounded-full text-[10px] font-black tracking-wider flex items-center gap-1.5">
+                    <div className="absolute top-4 right-4 bg-gold text-ink px-3 py-1 rounded-full text-[11px] font-black tracking-wider flex items-center gap-1.5">
                       <LucideIcons.Calendar className="w-3 h-3" /> {duration}
                     </div>
 
                     {/* Bottom text */}
                     <div className="absolute bottom-4 left-6 right-6">
-                      <div className="text-[#20d88a] text-[10px] font-black tracking-widest mb-1 flex items-center gap-2">
+                      <div className="text-[#20d88a] text-[11px] font-black tracking-widest mb-1 flex items-center gap-2">
                         <LucideIcons.Plane className="w-3 h-3" /> {flightRoute}
                       </div>
                       <h3 className="text-white font-serif text-2xl leading-tight">
@@ -149,7 +149,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                   </div>
 
                   <div className="p-6 flex-1 flex flex-col">
-                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-4">
+                    <div className="text-[11px] font-black text-ink uppercase tracking-widest mb-4">
                       ACCOMMODATIONS
                     </div>
 
@@ -168,19 +168,19 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                             />
                           </div>
                           <div className="flex flex-col justify-center">
-                            <h4 className="text-[#004B39] font-bold text-sm mb-1">
+                            <h4 className="text-primary font-bold text-sm mb-1">
                               {makkahHotel.name || "5 Star Hotel in Makkah"}
                             </h4>
-                            <div className="text-gray-500 text-[10px] flex items-center gap-1 mb-2">
+                            <div className="text-ink-soft text-[11px] flex items-center gap-1 mb-2">
                               <LucideIcons.MapPin className="w-3 h-3" />{" "}
                               {makkahHotel.location || "Near to Haram"}
                             </div>
                             <div className="flex gap-2">
-                              <span className="bg-[#004B39] text-white text-[9px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                              <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
                                 {makkahHotel.badgeIcon && <DynamicIcon name={makkahHotel.badgeIcon} className="w-2.5 h-2.5" />}
                                 {makkahHotel.badge || "Breakfast"}
                               </span>
-                              <span className="bg-gray-100 text-gray-600 text-[9px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                              <span className="bg-gray-100 text-ink-soft text-[10px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
                                 {makkahHotel.nightsIcon && <DynamicIcon name={makkahHotel.nightsIcon} className="w-2.5 h-2.5" />}
                                 {makkahHotel.nights || "6 Nights"}
                               </span>
@@ -203,19 +203,19 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                             />
                           </div>
                           <div className="flex flex-col justify-center">
-                            <h4 className="text-[#004B39] font-bold text-sm mb-1">
+                            <h4 className="text-primary font-bold text-sm mb-1">
                               {madinahHotel.name || "5 Star Hotel in Madinah"}
                             </h4>
-                            <div className="text-gray-500 text-[10px] flex items-center gap-1 mb-2">
+                            <div className="text-ink-soft text-[11px] flex items-center gap-1 mb-2">
                               <LucideIcons.MapPin className="w-3 h-3" />{" "}
                               {madinahHotel.location || "Near to Masjid Nabawi"}
                             </div>
                             <div className="flex gap-2">
-                              <span className="bg-[#004B39] text-white text-[9px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                              <span className="bg-primary text-white text-[11px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
                                 {madinahHotel.badgeIcon && <DynamicIcon name={madinahHotel.badgeIcon} className="w-2.5 h-2.5" />}
                                 {madinahHotel.badge || "Breakfast"}
                               </span>
-                              <span className="bg-gray-100 text-gray-600 text-[9px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                              <span className="bg-gray-100 text-ink-soft text-[11px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
                                 {madinahHotel.nightsIcon && <DynamicIcon name={madinahHotel.nightsIcon} className="w-2.5 h-2.5" />}
                                 {madinahHotel.nights || "6 Nights"}
                               </span>
@@ -227,21 +227,21 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
 
                     <div className="border-t border-gray-100 pt-5 flex items-end justify-between mb-6">
                       <div>
-                        <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">
+                        <div className="text-[10px] font-bold text-ink-soft uppercase tracking-widest mb-1.5">
                           OPERATOR
                         </div>
-                        <div className="text-sm font-bold text-[#1a2b25] flex items-center gap-2">
+                        <div className="text-sm font-bold text-ink flex items-center gap-2">
                           {operatorName}{" "}
-                          <span className="bg-gold text-[#1a2b25] text-[10px] px-1.5 py-0.5 rounded font-black">
+                          <span className="bg-gold text-ink text-[10px] px-1.5 py-0.5 rounded font-black">
                             {operatorRating}
                           </span>
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1.5">
+                        <div className="text-[10px] font-bold text-ink-soft uppercase tracking-widest mb-1.5">
                           {priceSubtext}
                         </div>
-                        <div className="text-2xl font-black text-[#1a2b25]">
+                        <div className="text-2xl font-black text-ink">
                           {price}
                         </div>
                       </div>
@@ -250,7 +250,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                     <div className="flex flex-col sm:flex-row gap-2">
                       <a
                         href={`/${pkg.slug}`}
-                        className="flex-1 py-3.5 border-2 border-[#545454] text-[#545454] hover:bg-[#545454]/5 text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                        className="flex-1 py-3.5 border-2 border-ink-soft text-ink-soft hover:bg-ink-soft/5 text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
                       >
                         <LucideIcons.Eye className="w-4 h-4" /> View Detail
                       </a>
@@ -261,7 +261,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                           setSelectedPkgForBooking(pkg);
                           setBookingModalOpen(true);
                         }}
-                        className="flex-1 py-3.5 bg-gold hover:bg-[#c58d2a] text-black text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
+                        className="flex-1 py-3.5 bg-gold hover:bg-[#c58d2a] text-ink text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
                       >
                         <LucideIcons.BookOpen className="w-4 h-4" /> Book Hajj 2027
                       </button>

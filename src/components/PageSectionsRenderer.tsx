@@ -331,7 +331,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                       {sec.data.eyebrow}
                     </span>
                   )}
-                  <h2 className="text-2xl font-serif text-[#004B39] font-normal">
+                  <h2 className="text-2xl font-serif text-ink font-normal">
                     {sec.data?.title || "Airlines We Sourced Deals From"}
                   </h2>
                 </div>

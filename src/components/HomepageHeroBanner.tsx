@@ -159,7 +159,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
             <form noValidate className="flex flex-col gap-4" onSubmit={handleQuoteSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="relative">
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Your Name
                   </label>
                   <input
@@ -178,7 +178,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                 </div>
 
                 <div className="relative">
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Phone Number
                   </label>
                   <input
@@ -215,7 +215,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                 </div>
 
                 <div className="relative">
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Email Address
                   </label>
                   <input
@@ -236,7 +236,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
                 <div className="relative">
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Select Your Package
                   </label>
                   <select
@@ -253,7 +253,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                 </div>
 
                 <div className="relative">
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Departure Date
                   </label>
                   <input
@@ -265,7 +265,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                 </div>
 
                 <div className="relative">
-                  <label className="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1.5">
+                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Number of Adults
                   </label>
                   <input

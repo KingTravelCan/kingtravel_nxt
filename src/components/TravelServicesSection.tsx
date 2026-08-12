@@ -42,8 +42,8 @@ export default function TravelServicesSection({ data }: { data: any }) {
               <div className="w-12 h-12 rounded-2xl bg-[#faeed8] group-hover:bg-[rgba(231,190,110,.18)] flex items-center justify-center text-gold group-hover:text-[var(--gold-lt)] mb-6">
                 <DynamicIcon name={s.icon || 'Star'} className="w-5 h-5" />
               </div>
-              <h4 className="text-[#1a2b25] group-hover:text-[var(--cream)] font-serif text-lg mb-3">{s.title}</h4>
-              <p className="text-gray-500 text-sm leading-relaxed group-hover:text-[#b7c3bd]">{s.desc || s.description}</p>
+              <h4 className="text-ink group-hover:text-[var(--cream)] font-serif text-lg mb-3">{s.title}</h4>
+              <p className="text-ink-soft text-sm leading-relaxed group-hover:text-[#b7c3bd]">{s.desc || s.description}</p>
             </div>
           ))}
           

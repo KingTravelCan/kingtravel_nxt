@@ -55,7 +55,7 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
               dangerouslySetInnerHTML={{ __html: title }}
             />
           </div>
-          <div className="max-w-sm text-gray-500 text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
+          <div className="max-w-sm text-ink-soft text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
             {description}
           </div>
         </div>
@@ -153,16 +153,16 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
                   )}
 
                   <div className="p-8 flex-1 flex flex-col">
-                    <div className="text-gray-500 text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1">
+                    <div className="ink-soft text-[10px] font-black uppercase tracking-widest mb-2 flex items-center gap-1">
                       {pkg.type === "hajj" ? <LucideIcons.Tent className="w-3.5 h-3.5" /> : <LucideIcons.MoonStar className="w-3.5 h-3.5" />}
                       {monthLabel}
                     </div>
                     <h3 className="text-2xl font-serif mb-2">
                       {pkg.title}
                     </h3>
-                    <div className="text-gold font-black text-xl mb-6">
+                    <div className="text-ink font-black text-xl mb-6">
                       {price}{" "}
-                      <span className="text-sm font-medium text-gray-500">
+                      <span className="text-sm font-medium text-ink-soft">
                         {priceUnit}
                       </span>
                     </div>
@@ -180,11 +180,11 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
                           return (
                             <li
                               key={j}
-                              className="flex gap-4 items-center text-sm text-gray-600"
+                              className="flex gap-4 items-center text-sm ink-soft"
                             >
                               <DynamicIcon
                                 name={iconName}
-                                className="w-4 h-4 text-gray-400 shrink-0"
+                                className="w-4 h-4 ink-soft shrink-0"
                               />
                               <span>{text}</span>
                             </li>

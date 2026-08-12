@@ -22,7 +22,7 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             {/* Review Badge */}
             <div className="absolute -bottom-6 -left-2 sm:-bottom-8 sm:-left-8 bg-white p-5 rounded-2xl shadow-xl w-64">
               <div className="flex text-gold text-sm mb-2">★★★★★</div>
-              <p className="text-xs text-gray-700 font-medium leading-relaxed">
+              <p className="text-xs text-ink-soft font-medium leading-relaxed">
                 {reviewText}
               </p>
             </div>
@@ -35,10 +35,10 @@ export default function WhoWeAreSection({ data }: { data: any }) {
               className="font-serif  leading-tight mb-6"
               dangerouslySetInnerHTML={{ __html: title }}
             />
-            <p className="!text-[18px] text-gray-700 mb-6 leading-relaxed text-sm md:text-base">
+            <p className="!text-[18px] text-ink-soft mb-6 leading-relaxed text-sm md:text-base">
               {description1}
             </p>
-            <p className="!text-[18px] text-gray-700 mb-10 leading-relaxed text-sm md:text-base">
+            <p className="!text-[18px] text-ink-soft mb-10 leading-relaxed text-sm md:text-base">
               {description2}
             </p>
 
@@ -46,15 +46,15 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             <div className="grid grid-cols-1 max-sm:grid-cols-3 sm:grid-cols-3 gap-4">
               <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
                 <div className="text-gold font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">25+</div>
-                <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Years Serving Canada</div>
+                <div className="text-[10px] uppercase font-bold text-ink-soft tracking-wider">Years Serving Canada</div>
               </div>
               <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
                 <div className="text-gold font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">10,000+</div>
-                <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Pilgrims Guided</div>
+                <div className="text-[10px] uppercase font-bold text-ink-soft tracking-wider">Pilgrims Guided</div>
               </div>
               <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
                 <div className="text-gold font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">5★</div>
-                <div className="text-[10px] uppercase font-bold text-gray-500 tracking-wider">Hotels, Every Package</div>
+                <div className="text-[10px] uppercase font-bold text-ink-soft tracking-wider">Hotels, Every Package</div>
               </div>
             </div>
           </div>

@@ -4,7 +4,7 @@
 :root {
   /* Brand & Base Colors */
   --ink: #132723;
-  /* --ink-2: #1c352f; */
+    /* --ink-2: #1c352f; */
   --ink-soft: #2e2e2e;
   --ink-light: color-mix(in srgb, var(--ink), #ffffff 50%);
   
@@ -49,6 +49,17 @@
   --shadow-card: 0 14px 34px -18px rgba(19, 39, 35, 0.28);
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   --transition: all 0.3s ease;
+
+
+  /* override colors */
+  /* --ink: yellow;
+  --ink-soft: #00ff15;
+  --gold: rgb(255, 0, 200);
+  --primary: #0400ff;
+  --sage: #f1e5f5;
+  --dark: #ff002b; */
+
+
 }
 
 /* ============ TAILWIND V4 THEME MAPPING ============ */
@@ -269,7 +280,7 @@ h2 {
   border-radius: 99px;
   text-transform: uppercase;
   border: 1px solid var(--gold);
-  color: #000000;
+  color: var(--ink);
   background: var(--gold);
   transition: .35s ease;
   white-space: nowrap;
@@ -2395,14 +2406,14 @@ section#flights {
 .card-title {
   font-size: 1.44rem;
   font-weight: 700;
-  color: #212529;
+  color: var(--ink);
   margin-bottom: 12px;
   line-height: 1.3;
 }
 
 .card-description {
   font-size: 1rem;
-  color: #8c8c8c;
+  color: var(--ink-soft);
   line-height: 1.6;
 }
 
