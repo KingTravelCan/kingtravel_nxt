@@ -1,14 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  async rewrites() {
-    return [
-      {
-        source: '/media/:path*',
-        destination: 'https://kingtravelcan.com/media/:path*',
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/media/:path*',
+  //       destination: 'https://kingtravelcan.com/media/:path*',
+  //     },
+  //   ];
+  // },
   images: {
     remotePatterns: [
       {
