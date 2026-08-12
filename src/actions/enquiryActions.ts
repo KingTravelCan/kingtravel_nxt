@@ -173,7 +173,7 @@ export async function submitPackageBookingEnquiryAction(data: {
     return {
       success: true,
       bookingNumber,
-      message: 'Your package booking request has been saved successfully in the database!',
+      message: 'Your package booking request has been sent successfully!',
     };
   } catch (error: any) {
     console.error('Error submitting package booking enquiry:', error);

@@ -74,7 +74,7 @@ export default function PackageBookingModal({
     }
 
     setErrors({});
-    setBookingStatus("Submitting booking to database...");
+    setBookingStatus("Submitting booking...");
 
     try {
       const res = await submitPackageBookingEnquiryAction({
