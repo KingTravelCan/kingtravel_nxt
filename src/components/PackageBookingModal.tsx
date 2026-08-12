@@ -94,8 +94,8 @@ export default function PackageBookingModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
-      <div className="bg-white top-6 max-h-[90vh] overflow-y-auto rounded-2xl w-full max-w-[420px] shadow-2xl relative flex flex-col my-auto shrink-0">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-sm overflow-y-auto">
+      <div className="bg-white w-full max-w-[420px] max-h-[90vh] rounded-2xl shadow-2xl relative flex flex-col overflow-hidden shrink-0">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 z-10 w-7 h-7 flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-full transition-colors shadow-sm"
