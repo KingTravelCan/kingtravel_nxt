@@ -77,7 +77,7 @@ export default function ImageUploadWidget({
             className="object-contain"
             unoptimized
           />
-          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/40 border-2 border-[#004B39] flex items-center justify-center">
             <button
               type="button"
               onClick={() => onChange("")}
@@ -93,14 +93,14 @@ export default function ImageUploadWidget({
           type="button"
           onClick={() => fileInputRef.current?.click()}
           disabled={uploading}
-          className={`flex items-center justify-center gap-2 ${compact ? "px-3 py-2 text-xs shrink-0" : "w-full p-4"} border-2 border-dashed border-slate-300 rounded-lg bg-slate-50 hover:bg-slate-100 hover:border-[#004B39] transition-colors text-slate-500`}
+          className={`flex items-center justify-center gap-2 ${compact ? "px-3 py-2 text-xs shrink-0" : "w-full p-4"} border-2 border-dashed border-primary rounded-lg bg-primary/5 hover:bg-slate-100 hover:border-[#004B39] transition-colors text-black`}
         >
           {uploading ? (
             <span>Uploading...</span>
           ) : (
             <>
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
-              <span>{compact ? "Upload" : "Click to upload image"}</span>
+              <span>{compact ? "Upload" : "Upload Image"}</span>
             </>
           )}
         </button>
@@ -114,7 +114,7 @@ export default function ImageUploadWidget({
             value={value}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Or paste image URL..."
-            className="w-full px-3 py-2 border border-slate-200 rounded-lg text-xs outline-none focus:border-[#004B39] font-mono text-slate-600"
+            className="w-full px-3 py-2 border border-primary/50 rounded-lg text-xs outline-none focus:border-primary/50 font-mono text-slate-600"
           />
           {error && <p className="text-red-500 text-[10px] mt-1">{error}</p>}
         </div>

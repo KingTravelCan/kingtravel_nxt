@@ -39,7 +39,7 @@ export default async function RootLayout({
   const initialMaintenanceMode = loginAuth?.maintenanceMode ?? false;
 
   return (
-    <html lang="en">
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
         <link rel="icon" href={faviconUrl} />
         <link rel="shortcut icon" href={faviconUrl} />

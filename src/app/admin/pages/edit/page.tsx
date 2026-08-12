@@ -1206,7 +1206,7 @@ function PageBuilderContent() {
             {/* Left Upload Dropzone Box */}
             <div
               onClick={() => document.getElementById('banner-file-input')?.click()}
-              className="bg-slate-50/80 hover:bg-emerald-50/40 border-2 border-dashed border-slate-300 hover:border-[#004B39] rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all min-h-[140px]"
+              className="bg-slate-50/80 hover:bg-primary-50/40 border-2 border-dashed border-primary/50 hover:border-primary rounded-2xl p-6 flex flex-col items-center justify-center text-center cursor-pointer transition-all min-h-[140px]"
             >
               <input
                 type="file"
