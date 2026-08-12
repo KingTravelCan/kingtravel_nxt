@@ -223,11 +223,11 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                         return (
                           <li
                             key={i}
-                            className={`flex gap-3 text-sm ${isGold ? "" : "text-gray-600"
+                            className={`flex gap-3 text-sm ${isGold ? "" : "text-[#2e2e2e]"
                               }`}
                           >
                             <Icon
-                              className={`w-4 h-4 shrink-0 ${isGold ? "" : "text-gray-400"
+                              className={`w-4 h-4 shrink-0 ${isGold ? "" : "text-[#2e2e2e"
                                 }`}
                             />{" "}
                             <span className="leading-tight">{text}</span>
