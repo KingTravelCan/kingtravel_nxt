@@ -240,8 +240,8 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                       <a
                         href={`/${pkg.slug}`}
                         className={`flex-1 py-3 text-center text-xs font-black rounded-xl uppercase tracking-widest transition-colors block border-2 ${isGold
-                          ? "border-[#2c3e35] text-[#2c3e35] hover:bg-[#2c3e35]/10"
-                          : "border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30]/10"
+                          ? "border-[#2d3e34] text-[#2d3e34] hover:bg-[#2c3e35]/5"
+                          : "border-[#545454] text-[#545454] hover:bg-[#545454]/5"
                           }`}
                       >
                         View Detail

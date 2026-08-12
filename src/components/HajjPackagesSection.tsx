@@ -250,7 +250,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                     <div className="flex flex-col sm:flex-row gap-2">
                       <a
                         href={`/${pkg.slug}`}
-                        className="flex-1 py-3.5 border-2 border-[#DB9E30] text-[#DB9E30] hover:bg-[#DB9E30]/10 text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                        className="flex-1 py-3.5 border-2 border-[#545454] text-[#545454] hover:bg-[#545454]/5 text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
                       >
                         <LucideIcons.Eye className="w-4 h-4" /> View Detail
                       </a>
