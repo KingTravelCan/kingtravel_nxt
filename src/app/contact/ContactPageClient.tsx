@@ -180,11 +180,11 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
   return (
     <div className="relative rounded-3xl overflow-hidden shadow-xl shadow-slate-100/50 bg-white">
       {isDisabled && (
-        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 text-center bg-slate-950/75 backdrop-blur-md border border-[#DB9E30]/40 rounded-3xl shadow-2xl">
-          <div className="w-14 h-14 rounded-2xl bg-[#DB9E30]/10 border border-[#DB9E30]/30 flex items-center justify-center text-2xl mb-4 text-[#DB9E30]">
+        <div className="absolute inset-0 z-30 flex flex-col items-center justify-center p-8 text-center bg-slate-950/75 backdrop-blur-md border border-gold/40 rounded-3xl shadow-2xl">
+          <div className="w-14 h-14 rounded-2xl bg-gold/10 border border-gold/30 flex items-center justify-center text-2xl mb-4 text-gold">
             ⚠️
           </div>
-          <h3 className="text-lg font-extrabold text-[#DB9E30] tracking-wide mb-2">
+          <h3 className="text-lg font-extrabold text-gold tracking-wide mb-2">
             Form Temporarily Unavailable
           </h3>
           <p className="text-xs text-amber-100/90 max-w-md font-medium leading-relaxed">

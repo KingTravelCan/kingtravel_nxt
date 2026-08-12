@@ -81,7 +81,7 @@ export default function Header({ initialNavItems = DEFAULT_NAV_ITEMS, initialIde
                     key={item.id || itemHref}
                     href={itemHref}
                     onClick={() => setMenuActive(false)}
-                    className={`text-[#333333] text-[16px] max-xl:text-[14px] max-xl:w-full max-xl:py-[8px] max-xl:border-b max-xl:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-[#DB9E30] ${isActive ? "!text-[#DB9E30] font-bold" : ""}`}
+                    className={`text-[#333333] text-[16px] max-xl:text-[14px] max-xl:w-full max-xl:py-[8px] max-xl:border-b max-xl:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-gold ${isActive ? "!text-gold font-bold" : ""}`}
                   >
                     {itemLabel}
                   </Link>
@@ -105,7 +105,7 @@ export default function Header({ initialNavItems = DEFAULT_NAV_ITEMS, initialIde
                     <Link
                       href={itemHref}
                       onClick={() => setMenuActive(false)}
-                      className={`w-full xl:w-auto text-[#333333] text-[16px] max-xl:text-[14px] max-xl:w-full max-xl:py-[8px] max-xl:border-b max-xl:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-[#DB9E30] ${isParentActive ? "!text-[#DB9E30] font-bold" : ""}`}
+                      className={`w-full xl:w-auto text-[#333333] text-[16px] max-xl:text-[14px] max-xl:w-full max-xl:py-[8px] max-xl:border-b max-xl:border-[#eee] font-semibold uppercase tracking-normal transition-all duration-300 hover:text-gold ${isParentActive ? "!text-gold font-bold" : ""}`}
                     >
                       {itemLabel}
                     </Link>
@@ -120,7 +120,7 @@ export default function Header({ initialNavItems = DEFAULT_NAV_ITEMS, initialIde
                         <Link
                           key={sub.id || subHref}
                           href={subHref}
-                          className={isSubActive ? "!text-[#DB9E30] font-bold" : ""}
+                          className={isSubActive ? "!text-gold font-bold" : ""}
                           onClick={() => {
                             setMenuActive(false);
                             setOpenDropdown(null);

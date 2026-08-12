@@ -345,12 +345,12 @@ export default function DashboardClient({
       {/* ── Cinematic Hero Header Banner ── */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#071814] via-[#0E2C24] to-[#004B39] text-white p-6 lg:p-7 border border-[#DB9E30]/25 shadow-2xl">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#DB9E30_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
-        <div className="absolute -top-32 -right-32 w-80 h-80 bg-[#DB9E30] rounded-full blur-[100px] opacity-20 pointer-events-none" />
+        <div className="absolute -top-32 -right-32 w-80 h-80 bg-gold rounded-full blur-[100px] opacity-20 pointer-events-none" />
 
         <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
-            <div className="inline-flex items-center gap-2 bg-[#DB9E30]/15 border border-[#DB9E30]/35 px-3 py-1 rounded-full text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest mb-2 backdrop-blur-xs">
-              <Sparkles className="w-3 h-3 text-[#DB9E30]" /> Executive Operations Suite
+            <div className="inline-flex items-center gap-2 bg-gold/15 border border-[#DB9E30]/35 px-3 py-1 rounded-full text-[10px] font-extrabold text-gold uppercase tracking-widest mb-2 backdrop-blur-xs">
+              <Sparkles className="w-3 h-3 text-gold" /> Executive Operations Suite
             </div>
             <h1 className="text-2xl lg:text-3xl font-serif text-white m-0 tracking-tight">
               Welcome Back, {session?.name || 'Super Admin'} 👋

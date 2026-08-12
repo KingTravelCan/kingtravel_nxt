@@ -9,7 +9,7 @@ function VisaProcessStepsSection({ data }: { data?: any }) {
     <section className="visa-section py-12 bg-emerald-950 text-white">
       <div className="container max-w-7xl mx-auto px-4 visa-grid-bottom grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div className="visa-info-pane space-y-6">
-          <span className="visa-tagline text-xs font-extrabold uppercase tracking-widest text-[#DB9E30]">
+          <span className="visa-tagline text-xs font-extrabold uppercase tracking-widest text-gold">
             {data?.eyebrow || "IN 3 EASY STEPS"}
           </span>
           <h2 className="text-3xl font-serif text-white">
@@ -39,7 +39,7 @@ function VisaProcessStepsSection({ data }: { data?: any }) {
             </div>
           </div>
 
-          <Link href="/contact" className="inline-block bg-[#DB9E30] hover:bg-[#b88222] text-slate-950 font-extrabold px-6 py-3.5 rounded-xl shadow-lg transition-all text-sm mt-4">
+          <Link href="/contact" className="inline-block bg-gold hover:bg-[#b88222] text-slate-950 font-extrabold px-6 py-3.5 rounded-xl shadow-lg transition-all text-sm mt-4">
             Start Your Visa Application Today
           </Link>
         </div>
@@ -51,7 +51,7 @@ function VisaProcessStepsSection({ data }: { data?: any }) {
             { number: 3, title: "Sit Back & Get Your Visa", description: "We handle the complete visa processing on your behalf. Once approved, your Saudi visa will be delivered to you quickly and securely." }
           ]).map((st: any, sIdx: number) => (
             <div key={sIdx} className="visa-step-card p-5 rounded-2xl bg-white shadow-md border border-slate-100 flex gap-4 items-start">
-              <div className="step-badge w-8 h-8 rounded-full bg-[#DB9E30] text-slate-950 font-extrabold flex items-center justify-center shrink-0 text-sm">
+              <div className="step-badge w-8 h-8 rounded-full bg-gold text-slate-950 font-extrabold flex items-center justify-center shrink-0 text-sm">
                 {st.number || sIdx + 1}
               </div>
               <div>

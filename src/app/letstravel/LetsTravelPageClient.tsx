@@ -45,7 +45,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
         <>
           <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#DB9E30_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none" />
           <div className="absolute -top-40 -left-40 w-[500px] h-[500px] bg-[#004B39] rounded-full blur-[120px] opacity-40 pointer-events-none" />
-          <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-[#DB9E30] rounded-full blur-[140px] opacity-15 pointer-events-none" />
+          <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-gold rounded-full blur-[140px] opacity-15 pointer-events-none" />
         </>
       )}
 
@@ -66,7 +66,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
             />
           </div>
 
-          <div className="inline-flex items-center gap-1.5 bg-[#DB9E30]/10 border border-[#DB9E30]/30 px-3 py-1 rounded-full text-[10px] font-bold text-[#DB9E30] uppercase tracking-widest mb-3">
+          <div className="inline-flex items-center gap-1.5 bg-gold/10 border border-[#DB9E30]/30 px-3 py-1 rounded-full text-[10px] font-bold text-gold uppercase tracking-widest mb-3">
             <span className="star w-2.5 h-2.5"></span>
             Management Portal
           </div>
@@ -122,7 +122,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 text-[#EAEAE4]/60 hover:text-[#DB9E30] transition p-1 text-sm focus:outline-none"
+                className="absolute right-3 text-[#EAEAE4]/60 hover:text-gold transition p-1 text-sm focus:outline-none"
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 {showPassword ? (
@@ -138,7 +138,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#DB9E30] hover:bg-[#E7BE6E] text-[#132723] font-bold text-sm py-3.5 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+              className="w-full bg-gold hover:bg-[#E7BE6E] text-[#132723] font-bold text-sm py-3.5 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
             >
               {loading ? 'Authenticating...' : 'Sign In to Portal →'}
             </button>

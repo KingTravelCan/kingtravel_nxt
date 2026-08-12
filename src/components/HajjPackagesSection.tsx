@@ -68,7 +68,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                   <div className="h-4 bg-gray-200 rounded w-2/3" />
                   <div className="h-16 bg-gray-100 rounded-2xl" />
                   <div className="h-16 bg-gray-100 rounded-2xl" />
-                  <div className="h-12 bg-[#DB9E30]/30 rounded-xl" />
+                  <div className="h-12 bg-gold/30 rounded-xl" />
                 </div>
               </div>
             ))}
@@ -133,7 +133,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                     <div className="absolute top-4 left-4 flex items-center gap-1.5 text-white text-[10px] font-bold tracking-wider">
                       <LucideIcons.Shield className="w-3 h-3" /> {badgeTag}
                     </div>
-                    <div className="absolute top-4 right-4 bg-[#DB9E30] text-[#1a2b25] px-3 py-1 rounded-full text-[10px] font-black tracking-wider flex items-center gap-1.5">
+                    <div className="absolute top-4 right-4 bg-gold text-[#1a2b25] px-3 py-1 rounded-full text-[10px] font-black tracking-wider flex items-center gap-1.5">
                       <LucideIcons.Calendar className="w-3 h-3" /> {duration}
                     </div>
 
@@ -232,7 +232,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                         </div>
                         <div className="text-sm font-bold text-[#1a2b25] flex items-center gap-2">
                           {operatorName}{" "}
-                          <span className="bg-[#DB9E30] text-[#1a2b25] text-[10px] px-1.5 py-0.5 rounded font-black">
+                          <span className="bg-gold text-[#1a2b25] text-[10px] px-1.5 py-0.5 rounded font-black">
                             {operatorRating}
                           </span>
                         </div>
@@ -261,7 +261,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                           setSelectedPkgForBooking(pkg);
                           setBookingModalOpen(true);
                         }}
-                        className="flex-1 py-3.5 bg-[#DB9E30] hover:bg-[#c58d2a] text-black text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
+                        className="flex-1 py-3.5 bg-gold hover:bg-[#c58d2a] text-black text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
                       >
                         <LucideIcons.BookOpen className="w-4 h-4" /> Book Hajj 2027
                       </button>

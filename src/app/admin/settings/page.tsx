@@ -2931,7 +2931,7 @@ export default function AdminSettingsPage() {
                         <div
                           key={f.key}
                           className={`rounded-3xl p-6 border transition-all flex flex-col justify-between ${isEditingThisForm
-                            ? 'bg-[#DB9E30]/50 border-[#DB9E30] shadow-md'
+                            ? 'bg-gold/50 border-[#DB9E30] shadow-md'
                             : 'bg-white border-slate-100 shadow-2xs hover:border-slate-200'
                             }`}
                         >
@@ -2966,7 +2966,7 @@ export default function AdminSettingsPage() {
                                   }}
                                   className={`px-3 py-1.5 rounded-full text-xs font-extrabold outline-none cursor-pointer border transition-colors ${cfg.enabled ?? true
                                     ? 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                                    : 'bg-amber-50 text-[#DB9E30] border-[#DB9E30]/50 font-bold'
+                                    : 'bg-amber-50 text-gold border-[#DB9E30]/50 font-bold'
                                     }`}
                                 >
                                   <option value="active">● Active</option>
@@ -3005,7 +3005,7 @@ export default function AdminSettingsPage() {
                           <div className="pt-4 border-t border-slate-100 flex justify-between items-center">
                             <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${cfg.enabled ?? true
                               ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
-                              : 'text-[#DB9E30] bg-amber-50 border-[#DB9E30]/30'
+                              : 'text-gold bg-amber-50 border-[#DB9E30]/30'
                               }`}>
                               ● {cfg.enabled ?? true ? 'Active on Frontend' : 'Disabled (Blurred Overlay)'}
                             </span>
@@ -3327,12 +3327,12 @@ export default function AdminSettingsPage() {
 
                   {/* ── SMTP Environment Connection (.env Configured) Card ── */}
                   <div className="p-6 lg:p-7 rounded-3xl bg-gradient-to-r from-[#071814] via-[#0E2C24] to-[#004B39] text-white border border-[#DB9E30]/30 shadow-xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-[#DB9E30] opacity-10 rounded-full blur-3xl pointer-events-none" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-gold opacity-10 rounded-full blur-3xl pointer-events-none" />
 
                     <div className="relative z-10 flex flex-col gap-5">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-emerald-500/20 pb-4">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 rounded-2xl bg-[#DB9E30]/20 border border-[#DB9E30]/40 flex items-center justify-center text-xl shadow-xs">
+                          <div className="w-10 h-10 rounded-2xl bg-gold/20 border border-[#DB9E30]/40 flex items-center justify-center text-xl shadow-xs">
                             ⚡
                           </div>
                           <div>
@@ -3351,7 +3351,7 @@ export default function AdminSettingsPage() {
                       {/* Active .env Configuration Parameters Grid */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
                         <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
-                          <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                          <span className="text-[10px] font-extrabold text-gold uppercase tracking-widest block mb-1">
                             SMTP SERVER HOST
                           </span>
                           <span className="text-xs font-mono font-bold text-white block truncate">
@@ -3361,7 +3361,7 @@ export default function AdminSettingsPage() {
                         </div>
 
                         <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
-                          <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                          <span className="text-[10px] font-extrabold text-gold uppercase tracking-widest block mb-1">
                             PORT &amp; ENCRYPTION
                           </span>
                           <span className="text-xs font-mono font-bold text-emerald-300 block">
@@ -3371,7 +3371,7 @@ export default function AdminSettingsPage() {
                         </div>
 
                         <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
-                          <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                          <span className="text-[10px] font-extrabold text-gold uppercase tracking-widest block mb-1">
                             AUTHENTICATED ACCOUNT
                           </span>
                           <span className="text-xs font-mono font-bold text-white block truncate">
@@ -3381,7 +3381,7 @@ export default function AdminSettingsPage() {
                         </div>
 
                         <div className="p-3.5 rounded-2xl bg-[#051410]/70 border border-emerald-500/20 backdrop-blur-md">
-                          <span className="text-[10px] font-extrabold text-[#DB9E30] uppercase tracking-widest block mb-1">
+                          <span className="text-[10px] font-extrabold text-gold uppercase tracking-widest block mb-1">
                             SECURITY MODE
                           </span>
                           <span className="text-xs font-mono font-bold text-emerald-300 block">

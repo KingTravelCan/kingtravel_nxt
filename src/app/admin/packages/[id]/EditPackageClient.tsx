@@ -413,7 +413,7 @@ export default function EditPackageClient({ packageData }: EditPackageClientProp
             <ArrowLeft className="w-4 h-4" />
           </Link>
           <h1 className="text-2xl font-extrabold text-slate-900 m-0 flex items-center gap-2">
-            <Edit2 className="w-5 h-5 text-[#DB9E30]" /> Edit {editingPkg.type === 'hajj' ? 'Hajj' : 'Umrah'} Package
+            <Edit2 className="w-5 h-5 text-gold" /> Edit {editingPkg.type === 'hajj' ? 'Hajj' : 'Umrah'} Package
           </h1>
         </div>
       </div>

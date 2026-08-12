@@ -14,7 +14,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
   }
 
   return (
-    <footer id="footer-place" className="px-5 bg-primary text-[#bccfc6] py-[70px] pb-[30px] text-[14px] md:text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-[#DB9E30]">
+    <footer id="footer-place" className="px-5 bg-primary text-[#bccfc6] py-[70px] pb-[30px] text-[14px] md:text-[16px] [&_a]:text-[#bccfc6] [&_a:hover]:text-gold">
       <div className="max-w-[1280px] mx-auto ">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-x-[20px] gap-y-[40px] lg:gap-[50px]">
 
@@ -95,7 +95,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
 
           {/* ── Column 2: Services ── */}
           <div className="col-span-1 md:col-span-1 lg:col-span-1">
-            <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.servicesTitle || 'SERVICES'}</h5>
+            <h5 className="text-[15px] tracking-[0.16em] uppercase text-gold mb-[18px] font-semibold">{footerData.servicesTitle || 'SERVICES'}</h5>
             <ul className="list-none p-0 m-0">
               {(footerData.servicesLinks || []).map((link: any, sIdx: number) => (
                 <li key={sIdx} className="mb-[10px] font-light">
@@ -107,7 +107,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
 
           {/* ── Column 3: Sitemap ── */}
           <div className="col-span-1 md:col-span-1 lg:col-span-1">
-            <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.sitemapTitle || 'SITEMAP'}</h5>
+            <h5 className="text-[15px] tracking-[0.16em] uppercase text-gold mb-[18px] font-semibold">{footerData.sitemapTitle || 'SITEMAP'}</h5>
             <ul className="list-none p-0 m-0">
               {(footerData.sitemapLinks || []).map((link: any, mIdx: number) => (
                 <li key={mIdx} className="mb-[10px] font-light">
@@ -119,7 +119,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
 
           {/* ── Column 4: Customer Support ── */}
           <div className="col-span-2 md:col-span-1 lg:col-span-1">
-            <h5 className="text-[15px] tracking-[0.16em] uppercase text-[#DB9E30] mb-[18px] font-semibold">{footerData.supportTitle || '24/7 CUSTOMER SUPPORT'}</h5>
+            <h5 className="text-[15px] tracking-[0.16em] uppercase text-gold mb-[18px] font-semibold">{footerData.supportTitle || '24/7 CUSTOMER SUPPORT'}</h5>
             <ul className="list-none p-0 m-0">
               {(footerData.supportItems || []).map((item: any, cIdx: number) => (
                 <li key={cIdx} className="mb-[10px] font-light">

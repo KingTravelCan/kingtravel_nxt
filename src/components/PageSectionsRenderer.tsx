@@ -128,7 +128,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                             href={flight.bookingUrl || `https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name || "PIA")})`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="bg-emerald-900 text-white hover:bg-[#DB9E30] hover:text-slate-900 font-bold py-3 px-8 rounded-lg tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
+                            className="bg-emerald-900 text-white hover:bg-gold hover:text-slate-900 font-bold py-3 px-8 rounded-lg tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
                           >
                             Booking
                           </a>
@@ -156,7 +156,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                 <p className="text-slate-600 text-sm md:text-base max-w-xl mx-auto mb-8 leading-relaxed font-light">
                   {sec.data?.description || "Speak directly with our ticketing specialists to get custom quotes, group flight discounts, and immediate confirmations."}
                 </p>
-                <Link href={sec.data?.btnLink || "/contact"} className="inline-block bg-[#004B39] hover:bg-[#DB9E30] text-white hover:text-slate-900 font-bold px-8 py-3.5 rounded-xl shadow-md transition-all text-sm">
+                <Link href={sec.data?.btnLink || "/contact"} className="inline-block bg-[#004B39] hover:bg-gold text-white hover:text-slate-900 font-bold px-8 py-3.5 rounded-xl shadow-md transition-all text-sm">
                   {sec.data?.btnLabel || "Contact Flight Desk"}
                 </Link>
               </div>

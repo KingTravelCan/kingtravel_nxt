@@ -486,7 +486,7 @@ export default function PackageBookingModal({
 
               <button
                 type="submit"
-                className="w-full bg-[#DB9E30] hover:bg-[#004B39] text-black hover:text-white font-semibold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 group cursor-pointer"
+                className="w-full bg-gold hover:bg-[#004B39] text-black hover:text-white font-semibold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 group cursor-pointer"
               >
                 <TicketPercent className="w-4 h-4" />
 

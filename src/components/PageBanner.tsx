@@ -38,7 +38,7 @@ export default function PageBanner({
     >
       <div className="max-w-[850px] mx-auto w-full z-10">
         <h1
-          className="text-3xl md:text-5xl font-serif font-normal text-white mb-3 tracking-wide [&>span]:text-[#DB9E30] [&>em]:text-[#DB9E30] [&>em]:not-italic"
+          className="text-3xl md:text-5xl font-serif font-normal text-white mb-3 tracking-wide [&>span]:text-gold [&>em]:text-gold [&>em]:not-italic"
           dangerouslySetInnerHTML={{ __html: title }}
         />
         {description && (

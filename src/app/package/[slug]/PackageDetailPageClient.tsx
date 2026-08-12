@@ -443,17 +443,17 @@ export default function PackageDetailPageClient({
             </p>
             <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-emerald-100">
               <span className="flex items-center gap-1.5 bg-white/10 px-3.5 py-2 rounded-xl border border-white/20">
-                <Plane className="w-4 h-4 text-[#DB9E30]" /> DEPARTURE: <strong className="text-white">{departure}</strong>
+                <Plane className="w-4 h-4 text-gold" /> DEPARTURE: <strong className="text-white">{departure}</strong>
               </span>
               <span className="flex items-center gap-1.5 bg-white/10 px-3.5 py-2 rounded-xl border border-white/20">
-                <Plane className="w-4 h-4 text-[#DB9E30]" /> DESTINATION: <strong className="text-white">{destination}</strong>
+                <Plane className="w-4 h-4 text-gold" /> DESTINATION: <strong className="text-white">{destination}</strong>
               </span>
             </div>
           </div>
 
           {/* Price Box Overlay on Right */}
-          <div className="mt-8 md:mt-0 md:absolute md:top-1/2 md:-translate-y-1/2 md:right-10 bg-[#00382B]/90 border-2 border-dashed border-[#DB9E30] rounded-2xl p-5 text-center min-w-[220px] backdrop-blur-md shadow-xl">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#DB9E30] block mb-1">
+          <div className="mt-8 md:mt-0 md:absolute md:top-1/2 md:-translate-y-1/2 md:right-10 bg-[#00382B]/90 border-2 border-dashed border-gold rounded-2xl p-5 text-center min-w-[220px] backdrop-blur-md shadow-xl">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-gold block mb-1">
               {exclusiveBadge}
             </span>
             <div className="text-3xl font-black text-white font-serif">
@@ -523,7 +523,7 @@ export default function PackageDetailPageClient({
                       className="object-cover"
                       unoptimized
                     />
-                    <span className="absolute top-3 left-3 bg-[#DB9E30] text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                    <span className="absolute top-3 left-3 bg-gold text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
                       Madinah
                     </span>
                   </div>
@@ -531,7 +531,7 @@ export default function PackageDetailPageClient({
                     <div>
                       <h4 className="font-bold text-slate-900 text-base line-clamp-1">{madinahName}</h4>
                       <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                        <MapPin className="w-3.5 h-3.5 text-[#DB9E30]" />
+                        <MapPin className="w-3.5 h-3.5 text-gold" />
                         <span>{madinahLoc}</span>
                       </p>
                     </div>
@@ -568,7 +568,7 @@ export default function PackageDetailPageClient({
                         <ul className="space-y-1.5 pt-1">
                           {details.map((d: string, dIdx: number) => (
                             <li key={dIdx} className="text-xs sm:text-sm text-slate-600 leading-relaxed flex items-start gap-2">
-                              <span className="text-[#DB9E30] font-bold text-xs mt-0.5">•</span>
+                              <span className="text-gold font-bold text-xs mt-0.5">•</span>
                               <span>{d}</span>
                             </li>
                           ))}

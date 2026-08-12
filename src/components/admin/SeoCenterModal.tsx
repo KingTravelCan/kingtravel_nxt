@@ -301,7 +301,7 @@ export default function SeoCenterModal({
                 <span className="text-xs font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-700/60 px-2.5 py-0.5 rounded-full">
                   {pageData.title}
                 </span>
-                <span className="text-[9px] font-black uppercase tracking-wider text-[#DB9E30] bg-[#DB9E30]/20 border border-[#DB9E30]/40 px-2 py-0.5 rounded-md">
+                <span className="text-[9px] font-black uppercase tracking-wider text-gold bg-gold/20 border border-[#DB9E30]/40 px-2 py-0.5 rounded-md">
                   Next-Gen Intelligence
                 </span>
               </div>
@@ -329,7 +329,7 @@ export default function SeoCenterModal({
                 </>
               ) : (
                 <>
-                  <Sparkles className="w-3.5 h-3.5 text-[#DB9E30]" />
+                  <Sparkles className="w-3.5 h-3.5 text-gold" />
                   <span>Auto Generate All</span>
                 </>
               )}
@@ -384,10 +384,10 @@ export default function SeoCenterModal({
         {isGenerating && (
           <div className="bg-gradient-to-r from-[#004B39] to-emerald-800 text-white px-6 py-2 flex items-center justify-between text-xs font-semibold animate-pulse border-b border-emerald-700 shrink-0">
             <div className="flex items-center gap-3">
-              <Loader2 className="w-4 h-4 animate-spin text-[#DB9E30]" />
+              <Loader2 className="w-4 h-4 animate-spin text-gold" />
               <span>{generationStep}</span>
             </div>
-            <div className="font-mono font-bold text-[#DB9E30]">{generationProgress}%</div>
+            <div className="font-mono font-bold text-gold">{generationProgress}%</div>
           </div>
         )}
 
@@ -431,7 +431,7 @@ export default function SeoCenterModal({
                 : 'text-slate-700 border-transparent hover:bg-slate-100'
                 }`}
             >
-              <Zap className={`w-4 h-4 shrink-0 ${activeTab === 'geo' ? 'text-[#DB9E30]' : 'text-amber-500'}`} />
+              <Zap className={`w-4 h-4 shrink-0 ${activeTab === 'geo' ? 'text-gold' : 'text-amber-500'}`} />
               <span>GEO (Generative AI)</span>
             </button>
 
@@ -867,7 +867,7 @@ export default function SeoCenterModal({
                     onClick={handleAutoGenerateAll}
                     className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-600 text-white text-xs font-extrabold hover:bg-emerald-700 transition-colors shadow-xs"
                   >
-                    <Zap className="w-3.5 h-3.5 text-[#DB9E30]" /> Auto Fix All Issues with AI
+                    <Zap className="w-3.5 h-3.5 text-gold" /> Auto Fix All Issues with AI
                   </button>
                 </div>
 

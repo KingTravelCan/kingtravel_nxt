@@ -158,7 +158,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                     placeholder="Full Name"
                     value={form.fullName}
                     onChange={(e) => { setForm({ ...form, fullName: e.target.value }); if (errors.fullName) setErrors((p) => ({ ...p, fullName: "" })); }}
-                    className={`w-full border p-3 rounded-lg outline-none transition-colors text-slate-900 text-sm ${errors.fullName ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-[#DB9E30] bg-white"}`}
+                    className={`w-full border p-3 rounded-lg outline-none transition-colors text-slate-900 text-sm ${errors.fullName ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-gold bg-white"}`}
                   />
                   {errors.fullName && <span className="text-red-600 text-xs mt-1 block">{errors.fullName}</span>}
                 </div>
@@ -171,7 +171,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                     placeholder="Email Address"
                     value={form.email}
                     onChange={(e) => { setForm({ ...form, email: e.target.value }); if (errors.email) setErrors((p) => ({ ...p, email: "" })); }}
-                    className={`w-full border p-3 rounded-lg outline-none transition-colors text-slate-900 text-sm ${errors.email ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-[#DB9E30] bg-white"}`}
+                    className={`w-full border p-3 rounded-lg outline-none transition-colors text-slate-900 text-sm ${errors.email ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-gold bg-white"}`}
                   />
                   {errors.email && <span className="text-red-600 text-xs mt-1 block">{errors.email}</span>}
                 </div>
@@ -184,7 +184,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                     placeholder="Phone Number"
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm"
+                    className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-gold transition-colors text-slate-900 text-sm"
                   />
                 </div>
                 <div className="field">
@@ -194,7 +194,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                   <select
                     value={form.packageType}
                     onChange={(e) => setForm({ ...form, packageType: e.target.value })}
-                    className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm appearance-none"
+                    className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-gold transition-colors text-slate-900 text-sm appearance-none"
                     style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%2２%20stroke-linejoin%3D%2２round%２２%3E%3Cpolyline%２ points%３D%２6%２０9%２ 1２%２ 15%２ 18%２ 9%２％３C％２Fpolyline％３E％３C％２Fsvg％３E')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
                   >
                     <option>Select Package</option>
@@ -215,14 +215,14 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                   placeholder="Your Message"
                   value={form.message}
                   onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-[#DB9E30] transition-colors text-slate-900 text-sm resize-y"
+                  className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-gold transition-colors text-slate-900 text-sm resize-y"
                   style={{ backgroundImage: "linear-gradient(45deg, transparent 50%, #94a3b8 50%, #94a3b8 55%, transparent 55%, transparent 65%, #94a3b8 65%, #94a3b8 70%, transparent 70%, transparent 80%, #94a3b8 80%, #94a3b8 85%, transparent 85%)", backgroundSize: "12px 12px", backgroundRepeat: "no-repeat", backgroundPosition: "bottom 4px right 4px" }}
                 />
               </div>
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-[#DB9E30] hover:bg-primary text-black hover:text-white font-bold py-4 px-6 rounded-lg shadow-md transition-all duration-300 tracking-wider uppercase text-xs cursor-pointer text-center"
+                  className="w-full bg-gold hover:bg-primary text-black hover:text-white font-bold py-4 px-6 rounded-lg shadow-md transition-all duration-300 tracking-wider uppercase text-xs cursor-pointer text-center"
                 >
                   Send Enquiry
                 </button>

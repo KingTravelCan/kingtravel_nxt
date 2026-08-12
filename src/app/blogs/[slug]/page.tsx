@@ -186,7 +186,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                   [&_strong]:font-bold [&_strong]:text-slate-900
                   [&_a]:text-[#004B39] [&_a]:underline [&_a]:underline-offset-2 [&_a]:font-medium
                   [&_img]:rounded-2xl [&_img]:w-full [&_img]:my-6 [&_img]:shadow-md
-                  [&_blockquote]:border-l-4 [&_blockquote]:border-[#DB9E30] [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-slate-600 [&_blockquote]:my-6 [&_blockquote]:bg-amber-50 [&_blockquote]:py-4 [&_blockquote]:pr-4 [&_blockquote]:rounded-r-xl
+                  [&_blockquote]:border-l-4 [&_blockquote]:border-gold [&_blockquote]:pl-5 [&_blockquote]:italic [&_blockquote]:text-slate-600 [&_blockquote]:my-6 [&_blockquote]:bg-amber-50 [&_blockquote]:py-4 [&_blockquote]:pr-4 [&_blockquote]:rounded-r-xl
                   [&_table]:w-full [&_table]:border-collapse [&_table]:my-6 [&_td]:border [&_td]:border-slate-200 [&_td]:px-3 [&_td]:py-2 [&_td]:text-sm [&_th]:border [&_th]:border-slate-200 [&_th]:px-3 [&_th]:py-2 [&_th]:text-sm [&_th]:bg-slate-50 [&_th]:font-bold"
                 dangerouslySetInnerHTML={{ __html: blog.content || '<p>Content coming soon.</p>' }}
               />
@@ -291,7 +291,7 @@ function SidebarPackageSection({
     <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
       <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
         <span className="text-lg font-extrabold text-slate-900">{title}</span>
-        <span className="text-[10px] font-bold uppercase tracking-wider text-[#DB9E30]">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-gold">
           {packages.length} Available
         </span>
       </div>

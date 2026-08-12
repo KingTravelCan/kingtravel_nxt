@@ -151,7 +151,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
           return (
             <div key={idx} className="wrap my-8">
               <div className="bg-[#f2f5e8] border border-[#e4ebd3] rounded-2xl p-8 max-w-7xl mx-auto shadow-xs">
-                <span className="text-xs font-bold uppercase tracking-widest text-[#DB9E30] block mb-1.5">
+                <span className="text-xs font-bold uppercase tracking-widest text-gold block mb-1.5">
                   {sec.data?.eyebrow || "ABOUT"}
                 </span>
                 <h2 className="font-serif mb-3">
@@ -199,7 +199,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
                     <ul className="features-list grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-xs text-slate-700 font-medium list-none p-0 mt-3">
                       {feats.map((f: string, i: number) => (
                         <li key={i} className="flex items-start gap-2">
-                          <span className="text-[#DB9E30] font-bold">✓</span> {f}
+                          <span className="text-gold font-bold">✓</span> {f}
                         </li>
                       ))}
                     </ul>
@@ -344,7 +344,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
                           <span className="text-[9px] font-bold text-slate-400 block uppercase">STARTING FROM</span>
                           <span className="text-lg font-extrabold text-[#004B39]">{pkg.price}</span>
                         </div>
-                        <button className="bg-[#004B39] hover:bg-[#DB9E30] text-white hover:text-slate-900 px-4 py-2 rounded-xl text-xs font-bold transition-all">
+                        <button className="bg-[#004B39] hover:bg-gold text-white hover:text-slate-900 px-4 py-2 rounded-xl text-xs font-bold transition-all">
                           Book Package
                         </button>
                       </div>
@@ -373,7 +373,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
         //     <section key={idx} id="flights" className="py-12">
         //       <div className="wrap">
         //         <div className="section-head center text-center mb-8">
-        //           <div className="eyebrow uppercase text-xs font-bold tracking-widest text-[#DB9E30] justify-center mb-1">
+        //           <div className="eyebrow uppercase text-xs font-bold tracking-widest text-gold justify-center mb-1">
         //             {sec.data?.eyebrow || "OUR TRUSTED PARTNERS"}
         //           </div>
         //           <h2 className="">

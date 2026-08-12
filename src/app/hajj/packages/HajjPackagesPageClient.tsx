@@ -210,7 +210,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
                     {/* Top Bar Tags */}
                     <div className="absolute top-4 inset-x-4 flex justify-between items-center text-xs">
                       <div className="bg-[#0a422d]/90 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 backdrop-blur-sm">
-                        <i className="fa-solid fa-kaaba text-[#DB9E30]"></i>
+                        <i className="fa-solid fa-kaaba text-gold"></i>
                         <span>{badgeTag}</span>
                       </div>
                       <div className="bg-amber-500 text-slate-950 font-extrabold px-3 py-1.5 rounded-lg flex items-center gap-1.5">
@@ -274,7 +274,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
                         <div className="flex-1 min-w-0">
                           <h4 className="text-sm font-bold text-[#004B39] truncate">{madinahName}</h4>
                           <p className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
-                            <i className="fa-solid fa-location-dot text-[#DB9E30]"></i>
+                            <i className="fa-solid fa-location-dot text-gold"></i>
                             <span>{madinahLoc}</span>
                           </p>
                           <div className="flex gap-1.5 mt-1.5 flex-wrap">
@@ -306,7 +306,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
 
                       <Link
                         href={`/package/${pkgSlug}`}
-                        className="w-full bg-[#DB9E30] hover:bg-[#b88222] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer mt-2"
+                        className="w-full bg-gold hover:bg-[#b88222] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-md hover:shadow-lg transition-all cursor-pointer mt-2"
                       >
                         <i className="fa-solid fa-book-bookmark"></i>
                         <span>{btnLabel}</span>
@@ -356,7 +356,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
             <div className="max-w-5xl mx-auto px-4">
               <div className="text-center mb-10">
                 {eyebrow && (
-                  <span className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] block mb-2">{eyebrow}</span>
+                  <span className="text-xs font-extrabold uppercase tracking-widest text-gold block mb-2">{eyebrow}</span>
                 )}
                 <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-3">{heading}</h2>
                 {subtitle && (
@@ -434,7 +434,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
                         '[&_a]:text-[#004B39] [&_a]:underline',
                         '[&_ul]:list-disc [&_ul]:pl-5',
                         '[&_ol]:list-decimal [&_ol]:pl-5',
-                        '[&_blockquote]:border-l-4 [&_blockquote]:border-[#DB9E30] [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-slate-600',
+                        '[&_blockquote]:border-l-4 [&_blockquote]:border-gold [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-slate-600',
                         '[&_strong]:text-slate-900',
                         '[&_p]:text-slate-700 [&_p]:leading-relaxed',
                       ].join(' ')}
@@ -478,7 +478,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
           <section className="bg-[#004B39] text-white py-6 overflow-hidden">
             <div className="max-w-7xl mx-auto">
               <div className="text-center mb-12">
-                <div className="text-xs font-extrabold uppercase tracking-widest text-[#DB9E30] mb-2">
+                <div className="text-xs font-extrabold uppercase tracking-widest text-gold mb-2">
                   {eyebrow}
                 </div>
                 <h2 className="text-3xl md:text-4xl font-serif text-white">{heading}</h2>

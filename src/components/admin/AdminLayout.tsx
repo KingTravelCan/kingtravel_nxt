@@ -139,7 +139,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
             priority
             className="w-auto h-[36px] object-contain block"
           />
-          <span className="mt-1.5 inline-flex items-center gap-1 text-[9px] font-bold tracking-widest uppercase text-[#DB9E30] bg-[#DB9E30]/10 border border-[#DB9E30]/30 px-2 py-0.5 rounded-full">
+          <span className="mt-1.5 inline-flex items-center gap-1 text-[9px] font-bold tracking-widest uppercase text-gold bg-gold/10 border border-[#DB9E30]/30 px-2 py-0.5 rounded-full">
             <Sparkles className="w-2.5 h-2.5" /> Admin Portal
           </span>
         </div>
@@ -290,7 +290,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
                       <div className="min-w-0">
                         <div className="text-sm font-extrabold truncate text-white">{userName}</div>
                         <div className="text-[10px] text-emerald-200 font-medium truncate">{user?.email || 'admin@kingtravelcan.com'}</div>
-                        <span className="inline-block mt-1 text-[9px] font-extrabold uppercase tracking-wider text-[#DB9E30] bg-[#DB9E30]/20 border border-[#DB9E30]/40 px-2 py-0.5 rounded-md">
+                        <span className="inline-block mt-1 text-[9px] font-extrabold uppercase tracking-wider text-gold bg-gold/20 border border-[#DB9E30]/40 px-2 py-0.5 rounded-md">
                           {userRole}
                         </span>
                       </div>

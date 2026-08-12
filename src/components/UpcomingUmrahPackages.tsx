@@ -94,7 +94,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                   <div className="h-5 bg-gray-200 rounded w-2/3" />
                   <div className="h-5 bg-gray-100 rounded w-1/2" />
                   <div className="h-24 bg-gray-100 rounded" />
-                  <div className="h-12 bg-[#DB9E30]/30 rounded-xl" />
+                  <div className="h-12 bg-gold/30 rounded-xl" />
                 </div>
               </div>
             ))}
@@ -181,7 +181,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                     </div>
                     <h3 className="text-2xl font-serif mb-2">{pkg.title}</h3>
                     <div
-                      className={`${isGold ? "" : "text-[#DB9E30]"
+                      className={`${isGold ? "" : "text-gold"
                         } font-black text-xl mb-6`}
                     >
                       CAD {price}{" "}
@@ -253,7 +253,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                         }}
                         className={`flex-1 py-3 text-center text-xs font-black rounded-md uppercase tracking-widest transition-colors block border-2 border-transparent cursor-pointer ${isGold
                           ? "bg-ink-soft hover:bg-ink text-white"
-                          : "bg-[#DB9E30] hover:bg-[#c58d2a] text-black"
+                          : "bg-gold hover:bg-[#c58d2a] text-black"
                           }`}
                       >
                         {buttonText}

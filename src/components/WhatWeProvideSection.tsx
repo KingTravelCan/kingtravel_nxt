@@ -40,7 +40,7 @@ export default function WhatWeProvideSection({ data }: { data: any }) {
             <div className="flex flex-col">
               {items.map((item: any, i: number) => (
                 <div key={i} className="flex gap-6 items-start py-6 border-b border-gray-200">
-                  <div className="w-12 h-12 shrink-0 rounded-2xl bg-[#faeed8] flex items-center justify-center text-[#DB9E30] font-serif text-lg">
+                  <div className="w-12 h-12 shrink-0 rounded-2xl bg-[#faeed8] flex items-center justify-center text-gold font-serif text-lg">
                     {String(i + 1).padStart(2, '0')}
                   </div>
                   <div>

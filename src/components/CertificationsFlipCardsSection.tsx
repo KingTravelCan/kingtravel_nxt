@@ -140,7 +140,7 @@ export default function CertificationsFlipCardsSection({
 
         {/* Header */}
         <div className="text-center mb-16">
-          <span className="text-[#DB9E30] font-black uppercase tracking-[0.2em] text-xs mb-3 block">
+          <span className="text-gold font-black uppercase tracking-[0.2em] text-xs mb-3 block">
             {eyebrow}
           </span>
 
@@ -278,7 +278,7 @@ export default function CertificationsFlipCardsSection({
                     "
                   >
 
-                    <h3 className="font-bold text-lg mb-3 text-[#DB9E30]">
+                    <h3 className="font-bold text-lg mb-3 text-gold">
                       {item.title}
                     </h3>
 

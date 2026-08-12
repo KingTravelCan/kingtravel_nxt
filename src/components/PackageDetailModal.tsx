@@ -152,10 +152,10 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
           onClick={onClose}
           className="flex items-center gap-2 text-xs font-bold text-emerald-200 hover:text-white bg-white/10 hover:bg-white/20 px-4 py-2 rounded-xl transition-all cursor-pointer"
         >
-          <ArrowLeft className="w-4 h-4 text-[#DB9E30]" />
+          <ArrowLeft className="w-4 h-4 text-gold" />
           <span>← BACK TO PACKAGES</span>
         </button>
-        <div className="text-xs font-extrabold text-[#DB9E30] uppercase tracking-widest hidden sm:block">
+        <div className="text-xs font-extrabold text-gold uppercase tracking-widest hidden sm:block">
           KING TRAVEL • PACKAGE DETAILS VIEW
         </div>
         <button
@@ -179,17 +179,17 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
             </p>
             <div className="flex flex-wrap items-center gap-4 text-xs font-bold text-emerald-100">
               <span className="flex items-center gap-1.5 bg-white/10 px-3.5 py-2 rounded-xl border border-white/20">
-                <Plane className="w-4 h-4 text-[#DB9E30]" /> DEPARTURE: <strong className="text-white">{departure}</strong>
+                <Plane className="w-4 h-4 text-gold" /> DEPARTURE: <strong className="text-white">{departure}</strong>
               </span>
               <span className="flex items-center gap-1.5 bg-white/10 px-3.5 py-2 rounded-xl border border-white/20">
-                <Plane className="w-4 h-4 text-[#DB9E30]" /> DESTINATION: <strong className="text-white">{destination}</strong>
+                <Plane className="w-4 h-4 text-gold" /> DESTINATION: <strong className="text-white">{destination}</strong>
               </span>
             </div>
           </div>
 
           {/* Price Box Overlay on Right */}
-          <div className="mt-8 md:mt-0 md:absolute md:top-10 md:right-14 bg-[#00382B]/90 border-2 border-dashed border-[#DB9E30] rounded-2xl p-5 text-center min-w-[220px] backdrop-blur-md shadow-xl">
-            <span className="text-[10px] font-extrabold uppercase tracking-widest text-[#DB9E30] block mb-1">
+          <div className="mt-8 md:mt-0 md:absolute md:top-10 md:right-14 bg-[#00382B]/90 border-2 border-dashed border-gold rounded-2xl p-5 text-center min-w-[220px] backdrop-blur-md shadow-xl">
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-gold block mb-1">
               {exclusiveBadge}
             </span>
             <div className="text-3xl font-black text-white font-serif">
@@ -258,7 +258,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                       className="object-cover"
                       unoptimized
                     />
-                    <span className="absolute top-3 left-3 bg-[#DB9E30] text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                    <span className="absolute top-3 left-3 bg-gold text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
                       Madinah
                     </span>
                   </div>
@@ -266,7 +266,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                     <div>
                       <h4 className="font-bold text-slate-900 text-base line-clamp-1">{madinahName}</h4>
                       <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                        <MapPin className="w-3.5 h-3.5 text-[#DB9E30]" />
+                        <MapPin className="w-3.5 h-3.5 text-gold" />
                         <span>{madinahLoc}</span>
                       </p>
                     </div>
@@ -306,7 +306,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                           <ul className="space-y-1.5 pt-1">
                             {details.map((d: string, dIdx: number) => (
                               <li key={dIdx} className="text-xs sm:text-sm text-slate-600 leading-relaxed flex items-start gap-2">
-                                <span className="text-[#DB9E30] font-bold text-xs mt-0.5">•</span>
+                                <span className="text-gold font-bold text-xs mt-0.5">•</span>
                                 <span>{d}</span>
                               </li>
                             ))}
@@ -481,7 +481,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                 {/* Submit CTA Button */}
                 <button
                   type="submit"
-                  className="w-full bg-[#DB9E30] hover:bg-[#c48c26] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 group cursor-pointer"
+                  className="w-full bg-gold hover:bg-[#c48c26] text-slate-950 font-extrabold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 group cursor-pointer"
                 >
                   <span>Book {pkg.badgeTag || "Package"} Now</span>
                   <span className="group-hover:translate-x-1 transition-transform">➔</span>
