@@ -80,8 +80,8 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
             <h3 className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] mb-2">
               {data?.card3Title || "EMAIL US"}
             </h3>
-            <a href={`mailto:${data?.email || "info@kingtravelcan.com"}`} className="text-sm text-slate-700 hover:text-emerald-800 transition break-all font-semibold no-underline">
-              {data?.email || "info@kingtravelcan.com"}
+            <a href={`mailto:${data?.email || "saudivisa@kingtravelcan.com"}`} className="text-sm text-slate-700 hover:text-emerald-800 transition break-all font-semibold no-underline">
+              {data?.email || "saudivisa@kingtravelcan.com"}
             </a>
           </div>
 

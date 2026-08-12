@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import * as LucideIcons from "lucide-react";
+import DynamicIcon from "@/components/ui/DynamicIcon";
 import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
 import PackageBookingModal from "@/components/PackageBookingModal";
 export default function HajjPackagesSection({ data, initialPackages }: { data: any, initialPackages?: any }) {
@@ -175,10 +176,12 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                               {makkahHotel.location || "Near to Haram"}
                             </div>
                             <div className="flex gap-2">
-                              <span className="bg-[#004B39] text-white text-[9px] px-2 py-0.5 rounded font-bold tracking-wider">
+                              <span className="bg-[#004B39] text-white text-[9px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                                {makkahHotel.badgeIcon && <DynamicIcon name={makkahHotel.badgeIcon} className="w-2.5 h-2.5" />}
                                 {makkahHotel.badge || "Breakfast"}
                               </span>
-                              <span className="bg-gray-100 text-gray-600 text-[9px] px-2 py-0.5 rounded font-bold tracking-wider">
+                              <span className="bg-gray-100 text-gray-600 text-[9px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                                {makkahHotel.nightsIcon && <DynamicIcon name={makkahHotel.nightsIcon} className="w-2.5 h-2.5" />}
                                 {makkahHotel.nights || "6 Nights"}
                               </span>
                             </div>
@@ -208,10 +211,12 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                               {madinahHotel.location || "Near to Masjid Nabawi"}
                             </div>
                             <div className="flex gap-2">
-                              <span className="bg-[#004B39] text-white text-[9px] px-2 py-0.5 rounded font-bold tracking-wider">
+                              <span className="bg-[#004B39] text-white text-[9px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                                {madinahHotel.badgeIcon && <DynamicIcon name={madinahHotel.badgeIcon} className="w-2.5 h-2.5" />}
                                 {madinahHotel.badge || "Breakfast"}
                               </span>
-                              <span className="bg-gray-100 text-gray-600 text-[9px] px-2 py-0.5 rounded font-bold tracking-wider">
+                              <span className="bg-gray-100 text-gray-600 text-[9px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                                {madinahHotel.nightsIcon && <DynamicIcon name={madinahHotel.nightsIcon} className="w-2.5 h-2.5" />}
                                 {madinahHotel.nights || "6 Nights"}
                               </span>
                             </div>

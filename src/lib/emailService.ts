@@ -16,7 +16,7 @@ export async function dispatchFormEmails(
 ): Promise<{ adminSent: boolean; userSent: boolean; error?: string }> {
   try {
     // 1. Fetch saved email settings from DB or defaults
-    let adminRecipientEmail = process.env.SMTP_TO || 'info@kingtravelcan.com';
+    let adminRecipientEmail = process.env.SMTP_TO || 'saudivisa@kingtravelcan.com';
     let smtpHost = process.env.SMTP_HOST || '';
     let smtpPort = parseInt(process.env.SMTP_PORT || '587', 10);
     let smtpUser = process.env.SMTP_USER || '';

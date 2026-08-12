@@ -314,7 +314,7 @@ function PageBuilderContent() {
                       phone1: '+1 800-844-5464',
                       phone2: '+1 905-624-8555',
                       phone3: '+1 905-624-8344',
-                      email: 'info@kingtravelcan.com'
+                      email: 'saudivisa@kingtravelcan.com'
                     }
                   },
                   {
@@ -3515,7 +3515,7 @@ function PageBuilderContent() {
                                         <label className="block text-[9px] font-bold text-slate-500 mb-0.5">EMAIL ADDRESS</label>
                                         <input
                                           type="text"
-                                          value={sec.data?.email || 'info@kingtravelcan.com'}
+                                          value={sec.data?.email || 'saudivisa@kingtravelcan.com'}
                                           onChange={(e) => updateSectionData(sec.id, 'email', e.target.value)}
                                           className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
                                         />
@@ -3742,7 +3742,7 @@ function PageBuilderContent() {
                                     <label className="block text-[9px] font-bold text-slate-500 mb-0.5">GENERAL EMAIL</label>
                                     <input
                                       type="email"
-                                      value={sec.data?.email || 'info@kingtravelcan.com'}
+                                      value={sec.data?.email || 'saudivisa@kingtravelcan.com'}
                                       onChange={(e) => updateSectionData(sec.id, 'email', e.target.value)}
                                       className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
                                     />

@@ -113,7 +113,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
               <div>
                 <h4 className="">Email</h4>
                 <div className="">
-                  {data.email || "info@kingtravelcan.com"}
+                  {data.email || "saudivisa@kingtravelcan.com"}
                 </div>
               </div>
 

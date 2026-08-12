@@ -134,11 +134,17 @@ function HajjCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v:
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
-                <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Icon (e.g. Utensils)" value={cd.makkahHotel?.badgeIcon || ''} onChange={e => updateMak('badgeIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                  <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                </div>
               </div>
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
-                <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Icon (e.g. Moon)" value={cd.makkahHotel?.nightsIcon || ''} onChange={e => updateMak('nightsIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                  <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                </div>
               </div>
             </div>
           </div>
@@ -162,11 +168,17 @@ function HajjCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v:
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
-                <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Icon (e.g. Utensils)" value={cd.madinahHotel?.badgeIcon || ''} onChange={e => updateMad('badgeIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                  <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                </div>
               </div>
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
-                <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Icon (e.g. Moon)" value={cd.madinahHotel?.nightsIcon || ''} onChange={e => updateMad('nightsIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                  <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                </div>
               </div>
             </div>
           </div>
@@ -250,11 +262,17 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
-                <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Icon (e.g. Utensils)" value={cd.makkahHotel?.badgeIcon || ''} onChange={e => updateMak('badgeIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                  <input type="text" value={cd.makkahHotel?.badge || ''} onChange={e => updateMak('badge', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                </div>
               </div>
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
-                <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Icon (e.g. Moon)" value={cd.makkahHotel?.nightsIcon || ''} onChange={e => updateMak('nightsIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                  <input type="text" value={cd.makkahHotel?.nights || ''} onChange={e => updateMak('nights', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                </div>
               </div>
             </div>
           </div>
@@ -278,11 +296,17 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
             <div className="grid grid-cols-2 gap-2">
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">MEAL BADGE</label>
-                <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Icon (e.g. Utensils)" value={cd.madinahHotel?.badgeIcon || ''} onChange={e => updateMad('badgeIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                  <input type="text" value={cd.madinahHotel?.badge || ''} onChange={e => updateMad('badge', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                </div>
               </div>
               <div>
                 <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">NIGHTS</label>
-                <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-full px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                <div className="flex gap-2">
+                  <input type="text" placeholder="Icon (e.g. Moon)" value={cd.madinahHotel?.nightsIcon || ''} onChange={e => updateMad('nightsIcon', e.target.value)} className="w-1/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                  <input type="text" value={cd.madinahHotel?.nights || ''} onChange={e => updateMad('nights', e.target.value)} className="w-2/3 px-2 py-1.5 rounded-lg border border-slate-200 text-xs" />
+                </div>
               </div>
             </div>
           </div>

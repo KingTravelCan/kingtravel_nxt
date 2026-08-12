@@ -246,7 +246,7 @@ export default function AdminSettingsPage() {
   });
 
   const [emailConfigs, setEmailConfigs] = useState({
-    sendToEmail: 'info@kingtravelcan.com',
+    sendToEmail: 'saudivisa@kingtravelcan.com',
     emailSubjectLine: 'New Pilgrimage Form Submission',
     fromName: 'King Travel Canada',
     fromEmail: 'no-reply@kingtravelcan.com',
@@ -281,9 +281,9 @@ export default function AdminSettingsPage() {
 </html>`);
 
   const [formsData, setFormsData] = useState<any>({
-    quoteForm: { title: 'Get a Free Quote Form', subtitle: 'Homepage & landing page Get a Free Quote banner form.', recipientEmail: 'info@kingtravelcan.com', successMessage: 'Thank you! Your quote request has been received.', enabled: true, buttonText: 'Submit Quote' },
+    quoteForm: { title: 'Get a Free Quote Form', subtitle: 'Homepage & landing page Get a Free Quote banner form.', recipientEmail: 'saudivisa@kingtravelcan.com', successMessage: 'Thank you! Your quote request has been received.', enabled: true, buttonText: 'Submit Quote' },
     packageDetailForm: { title: 'Package Detail Page Booking Form', subtitle: 'Dedicated package detail page booking & reservation form.', recipientEmail: 'booking@kingtravelcan.com', successMessage: 'Your package booking request has been submitted.', enabled: true, buttonText: 'Book Package' },
-    contact: { title: 'Get In Touch With Us', subtitle: 'Have questions about Umrah, Hajj or Saudi Visa?', recipientEmail: 'info@kingtravelcan.com', successMessage: 'Thank you! Your message has been received.', enabled: true, buttonText: 'Send Message' },
+    contact: { title: 'Get In Touch With Us', subtitle: 'Have questions about Umrah, Hajj or Saudi Visa?', recipientEmail: 'saudivisa@kingtravelcan.com', successMessage: 'Thank you! Your message has been received.', enabled: true, buttonText: 'Send Message' },
     packageInquiry: { title: 'Inquire About Pilgrimage Packages', subtitle: 'Fill in your details below and our team will craft a customized package for you.', recipientEmail: 'booking@kingtravelcan.com', successMessage: 'Package inquiry submitted successfully!', enabled: true, buttonText: 'Submit Package Inquiry' },
     visaConsultation: { title: 'Apply For Saudi Visa Consultation', subtitle: 'Fast, authorized & reliable Saudi eVisa and Pilgrimage visa processing.', recipientEmail: 'visas@kingtravelcan.com', successMessage: 'Visa application submitted!', enabled: true, buttonText: 'Submit Visa Request' },
     flightInquiry: { title: 'Request Flight Booking Assistance', subtitle: 'Get the best rates on direct and connecting flights to Jeddah & Madinah.', recipientEmail: 'flights@kingtravelcan.com', successMessage: 'Flight request received!', enabled: true, buttonText: 'Request Flight Quote' },
@@ -3580,7 +3580,7 @@ export default function AdminSettingsPage() {
                       </thead>
                       <tbody className="divide-y divide-slate-100">
                         {[
-                          { time: 'Jul 30, 2026 14:22', formId: 'contact-form-1', status: 'Delivered', sentTo: 'info@kingtravelcan.com', details: 'Notification sent successfully via SMTP' },
+                          { time: 'Jul 30, 2026 14:22', formId: 'contact-form-1', status: 'Delivered', sentTo: 'saudivisa@kingtravelcan.com', details: 'Notification sent successfully via SMTP' },
                           { time: 'Jul 29, 2026 09:15', formId: 'visa-form-2', status: 'Delivered', sentTo: 'visas@kingtravelcan.com', details: 'Notification sent successfully via SMTP' },
                         ].map((log, idx) => (
                           <tr key={idx} className="hover:bg-slate-50/50">

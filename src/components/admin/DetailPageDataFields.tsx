@@ -110,11 +110,17 @@ export default function DetailPageDataFields({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-[10px] font-bold text-slate-500 mb-1 block">BOARD (BADGE)</label>
-              <input type="text" value={d.makkahHotel?.badge || ''} onChange={e => updateHotel('makkahHotel', 'badge', e.target.value)} placeholder="e.g. Breakfast & Dinner Inc." className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+              <div className="flex gap-2">
+                <input type="text" placeholder="Icon (e.g. Utensils)" value={d.makkahHotel?.badgeIcon || ''} onChange={e => updateHotel('makkahHotel', 'badgeIcon', e.target.value)} className="w-1/3 px-3 py-2 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                <input type="text" value={d.makkahHotel?.badge || ''} onChange={e => updateHotel('makkahHotel', 'badge', e.target.value)} placeholder="e.g. Breakfast & Dinner Inc." className="w-2/3 px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+              </div>
             </div>
             <div>
               <label className="text-[10px] font-bold text-slate-500 mb-1 block">NIGHTS</label>
-              <input type="text" value={d.makkahHotel?.nights || ''} onChange={e => updateHotel('makkahHotel', 'nights', e.target.value)} placeholder="e.g. 6 Nights Stay" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+              <div className="flex gap-2">
+                <input type="text" placeholder="Icon (e.g. Moon)" value={d.makkahHotel?.nightsIcon || ''} onChange={e => updateHotel('makkahHotel', 'nightsIcon', e.target.value)} className="w-1/3 px-3 py-2 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                <input type="text" value={d.makkahHotel?.nights || ''} onChange={e => updateHotel('makkahHotel', 'nights', e.target.value)} placeholder="e.g. 6 Nights Stay" className="w-2/3 px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+              </div>
             </div>
           </div>
           <div>
@@ -142,11 +148,17 @@ export default function DetailPageDataFields({
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-[10px] font-bold text-slate-500 mb-1 block">BOARD (BADGE)</label>
-              <input type="text" value={d.madinahHotel?.badge || ''} onChange={e => updateHotel('madinahHotel', 'badge', e.target.value)} placeholder="e.g. Breakfast & Dinner Inc." className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+              <div className="flex gap-2">
+                <input type="text" placeholder="Icon (e.g. Utensils)" value={d.madinahHotel?.badgeIcon || ''} onChange={e => updateHotel('madinahHotel', 'badgeIcon', e.target.value)} className="w-1/3 px-3 py-2 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                <input type="text" value={d.madinahHotel?.badge || ''} onChange={e => updateHotel('madinahHotel', 'badge', e.target.value)} placeholder="e.g. Breakfast & Dinner Inc." className="w-2/3 px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+              </div>
             </div>
             <div>
               <label className="text-[10px] font-bold text-slate-500 mb-1 block">NIGHTS</label>
-              <input type="text" value={d.madinahHotel?.nights || ''} onChange={e => updateHotel('madinahHotel', 'nights', e.target.value)} placeholder="e.g. 6 Nights Stay" className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+              <div className="flex gap-2">
+                <input type="text" placeholder="Icon (e.g. Moon)" value={d.madinahHotel?.nightsIcon || ''} onChange={e => updateHotel('madinahHotel', 'nightsIcon', e.target.value)} className="w-1/3 px-3 py-2 rounded-lg border border-slate-200 text-xs" title="Lucide Icon Name" />
+                <input type="text" value={d.madinahHotel?.nights || ''} onChange={e => updateHotel('madinahHotel', 'nights', e.target.value)} placeholder="e.g. 6 Nights Stay" className="w-2/3 px-3 py-2 rounded-lg border border-slate-200 text-xs" />
+              </div>
             </div>
           </div>
           <div>

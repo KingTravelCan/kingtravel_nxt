@@ -26,7 +26,7 @@ function safeJsonParse<T>(jsonStr: any, fallback: T): T {
 export async function getPagesList() {
   try {
     let pages = await db.select().from(sitePages);
-    
+
     // Apply stored reordering sequence if available
     try {
       const orderSetting = await db.select().from(siteSettings).where(eq(siteSettings.key, 'ordered_pages')).limit(1);
@@ -284,7 +284,7 @@ export async function getDefaultFooterData() {
       { text: '+1800-844-5464', url: 'tel:+18008445464', openInNewTab: false },
       { text: '+1905-624-8555', url: 'tel:+19056248555', openInNewTab: false },
       { text: '+1905-624-8344', url: 'tel:+19056248344', openInNewTab: false },
-      { text: 'info@kingtravelcan.com', url: 'mailto:info@kingtravelcan.com', openInNewTab: false },
+      { text: 'saudivisa@kingtravelcan.com', url: 'mailto:saudivisa@kingtravelcan.com', openInNewTab: false },
       { text: 'Mon–Sat, 9am – 7pm EST', url: '', openInNewTab: false },
     ],
     copyrightText: '© 2026 King Travel Can LTD. All Rights Reserved.',
@@ -675,7 +675,7 @@ export async function getFormsSettings() {
       return {
         formsData: parsed,
         emailConfigs: {
-          sendToEmail: 'info@kingtravelcan.com',
+          sendToEmail: 'saudivisa@kingtravelcan.com',
           emailSubjectLine: 'New Pilgrimage Form Submission',
           fromName: 'King Travel Canada',
           fromEmail: 'no-reply@kingtravelcan.com',
@@ -713,7 +713,7 @@ export async function getFormsSettings() {
       quoteForm: {
         title: 'Get a Free Quote Form',
         subtitle: 'Homepage & landing page Get a Free Quote banner form.',
-        recipientEmail: 'info@kingtravelcan.com',
+        recipientEmail: 'saudivisa@kingtravelcan.com',
         successMessage: 'Thank you! Your quote request has been received.',
         enabled: true,
         buttonText: 'Submit Quote',
@@ -731,7 +731,7 @@ export async function getFormsSettings() {
       contact: {
         title: 'Get In Touch With Us',
         subtitle: 'Have questions about Umrah, Hajj or Saudi Visa? Our travel experts are here 24/7.',
-        recipientEmail: 'info@kingtravelcan.com',
+        recipientEmail: 'saudivisa@kingtravelcan.com',
         successMessage: 'Thank you! Your message has been received. Our team will contact you shortly.',
         enabled: true,
         buttonText: 'Send Message',
@@ -766,7 +766,7 @@ export async function getFormsSettings() {
       },
     },
     emailConfigs: {
-      sendToEmail: 'info@kingtravelcan.com',
+      sendToEmail: 'saudivisa@kingtravelcan.com',
       emailSubjectLine: 'New Pilgrimage Form Submission',
       fromName: 'King Travel Canada',
       fromEmail: 'no-reply@kingtravelcan.com',
