@@ -3,6 +3,7 @@ import Image from "next/image";
 import { getPackagesByType } from "@/actions/packageActions";
 import { getPageBySlug } from "@/actions/pageActions";
 import PageSectionsRenderer from "@/components/PageSectionsRenderer";
+import HajjPackagesSection from "@/components/HajjPackagesSection";
 
 // Fallback cards shown only if no Hajj packages exist yet in the database,
 // so the page never renders empty.
@@ -137,8 +138,10 @@ export default async function HajjPackagesPage() {
         </div>
       </section>
 
-      {pageSections.length > 0 && (
+      {pageSections.length > 0 ? (
         <PageSectionsRenderer sections={pageSections} pageData={pageData} initialPackageData={{ hajj: liveCards.length > 0 ? hajjPackages : undefined }} />
+      ) : (
+        <HajjPackagesSection data={{}} initialPackages={cards.length > 0 ? cards : fallbackCards} />
       )}
     </main>
   );

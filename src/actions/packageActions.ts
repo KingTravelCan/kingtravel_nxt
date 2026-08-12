@@ -3,7 +3,7 @@
 import { db } from '@/db';
 import { packages, packagePrices, packageHotels } from '@/db/schema';
 import { eq, desc, and, ne } from 'drizzle-orm';
-import { revalidatePath, updateTag } from 'next/cache';
+import { revalidatePath } from 'next/cache';
 
 /**
  * Fetch every non-draft package of a given type ('umrah' | 'hajj'), newest first.
@@ -12,19 +12,12 @@ import { revalidatePath, updateTag } from 'next/cache';
  */
 export async function getPackagesByType(type: 'umrah' | 'hajj'): Promise<any[]> {
   try {
-    const { unstable_cache } = await import('next/cache');
-    const getCachedPackages = unstable_cache(
-      async () => {
-        return await db
-          .select()
-          .from(packages)
-          .where(and(eq(packages.type, type), ne(packages.status, 'draft'), ne(packages.status, 'sold_out')))
-          .orderBy(desc(packages.createdAt));
-      },
-      ['packages-by-type-v2', type],
-      { tags: ['packages', `packages-${type}-v2`], revalidate: 120 }
-    );
-    return (await getCachedPackages()) || [];
+    const rows = await db
+      .select()
+      .from(packages)
+      .where(and(eq(packages.type, type), ne(packages.status, 'draft'), ne(packages.status, 'sold_out')))
+      .orderBy(desc(packages.createdAt));
+    return rows || [];
   } catch (err) {
     console.error('getPackagesByType DB error:', err);
     return [];
@@ -43,19 +36,12 @@ export async function getAllPackages() {
 
 export async function getSoldOutPackages() {
   try {
-    const { unstable_cache } = await import('next/cache');
-    const getCached = unstable_cache(
-      async () => {
-        return await db
-          .select()
-          .from(packages)
-          .where(eq(packages.status, 'sold_out'))
-          .orderBy(desc(packages.createdAt));
-      },
-      ['packages-soldout'],
-      { tags: ['packages', 'packages-soldout'], revalidate: 120 }
-    );
-    return (await getCached()) || [];
+    const rows = await db
+      .select()
+      .from(packages)
+      .where(eq(packages.status, 'sold_out'))
+      .orderBy(desc(packages.createdAt));
+    return rows || [];
   } catch (err) {
     console.error('getSoldOutPackages DB error:', err);
     return [];
@@ -143,9 +129,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
     revalidatePath('/admin/packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah-packages');
-    revalidatePath('/hajj-packages');
     revalidatePath('/');
-    updateTag('packages');
     return { success: true };
   } catch (error: any) {
     console.error('Error creating package:', error);
@@ -202,9 +186,7 @@ export async function updatePackageAction(
     revalidatePath('/admin/packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah-packages');
-    revalidatePath('/hajj-packages');
     revalidatePath('/');
-    updateTag('packages');
     return { success: true };
   } catch (error: any) {
     console.error('Error updating package:', error);
@@ -219,7 +201,6 @@ export async function updatePackageStatus(id: number, status: 'available' | 'sol
     revalidatePath('/');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah-packages');
-    updateTag('packages');
   } catch (error) {
     console.error('Error updating package status:', error);
   }
@@ -232,7 +213,6 @@ export async function deletePackage(id: number): Promise<void> {
     revalidatePath('/');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah-packages');
-    updateTag('packages');
   } catch (error) {
     console.error('Error deleting package:', error);
   }

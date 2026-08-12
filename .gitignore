@@ -57,3 +57,4 @@ clear-db.js
 check_packages.ts
 check_pages.ts
 /public/media
+scripts/check-prod-db.mjs

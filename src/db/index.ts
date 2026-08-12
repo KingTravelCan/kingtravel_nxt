@@ -7,7 +7,7 @@ const port = Number(process.env.DB_PORT) || 3306;
 const user = process.env.DB_USER || 'root';
 const password = process.env.DB_PASSWORD || '';
 const database = process.env.DB_NAME || 'kingtravel_db';
-const useSsl = process.env.DB_SSL === 'true';
+const useSsl = process.env.DB_SSL?.toLowerCase() === 'true';
 
 const globalForDb = globalThis as unknown as {
   poolConnection?: mysql.Pool;
