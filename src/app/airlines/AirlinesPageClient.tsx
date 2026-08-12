@@ -66,7 +66,7 @@ export default function AirlinesPageClient({ initialPageData }: { initialPageDat
   }
 
   return (
-    <main className="bg-[#f2f5f3] min-h-screen">
+    <main className="bg-sage min-h-screen">
       {/* ================= DYNAMIC HERO BANNER ================= */}
       <PageBanner
         title={pageData?.bannerTitle || pageData?.title || "Find <span>Lowest Fare</span> Flights & Book Airline Tickets Across Canada"}

@@ -139,12 +139,12 @@ export default function CertificationsFlipCardsSection({
       <div className="max-w-7xl mx-auto px-4 relative z-10">
 
         {/* Header */}
-        <div className="text-center mb-16">
-          <span className="text-gold font-black uppercase tracking-[0.2em] text-xs mb-3 block">
+        <div className="flex flex-col items-center text-center mb-8">
+          <span className="eyebrow mx-auto block">
             {eyebrow}
           </span>
 
-          <h2 className="text-4xl md:text-5xl font-serif text-[#004B39]">
+          <h2 className="text-4xl md:text-5xl font-serif text-ink">
             {title}
           </h2>
         </div>

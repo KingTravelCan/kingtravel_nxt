@@ -34,16 +34,16 @@ export default function PageBanner({
           el.style.backgroundSize = activeSize;
         }
       }}
-      className="relative text-center text-white py-20 px-5 overflow-hidden h-[420px] max-h-[420px] flex flex-col items-center justify-center bg-no-repeat"
+      className="relative text-center text-white py-20 !px-5 overflow-hidden h-[420px] max-h-[420px] flex flex-col items-center justify-center bg-no-repeat"
     >
-      <div className="max-w-[850px] mx-auto w-full z-10">
+      <div className="mx-auto w-full z-10">
         <h1
-          className="text-3xl md:text-5xl font-serif font-normal text-white mb-3 tracking-wide [&>span]:text-gold [&>em]:text-gold [&>em]:not-italic"
+          className="page-header-title"
           dangerouslySetInnerHTML={{ __html: title }}
         />
         {description && (
           <p
-            className="text-sm md:text-base opacity-90 max-w-2xl mx-auto font-light leading-relaxed text-white/90"
+            className="page-header-leadtxt"
           >
             {description}
           </p>

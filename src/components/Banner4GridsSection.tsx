@@ -12,8 +12,8 @@ export default function Banner4GridsSection({ data }: { data: any }) {
   ];
 
   return (
-    <div className="w-full bg-[#f1f5e6]">
-      <section className="relative -mt-30 z-10 max-w-4xl w-[calc(100%-3rem)] md:w-full mx-auto">
+    <div className="w-full bg-sage">
+      <section className="relative -mt-15 md:-mt-30 z-10 max-w-4xl w-[calc(100%-3rem)] md:w-full mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
         {items.map((item: any, idx: number) => (
           <div key={idx} className="bg-white rounded-lg px-2 py-8 flex flex-col items-center justify-center shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-slate-100 hover:-translate-y-1 transition-transform duration-300">

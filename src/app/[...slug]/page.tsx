@@ -66,7 +66,7 @@ export default async function DynamicPage({
   ]);
 
   return (
-    <main className="bg-[#f2f5f3] min-h-screen">
+    <main className="bg-sage min-h-screen">
       <PageSeoHead pageTitle={page.title} seoData={page.seoData} />
 
       <PageBanner

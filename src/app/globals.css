@@ -2769,3 +2769,12 @@ select {
     transform: translateY(0) !important;
   }
 }
+
+
+/* InnerPages Header Css */
+.page-header-title{
+  @apply text-3xl md:text-5xl font-serif font-normal text-white mb-3 tracking-wide [&>span]:text-gold [&>em]:text-gold [&>em]:not-italic;
+}
+.page-header-leadtxt{
+  @apply text-sm md:text-[1.2rem] opacity-90 max-w-6xl mx-auto font-light leading-relaxed text-white/90;
+}

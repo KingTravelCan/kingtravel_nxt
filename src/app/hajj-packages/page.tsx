@@ -129,10 +129,10 @@ export default async function HajjPackagesPage() {
       <style dangerouslySetInnerHTML={{ __html: 'body { background-color: #f1f5e6 !important; }' }} />
       <section className="hero packages">
         <div className="wrap">
-          <h1 className="text-white text-5xl mb-5">
+          <h1 className="page-header-title">
             Luxury <span className="text-gold">Hajj Packages 2027</span>
           </h1>
-          <p className="text-white text-lg max-w-[700px] mx-auto mb-7.5 opacity-90">
+          <p className="page-header-leadtxt">
             Luxury Hajj 2027 Packages with 5-Star Hotels, VIP Services &amp; Complete Spiritual Guidance.
           </p>
         </div>

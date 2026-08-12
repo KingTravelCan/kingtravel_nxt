@@ -18,7 +18,7 @@ export default function EconomyHajj2027Page() {
   };
 
   return (
-    <main className="bg-[#f2f5f3] min-h-screen">
+    <main className="bg-sage min-h-screen">
       {/* ================= SUB-HEADER HERO ================= */}
       <div className="sub-header bg-[#0b4a3a] text-white py-12 px-4">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">

@@ -422,7 +422,7 @@ export default function ContactPageClient({ initialPageData, initialFormConfig }
   const formSec = sections.find((s: any) => s.type === "Contact Form" || s.type === "Contact Form + Maps");
 
   return (
-    <main className="bg-[#f2f5f3] min-h-screen">
+    <main className="bg-sage min-h-screen">
       {/* ================= DYNAMIC HERO BANNER ================= */}
       <PageBanner
         title={pageData?.bannerTitle || pageData?.title || "We'd <span>Love</span> To Hear From You"}

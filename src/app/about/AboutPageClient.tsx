@@ -221,11 +221,11 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
           return (
             <section key={idx} className="services-section">
               <div className="wrap">
-                <div className="section-header reveal">
-                  <span className="section-tag">{sec.data?.eyebrow || "WHAT WE PROVIDE"}</span>
+                <div className="flex flex-col items-center text-center mb-8">
+                  <span className="eyebrow mx-auto block">{sec.data?.eyebrow || "WHAT WE PROVIDE"}</span>
                   <h2 className="section-title">{sec.data?.title || "Our Premium Travel Services"}</h2>
                 </div>
-                <div className="flex flex-col md:grid md:grid-cols-2 gap-6 reveal">
+                <div className="flex flex-col md:grid md:grid-cols-2 gap-6">
                   {svcs.map((item: any, i: number) => (
                     <div key={i} className="about-service-card">
                       <div className="flex items-center gap-3">
