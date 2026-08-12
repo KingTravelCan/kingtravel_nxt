@@ -2834,9 +2834,9 @@ export default function AdminSettingsPage() {
               {/* FORMS MANAGEMENT Header with Universal Save Form Button */}
               <div className="flex items-center justify-between pb-2 border-b border-slate-200/60">
                 <div>
-                  <h2 className="text-xl font-extrabold text-slate-900 m-0 flex items-center gap-2">
+                  <span className="text-xl font-extrabold text-slate-900 m-0 flex items-center gap-2">
                     🚩 FORMS MANAGEMENT
-                  </h2>
+                  </span>
                   <p className="text-xs text-slate-500 mt-1 mb-0">
                     Configure titles, email routing, notification templates, submission inbox, and form field inputs across King Travel.
                   </p>

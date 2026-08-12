@@ -58,3 +58,4 @@ check_packages.ts
 check_pages.ts
 /public/media
 scripts/check-prod-db.mjs
+scripts/db_check.js
