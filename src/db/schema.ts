@@ -306,3 +306,13 @@ export const sitemapLogs = mysqlTable('sitemap_logs', {
   triggeredBy: varchar('triggered_by', { length: 128 }).default('system'),
   createdAt: timestamp('created_at').defaultNow(),
 });
+
+// 13. Email Delivery Logs
+export const emailDeliveryLogs = mysqlTable('email_delivery_logs', {
+  id: int('id').autoincrement().primaryKey(),
+  formId: varchar('form_id', { length: 255 }).notNull(),
+  status: mysqlEnum('status', ['Delivered', 'Failed']).notNull(),
+  sentTo: varchar('sent_to', { length: 255 }).notNull(),
+  details: text('details'),
+  createdAt: timestamp('created_at').defaultNow(),
+});

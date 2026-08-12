@@ -59,3 +59,7 @@ check_pages.ts
 /public/media
 scripts/check-prod-db.mjs
 scripts/db_check.js
+scripts/fix_input_colors.js
+create_table.ts
+test_fetch.ts
+test_insert.ts

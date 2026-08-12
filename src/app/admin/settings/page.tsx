@@ -25,6 +25,7 @@ import {
   getFormsSettings,
   saveFormsSettingsAction,
 } from '@/actions/pageActions';
+import { getEmailDeliveryLogsAction } from '@/actions/logActions';
 import { getResponsiveEmailTemplateHtml } from '@/lib/emailTemplate';
 import {
   getUsersList,
@@ -32,6 +33,7 @@ import {
   updateUserAction,
   deleteUserAction,
 } from '@/actions/userActions';
+import { getEnquiriesList, deleteEnquiriesBulkAction, markEnquiriesReadAction, updateEnquiryStatus } from '@/actions/enquiryActions';
 import { Field, FieldLabel } from '@/components/ui/field';
 import { Switch } from '@/components/ui/switch';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
@@ -194,6 +196,102 @@ export default function AdminSettingsPage() {
   >('all');
   const [editingFormKey, setEditingFormKey] = useState<string | null>(null);
 
+  const [emailLogs, setEmailLogs] = useState<any[]>([]);
+  const [isLoadingLogs, setIsLoadingLogs] = useState(false);
+
+  const [inboxEnquiries, setInboxEnquiries] = useState<any[]>([]);
+  const [isLoadingInbox, setIsLoadingInbox] = useState(false);
+  const [inboxFilter, setInboxFilter] = useState<'all' | 'unread'>('all');
+  const [selectedInboxItems, setSelectedInboxItems] = useState<number[]>([]);
+  const [isDeletingInboxItems, setIsDeletingInboxItems] = useState(false);
+  const [isMarkingRead, setIsMarkingRead] = useState(false);
+  const [activeInboxMsg, setActiveInboxMsg] = useState<any>(null);
+
+  const fetchInbox = async () => {
+    setIsLoadingInbox(true);
+    try {
+      const res = await getEnquiriesList();
+      if (res && Array.isArray(res)) setInboxEnquiries(res);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoadingInbox(false);
+    }
+  };
+
+  const handleToggleInboxItem = (id: number) => {
+    setSelectedInboxItems((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  const handleDeleteSelectedInbox = async () => {
+    if (selectedInboxItems.length === 0) return;
+    setIsDeletingInboxItems(true);
+    try {
+      await deleteEnquiriesBulkAction(selectedInboxItems);
+      setSelectedInboxItems([]);
+      await fetchInbox();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsDeletingInboxItems(false);
+    }
+  };
+
+  const handleMarkAllRead = async () => {
+    const unreadItems = inboxEnquiries.filter(i => i.status === 'new');
+    if (unreadItems.length === 0) return;
+    setIsMarkingRead(true);
+    try {
+      const idsToMark = unreadItems.map(i => i.id);
+      await markEnquiriesReadAction(idsToMark);
+      await fetchInbox();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsMarkingRead(false);
+    }
+  };
+
+  const filteredInboxEnquiries = inboxEnquiries.filter((item) => {
+    if (inboxFilter === 'unread') return item.status === 'new';
+    return true;
+  });
+
+  const fetchEmailLogs = async () => {
+    setIsLoadingLogs(true);
+    try {
+      const res = await getEmailDeliveryLogsAction();
+      if (res.success && res.logs) {
+        setEmailLogs(res.logs);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoadingLogs(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'forms') {
+      if (formsSubTab === 'emailLogs') {
+        fetchEmailLogs();
+        const interval = setInterval(() => {
+          fetchEmailLogs();
+        }, 10000);
+        return () => clearInterval(interval);
+      }
+      if (formsSubTab === 'inbox') {
+        fetchInbox();
+        const interval = setInterval(() => {
+          fetchInbox();
+        }, 10000);
+        return () => clearInterval(interval);
+      }
+    }
+  }, [activeTab, formsSubTab]);
+
   const [formFieldsState, setFormFieldsState] = useState<Record<string, Array<{ id: string; label: string; type: string; placeholder: string; required: boolean }>>>({
     contact: [
       { id: '1', label: 'Full Name', type: 'text', placeholder: 'Enter your full name', required: true },
@@ -243,6 +341,13 @@ export default function AdminSettingsPage() {
       { id: '5', label: 'Number of Passengers', type: 'text', placeholder: 'e.g. 2 Adults, 1 Child', required: true },
       { id: '6', label: 'Contact Phone', type: 'tel', placeholder: '+1 (555) 000-0000', required: true },
     ],
+    dropUsMessage: [
+      { id: '1', label: 'Full Name', type: 'text', placeholder: 'Full Name', required: true },
+      { id: '2', label: 'Email Address', type: 'email', placeholder: 'Email Address', required: true },
+      { id: '3', label: 'Phone Number', type: 'tel', placeholder: 'Phone Number', required: false },
+      { id: '4', label: 'Select Package', type: 'select', placeholder: 'Select Package', required: false },
+      { id: '5', label: 'Message', type: 'textarea', placeholder: 'Your Message', required: false },
+    ],
   });
 
   const [emailConfigs, setEmailConfigs] = useState({
@@ -287,6 +392,7 @@ export default function AdminSettingsPage() {
     packageInquiry: { title: 'Inquire About Pilgrimage Packages', subtitle: 'Fill in your details below and our team will craft a customized package for you.', recipientEmail: 'booking@kingtravelcan.com', successMessage: 'Package inquiry submitted successfully!', enabled: true, buttonText: 'Submit Package Inquiry' },
     visaConsultation: { title: 'Apply For Saudi Visa Consultation', subtitle: 'Fast, authorized & reliable Saudi eVisa and Pilgrimage visa processing.', recipientEmail: 'visas@kingtravelcan.com', successMessage: 'Visa application submitted!', enabled: true, buttonText: 'Submit Visa Request' },
     flightInquiry: { title: 'Request Flight Booking Assistance', subtitle: 'Get the best rates on direct and connecting flights to Jeddah & Madinah.', recipientEmail: 'flights@kingtravelcan.com', successMessage: 'Flight request received!', enabled: true, buttonText: 'Request Flight Quote' },
+    dropUsMessage: { title: 'Drop Us A Message', subtitle: 'General get in touch message form.', recipientEmail: 'saudivisa@kingtravelcan.com', successMessage: 'Thank you! Your message has been received.', enabled: true, buttonText: 'Send Enquiry' },
   });
   const [formsSaveMsg, setFormsSaveMsg] = useState<string | null>(null);
   const [savingForms, setSavingForms] = useState(false);
@@ -2810,7 +2916,7 @@ export default function AdminSettingsPage() {
                   rows={16}
                   value={customCss}
                   onChange={(e) => setCustomCss(e.target.value)}
-                  className="w-full p-6 font-mono text-xs text-emerald-400 bg-transparent outline-none resize-y leading-relaxed border-none focus:ring-0"
+                  className="w-full p-6 font-mono text-xs !text-white bg-transparent outline-none resize-y leading-relaxed border-none focus:ring-0"
                   placeholder="/* Add your custom CSS here */ body { /* overrides */ }"
                 />
               </div>
@@ -2872,7 +2978,6 @@ export default function AdminSettingsPage() {
                   { id: 'emailConfigs', label: 'Email Configs', icon: '⚙️' },
                   { id: 'emailTemplate', label: 'Email Template', icon: '🎨' },
                   { id: 'inbox', label: 'Inbox', icon: '📥' },
-                  { id: 'sentHistory', label: 'Sent History', icon: '📤' },
                   { id: 'emailLogs', label: 'Email Logs', icon: '📊' },
                 ].map((st) => (
                   <button
@@ -2915,6 +3020,7 @@ export default function AdminSettingsPage() {
                         packageInquiry: { title: 'Package Inquiry Form', icon: '🕋', desc: 'Custom Umrah & Hajj package booking inquiry form.' },
                         visaConsultation: { title: 'Visa Consultation Form', icon: '📜', desc: 'Saudi eVisa & Pilgrimage visa application form.' },
                         flightInquiry: { title: 'Flight Booking Form', icon: '✈️', desc: 'Direct flight quote assistance request form.' },
+                        dropUsMessage: { title: 'Drop Us A Message Form', icon: '📬', desc: 'General get in touch message form.' },
                       };
 
                       const cfg = formsData[formKey] || {};
@@ -2946,8 +3052,9 @@ export default function AdminSettingsPage() {
                                       formKey === 'quoteForm' ? 'quote_enquiries' :
                                         formKey === 'packageDetailForm' ? 'package_booking_enquiries' :
                                           formKey === 'contact' ? 'contact_enquiries' :
-                                            formKey === 'visaConsultation' ? 'visa_enquiries' :
-                                              formKey === 'flightInquiry' ? 'flight_enquiries' : 'enquiries'
+                                            formKey === 'dropUsMessage' ? 'contact_enquiries' :
+                                              formKey === 'visaConsultation' ? 'visa_enquiries' :
+                                                formKey === 'flightInquiry' ? 'flight_enquiries' : 'enquiries'
                                     }
                                   </span>
                                 </div>
@@ -3484,7 +3591,7 @@ export default function AdminSettingsPage() {
                         rows={18}
                         value={emailTemplateHtml}
                         onChange={(e) => setEmailTemplateHtml(e.target.value)}
-                        className="w-full bg-transparent font-mono text-xs text-emerald-400 outline-none resize-y leading-relaxed border-none focus:ring-0"
+                        className="w-full bg-transparent font-mono text-xs !text-white outline-none resize-y leading-relaxed border-none focus:ring-0"
                       />
                     </div>
 
@@ -3510,61 +3617,114 @@ export default function AdminSettingsPage() {
                 <div className="bg-white rounded-3xl p-6 lg:p-8 border border-slate-100 shadow-2xs flex flex-col gap-6">
                   <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                     <div>
-                      <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider m-0">📩 SUBMISSION QUEUE</h4>
+                      <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider m-0 flex items-center gap-2">
+                        📩 Inbox
+                        <button onClick={fetchInbox} className={`bg-transparent border-none cursor-pointer text-slate-400 hover:text-slate-600 transition-colors ${isLoadingInbox ? 'animate-spin' : ''}`}>
+                          🔄
+                        </button>
+                      </h4>
                       <p className="text-xs text-slate-500 mt-0.5 mb-0 font-medium">Real-time incoming lead submissions across all active forms.</p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <button type="button" className="text-xs font-extrabold text-[#004B39] hover:underline cursor-pointer bg-transparent border-none">
-                        MARK ALL READ
+                      {selectedInboxItems.length > 0 && (
+                        <button
+                          onClick={handleDeleteSelectedInbox}
+                          disabled={isDeletingInboxItems}
+                          className="text-xs font-extrabold text-red-600 hover:bg-red-50 px-3 py-1 rounded-lg cursor-pointer bg-transparent border-none flex items-center gap-1 transition-colors"
+                        >
+                          {isDeletingInboxItems ? 'DELETING...' : `DELETE (${selectedInboxItems.length})`}
+                        </button>
+                      )}
+                      <button
+                        onClick={handleMarkAllRead}
+                        disabled={isMarkingRead}
+                        type="button"
+                        className="text-xs font-extrabold text-[#004B39] hover:underline cursor-pointer bg-transparent border-none"
+                      >
+                        {isMarkingRead ? 'MARKING...' : 'MARK ALL READ'}
                       </button>
                       <div className="flex bg-slate-100 p-1 rounded-xl text-xs font-bold">
-                        <button type="button" className="px-3 py-1 rounded-lg bg-[#004B39] text-white border-none cursor-pointer">ALL</button>
-                        <button type="button" className="px-3 py-1 rounded-lg text-slate-600 border-none bg-transparent cursor-pointer">UNREAD</button>
+                        <button
+                          onClick={() => setInboxFilter('all')}
+                          type="button"
+                          className={`px-3 py-1 rounded-lg border-none cursor-pointer transition-colors ${inboxFilter === 'all' ? 'bg-[#004B39] text-white' : 'text-slate-600 bg-transparent'}`}
+                        >
+                          ALL
+                        </button>
+                        <button
+                          onClick={() => setInboxFilter('unread')}
+                          type="button"
+                          className={`px-3 py-1 rounded-lg border-none cursor-pointer transition-colors ${inboxFilter === 'unread' ? 'bg-[#004B39] text-white' : 'text-slate-600 bg-transparent'}`}
+                        >
+                          UNREAD
+                        </button>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex flex-col divide-y divide-slate-100">
-                    {[
-                      { email: 'hassandks10@gmail.com', msg: 'Inquiry regarding 14 Days Premium Umrah Package for family of 4.', form: 'CONTACT', date: 'July 30, 2026' },
-                      { email: 'mubashir.dev@gmail.com', msg: 'Interested in Saudi Tourist eVisa process for Canadian passport holder.', form: 'VISA CONSULTATION', date: 'July 29, 2026' },
-                      { email: 'dks.admin@kingtravelcan.com', msg: 'Direct flight inquiry from Toronto to Madinah in December.', form: 'FLIGHT BOOKING', date: 'July 28, 2026' },
-                    ].map((item, idx) => (
-                      <div key={idx} className="py-4 flex items-center justify-between hover:bg-slate-50/50 px-2 rounded-xl transition-colors">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-bold text-xs text-slate-900">{item.email}</span>
-                            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    {filteredInboxEnquiries.length > 0 ? (
+                      filteredInboxEnquiries.map((item: any, idx: number) => {
+                        const dateStr = new Date(item.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                        return (
+                          <div key={idx} onClick={() => setActiveInboxMsg(item)} className={`py-4 flex flex-col md:flex-row md:items-center justify-between hover:bg-slate-50/50 px-2 rounded-xl transition-colors gap-4 cursor-pointer ${item.status === 'new' ? 'bg-slate-50/30' : ''}`}>
+                            <div className="flex items-start gap-4">
+                              <div className="pt-2" onClick={(e) => e.stopPropagation()}>
+                                <input
+                                  type="checkbox"
+                                  className="w-4 h-4 cursor-pointer accent-[#004B39]"
+                                  checked={selectedInboxItems.includes(item.id)}
+                                  onChange={() => handleToggleInboxItem(item.id)}
+                                />
+                              </div>
+                              <div className="w-10 h-10 rounded-full bg-[#004B39] text-white flex items-center justify-center font-bold text-lg flex-shrink-0">
+                                {item.fullName ? item.fullName.charAt(0).toUpperCase() : 'U'}
+                              </div>
+                              <div className="flex flex-col gap-1.5">
+                                <div className="flex items-center gap-2">
+                                  <h5 className="m-0 text-sm font-bold text-slate-900">{item.email}</h5>
+                                  {item.status === 'new' && (
+                                    <button
+                                      onClick={async (e) => {
+                                        e.stopPropagation();
+                                        await updateEnquiryStatus(item.id, 'contacted');
+                                        await fetchInbox();
+                                      }}
+                                      className="w-2 h-2 rounded-full bg-emerald-500 cursor-pointer border-none p-0 outline-none hover:scale-125 transition-transform"
+                                      title="Mark as read"
+                                    />
+                                  )}
+                                </div>
+                                <p className="text-xs text-slate-600 m-0 max-w-xl truncate">{item.message || `Inquiry for ${item.preferredPackageType || 'service'}`}</p>
+                                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 w-fit">
+                                  {item.type ? item.type.replace('_', ' ').toUpperCase() : 'CONTACT'}
+                                </span>
+                              </div>
+                            </div>
+                            <span className="text-xs text-slate-400 font-medium md:text-right">{dateStr}</span>
                           </div>
-                          <p className="text-xs text-slate-600 mt-1 mb-1 font-medium">{item.msg}</p>
-                          <span className="text-[9px] font-extrabold bg-emerald-50 text-emerald-800 px-2 py-0.5 rounded-full border border-emerald-200 uppercase">
-                            {item.form}
-                          </span>
-                        </div>
-                        <span className="text-xs text-slate-400 font-medium">{item.date}</span>
-                      </div>
-                    ))}
+                        );
+                      })
+                    ) : (
+                      <div className="py-8 text-center text-slate-400 font-medium">{isLoadingInbox ? 'Loading inbox...' : 'No incoming submissions found.'}</div>
+                    )}
                   </div>
                 </div>
               )}
 
-              {/* ── 5. SENT HISTORY SUB-TAB (Matching Screenshot 4) ── */}
-              {formsSubTab === 'sentHistory' && (
-                <div className="bg-white rounded-3xl p-8 border border-slate-100 shadow-2xs flex flex-col items-center justify-center py-16 text-center">
-                  <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center text-2xl text-slate-400 mb-4">
-                    📥
-                  </div>
-                  <h4 className="text-base font-extrabold text-slate-900 m-0">No History</h4>
-                  <p className="text-xs text-slate-400 mt-1 mb-0">You haven&apos;t sent any automated replies yet.</p>
-                </div>
-              )}
-
-              {/* ── 6. EMAIL LOGS SUB-TAB (Matching Screenshot 5) ── */}
+              {/* ── 5. EMAIL LOGS SUB-TAB (Matching Screenshot 5) ── */}
               {formsSubTab === 'emailLogs' && (
                 <div className="bg-white rounded-3xl p-6 lg:p-8 border border-slate-100 shadow-2xs flex flex-col gap-6">
-                  <div>
-                    <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider m-0">🔄 EMAIL DELIVERY LOGS</h4>
-                    <p className="text-xs text-slate-500 mt-0.5 mb-0 font-medium">Real-time tracking of form notification emails sent to administrators.</p>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider m-0 flex items-center gap-2">
+                        EMAIL DELIVERY LOGS
+                        <button onClick={fetchEmailLogs} className={`bg-transparent border-none cursor-pointer text-slate-400 hover:text-slate-600 transition-colors ${isLoadingLogs ? 'animate-spin' : ''}`}>
+                          🔄
+                        </button>
+                      </h4>
+                      <p className="text-xs text-slate-500 mt-0.5 mb-0 font-medium">Real-time tracking of form notification emails sent to administrators.</p>
+                    </div>
                   </div>
 
                   <div className="overflow-x-auto">
@@ -3579,22 +3739,28 @@ export default function AdminSettingsPage() {
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100">
-                        {[
-                          { time: 'Jul 30, 2026 14:22', formId: 'contact-form-1', status: 'Delivered', sentTo: 'saudivisa@kingtravelcan.com', details: 'Notification sent successfully via SMTP' },
-                          { time: 'Jul 29, 2026 09:15', formId: 'visa-form-2', status: 'Delivered', sentTo: 'visas@kingtravelcan.com', details: 'Notification sent successfully via SMTP' },
-                        ].map((log, idx) => (
-                          <tr key={idx} className="hover:bg-slate-50/50">
-                            <td className="py-3 px-4 font-mono font-medium text-slate-600">{log.time}</td>
-                            <td className="py-3 px-4 font-mono font-bold text-emerald-800">{log.formId}</td>
-                            <td className="py-3 px-4">
-                              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                                • {log.status}
-                              </span>
-                            </td>
-                            <td className="py-3 px-4 font-mono text-slate-700">{log.sentTo}</td>
-                            <td className="py-3 px-4 text-slate-500">{log.details}</td>
+                        {emailLogs.length > 0 ? (
+                          emailLogs.map((log: any, idx: number) => {
+                            const dateStr = new Date(log.createdAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: false });
+                            return (
+                              <tr key={idx} className="hover:bg-slate-50/50 transition-colors">
+                                <td className="py-3 px-4 font-mono font-medium text-slate-600 whitespace-nowrap">{dateStr}</td>
+                                <td className="py-3 px-4 font-mono font-bold text-emerald-800">{log.formId}</td>
+                                <td className="py-3 px-4 whitespace-nowrap">
+                                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${log.status === 'Delivered' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-red-50 text-red-700 border-red-200'}`}>
+                                    • {log.status}
+                                  </span>
+                                </td>
+                                <td className="py-3 px-4 font-mono text-slate-700">{log.sentTo}</td>
+                                <td className="py-3 px-4 text-slate-500 max-w-[250px] truncate" title={log.details || ''}>{log.details}</td>
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td colSpan={5} className="py-8 text-center text-slate-400 font-medium">{isLoadingLogs ? 'Loading logs...' : 'No email delivery logs found.'}</td>
                           </tr>
-                        ))}
+                        )}
                       </tbody>
                     </table>
                   </div>
@@ -3709,6 +3875,91 @@ export default function AdminSettingsPage() {
         message={notificationConfig.message}
         onClose={() => setNotificationConfig((prev) => ({ ...prev, isOpen: false }))}
       />
+      
+      {/* Drawer for Inbox Message */}
+      {activeInboxMsg && (
+        <div className="fixed inset-0 z-[100] flex justify-end">
+          <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity" onClick={() => setActiveInboxMsg(null)} />
+          <div className="relative w-full max-w-md bg-white h-full shadow-2xl animate-in slide-in-from-right duration-300 flex flex-col border-l border-slate-200">
+             {/* Drawer Header */}
+             <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50">
+                <h3 className="font-bold text-slate-900 m-0 text-lg">Message Details</h3>
+                <button onClick={() => setActiveInboxMsg(null)} className="p-2 bg-white rounded-full text-slate-500 hover:text-slate-900 shadow-sm border border-slate-200 cursor-pointer">
+                   <X className="w-4 h-4" />
+                </button>
+             </div>
+             {/* Drawer Body - Simulated Email Template */}
+             <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
+               <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
+                 {/* Header */}
+                 <div className="text-center pb-6 border-b border-slate-100 mb-6">
+                   <div className="font-black text-2xl tracking-tighter text-[#004B39]">KING TRAVEL</div>
+                   <p className="text-xs text-slate-500 mt-2">New Lead Submission</p>
+                 </div>
+                 {/* Body */}
+                 <div className="space-y-4 text-sm">
+                   <div>
+                     <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Name</p>
+                     <p className="font-medium text-slate-900">{activeInboxMsg.fullName || 'N/A'}</p>
+                   </div>
+                   <div>
+                     <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Email</p>
+                     <p className="font-medium text-slate-900">{activeInboxMsg.email}</p>
+                   </div>
+                   {activeInboxMsg.phone && (
+                     <div>
+                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Phone</p>
+                       <p className="font-medium text-slate-900">{activeInboxMsg.phone}</p>
+                     </div>
+                   )}
+                   {activeInboxMsg.whatsapp && (
+                     <div>
+                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">WhatsApp</p>
+                       <p className="font-medium text-slate-900">{activeInboxMsg.whatsapp}</p>
+                     </div>
+                   )}
+                   {(activeInboxMsg.city || activeInboxMsg.province) && (
+                     <div>
+                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Location</p>
+                       <p className="font-medium text-slate-900">{activeInboxMsg.city}, {activeInboxMsg.province}</p>
+                     </div>
+                   )}
+                   {activeInboxMsg.preferredPackageType && (
+                     <div>
+                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Inquiry For</p>
+                       <p className="font-medium text-slate-900">{activeInboxMsg.preferredPackageType}</p>
+                     </div>
+                   )}
+                   {activeInboxMsg.departureMonth && (
+                     <div>
+                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Departure</p>
+                       <p className="font-medium text-slate-900">{activeInboxMsg.departureMonth}</p>
+                     </div>
+                   )}
+                   {(activeInboxMsg.adults || activeInboxMsg.children) && (
+                     <div>
+                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Passengers</p>
+                       <p className="font-medium text-slate-900">Adults: {activeInboxMsg.adults}, Children: {activeInboxMsg.children}, Infants: {activeInboxMsg.infants}</p>
+                     </div>
+                   )}
+                   {activeInboxMsg.message && (
+                     <div className="pt-4 border-t border-slate-100">
+                       <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Message</p>
+                       <p className="text-slate-700 whitespace-pre-wrap">{activeInboxMsg.message}</p>
+                     </div>
+                   )}
+                   
+                   <div className="pt-6 mt-6 border-t border-slate-100 flex justify-center">
+                      <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
+                        {activeInboxMsg.type ? activeInboxMsg.type.replace('_', ' ').toUpperCase() : 'CONTACT'}
+                      </span>
+                   </div>
+                 </div>
+               </div>
+             </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }

@@ -1,15 +1,8 @@
 'use server';
 
 import { db } from '@/db';
-import {
-  enquiries,
-  quoteEnquiries,
-  packageBookingEnquiries,
-  contactEnquiries,
-  visaEnquiries,
-  flightEnquiries,
-} from '@/db/schema';
-import { eq, desc } from 'drizzle-orm';
+import { enquiries, quoteEnquiries, packageBookingEnquiries, contactEnquiries, visaEnquiries, flightEnquiries } from '@/db/schema';
+import { eq, desc, inArray } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { dispatchFormEmails } from '@/lib/emailService';
 
@@ -509,5 +502,33 @@ export async function deleteEnquiryAction(id: number): Promise<{ success: boolea
   } catch (error: any) {
     console.error('Error deleting enquiry:', error);
     return { success: false, error: error.message || 'Failed to delete enquiry.' };
+  }
+}
+
+export async function markEnquiriesReadAction(ids: number[]): Promise<{ success: boolean; error?: string }> {
+  console.log('markEnquiriesReadAction called with ids:', ids);
+  try {
+    if (!ids || ids.length === 0) return { success: true };
+    console.log('About to call db.update');
+    await db.update(enquiries).set({ status: 'contacted', updatedAt: new Date() }).where(inArray(enquiries.id, ids));
+    console.log('db.update successful, calling revalidatePath');
+    revalidatePath('/admin/enquiries');
+    console.log('revalidatePath successful');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error marking enquiries read:', error);
+    return { success: false, error: error.message || 'Failed to mark as read.' };
+  }
+}
+
+export async function deleteEnquiriesBulkAction(ids: number[]): Promise<{ success: boolean; error?: string }> {
+  try {
+    if (!ids || ids.length === 0) return { success: true };
+    await db.delete(enquiries).where(inArray(enquiries.id, ids));
+    revalidatePath('/admin/enquiries');
+    return { success: true };
+  } catch (error: any) {
+    console.error('Error deleting enquiries:', error);
+    return { success: false, error: error.message || 'Failed to delete enquiries.' };
   }
 }

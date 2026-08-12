@@ -25,7 +25,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
     fullName: "",
     email: "",
     phone: "",
-    packageType: "Select Package",
+    packageType: "",
     message: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -43,6 +43,9 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
     } else if (!/\S+@\S+\.\S+/.test(form.email)) {
       newErrors.email = "Please enter a valid email address.";
     }
+
+    if (!form.packageType || form.packageType === "Select Package") newErrors.packageType = "Please select a package.";
+    if (!form.message.trim()) newErrors.message = "Please fill out this field.";
 
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -66,7 +69,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
         if (res.ticketNumber) setModalRef(res.ticketNumber);
         setModalOpen(true);
         setStatus(null);
-        setForm({ fullName: "", email: "", phone: "", packageType: "Select Package", message: "" });
+        setForm({ fullName: "", email: "", phone: "", packageType: "", message: "" });
       } else {
         setStatus(res.error || "Submission failed.");
       }
@@ -147,84 +150,120 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
             {status && (
               <p className="text-center text-emerald-800 font-semibold mb-6 text-sm">{status}</p>
             )}
-            <form noValidate className="flex flex-col gap-6" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="field">
-                  <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
-                    Full Name <span className="text-red-500">*</span>
-                  </label>
+            <form noValidate className="flex flex-col gap-4" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="relative">
                   <input
                     type="text"
-                    placeholder="Full Name"
+                    id="fullName"
+                    placeholder=" "
                     value={form.fullName}
-                    onChange={(e) => { setForm({ ...form, fullName: e.target.value }); if (errors.fullName) setErrors((p) => ({ ...p, fullName: "" })); }}
-                    className={`w-full border p-3 rounded-lg outline-none transition-colors text-slate-900 text-sm ${errors.fullName ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-gold bg-white"}`}
+                    onChange={(e) => {
+                      setForm({ ...form, fullName: e.target.value });
+                      if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: "" }));
+                    }}
+                    className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
                   />
-                  {errors.fullName && <span className="text-red-600 text-xs mt-1 block">{errors.fullName}</span>}
-                </div>
-                <div className="field">
-                  <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
-                    Email Address <span className="text-red-500">*</span>
+                  <label
+                    htmlFor="fullName"
+                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.fullName ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"}`}
+                  >
+                    Full Name *
                   </label>
+                  {errors.fullName && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.fullName}</span>}
+                </div>
+
+                <div className="relative">
                   <input
                     type="email"
-                    placeholder="Email Address"
+                    id="emailAddress"
+                    placeholder=" "
                     value={form.email}
-                    onChange={(e) => { setForm({ ...form, email: e.target.value }); if (errors.email) setErrors((p) => ({ ...p, email: "" })); }}
-                    className={`w-full border p-3 rounded-lg outline-none transition-colors text-slate-900 text-sm ${errors.email ? "border-red-500 bg-red-50" : "border-slate-200 focus:border-gold bg-white"}`}
+                    onChange={(e) => {
+                      setForm({ ...form, email: e.target.value });
+                      if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                    }}
+                    className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
                   />
-                  {errors.email && <span className="text-red-600 text-xs mt-1 block">{errors.email}</span>}
-                </div>
-                <div className="field">
-                  <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
-                    Phone Number
+                  <label
+                    htmlFor="emailAddress"
+                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.email ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"}`}
+                  >
+                    Email Address *
                   </label>
+                  {errors.email && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.email}</span>}
+                </div>
+
+                <div className="relative">
                   <input
-                    type="text"
-                    placeholder="Phone Number"
+                    type="tel"
+                    id="phoneNumber"
+                    placeholder=" "
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-gold transition-colors text-slate-900 text-sm"
+                    className="peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-[#111111] placeholder-transparent"
                   />
-                </div>
-                <div className="field">
-                  <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
-                    Select Package
-                  </label>
-                  <select
-                    value={form.packageType}
-                    onChange={(e) => setForm({ ...form, packageType: e.target.value })}
-                    className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-gold transition-colors text-slate-900 text-sm appearance-none"
-                    style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%2２%20stroke-linejoin%3D%2２round%２２%3E%3Cpolyline%２ points%３D%２6%２０9%２ 1２%２ 15%２ 18%２ 9%２％３C％２Fpolyline％３E％３C％２Fsvg％３E')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
+                  <label
+                    htmlFor="phoneNumber"
+                    className="absolute left-3 top-3 text-slate-400 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs peer-focus:text-emerald-800 font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs"
                   >
-                    <option>Select Package</option>
-                    <option>Umrah Package</option>
-                    <option>Hajj Package</option>
-                    <option>Flight Only</option>
-                    <option>Saudi Visa</option>
-                    <option>Other</option>
+                    Phone Number
+                  </label>
+                </div>
+
+                <div className="relative">
+                  <select
+                    id="packageType"
+                    value={form.packageType}
+                    onChange={(e) => {
+                      setForm({ ...form, packageType: e.target.value });
+                      if (errors.packageType) setErrors((prev) => ({ ...prev, packageType: "" }));
+                    }}
+                    className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 appearance-none ${form.packageType === "" ? "text-slate-400" : "text-slate-900"} ${errors.packageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
+                    style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
+                  >
+                    <option value="" disabled hidden>Select Package *</option>
+                    <option value="Hajj/Umrah Packages">Hajj/Umrah Packages</option>
+                    <option value="Umrah Package">Umrah Package</option>
+                    <option value="Hajj Package">Hajj Package</option>
+                    <option value="Flight Only">Flight Only</option>
+                    <option value="Saudi Visa">Saudi Visa</option>
+                    <option value="Other">Other</option>
                   </select>
+                  {errors.packageType && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.packageType}</span>}
                 </div>
               </div>
-              <div className="field">
-                <label className="block text-[14px] font-[500] text-[var(--ink-soft)] uppercase tracking-widest mb-2">
-                  Message
-                </label>
+
+              <div className="relative mt-2">
                 <textarea
+                  id="message"
                   rows={4}
-                  placeholder="Your Message"
+                  placeholder=" "
                   value={form.message}
-                  onChange={(e) => setForm({ ...form, message: e.target.value })}
-                  className="w-full border border-slate-200 p-3 rounded-lg bg-white outline-none focus:border-gold transition-colors text-slate-900 text-sm resize-y"
-                  style={{ backgroundImage: "linear-gradient(45deg, transparent 50%, #94a3b8 50%, #94a3b8 55%, transparent 55%, transparent 65%, #94a3b8 65%, #94a3b8 70%, transparent 70%, transparent 80%, #94a3b8 80%, #94a3b8 85%, transparent 85%)", backgroundSize: "12px 12px", backgroundRepeat: "no-repeat", backgroundPosition: "bottom 4px right 4px" }}
+                  onChange={(e) => {
+                    setForm({ ...form, message: e.target.value });
+                    if (errors.message) {
+                      setErrors((prev) => ({ ...prev, message: "" }));
+                    }
+                  }}
+                  className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
                 />
+                <label
+                  htmlFor="message"
+                  className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.message ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"}`}
+                >
+                  Message *
+                </label>
+                {errors.message && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.message}</span>}
               </div>
+
               <div>
                 <button
                   type="submit"
-                  className="w-full bg-gold hover:bg-primary text-black hover:text-white font-bold py-4 px-6 rounded-lg shadow-md transition-all duration-300 tracking-wider uppercase text-xs cursor-pointer text-center"
+                  className="group w-full bg-gold hover:bg-primary text-black hover:text-white font-bold py-4 px-8 rounded-xl shadow-md hover:shadow-md active:scale-[0.99] transition-all duration-200 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
-                  Send Enquiry
+                  <span>SEND ENQUIRY</span>
+                  <i className="fa-solid fa-paper-plane text-xs group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform"></i>
                 </button>
               </div>
             </form>
