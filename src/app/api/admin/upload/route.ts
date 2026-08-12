@@ -22,9 +22,25 @@ export async function POST(req: NextRequest) {
     // Check if FTP is explicitly disabled or local uploads are forced in development
     const useFtp = process.env.ENABLE_FTP === 'true';
 
+    const ext = path.extname(file.name) || '.png';
+    const cleanBaseName = path
+      .basename(file.name, ext)
+      .toLowerCase()
+      .replace(/[^\w-]/g, '');
+    const uniqueFilename = `${cleanBaseName || 'media'}-${Date.now()}${ext.toLowerCase()}`;
+
+    // ALWAYS save a local copy to public/media/... so that local previews work immediately
+    const relativeDir = `${subfolder}/${new Date().toISOString().slice(0, 7)}`.replace(/^\/+|\/+$/g, '');
+    const localUploadDir = path.join(process.cwd(), 'public', 'media', relativeDir);
+    if (!fs.existsSync(localUploadDir)) {
+      fs.mkdirSync(localUploadDir, { recursive: true });
+    }
+    const localFilePath = path.join(localUploadDir, uniqueFilename);
+    fs.writeFileSync(localFilePath, buffer);
+
     if (useFtp) {
-      // Try FTP upload first
-      const uploadResult = await uploadToFtp(buffer, file.name, subfolder);
+      // Try FTP upload
+      const uploadResult = await uploadToFtp(buffer, uniqueFilename, subfolder);
 
       if (uploadResult.success && uploadResult.url) {
         return NextResponse.json({
@@ -36,28 +52,14 @@ export async function POST(req: NextRequest) {
       console.warn('FTP upload failed/timed out, falling back to local public storage:', uploadResult.error);
     }
 
-    const ext = path.extname(file.name) || '.png';
-    const cleanBaseName = path
-      .basename(file.name, ext)
-      .toLowerCase()
-      .replace(/[^\w-]/g, '');
-    const uniqueFilename = `${cleanBaseName || 'media'}-${Date.now()}${ext.toLowerCase()}`;
-
-    const localUploadDir = path.join(process.cwd(), 'public', 'uploads', subfolder);
-    if (!fs.existsSync(localUploadDir)) {
-      fs.mkdirSync(localUploadDir, { recursive: true });
-    }
-
-    const localFilePath = path.join(localUploadDir, uniqueFilename);
-    fs.writeFileSync(localFilePath, buffer);
-
-    const localPublicUrl = `/uploads/${subfolder}/${uniqueFilename}`;
+    // If we reach here, it means FTP is disabled or it failed
+    const localPublicUrl = `/media/${relativeDir}/${uniqueFilename}`;
 
     return NextResponse.json({
       success: true,
       url: localPublicUrl,
-      relativePath: `uploads/${subfolder}/${uniqueFilename}`,
-      warning: 'FTP timed out. File saved to local storage.',
+      relativePath: `media/${relativeDir}/${uniqueFilename}`,
+      warning: useFtp ? 'FTP timed out. File saved to local storage.' : undefined,
     });
   } catch (error: any) {
     console.error('Error in /api/admin/upload POST handler:', error);

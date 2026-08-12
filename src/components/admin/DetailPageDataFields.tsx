@@ -14,14 +14,18 @@ export interface DetailPageData {
     name: string;
     location: string;
     badge: string;
+    badgeIcon?: string;
     nights: string;
+    nightsIcon?: string;
     image: string;
   };
   madinahHotel?: {
     name: string;
     location: string;
     badge: string;
+    badgeIcon?: string;
     nights: string;
+    nightsIcon?: string;
     image: string;
   };
   overview: {

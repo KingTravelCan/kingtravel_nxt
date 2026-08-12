@@ -56,3 +56,4 @@ test-db.js
 clear-db.js
 check_packages.ts
 check_pages.ts
+/public/media
