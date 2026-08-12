@@ -267,7 +267,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
           <div className="flex justify-center mt-12">
             <a
               href="/umrah-packages"
-              className="px-8 py-3.5 border-2 border-[#004B39] text-[#004B39] font-bold text-xs uppercase tracking-widest rounded-full hover:bg-[#004B39] hover:text-white transition-all flex items-center gap-3"
+              className="px-8 py-3.5 border-2 border-[#004B39] text-[#004B39] font-bold text-xs uppercase tracking-widest rounded-md hover:bg-[#004B39] hover:text-white transition-all flex items-center gap-3"
             >
               SEE ALL PACKAGES <span>→</span>
             </a>

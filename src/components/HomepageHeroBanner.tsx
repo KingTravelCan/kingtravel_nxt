@@ -280,7 +280,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                 <div>
                   <button
                     type="submit"
-                    className="w-full bg-gold text-black font-extrabold py-3.5 px-6 rounded-xl shadow-md hover:bg-primary hover:text-white active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
+                    className="w-full bg-gold text-black font-extrabold py-3.5 px-6 rounded-md shadow-md hover:bg-primary hover:text-white active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
                   >
                     <span>SUBMIT</span>
                   </button>

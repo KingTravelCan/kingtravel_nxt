@@ -360,7 +360,7 @@ function SidebarPackageSection({
 
                 <Link
                   href={`/${pkg.slug}`}
-                  className="mt-3 flex w-full items-center justify-center rounded-xl border border-[#004B39]/20 py-2.5 text-[11px] font-extrabold text-[#004B39] hover:bg-[#004B39] hover:text-white hover:border-[#004B39] transition-all no-underline"
+                  className="mt-3 flex w-full items-center justify-center rounded-md border border-[#004B39]/20 py-2.5 text-[11px] font-extrabold text-[#004B39] hover:bg-[#004B39] hover:text-white hover:border-[#004B39] transition-all no-underline"
                 >
                   View Details →
                 </Link>

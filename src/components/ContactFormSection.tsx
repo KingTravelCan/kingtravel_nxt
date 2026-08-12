@@ -260,7 +260,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
               <div>
                 <button
                   type="submit"
-                  className="group w-full bg-gold hover:bg-primary text-black hover:text-white font-bold py-4 px-8 rounded-xl shadow-md hover:shadow-md active:scale-[0.99] transition-all duration-200 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer mt-2"
+                  className="group w-full bg-gold hover:bg-primary text-black hover:text-white font-bold py-4 px-8 rounded-md shadow-md hover:shadow-md active:scale-[0.99] transition-all duration-200 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer mt-2"
                 >
                   <span>SEND ENQUIRY</span>
                   <i className="fa-solid fa-paper-plane text-xs group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform"></i>
