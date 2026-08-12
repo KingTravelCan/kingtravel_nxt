@@ -2682,6 +2682,9 @@ select {
     margin-top: 16px;
     max-width: none;
   }
+  section {
+    padding: 30px 0;
+  }
 }
 
 @media (max-width:480px) {
