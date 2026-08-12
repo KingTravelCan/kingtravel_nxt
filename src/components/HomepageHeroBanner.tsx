@@ -182,16 +182,34 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                     Phone Number
                   </label>
                   <input
-                    type="text"
+                    type="tel"
                     id="quote-phone"
                     placeholder="+1(___) ___-____"
                     value={quoteForm.phone}
+                    inputMode="numeric"
+                    maxLength={11}
                     onChange={(e) => {
-                      setQuoteForm({ ...quoteForm, phone: e.target.value });
-                      if (quoteErrors.phone) setQuoteErrors((prev) => ({ ...prev, phone: "" }));
+                      const value = e.target.value
+                        .replace(/\D/g, "")
+                        .slice(0, 11);
+
+                      setQuoteForm({
+                        ...quoteForm,
+                        phone: value,
+                      });
+
+                      if (quoteErrors.phone) {
+                        setQuoteErrors((prev) => ({
+                          ...prev,
+                          phone: "",
+                        }));
+                      }
                     }}
-                    className={`w-full border p-3 rounded-xl bg-slate-50 outline-none transition-colors duration-300 text-slate-900 text-sm font-medium placeholder:text-slate-400 ${quoteErrors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
-                      }`}
+                    className={`w-full border p-3 rounded-xl bg-slate-50 outline-none transition-colors duration-300 text-slate-900 text-sm font-medium placeholder:text-slate-400 ${
+                      quoteErrors.phone
+                        ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
+                        : "border-slate-300 focus:border-emerald-800"
+                    }`}
                   />
                   {quoteErrors.phone && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.phone}</span>}
                 </div>

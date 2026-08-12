@@ -60,22 +60,25 @@ export async function submitQuoteEnquiryAction(data: {
     });
 
     // Dispatch Dual Emails (Admin Notification + User Confirmation)
-    dispatchFormEmails('Get a Free Quote Form', {
-      enquiryNumber,
-      fullName,
-      email,
-      phone,
-      packageType,
-      departureDate,
-      adults,
-    });
+    const emailResult = await dispatchFormEmails(
+      'Get a Free Quote Form',
+      {
+        enquiryNumber,
+        fullName,
+        email,
+        phone,
+        packageType,
+        departureDate,
+        adults,
+      }
+    );
 
     revalidatePath('/admin/enquiries');
     revalidatePath('/admin/dashboard');
     return {
       success: true,
       enquiryNumber,
-      message: 'Thank you! Your quote request has been submitted to the database. Our specialist will contact you shortly.',
+      message: 'Thank you! Your quote request has been submitted. Our specialist will contact you shortly.',
     };
   } catch (error: any) {
     console.error('Error submitting quote enquiry:', error);
@@ -154,19 +157,22 @@ export async function submitPackageBookingEnquiryAction(data: {
     });
 
     // Dispatch Dual Emails (Admin Notification + User Confirmation)
-    dispatchFormEmails('Package Detail Page Booking Form', {
-      bookingNumber,
-      packageName,
-      fullName,
-      email,
-      phone,
-      adults,
-      children,
-      infants,
-      startDate,
-      totalPrice,
-      message,
-    });
+    const emailResult = await dispatchFormEmails(
+      'Package Detail Page Booking Form',
+      {
+        bookingNumber,
+        packageName,
+        fullName,
+        email,
+        phone,
+        adults,
+        children,
+        infants,
+        startDate,
+        totalPrice,
+        message,
+      }
+    );
 
     revalidatePath('/admin/enquiries');
     revalidatePath('/admin/dashboard');
@@ -242,7 +248,7 @@ export async function submitContactEnquiryAction(data: {
     return {
       success: true,
       ticketNumber,
-      message: 'Thank you! Your message has been logged in our database.',
+      message: 'Thank you!.',
     };
   } catch (error: any) {
     console.error('Error submitting contact enquiry:', error);
@@ -502,6 +508,6 @@ export async function deleteEnquiryAction(id: number): Promise<{ success: boolea
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting enquiry:', error);
-    return { success: false, error: error.message || 'Failed to delete enquiry from database.' };
+    return { success: false, error: error.message || 'Failed to delete enquiry.' };
   }
 }

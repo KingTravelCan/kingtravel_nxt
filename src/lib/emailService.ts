@@ -57,11 +57,16 @@ export async function dispatchFormEmails(
     const userSubject = `Thank you for Contacting King Travel Canada — ${formName} Received`;
 
     // 2. Check if SMTP Credentials exist
-    if (!smtpHost || !smtpUser) {
-      console.log(
-        `[Email Dispatcher - Dry Run] Emails generated for "${formName}". SMTP not configured in .env. Admin: ${adminRecipientEmail}, User: ${userEmail || 'None'}`
+    if (!smtpHost || !smtpUser || !smtpPass) {
+      console.error(
+        `[Email Dispatcher] SMTP is not configured.`
       );
-      return { adminSent: true, userSent: isValidUserEmail };
+
+      return {
+        adminSent: false,
+        userSent: false,
+        error: 'SMTP is not configured.',
+      };
     }
 
     // Dynamically import nodemailer server-side to prevent bundler errors in Client Components
