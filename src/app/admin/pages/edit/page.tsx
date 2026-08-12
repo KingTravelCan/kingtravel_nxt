@@ -468,7 +468,7 @@ function PageBuilderContent() {
       defaultData = {
         eyebrow: 'Luxury Hajj Packages',
         title: 'Packages Officially<br />Sold Out',
-        description: 'We sincerely thank everyone for the incredible trust and response. Our Hajj 2026 packages are now fully sold out...',
+        description: 'Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking – contact us before reserving.',
         items: [
           {
             title: 'Hajj Package',

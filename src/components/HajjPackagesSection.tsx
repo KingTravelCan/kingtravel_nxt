@@ -261,7 +261,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                           setSelectedPkgForBooking(pkg);
                           setBookingModalOpen(true);
                         }}
-                        className="flex-1 py-3.5 bg-gold hover:bg-[#c58d2a] text-ink text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
+                        className="flex-1 py-3.5 bg-gold hover:bg-gold-lt text-ink text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
                       >
                         <LucideIcons.BookOpen className="w-4 h-4" /> Book Hajj 2027
                       </button>
