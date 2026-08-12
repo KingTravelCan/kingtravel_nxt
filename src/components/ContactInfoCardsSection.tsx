@@ -21,7 +21,7 @@ export default function ContactInfoCardsSection({ data }: { data?: any }) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                {data?.headAddress || "1325 Eglinton Ave E Ste 218, Mississauga, ON L4W 4L9, Canada"}
+                {data?.headAddress || "1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada"}
               </a>
             </div>
 

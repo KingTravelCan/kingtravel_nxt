@@ -309,7 +309,7 @@ function PageBuilderContent() {
                     type: 'Contact Info Cards',
                     title: 'Contact Info & Office Locations',
                     data: {
-                      headAddress: '1325 Eglinton Ave E Ste 218, Mississauga, ON L4W 4L9, Canada',
+                      headAddress: '1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada',
                       branchAddress: '22 Ontario St S, Milton, ON L9T 2M6, Canada',
                       phone1: '+1 800-844-5464',
                       phone2: '+1 905-624-8555',
@@ -3423,7 +3423,7 @@ function PageBuilderContent() {
                                           <label className="block text-[9px] font-bold text-slate-500 mb-0.5">HEAD OFFICE ADDRESS</label>
                                           <input
                                             type="text"
-                                            value={sec.data?.headAddress || '1325 Eglinton Ave E Ste 218, Mississauga, ON L4W 4L9, Canada'}
+                                            value={sec.data?.headAddress || '1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada'}
                                             onChange={(e) => updateSectionData(sec.id, 'headAddress', e.target.value)}
                                             className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
                                           />
@@ -3628,7 +3628,7 @@ function PageBuilderContent() {
                                       <label className="block text-[9px] font-bold text-slate-500 mb-0.5">LOCATION ADDRESS</label>
                                       <input
                                         type="text"
-                                        value={sec.data?.headAddress || '1325 Eglinton Ave E Ste 218, Mississauga, ON L4W 4L9, Canada'}
+                                        value={sec.data?.headAddress || '1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada'}
                                         onChange={(e) => updateSectionData(sec.id, 'headAddress', e.target.value)}
                                         className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
                                       />
@@ -3760,7 +3760,7 @@ function PageBuilderContent() {
                                 <div className="mt-2">
                                   <label className="block text-[9px] font-bold text-slate-500 mb-0.5">HEAD OFFICE ADDRESS (HTML ALLOWED)</label>
                                   <textarea
-                                    value={sec.data?.headOffice || '1325 Eglinton Ave E Ste 218,<br />Mississauga, ON L4W 4L9, Canada'}
+                                    value={sec.data?.headOffice || '1325 Eglinton Ave E Suite Number 218,<br />Mississauga, ON L4W 4L9, Canada'}
                                     onChange={(e) => updateSectionData(sec.id, 'headOffice', e.target.value)}
                                     className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
                                     rows={2}

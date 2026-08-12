@@ -609,7 +609,7 @@ export function getResponsiveEmailTemplateHtml(
                         line-height:1.5;
                       "
                     >
-                      1325 Eglinton Ave E Ste 218,
+                      1325 Eglinton Ave E Suite Number 218,
                       Mississauga, ON L4W 4L9, Canada
                       <br>
                       TICO &amp; IATA Licensed Pilgrimage

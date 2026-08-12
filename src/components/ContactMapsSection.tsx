@@ -1,6 +1,6 @@
 export default function ContactMapsSection({ data }: { data?: any }) {
   const headTitle = data?.headTitle || "Head Office";
-  const headAddress = data?.headAddress || "1325 Eglinton Ave E Ste 218, Mississauga, ON L4W 4L9, Canada";
+  const headAddress = data?.headAddress || "1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada";
   const headMap = data?.headMapUrl || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2888.1637775952674!2d-79.62528662340336!3d43.63487945347209!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x882b3897316b3bdb%3A0xc6758691a49d5a8e!2sKing%20Travel%20Can%20Ltd%20-%20Mississauga!5e0!3m2!1sen!2sca!4v1710000000000!5m2!1sen!2sca";
 
   const branchTitle = data?.branchTitle || "Branch Office";
@@ -43,4 +43,4 @@ export default function ContactMapsSection({ data }: { data?: any }) {
     </div>
   );
 }
-
+

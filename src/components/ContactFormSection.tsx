@@ -128,7 +128,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                 <h4 className="">Head Office</h4>
                 <div
                   className=" leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: data.headOffice || "1325 Eglinton Ave E Ste 218,<br/>Mississauga, ON L4W 4L9, Canada" }}
+                  dangerouslySetInnerHTML={{ __html: data.headOffice || "1325 Eglinton Ave E Suite Number 218,<br/>Mississauga, ON L4W 4L9, Canada" }}
                 />
               </div>
 
