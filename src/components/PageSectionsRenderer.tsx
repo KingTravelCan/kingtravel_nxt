@@ -57,15 +57,15 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           return (
             <section key={idx} className="pt-14">
               <div className="max-w-5xl mx-auto px-4">
-                <div className="text-center mb-8">
-                  <span className="text-emerald-800 font-semibold uppercase tracking-wider text-sm block mb-1">
+                <div className="flex flex-col items-center text-center mb-8">
+                  <span className="eyebrow mx-auto block">
                     {sec.data?.eyebrow || "AVAILABLE FLIGHTS"}
                   </span>
                   <h2 className="text-3xl font-serif text-gray-900 tracking-tight">
                     {sec.data?.title || "BEST FARES, LIMITED AVAILABILITY FROM LONDON"}
                   </h2>
                 </div>
-                <div className="space-y-6 mb-12">
+                <div className="space-y-6">
                   {(sec.data?.items || [
                     { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
                     { code: "SA", name: "Saudia Airlines", operatedBy: "Operated By Saudia", originCode: "LHR", originCity: "London", destCode: "MED", destCity: "Madinah", time: "18:45", price: "CAD 1,380.00" }
@@ -113,8 +113,8 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
 
                           <div className="h-8 border-l border-gray-300 mx-6 hidden md:block"></div>
 
-                          <div className="text-center md:text-left">
-                            <span className="block text-xl font-bold text-gray-900">{flight.time || "14:20"}</span>
+                          <div className="text-center ml-2 md:ml-0 md:text-left">
+                            <span className="block text-[16px] md:text-xl font-bold text-gray-900">{flight.time || "14:20"}</span>
                             <span className="text-xs text-gray-400 font-medium uppercase">{flight.timeOriginCode || flight.originCode || "LHR"}</span>
                           </div>
                         </div>
@@ -123,14 +123,14 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                         <div className="text-right flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4 border-t md:border-0 pt-4 md:pt-0 border-gray-200">
                           <div>
                             <span className="text-xs font-semibold text-gray-500 block md:hidden">Price</span>
-                            <span suppressHydrationWarning className="text-2xl font-bold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
+                            <span suppressHydrationWarning className="whitespace-nowrap text-[16px] md:whitespace-normal md:text-2xl font-bold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
                           </div>
                           <a
                             href={flight.bookingUrl || `https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name || "PIA")})`}
                             target={pageData?.slug === "/cheap-flights-air-tickets" || pageData?.slug === "cheap-flights-air-tickets" ? undefined : "_blank"}
                             rel="noopener noreferrer"
                             suppressHydrationWarning
-                            className="bg-emerald-900 text-white hover:bg-gold hover:text-slate-900 font-bold py-3 px-8 rounded-md tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
+                            className="bg-emerald-900 text-white hover:bg-gold hover:text-slate-900 font-bold py-3 px-6 md:px-8 rounded-md tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
                           >
                             Booking
                           </a>
