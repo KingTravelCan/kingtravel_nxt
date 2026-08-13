@@ -78,3 +78,58 @@ export async function adminLogout() {
   await destroySession();
   return redirect('/letstravel');
 }
+
+export async function verifyResetEmail(formData: FormData) {
+  const email = (formData.get('email') as string)?.trim().toLowerCase();
+
+  if (!email) {
+    return { success: false, error: 'Email is required.' };
+  }
+
+  try {
+    const userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
+
+    if (!userList.length) {
+      return { success: false, error: 'No account found with this email address.' };
+    }
+
+    const user = userList[0];
+
+    if (!user.active) {
+      return { success: false, error: 'This user account is currently disabled.' };
+    }
+
+    return { success: true, message: 'Email verified.', email };
+  } catch (error: any) {
+    return { success: false, error: 'Failed to verify email.' };
+  }
+}
+
+export async function resetAdminPassword(formData: FormData) {
+  const email = (formData.get('email') as string)?.trim().toLowerCase();
+  const newPassword = formData.get('password') as string;
+
+  if (!email || !newPassword) {
+    return { success: false, error: 'Email and new password are required.' };
+  }
+
+  try {
+    const userList = await db.select().from(users).where(eq(users.email, email)).limit(1);
+
+    if (!userList.length) {
+      return { success: false, error: 'No account found with this email address.' };
+    }
+
+    const user = userList[0];
+
+    if (!user.active) {
+      return { success: false, error: 'This user account is currently disabled.' };
+    }
+
+    await db.update(users).set({ passwordHash: hashPassword(newPassword) }).where(eq(users.id, user.id));
+
+    return { success: true, message: 'Password has been successfully reset.' };
+  } catch (error: any) {
+    return { success: false, error: 'Failed to reset password.' };
+  }
+}

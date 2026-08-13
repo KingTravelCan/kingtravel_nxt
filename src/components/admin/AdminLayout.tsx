@@ -153,11 +153,10 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs transition-all ${
-                  isActive
-                    ? 'text-[#004B39] font-bold bg-white shadow-md border-l-4 border-[#DB9E30] pl-2.5'
-                    : 'text-slate-300 font-medium hover:bg-white/10 hover:text-white'
-                }`}
+                className={`flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs transition-all ${isActive
+                  ? 'text-[#004B39] font-bold bg-white shadow-md border-l-4 border-[#DB9E30] pl-2.5'
+                  : 'text-slate-300 font-medium hover:bg-white/10 hover:text-white'
+                  }`}
               >
                 <span className={`shrink-0 ${isActive ? 'text-[#004B39]' : 'text-slate-400'}`}>
                   {item.icon}
@@ -173,7 +172,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
           <form action={adminLogout}>
             <button
               type="submit"
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-red-400 hover:text-red-300 hover:bg-red-500/20 bg-red-500/10 transition-colors cursor-pointer text-left border border-red-500/30"
+              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-white hover:bg-red-700 bg-red-600 transition-colors cursor-pointer text-left border border-red-500/30"
             >
               <LogOut className="w-4 h-4 shrink-0 text-red-400" />
               Log Out
@@ -186,7 +185,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* ── Redesigned Sleek Top Header Bar ── */}
         <header className="bg-white border-b border-slate-200/80 px-6 py-3 flex items-center justify-between gap-4 shrink-0 shadow-xs z-30 relative">
-          
+
           {/* Left Side: Page Context & Live Indicator */}
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
