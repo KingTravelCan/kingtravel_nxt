@@ -173,14 +173,14 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
         {flowType === 'login' && (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className={`block text-[11px] font-bold uppercase tracking-wider mb-2 ${error ? 'text-red-400' : 'text-[#EAEAE4]'}`}>
+              <label className={`block text-[11px] font-bold uppercase tracking-wider mb-2 ${error ? 'text-red-400' : 'text-white'}`}>
                 Email Address
               </label>
               <input
                 type="email"
                 name="email"
                 required
-                className={`w-full px-4 py-3 text-sm bg-[#0c1a17] text-white rounded-xl outline-none transition placeholder:text-gray-500 ${error
+                className={`w-full px-4 py-3 text-sm bg-gold/30 text-white rounded-xl outline-none transition placeholder:text-white ${error
                   ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
                   : 'border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]'
                   }`}
@@ -196,7 +196,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                 <button
                   type="button"
                   onClick={() => { setFlowType('forgot_password'); setError(null); setSuccessMsg(null); }}
-                  className="text-[10px] font-bold text-gold hover:text-[#E7BE6E] transition-colors uppercase tracking-wider"
+                  className="text-[10px] font-bold text-gold hover:text-white transition-colors uppercase tracking-wider"
                 >
                   Forgot Password?
                 </button>
@@ -208,7 +208,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                   required
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className={`w-full px-4 py-3 text-sm bg-[#0c1a17] text-white rounded-xl outline-none transition placeholder:text-gray-500 pr-10 ${error
+                  className={`w-full px-4 py-3 text-sm bg-gold/30 text-white rounded-xl outline-none transition placeholder:text-white ${error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
                     : 'border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]'
                     }`}
