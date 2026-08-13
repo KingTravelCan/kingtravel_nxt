@@ -334,11 +334,11 @@ export default function DynamicSiteForm({
                         className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors appearance-none cursor-pointer pr-6 ${formKey === "flightInquiry" ? "bg-white" : ""}`}
                       >
                         <option value="">Select {field.label}</option>
-                        
+
                         {field.type === "dropdown_packages" && allPackages.map(p => (
                           <option key={p.id} value={p.name}>{p.name}</option>
                         ))}
-                        
+
                         {field.type === "dropdown_tab_package" && allPackages
                           .filter(p => {
                             const journeyField = mainFields.find(f => f.type === "bubble_tabs_journey");
@@ -366,7 +366,7 @@ export default function DynamicSiteForm({
                         {isSelect && selectOptions.map(opt => (
                           <option key={opt} value={opt}>{opt}</option>
                         ))}
-                        
+
                         {isSelect && selectOptions.length === 0 && (
                           <>
                             <option value="Option 1">Option 1</option>
@@ -402,9 +402,10 @@ export default function DynamicSiteForm({
                       value={formData[field.id] || ""}
                       onChange={handleChange}
                       placeholder={field.placeholder || "e.g. +1 234 567 890"}
-                      pattern="[0-9+() -]*"
                       inputMode="tel"
-                      className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors ${formKey === "flightInquiry" ? "bg-white" : ""}`}
+                      autoComplete="tel"
+                      className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors ${formKey === "flightInquiry" ? "bg-white" : ""
+                        }`}
                     />
                   ) : (
                     <input
