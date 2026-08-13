@@ -2947,7 +2947,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.time || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], time: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2959,7 +2959,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.timeOriginCode || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], timeOriginCode: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2976,7 +2976,7 @@ function PageBuilderContent() {
                                           type="text"
                                           value={fl.price || ''}
                                           onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
+                                            const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
                                             currentFlights[fIdx] = { ...currentFlights[fIdx], price: e.target.value };
                                             updateSectionData(sec.id, 'items', currentFlights);
                                           }}
@@ -2988,7 +2988,7 @@ function PageBuilderContent() {
                                           type="text"
                                           value={fl.bookingUrl || ''}
                                           onChange={(e) => {
-                                            const currentFlights = [...sec.data?.items];
+                                            const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
                                             currentFlights[fIdx] = { ...currentFlights[fIdx], bookingUrl: e.target.value };
                                             updateSectionData(sec.id, 'items', currentFlights);
                                           }}
@@ -3005,7 +3005,7 @@ function PageBuilderContent() {
                                         type="text"
                                         value={fl.priceSubtext || ''}
                                         onChange={(e) => {
-                                          const currentFlights = [...sec.data?.items];
+                                          const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
                                           currentFlights[fIdx] = { ...currentFlights[fIdx], priceSubtext: e.target.value };
                                           updateSectionData(sec.id, 'items', currentFlights);
                                         }}
