@@ -226,19 +226,19 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                       )}
                     </div>
 
-                    <div className="border-t border-gray-100 pt-5 flex items-end justify-between mb-6">
-                      <div>
+                    <div className="border-t border-gray-100 pt-5 flex items-start justify-between gap-4 mb-6">
+                      <div className="w-1/2">
                         <div className="text-[10px] font-bold text-ink-soft uppercase tracking-widest mb-1.5">
                           OPERATOR
                         </div>
-                        <div className="text-sm font-bold text-ink flex items-center gap-2">
-                          {operatorName}{" "}
-                          <span className="bg-gold text-ink text-[10px] px-1.5 py-0.5 rounded font-black">
+                        <div className="text-sm font-bold text-ink flex items-center gap-2 flex-wrap">
+                          <span>{operatorName}</span>
+                          <span className="bg-gold text-ink text-[10px] px-1.5 py-0.5 rounded font-black shrink-0">
                             {operatorRating}
                           </span>
                         </div>
                       </div>
-                      <div className="text-right">
+                      <div className="w-1/2 text-right">
                         <div className="text-[10px] font-bold text-ink-soft uppercase tracking-widest mb-1.5">
                           {priceSubtext}
                         </div>

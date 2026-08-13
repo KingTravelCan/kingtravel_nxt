@@ -290,15 +290,15 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
 
                     {/* Footer Meta & Actions */}
                     <div className="pt-4 border-t border-slate-100 mt-4 space-y-4">
-                      <div className="flex justify-between items-center">
-                        <div>
+                      <div className="flex justify-between items-start gap-4">
+                        <div className="w-1/2">
                           <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">OPERATOR</span>
-                          <div className="flex items-center gap-1.5 mt-0.5">
+                          <div className="flex items-center gap-1.5 mt-0.5 flex-wrap">
                             <span className="text-xs font-bold text-slate-800">{operatorName}</span>
-                            <span className="text-[9px] font-extrabold bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded">{operatorRating}</span>
+                            <span className="text-[9px] font-extrabold bg-amber-500 text-slate-950 px-1.5 py-0.5 rounded shrink-0">{operatorRating}</span>
                           </div>
                         </div>
-                        <div className="text-right">
+                        <div className="w-1/2 text-right">
                           <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block">{priceSubtext}</span>
                           <div className="text-[24px] font-black text-[#004B39] text-right leading-none">{price}</div>
                         </div>
