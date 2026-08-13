@@ -233,7 +233,7 @@ export default function AirlinesPage() {
               })
             ) : (
               <>
-                <section className="pt-14">
+                <section className="pt-14 bg-sage">
                   <div className="max-w-5xl mx-auto px-4">
                     <div className="text-center mb-8">
                       <span className="text-emerald-800 font-semibold uppercase tracking-wider text-sm block mb-1">Available Flights</span>

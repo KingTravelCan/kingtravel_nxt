@@ -55,7 +55,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
             ];
 
           return (
-            <section key={idx} className="pt-14">
+            <section key={idx} className="pt-14 bg-sage">
               <div className="max-w-5xl mx-auto px-4">
                 <div className="flex flex-col items-center text-center mb-8">
                   <span className="eyebrow mx-auto block">

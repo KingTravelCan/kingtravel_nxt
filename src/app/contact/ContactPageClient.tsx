@@ -259,7 +259,7 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                   placeholder=" "
                   value={contactForm.phone}
                   onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                  className="peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
+                  className="peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-[#111111] placeholder-transparent"
                 />
                 <label
                   htmlFor="phone"

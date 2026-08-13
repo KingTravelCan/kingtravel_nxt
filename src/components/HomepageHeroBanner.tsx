@@ -171,7 +171,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                       setQuoteForm({ ...quoteForm, fullName: e.target.value });
                       if (quoteErrors.fullName) setQuoteErrors((prev) => ({ ...prev, fullName: "" }));
                     }}
-                    className={`w-full border p-3 rounded-sm bg-slate-50 outline-none transition-colors duration-300 text-slate-900 text-sm font-medium placeholder:font-light placeholder:text-slate-400 ${quoteErrors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-line focus:border-gold"
+                    className={`w-full border p-3 rounded-xl bg-slate-50 outline-none transition-colors duration-300 text-[#111111] text-sm font-medium placeholder:text-slate-400 ${quoteErrors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
                       }`}
                   />
                   {quoteErrors.fullName && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.fullName}</span>}
@@ -205,11 +205,10 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                         }));
                       }
                     }}
-                    className={`w-full border p-3 rounded-sm bg-slate-50 outline-none transition-colors duration-300 text-slate-900 text-sm font-medium placeholder:text-slate-400 ${
-                      quoteErrors.phone
-                        ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
-                        : "border-line focus:border-gold"
-                    }`}
+                    className={`w-full border p-3 rounded-xl bg-slate-50 outline-none transition-colors duration-300 text-slate-900 text-sm font-medium placeholder:text-slate-400 ${quoteErrors.phone
+                      ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
+                      : "border-slate-300 focus:border-emerald-800"
+                      }`}
                   />
                   {quoteErrors.phone && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.phone}</span>}
                 </div>
