@@ -150,7 +150,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
 
         if (sec.type === "Flight Assistance CTA" || sec.type === "Flight Desk CTA") {
           return (
-            <section key={idx} className="tint mt-12 py-20 bg-emerald-50/60 border-t border-emerald-100">
+            <section key={idx} className="tint mt-12 py-20">
               <div className="wrap text-center max-w-3xl mx-auto px-4">
                 <h2 className=" mb-4">
                   {sec.data?.title || "Need Flight Booking Assistance?"}
@@ -177,12 +177,14 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
             "Contact Us Form": "contact",
             "Drop Us A Message Form": "dropUsMessage"
           };
+          const isFlightBookingPage = pageData?.slug === "/airline-tickets-booking";
           const formKey = formKeyMap[sec.type];
           return (
-            <section key={idx} className="relative z-10 w-full flex justify-center" suppressHydrationWarning>
+            <section key={idx} className={`relative z-10 w-full flex justify-center ${isFlightBookingPage ? "bg-white !py-0" : ""}`} suppressHydrationWarning>
               <DynamicSiteForm
                 formKey={formKey}
-                bgColor={sec.data?.bgColor}
+                bgColor={isFlightBookingPage ? "transparent" : sec.data?.bgColor}
+                forceNoPadding={isFlightBookingPage}
                 maxWidth={sec.data?.maxWidth}
                 eyebrow={sec.data?.eyebrow}
                 title={sec.data?.title}

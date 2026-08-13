@@ -765,7 +765,7 @@ export async function getFormsSettings() {
         recipientEmail: 'flights@kingtravelcan.com',
         successMessage: 'Flight request received! We will send available flight options to your email.',
         enabled: true,
-        buttonText: 'Request Flight Quote',
+        buttonText: 'Request Booking',
         fieldsCount: 6,
       },
     },

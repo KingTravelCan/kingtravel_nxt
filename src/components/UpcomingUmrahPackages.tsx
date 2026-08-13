@@ -11,7 +11,8 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
   const title = data?.title || "Umrah Packages<br />from Canada";
   const description =
     data?.description ||
-    "Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking – contact us before reserving.";
+    data?.subtext ||
+    "Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking — contact us before reserving.";
 
   const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
   const [loading, setLoading] = useState(!initialPackages);

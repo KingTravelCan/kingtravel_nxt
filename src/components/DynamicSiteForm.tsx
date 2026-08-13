@@ -18,8 +18,9 @@ interface DynamicSiteFormProps {
   bgColor?: string;
   maxWidth?: string;
   eyebrow?: string;
-  title?: string;
-  description?: string;
+  title?: string | null;
+  description?: string | null;
+  forceNoPadding?: boolean;
 }
 
 // ── Dropdown options keyed by field label (case-insensitive partial match) ──
@@ -57,6 +58,7 @@ export default function DynamicSiteForm({
   eyebrow,
   title,
   description,
+  forceNoPadding,
 }: DynamicSiteFormProps) {
   const [mounted, setMounted] = useState(false);
   const [fieldsList, setFieldsList] = useState<any[]>([]);
@@ -273,8 +275,8 @@ export default function DynamicSiteForm({
   const richFields = fieldsList.filter((f) => f.type === "richtext" || f.type === "textarea");
 
   return (
-    <div style={{ backgroundColor: finalBgColor }} className="w-full">
-      <div style={{ maxWidth: finalMaxWidth }} className="mx-auto px-4 py-12">
+    <div style={{ backgroundColor: finalBgColor }} className="w-full !bg-white">
+      <div style={{ maxWidth: finalMaxWidth }} className={`mx-auto px-4 ${forceNoPadding ? "py-8" : "py-10"}`}>
         <div className="text-center mb-10">
           {eyebrow && (
             <div className="text-[#004B39] font-bold text-sm tracking-widest uppercase mb-3">
@@ -284,7 +286,7 @@ export default function DynamicSiteForm({
           <h2 className="text-3xl md:text-4xl font-extrabold text-[#004B39] mb-4 uppercase">
             {displayTitle}
           </h2>
-          <p className="text-slate-700 font-mono text-sm max-w-2xl mx-auto uppercase tracking-wide">
+          <p className="text-slate-700 font-sans text-sm max-w-2xl mx-auto uppercase tracking-wider">
             {displayDesc}
           </p>
         </div>

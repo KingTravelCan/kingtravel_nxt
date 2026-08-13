@@ -22,14 +22,14 @@ export default async function DynamicPage({
     if (slug.length === 1) {
       const packageData = await getPackageBySlug(slug[0]).catch(() => null);
       if (packageData) {
-        const seoData = packageData.id 
+        const seoData = packageData.id
           ? await getPageSeoAction(`pkg_${packageData.id}`).catch(() => null)
           : null;
         return (
-          <PackageDetailPageClient 
-            initialSlug={slug[0]} 
-            initialPackage={packageData} 
-            initialSeo={seoData} 
+          <PackageDetailPageClient
+            initialSlug={slug[0]}
+            initialPackage={packageData}
+            initialSeo={seoData}
           />
         );
       }
@@ -65,8 +65,10 @@ export default async function DynamicPage({
     needsHajj ? getPackagesByType("hajj") : Promise.resolve([]),
   ]);
 
+  const isFlightBooking = slug.join("/") === "airline-tickets-booking";
+
   return (
-    <main className="bg-sage min-h-screen">
+    <main className={`${isFlightBooking ? "bg-white" : "bg-white"} min-h-screen`}>
       <PageSeoHead pageTitle={page.title} seoData={page.seoData} />
 
       <PageBanner
