@@ -544,14 +544,14 @@ function PageBuilderContent() {
         title: 'Hajj 2027 Services',
         subtitle: 'From Departure to Return, We Take Care of Every Detail of Your Hajj.',
         items: [
-          { icon: '🕋', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
-          { icon: '🤝', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
-          { icon: '🍽️', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
-          { icon: '🪪', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
-          { icon: '🚐', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
-          { icon: '🛋️', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
-          { icon: '🛏️', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
-          { icon: '📖', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
+          { icon: 'Users', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
+          { icon: 'Handshake', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
+          { icon: 'Utensils', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
+          { icon: 'IdCard', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
+          { icon: 'Bus', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
+          { icon: 'Building2', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
+          { icon: 'BedDouble', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
+          { icon: 'BookOpen', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
         ],
       };
     } else if (type === 'Banner 4 Grids') {
@@ -1579,7 +1579,7 @@ function PageBuilderContent() {
                         {editingSectionId === sec.id && (
                           <div className="pt-4 border-t border-slate-200 flex flex-col gap-3">
                             {/* Universal Section Header Block (Eyebrow, Heading, Description) - Hidden for Blog sections */}
-                            {sec.type !== 'Latest Blogs Grid' && sec.type !== 'Blog Posts Carousel' && sec.type !== 'Testimonials' && sec.type !== 'Hajj Services Grid' && sec.type !== 'Text Block (Rich Text)' && sec.type !== 'Packages Content (Rich Text)' && sec.type !== 'Sold Out Packages' && (
+                            {sec.type !== 'Latest Blogs Grid' && sec.type !== 'Blog Posts Carousel' && sec.type !== 'Testimonials' && sec.type !== 'Hajj Services Grid' && sec.type !== 'Text Block (Rich Text)' && sec.type !== 'Packages Content (Rich Text)' && (
                               <div className="bg-slate-50 border border-slate-200 rounded-xl p-3 flex flex-col gap-2">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase flex items-center gap-1.5">
                                   ✏️ SECTION HEADING & BADGE CONTENT
@@ -2403,14 +2403,14 @@ function PageBuilderContent() {
 
                                 {/* Service cards CRUD list */}
                                 {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
-                                  { icon: '🕋', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
-                                  { icon: '🤝', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
-                                  { icon: '🍽️', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
-                                  { icon: '🪪', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
-                                  { icon: '🚐', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
-                                  { icon: '🛋️', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
-                                  { icon: '🛏️', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
-                                  { icon: '📖', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
+                                  { icon: 'Users', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
+                                  { icon: 'Handshake', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
+                                  { icon: 'Utensils', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
+                                  { icon: 'IdCard', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
+                                  { icon: 'Bus', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
+                                  { icon: 'Building2', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
+                                  { icon: 'BedDouble', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
+                                  { icon: 'BookOpen', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
                                 ]).map((svc: any, sIdx: number, allItems: any[]) => (
                                   <div key={sIdx} className="bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex flex-col gap-2">
                                     <div className="flex justify-between items-center">

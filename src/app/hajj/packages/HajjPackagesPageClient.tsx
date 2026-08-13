@@ -7,6 +7,7 @@ import PageBanner from "@/components/PageBanner";
 import PackageDetailModal, { PackageDetailData } from "@/components/PackageDetailModal";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import PageSectionsRenderer from "@/components/PageSectionsRenderer";
+import DynamicIcon from "@/components/ui/DynamicIcon";
 
 const hajjCardsData = [
   {
@@ -324,14 +325,14 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
       {(() => {
         // Defaults matching the screenshot layout
         const DEFAULT_SERVICES = [
-          { icon: '🕋', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
-          { icon: '🤝', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
-          { icon: '🍽️', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
-          { icon: '🪪', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
-          { icon: '🚐', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
-          { icon: '🛋️', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
-          { icon: '🛏️', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
-          { icon: '📖', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
+          { icon: 'Users', title: 'Pre-Hajj Meet up', description: 'Get to know each other and held a meeting with all Hajjis' },
+          { icon: 'Handshake', title: 'Meet & Assist', description: 'A dedicated team to assist and guide' },
+          { icon: 'Utensils', title: 'Buffet Meals', description: 'Segregated full board buffet food' },
+          { icon: 'IdCard', title: 'Visa Acquisition', description: 'We facilitate with visa documentation and services' },
+          { icon: 'Bus', title: 'Luxury Transportation', description: 'We offer luxury busses and private vehicle' },
+          { icon: 'Building2', title: '5 Star Accommodation', description: 'Get a comfort living 5 star hotel facility' },
+          { icon: 'BedDouble', title: 'Sofa Mattress in Mina', description: 'Premium quality sofas and mattress' },
+          { icon: 'BookOpen', title: 'Guide & Scholar', description: '3 to 4 training sessions with renowned scholars' },
         ];
         let eyebrow = 'WHAT IS INCLUDED';
         let heading = 'Hajj 2027 Services';
@@ -369,8 +370,8 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
                     key={i}
                     className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col items-center text-center gap-3 hover:shadow-md transition-shadow"
                   >
-                    <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-3xl mb-1">
-                      {svc.icon}
+                    <div className="w-16 h-16 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-gold mb-1">
+                      <DynamicIcon name={svc.icon || 'Star'} className="w-8 h-8" />
                     </div>
                     <h3 className="text-sm font-extrabold text-[#004B39] leading-snug">{svc.title}</h3>
                     <p className="text-[11px] text-slate-500 leading-relaxed">{svc.description}</p>
