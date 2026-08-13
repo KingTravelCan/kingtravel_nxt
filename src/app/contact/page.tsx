@@ -13,3 +13,4 @@ export default async function ContactPage() {
 
   return <ContactPageClient initialPageData={pageData} initialFormConfig={contactFormConfig} />;
 }
+// Force recompile to clear RSC cache

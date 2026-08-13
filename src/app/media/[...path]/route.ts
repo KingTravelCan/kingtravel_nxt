@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Client } from 'basic-ftp';
 import { PassThrough } from 'stream';
+import fs from 'fs';
+import path from 'path';
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ path: string[] }> }) {
   // Await the params object in Next.js 16+ App Router
@@ -9,6 +11,31 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   const client = new Client(4000);
 
   try {
+    // Guess mime type
+    const ext = filePath.split('.').pop()?.toLowerCase();
+    const mimeTypes: Record<string, string> = {
+      'jpg': 'image/jpeg',
+      'jpeg': 'image/jpeg',
+      'png': 'image/png',
+      'gif': 'image/gif',
+      'webp': 'image/webp',
+      'svg': 'image/svg+xml'
+    };
+    const contentType = mimeTypes[ext!] || 'application/octet-stream';
+
+    // 1. First, check if the file exists locally (Fallback if FTP timed out during upload)
+    const localFilePath = path.join(process.cwd(), 'public', filePath);
+    if (fs.existsSync(localFilePath)) {
+      const fileBuffer = fs.readFileSync(localFilePath);
+      return new NextResponse(fileBuffer as any, {
+        headers: {
+          'Content-Type': contentType,
+          'Cache-Control': 'public, max-age=31536000, immutable',
+        },
+      });
+    }
+
+    // 2. If not local, try fetching from FTP
     const ftpHost = process.env.FTP_HOST;
     const ftpUser = process.env.FTP_USER;
     const ftpPassword = process.env.FTP_PASSWORD;
@@ -27,17 +54,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     const targetFile = `${ftpRootDir.replace(/\/$/, '')}/${filePath}`;
 
-    // Guess mime type
-    const ext = filePath.split('.').pop()?.toLowerCase();
-    const mimeTypes: Record<string, string> = {
-      'jpg': 'image/jpeg',
-      'jpeg': 'image/jpeg',
-      'png': 'image/png',
-      'gif': 'image/gif',
-      'webp': 'image/webp',
-      'svg': 'image/svg+xml'
-    };
-    const contentType = mimeTypes[ext!] || 'application/octet-stream';
 
     const pass = new PassThrough();
 

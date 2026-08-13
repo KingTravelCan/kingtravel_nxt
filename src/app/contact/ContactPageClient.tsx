@@ -100,6 +100,12 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
               <a href={data?.tiktokUrl || "https://www.tiktok.com/@kingtravelcan"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-black/5 text-black hover:bg-black hover:text-white transition duration-200 flex items-center justify-center no-underline">
                 <i className="fa-brands fa-tiktok text-sm"></i>
               </a>
+              <a href={data?.twitterUrl || "https://twitter.com/kingtravelcan"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-black/5 text-black hover:bg-black hover:text-white transition duration-200 flex items-center justify-center no-underline">
+                <i className="fa-brands fa-x-twitter text-sm"></i>
+              </a>
+              <a href={data?.pinterestUrl || "https://pinterest.com/kingtravelcan"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-[#E60023]/10 text-[#E60023] hover:bg-[#E60023] hover:text-white transition duration-200 flex items-center justify-center no-underline">
+                <i className="fa-brands fa-pinterest-p text-sm"></i>
+              </a>
             </div>
           </div>
         </div>

@@ -256,6 +256,8 @@ export async function getDefaultFooterData() {
       { name: 'Instagram', url: 'https://www.instagram.com/kingtravelcan/', icon: '/img/insta.svg', openInNewTab: true },
       { name: 'LinkedIn', url: 'https://ca.linkedin.com/company/kingtravelcan', icon: '/img/in.svg', openInNewTab: true },
       { name: 'TikTok', url: 'https://www.tiktok.com/@kingtravelcan', icon: '/img/tik.svg', openInNewTab: true },
+      { name: 'X (Twitter)', url: 'https://twitter.com/kingtravelcan', icon: '/img/x.svg', openInNewTab: true },
+      { name: 'Pinterest', url: 'https://pinterest.com/kingtravelcan', icon: '/img/pinterest.svg', openInNewTab: true },
     ],
     trustBadges: [
       { name: 'ACTA', icon: '/img/acta.svg' },
