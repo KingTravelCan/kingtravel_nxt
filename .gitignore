@@ -63,3 +63,12 @@ scripts/fix_input_colors.js
 create_table.ts
 test_fetch.ts
 test_insert.ts
+/drizzle
+/drizzle/meta
+temp-fetch.js
+temp-fetch.ts
+test-insert.ts
+update-flight-fields.ts
+migrate-flight-enquiries.ts
+src/lib/emailTemplate.ts
+src/lib/emailTemplate.ts

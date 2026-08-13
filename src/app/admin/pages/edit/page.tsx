@@ -84,6 +84,19 @@ const SECTION_CATALOG: SectionCategory[] = [
     ],
   },
   {
+    category: 'Dynamic Forms',
+    icon: '📝',
+    items: [
+      { type: 'Quote Form', description: 'Dynamic CMS controlled get a free quote form.', pages: ['Any Page'] },
+      { type: 'Package Inquiry Form', description: 'Dynamic CMS controlled package inquiry form.', pages: ['Any Page'] },
+      { type: 'Package Detail Form', description: 'Dynamic CMS controlled package detail booking form.', pages: ['Any Page'] },
+      { type: 'Visa Consultation Form', description: 'Dynamic CMS controlled visa consultation form.', pages: ['Any Page'] },
+      { type: 'Flight Booking Form', description: 'Dynamic CMS controlled flight quote form.', pages: ['Airlines', 'Any Page'] },
+      { type: 'Contact Us Form', description: 'Dynamic CMS controlled contact us form.', pages: ['Any Page'] },
+      { type: 'Drop Us A Message Form', description: 'Dynamic CMS controlled drop us a message form.', pages: ['Any Page'] },
+    ]
+  },
+  {
     category: 'Contact',
     icon: '📞',
     items: [
@@ -3599,6 +3612,36 @@ function PageBuilderContent() {
                                       type="text"
                                       value={sec.data?.subtitle || "Fill out the form below and we'll get back to you shortly."}
                                       onChange={(e) => updateSectionData(sec.id, 'subtitle', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {["Quote Form", "Package Inquiry Form", "Package Detail Form", "Visa Consultation Form", "Flight Booking Form", "Contact Us Form", "Drop Us A Message Form"].includes(sec.type) && (
+                              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
+                                <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
+                                  📝 Dynamic Form Settings
+                                </span>
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">BACKGROUND COLOR</label>
+                                    <input
+                                      type="text"
+                                      placeholder="e.g. #F0FAF0 or transparent"
+                                      value={sec.data?.bgColor || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'bgColor', e.target.value)}
+                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                    />
+                                  </div>
+                                  <div>
+                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">MAX WIDTH (e.g. 1280px)</label>
+                                    <input
+                                      type="text"
+                                      placeholder="e.g. 1280px"
+                                      value={sec.data?.maxWidth || ''}
+                                      onChange={(e) => updateSectionData(sec.id, 'maxWidth', e.target.value)}
                                       className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
                                     />
                                   </div>

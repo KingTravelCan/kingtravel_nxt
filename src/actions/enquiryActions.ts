@@ -381,7 +381,7 @@ export async function getContactEnquiriesList() {
   }
 }
 
-export async function submitFlightEnquiryAction(data: {
+export async function submitFlightInquiry(data: {
   fullName: string;
   email: string;
   phone: string;
@@ -389,7 +389,10 @@ export async function submitFlightEnquiryAction(data: {
   destinationCity?: string;
   departureDate?: string;
   returnDate?: string;
+  tripType?: string;
   passengers?: number;
+  flightClass?: string;
+  message?: string;
 }) {
   try {
     const {
@@ -400,7 +403,10 @@ export async function submitFlightEnquiryAction(data: {
       destinationCity = 'Jeddah (JED)',
       departureDate = '',
       returnDate = '',
+      tripType = 'Round Trip',
       passengers = 1,
+      flightClass = 'Economy',
+      message = '',
     } = data;
 
     if (!fullName || !email || !phone) {
@@ -419,7 +425,10 @@ export async function submitFlightEnquiryAction(data: {
         destinationCity,
         departureDate,
         returnDate,
+        tripType,
         passengers,
+        flightClass,
+        message,
         status: 'new',
       });
     } catch (subErr) {
@@ -435,6 +444,7 @@ export async function submitFlightEnquiryAction(data: {
       preferredPackageType: `Flight: ${originCity} to ${destinationCity}`,
       adults: passengers,
       departureMonth: departureDate,
+      message,
       status: 'new',
     });
 
@@ -448,7 +458,10 @@ export async function submitFlightEnquiryAction(data: {
       destinationCity,
       departureDate,
       returnDate,
+      tripType,
       passengers,
+      flightClass,
+      message,
     });
 
     revalidatePath('/admin/enquiries');

@@ -662,6 +662,10 @@ export async function saveDisclaimerSettingsAction(data: DisclaimerSettings) {
 
 let formsSettingsMemoryCache: any = null;
 
+export async function clearFormsSettingsCache() {
+  formsSettingsMemoryCache = null;
+}
+
 export async function getFormsSettings() {
   if (formsSettingsMemoryCache) return formsSettingsMemoryCache;
   try {

@@ -17,6 +17,7 @@ import ContactMapsSection from '@/components/ContactMapsSection';
 import CertificationsFlipCardsSection from '@/components/CertificationsFlipCardsSection';
 import SoldOutPackagesSection from '@/components/SoldOutPackagesSection';
 import Banner4GridsSection from '@/components/Banner4GridsSection';
+import DynamicSiteForm from '@/components/DynamicSiteForm';
 import { useEffect } from "react";
 export default function PageSectionsRenderer({ sections, pageData, initialPackageData }: { sections: any[], pageData?: any, initialPackageData?: any }) {
   if (!sections || !Array.isArray(sections)) return null;
@@ -164,6 +165,30 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           );
         }
 
+        const isDynamicForm = ["Quote Form", "Package Inquiry Form", "Package Detail Form", "Visa Consultation Form", "Flight Booking Form", "Contact Us Form", "Drop Us A Message Form"].includes(sec.type);
+        if (isDynamicForm) {
+          const formKeyMap: Record<string, string> = {
+            "Quote Form": "quoteForm",
+            "Package Inquiry Form": "packageInquiry",
+            "Package Detail Form": "packageDetailForm",
+            "Visa Consultation Form": "visaConsultation",
+            "Flight Booking Form": "flightInquiry",
+            "Contact Us Form": "contact",
+            "Drop Us A Message Form": "dropUsMessage"
+          };
+          const formKey = formKeyMap[sec.type];
+          return (
+            <section key={idx} className="relative z-10 w-full flex justify-center" suppressHydrationWarning>
+              <DynamicSiteForm 
+                formKey={formKey} 
+                bgColor={sec.data?.bgColor} 
+                maxWidth={sec.data?.maxWidth}
+                title={sec.data?.title}
+                description={sec.data?.subtitle}
+              />
+            </section>
+          );
+        }
 
         if (sec.type === "Sold Out Packages") {
           const ids = Array.isArray(sec.data?.packageIds) ? sec.data.packageIds.map(Number).filter(Boolean) : [];
