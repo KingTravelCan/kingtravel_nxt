@@ -102,7 +102,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                           <div className="flex-1 flex items-center justify-center px-4 relative">
                             <div className="w-full border-t border-dashed border-gray-300 absolute"></div>
                             <div className="bg-gray-100 px-2 z-10 rounded-full py-1">
-                              <i className="fa-solid fa-plane text-sky-400 text-sm rotate-45"></i>
+                              <i className="fa-solid fa-plane text-gold text-sm rotate-320"></i>
                             </div>
                           </div>
 
