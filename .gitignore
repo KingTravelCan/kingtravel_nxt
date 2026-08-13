@@ -72,3 +72,4 @@ update-flight-fields.ts
 migrate-flight-enquiries.ts
 src/lib/emailTemplate.ts
 src/lib/emailTemplate.ts
+drizzle/meta/_journal.json

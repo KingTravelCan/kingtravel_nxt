@@ -3272,7 +3272,7 @@ export default function AdminSettingsPage() {
                                           const updated = fieldsList.filter((_, i) => i !== idx);
                                           setFormFieldsState((prev) => ({ ...prev, [f.key]: updated }));
                                         }}
-                                        className="w-8 h-8 rounded-full bg-rose-50 hover:bg-rose-600 text-rose-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all shrink-0"
+                                        className="w-8 h-8 rounded-full bg-red-50 hover:bg-red-600 text-red-600 hover:text-white flex items-center justify-center border-none cursor-pointer transition-all shrink-0"
                                         title="Delete Field Input"
                                       >
                                         <Trash2 className="w-3.5 h-3.5" />
@@ -3894,131 +3894,131 @@ export default function AdminSettingsPage() {
         message={notificationConfig.message}
         onClose={() => setNotificationConfig((prev) => ({ ...prev, isOpen: false }))}
       />
-      
+
       {/* Drawer for Inbox Message */}
       {activeInboxMsg && (
         <div className="fixed inset-0 z-[100] flex justify-end">
           <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity" onClick={() => setActiveInboxMsg(null)} />
           <div className="relative w-full max-w-2xl bg-slate-50 h-full shadow-2xl animate-in slide-in-from-right duration-300 flex flex-col border-l border-slate-200">
-             
-             {/* Drawer Header Toolbar */}
-             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white shrink-0">
-                <h3 className="font-bold text-slate-900 m-0 text-base">Message Details</h3>
-                <button onClick={() => setActiveInboxMsg(null)} className="p-2 bg-slate-50 rounded-full text-slate-500 hover:text-slate-900 shadow-sm border border-slate-200 cursor-pointer transition-colors">
-                   <X className="w-4 h-4" />
-                </button>
-             </div>
 
-             {/* Drawer Body - Email Template Design */}
-             <div className="flex-1 overflow-y-auto p-4 md:p-8">
-               <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-xl mx-auto flex flex-col font-sans">
-                 
-                 {/* Email Header */}
-                 <div className="bg-[#004B39] px-8 py-10 flex flex-col items-center text-center">
-                   <span className="text-[10px] font-bold text-[#E7BE6E] border border-[#E7BE6E] rounded-full px-4 py-1.5 uppercase tracking-widest mb-6">
-                     INQUIRY RECEIVED
-                   </span>
-                   <h1 className="text-white font-serif text-3xl font-normal m-0 mb-2">
-                     King Travel Canada
-                   </h1>
-                   <p className="text-[#a5d6c8] text-sm m-0 font-medium tracking-wide">
-                     Licensed Hajj &amp; Umrah Travel Operator
-                   </p>
-                 </div>
+            {/* Drawer Header Toolbar */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white shrink-0">
+              <h3 className="font-bold text-slate-900 m-0 text-base">Message Details</h3>
+              <button onClick={() => setActiveInboxMsg(null)} className="p-2 bg-slate-50 rounded-full text-slate-500 hover:text-slate-900 shadow-sm border border-slate-200 cursor-pointer transition-colors">
+                <X className="w-4 h-4" />
+              </button>
+            </div>
 
-                 {/* Email Content */}
-                 <div className="p-8 pb-10">
-                   <h2 className="text-slate-900 font-bold text-xl m-0 mb-4">
-                     {activeInboxMsg.type === 'quote_request' ? 'New Quote Request Received' : 'New Inquiry Received'}
-                   </h2>
-                   <p className="text-slate-600 text-sm leading-relaxed m-0 mb-8">
-                     A new inquiry has been received via the website form. The submission details and lead contact information are listed below:
-                   </p>
+            {/* Drawer Body - Email Template Design */}
+            <div className="flex-1 overflow-y-auto p-4 md:p-8">
+              <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-xl mx-auto flex flex-col font-sans">
 
-                   {/* Date Box */}
-                   <div className="bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 flex items-center gap-3 mb-8 text-sm">
-                     <span className="text-lg">📅</span>
-                     <span className="text-slate-600 font-medium">Date: <strong className="text-slate-900 ml-1">{new Date(activeInboxMsg.createdAt || new Date()).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</strong></span>
-                   </div>
+                {/* Email Header */}
+                <div className="bg-[#004B39] px-8 py-10 flex flex-col items-center text-center">
+                  <span className="text-[10px] font-bold text-[#E7BE6E] border border-[#E7BE6E] rounded-full px-4 py-1.5 uppercase tracking-widest mb-6">
+                    INQUIRY RECEIVED
+                  </span>
+                  <h1 className="text-white font-serif text-3xl font-normal m-0 mb-2">
+                    King Travel Canada
+                  </h1>
+                  <p className="text-[#a5d6c8] text-sm m-0 font-medium tracking-wide">
+                    Licensed Hajj &amp; Umrah Travel Operator
+                  </p>
+                </div>
 
-                   {/* Details Section */}
-                   <div className="flex items-center gap-2 mb-4">
-                     <span className="text-lg">📋</span>
-                     <h3 className="font-bold text-[#004B39] text-sm uppercase tracking-wider m-0">
-                       SUBMITTED FORM DETAILS
-                     </h3>
-                   </div>
+                {/* Email Content */}
+                <div className="p-8 pb-10">
+                  <h2 className="text-slate-900 font-bold text-xl m-0 mb-4">
+                    {activeInboxMsg.type === 'quote_request' ? 'New Quote Request Received' : 'New Inquiry Received'}
+                  </h2>
+                  <p className="text-slate-600 text-sm leading-relaxed m-0 mb-8">
+                    A new inquiry has been received via the website form. The submission details and lead contact information are listed below:
+                  </p>
 
-                   <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-200 text-sm">
-                     <div className="flex flex-col sm:flex-row sm:items-center">
-                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Ticket Reference #</div>
-                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600 font-mono text-xs">{activeInboxMsg.enquiryNumber || `TKT-${Math.floor(Math.random() * 1000000)}`}</div>
-                     </div>
-                     <div className="flex flex-col sm:flex-row sm:items-center">
-                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Full Name</div>
-                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.fullName || 'N/A'}</div>
-                     </div>
-                     <div className="flex flex-col sm:flex-row sm:items-center">
-                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Email Address</div>
-                       <div className="w-full sm:w-2/3 px-5 py-4 text-[#0066cc] hover:underline cursor-pointer break-all">
-                         <a href={`mailto:${activeInboxMsg.email}`}>{activeInboxMsg.email}</a>
-                       </div>
-                     </div>
-                     <div className="flex flex-col sm:flex-row sm:items-center">
-                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Phone Number</div>
-                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.phone || 'N/A'}</div>
-                     </div>
-                     {activeInboxMsg.whatsapp && (
-                       <div className="flex flex-col sm:flex-row sm:items-center">
-                         <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">WhatsApp Number</div>
-                         <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.whatsapp}</div>
-                       </div>
-                     )}
-                     {(activeInboxMsg.city || activeInboxMsg.province) && (
-                       <div className="flex flex-col sm:flex-row sm:items-center">
-                         <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Location</div>
-                         <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{[activeInboxMsg.city, activeInboxMsg.province].filter(Boolean).join(', ')}</div>
-                       </div>
-                     )}
-                     <div className="flex flex-col sm:flex-row sm:items-center">
-                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Selected Package / Service</div>
-                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.preferredPackageType || 'General Inquiry'}</div>
-                     </div>
-                     {activeInboxMsg.departureMonth && (
-                       <div className="flex flex-col sm:flex-row sm:items-center">
-                         <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Departure</div>
-                         <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.departureMonth}</div>
-                       </div>
-                     )}
-                     {(activeInboxMsg.adults > 0 || activeInboxMsg.children > 0) && (
-                       <div className="flex flex-col sm:flex-row sm:items-center">
-                         <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Passengers</div>
-                         <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">Adults: {activeInboxMsg.adults || 0}, Children: {activeInboxMsg.children || 0}, Infants: {activeInboxMsg.infants || 0}</div>
-                       </div>
-                     )}
-                     <div className="flex flex-col sm:flex-row">
-                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Message / Special Notes</div>
-                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600 whitespace-pre-wrap">{activeInboxMsg.message || 'N/A'}</div>
-                     </div>
-                   </div>
-                 </div>
+                  {/* Date Box */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 flex items-center gap-3 mb-8 text-sm">
+                    <span className="text-lg">📅</span>
+                    <span className="text-slate-600 font-medium">Date: <strong className="text-slate-900 ml-1">{new Date(activeInboxMsg.createdAt || new Date()).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</strong></span>
+                  </div>
 
-                 {/* Email Footer */}
-                 <div className="bg-[#111827] px-8 py-10 flex flex-col items-center text-center">
-                   <h3 className="text-white font-bold m-0 mb-3 text-sm">King Travel Canada Ltd.</h3>
-                   <p className="text-slate-400 text-[11px] leading-relaxed m-0 mb-6 max-w-sm">
-                     1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada<br/>
-                     TICO &amp; IATA Licensed Pilgrimage &amp; Flight Operator
-                   </p>
-                   <a href="#" className="text-[#E7BE6E] text-xs font-bold hover:underline mb-8">
-                     Visit Official Website →
-                   </a>
-                   <p className="text-slate-500 text-[10px] m-0">
-                     © {new Date().getFullYear()} King Travel Canada Ltd. All Rights Reserved.
-                   </p>
-                 </div>
-               </div>
-             </div>
+                  {/* Details Section */}
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="text-lg">📋</span>
+                    <h3 className="font-bold text-[#004B39] text-sm uppercase tracking-wider m-0">
+                      SUBMITTED FORM DETAILS
+                    </h3>
+                  </div>
+
+                  <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-200 text-sm">
+                    <div className="flex flex-col sm:flex-row sm:items-center">
+                      <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Ticket Reference #</div>
+                      <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600 font-mono text-xs">{activeInboxMsg.enquiryNumber || `TKT-${Math.floor(Math.random() * 1000000)}`}</div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center">
+                      <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Full Name</div>
+                      <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.fullName || 'N/A'}</div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center">
+                      <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Email Address</div>
+                      <div className="w-full sm:w-2/3 px-5 py-4 text-[#0066cc] hover:underline cursor-pointer break-all">
+                        <a href={`mailto:${activeInboxMsg.email}`}>{activeInboxMsg.email}</a>
+                      </div>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center">
+                      <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Phone Number</div>
+                      <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.phone || 'N/A'}</div>
+                    </div>
+                    {activeInboxMsg.whatsapp && (
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">WhatsApp Number</div>
+                        <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.whatsapp}</div>
+                      </div>
+                    )}
+                    {(activeInboxMsg.city || activeInboxMsg.province) && (
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Location</div>
+                        <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{[activeInboxMsg.city, activeInboxMsg.province].filter(Boolean).join(', ')}</div>
+                      </div>
+                    )}
+                    <div className="flex flex-col sm:flex-row sm:items-center">
+                      <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Selected Package / Service</div>
+                      <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.preferredPackageType || 'General Inquiry'}</div>
+                    </div>
+                    {activeInboxMsg.departureMonth && (
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Departure</div>
+                        <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.departureMonth}</div>
+                      </div>
+                    )}
+                    {(activeInboxMsg.adults > 0 || activeInboxMsg.children > 0) && (
+                      <div className="flex flex-col sm:flex-row sm:items-center">
+                        <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Passengers</div>
+                        <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">Adults: {activeInboxMsg.adults || 0}, Children: {activeInboxMsg.children || 0}, Infants: {activeInboxMsg.infants || 0}</div>
+                      </div>
+                    )}
+                    <div className="flex flex-col sm:flex-row">
+                      <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Message / Special Notes</div>
+                      <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600 whitespace-pre-wrap">{activeInboxMsg.message || 'N/A'}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Email Footer */}
+                <div className="bg-[#111827] px-8 py-10 flex flex-col items-center text-center">
+                  <h3 className="text-white font-bold m-0 mb-3 text-sm">King Travel Canada Ltd.</h3>
+                  <p className="text-slate-400 text-[11px] leading-relaxed m-0 mb-6 max-w-sm">
+                    1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada<br />
+                    TICO &amp; IATA Licensed Pilgrimage &amp; Flight Operator
+                  </p>
+                  <a href="#" className="text-[#E7BE6E] text-xs font-bold hover:underline mb-8">
+                    Visit Official Website →
+                  </a>
+                  <p className="text-slate-500 text-[10px] m-0">
+                    © {new Date().getFullYear()} King Travel Canada Ltd. All Rights Reserved.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}
