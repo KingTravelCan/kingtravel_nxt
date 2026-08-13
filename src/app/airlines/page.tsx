@@ -169,6 +169,7 @@ export default function AirlinesPage() {
                                     href={`https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name)})`}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    suppressHydrationWarning
                                     className="bg-emerald-900 text-white hover:bg-gold hover:text-slate-900 font-bold py-3 px-8 rounded-md tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
                                   >
                                     Booking

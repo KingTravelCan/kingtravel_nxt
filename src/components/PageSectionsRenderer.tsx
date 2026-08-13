@@ -129,6 +129,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                             href={flight.bookingUrl || `https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name || "PIA")})`}
                             target="_blank"
                             rel="noopener noreferrer"
+                            suppressHydrationWarning
                             className="bg-emerald-900 text-white hover:bg-gold hover:text-slate-900 font-bold py-3 px-8 rounded-md tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
                           >
                             Booking
@@ -179,12 +180,13 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           const formKey = formKeyMap[sec.type];
           return (
             <section key={idx} className="relative z-10 w-full flex justify-center" suppressHydrationWarning>
-              <DynamicSiteForm 
-                formKey={formKey} 
-                bgColor={sec.data?.bgColor} 
+              <DynamicSiteForm
+                formKey={formKey}
+                bgColor={sec.data?.bgColor}
                 maxWidth={sec.data?.maxWidth}
+                eyebrow={sec.data?.eyebrow}
                 title={sec.data?.title}
-                description={sec.data?.subtitle}
+                description={sec.data?.description}
               />
             </section>
           );
@@ -194,7 +196,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           const ids = Array.isArray(sec.data?.packageIds) ? sec.data.packageIds.map(Number).filter(Boolean) : [];
           let initialSoldOut = undefined;
           if (initialPackageData?.all) {
-            initialSoldOut = ids.length > 0 
+            initialSoldOut = ids.length > 0
               ? ids.map((id: number) => initialPackageData.all?.find((pkg: any) => Number(pkg.id) === id)).filter(Boolean)
               : initialPackageData.all.filter((pkg: any) => pkg.status === 'sold_out');
           }
