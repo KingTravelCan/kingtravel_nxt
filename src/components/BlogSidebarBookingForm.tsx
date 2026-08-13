@@ -257,6 +257,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
             <select
               value={selectedPackageId}
               disabled={packagesLoading}
+              suppressHydrationWarning
               onChange={(e) => {
                 setSelectedPackageId(e.target.value);
                 if (errors.selectedPackage) {
