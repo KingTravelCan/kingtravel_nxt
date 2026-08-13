@@ -9,6 +9,7 @@ import {
   submitVisaEnquiryAction,
 } from "@/actions/enquiryActions";
 import { getFormsSettings } from "@/actions/pageActions";
+import { getAllPackages } from "@/actions/packageActions";
 import { CheckCircle, AlertTriangle } from "lucide-react";
 import GlassNotificationModal from "@/components/ui/GlassNotificationModal";
 
@@ -66,9 +67,19 @@ export default function DynamicSiteForm({
     type: null,
     msg: "",
   });
+  const [allPackages, setAllPackages] = useState<any[]>([]);
 
   useEffect(() => {
     setMounted(true);
+    const fetchPkgs = async () => {
+      try {
+        const pkgs = await getAllPackages();
+        setAllPackages(pkgs || []);
+      } catch (err) {
+        console.error("Failed to fetch packages", err);
+      }
+    };
+    fetchPkgs();
   }, []);
 
   useEffect(() => {
@@ -301,7 +312,19 @@ export default function DynamicSiteForm({
                     {field.required && <span className="text-red-500">*</span>}
                   </label>
 
-                  {isSelect ? (
+                  {field.type === "bubble_tabs_journey" ? (
+                    <div className="flex bg-slate-100 p-1 rounded-full gap-1 w-full">
+                      {["Hajj", "Umrah"].map(tab => {
+                        const isSelected = formData[field.id]?.toLowerCase() === tab.toLowerCase();
+                        return (
+                          <label key={tab} className={`flex-1 text-center py-2.5 rounded-full text-sm font-bold cursor-pointer transition-all ${isSelected ? "bg-[#004B39] text-white shadow-md" : "text-slate-600 hover:text-slate-800 hover:bg-slate-200"}`}>
+                            <input type="radio" name={field.id} value={tab.toLowerCase()} onChange={handleChange} className="hidden" required={field.required && !formData[field.id]} />
+                            {tab}
+                          </label>
+                        );
+                      })}
+                    </div>
+                  ) : field.type.startsWith("dropdown_") || isSelect ? (
                     <div className="relative">
                       <select
                         name={field.id}
@@ -311,12 +334,40 @@ export default function DynamicSiteForm({
                         className="w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors appearance-none cursor-pointer pr-6"
                       >
                         <option value="">Select {field.label}</option>
-                        {selectOptions.map((opt) => (
-                          <option key={opt} value={opt}>
-                            {opt}
-                          </option>
+                        
+                        {field.type === "dropdown_packages" && allPackages.map(p => (
+                          <option key={p.id} value={p.name}>{p.name}</option>
                         ))}
-                        {selectOptions.length === 0 && (
+                        
+                        {field.type === "dropdown_tab_package" && allPackages
+                          .filter(p => {
+                            const journeyField = mainFields.find(f => f.type === "bubble_tabs_journey");
+                            const activeTab = journeyField ? formData[journeyField.id] : null;
+                            if (!activeTab) return true;
+                            return p.type?.toLowerCase() === activeTab.toLowerCase();
+                          })
+                          .map(p => (
+                            <option key={p.id} value={p.name}>{p.name}</option>
+                          ))
+                        }
+
+                        {field.type === "dropdown_numbers_1_6" && ["1", "2", "3", "4", "5", "6+"].map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+
+                        {field.type === "dropdown_flight_type" && ["One-Way", "Round Trip"].map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+
+                        {field.type === "dropdown_flight_class" && ["Economy", "Business", "First Class"].map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+
+                        {isSelect && selectOptions.map(opt => (
+                          <option key={opt} value={opt}>{opt}</option>
+                        ))}
+                        
+                        {isSelect && selectOptions.length === 0 && (
                           <>
                             <option value="Option 1">Option 1</option>
                             <option value="Option 2">Option 2</option>

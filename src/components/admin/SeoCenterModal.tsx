@@ -487,7 +487,7 @@ export default function SeoCenterModal({
           {/* Right Scrollable Content Panel */}
           <main ref={mainRef} className="flex-1 p-6 space-y-6 overflow-y-auto bg-[#F8FAFC] scroll-smooth">
             {/* ── 1. Meta Data Management ── */}
-            <section id="seo-sec-traditional" className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
+            <section id="seo-sec-traditional" className="bg-white rounded-2xl px-2  border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
               <div>
                 <h3 className="text-sm font-extrabold text-slate-900 m-0">Meta Data Management</h3>
                 <p className="text-xs text-slate-400 m-0 mt-0.5">
@@ -539,7 +539,7 @@ export default function SeoCenterModal({
             </section>
 
             {/* ── 2. Smart Accessibility Engine (Alt Texts) ── */}
-            <section id="seo-sec-alt" className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
+            <section id="seo-sec-alt" className="bg-white rounded-2xl px-2  border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <h3 className="text-sm font-extrabold text-slate-900 m-0 flex items-center gap-1.5">
@@ -605,7 +605,7 @@ export default function SeoCenterModal({
             </section>
 
             {/* ── 3. GEO (Generative Engine Optimization) ── */}
-            <section id="seo-sec-geo" className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
+            <section id="seo-sec-geo" className="bg-white rounded-2xl px-2  border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
               <div>
                 <h3 className="text-sm font-extrabold text-slate-900 m-0">GEO (Generative Engine Optimization)</h3>
                 <p className="text-xs text-slate-400 m-0 mt-0.5">
@@ -637,7 +637,7 @@ export default function SeoCenterModal({
             </section>
 
             {/* ── 4. AEO (Answer Engine Optimization) ── */}
-            <section id="seo-sec-aeo" className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
+            <section id="seo-sec-aeo" className="bg-white rounded-2xl px-2  border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
               <div>
                 <h3 className="text-sm font-extrabold text-slate-900 m-0">AEO (Answer Engine Optimization)</h3>
                 <p className="text-xs text-slate-400 m-0 mt-0.5">
@@ -657,7 +657,7 @@ export default function SeoCenterModal({
             </section>
 
             {/* ── 5. Dynamic JSON-LD Schema ── */}
-            <section id="seo-sec-schema" className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
+            <section id="seo-sec-schema" className="bg-white rounded-2xl px-2  border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
               <div>
                 <h3 className="text-sm font-extrabold text-slate-900 m-0">Dynamic JSON-LD Schema</h3>
                 <p className="text-xs text-slate-400 m-0 mt-0.5">
@@ -696,7 +696,7 @@ export default function SeoCenterModal({
             </section>
 
             {/* ── 6. Technical SEO & Social Cards ── */}
-            <section id="seo-sec-technical" className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
+            <section id="seo-sec-technical" className="bg-white rounded-2xl px-2  border border-slate-200 shadow-xs space-y-4 scroll-mt-6">
               <div>
                 <h3 className="text-sm font-extrabold text-slate-900 m-0">Technical SEO &amp; Social Cards</h3>
                 <p className="text-xs text-slate-400 m-0 mt-0.5">Canonical URLs, Indexing rules, and Open Graph attributes.</p>

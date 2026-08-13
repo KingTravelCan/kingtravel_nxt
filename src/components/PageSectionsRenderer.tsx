@@ -123,11 +123,11 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                         <div className="text-right flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4 border-t md:border-0 pt-4 md:pt-0 border-gray-200">
                           <div>
                             <span className="text-xs font-semibold text-gray-500 block md:hidden">Price</span>
-                            <span className="text-2xl font-extrabold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
+                            <span suppressHydrationWarning className="text-2xl font-bold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
                           </div>
                           <a
                             href={flight.bookingUrl || `https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name || "PIA")})`}
-                            target="_blank"
+                            target={pageData?.slug === "/cheap-flights-air-tickets" || pageData?.slug === "cheap-flights-air-tickets" ? undefined : "_blank"}
                             rel="noopener noreferrer"
                             suppressHydrationWarning
                             className="bg-emerald-900 text-white hover:bg-gold hover:text-slate-900 font-bold py-3 px-8 rounded-md tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
