@@ -155,7 +155,7 @@ function PageBuilderContent() {
   const [primaryBtnLink, setPrimaryBtnLink] = useState('#packages');
   const [secondaryBtnLabel, setSecondaryBtnLabel] = useState('Speak With an Advisor');
   const [secondaryBtnLink, setSecondaryBtnLink] = useState('/contact');
-  const [badge1Top, setBadge1Top] = useState('10,000+');
+  const [badge1Top, setBadge1Top] = useState('10k+');
   const [badge1Sub, setBadge1Sub] = useState('Pilgrims Guided');
   const [badge2Top, setBadge2Top] = useState('5★ Hotels');
   const [badge2Sub, setBadge2Sub] = useState('Every Package, Every Time');
@@ -473,7 +473,7 @@ function PageBuilderContent() {
         quoteBadgeText: '"Every detail handled — from Visa to hotel, steps from the Haram."',
         stat1Num: '25+',
         stat1Label: 'Years Serving Canada',
-        stat2Num: '10,000+',
+        stat2Num: '10k+',
         stat2Label: 'Pilgrims Guided',
         stat3Num: '5★',
         stat3Label: 'Hotels, Every Package',
@@ -593,7 +593,7 @@ function PageBuilderContent() {
       defaultData = {
         items: [
           { value: '25+', label: 'Years Serving Canada' },
-          { value: '10,000+', label: 'Pilgrims Guided' },
+          { value: '10k+', label: 'Pilgrims Guided' },
           { value: '5★', label: 'Hotels, Every Package' },
         ]
       };
@@ -1157,7 +1157,7 @@ function PageBuilderContent() {
                 type="text"
                 value={badge1Top}
                 onChange={(e) => setBadge1Top(e.target.value)}
-                placeholder="10,000+"
+                placeholder="10k+"
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-slate-50 text-xs font-medium outline-none focus:border-[#004B39]"
               />
             </div>

@@ -110,11 +110,8 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
               <h1 dangerouslySetInnerHTML={{ __html: heroData.title }} />
               <p className="lead">{heroData.description}</p>
               <div className="hero-cta">
-                <a className="btn" href={heroData.primaryBtnLink || '#packages'}>
+                <a className="btn" href={heroData.primaryBtnLink || '/umrah-packages'}>
                   {heroData.primaryBtnLabel || 'View Umrah Packages'}
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-                    <path d="M5 12h14M13 6l6 6-6 6"></path>
-                  </svg>
                 </a>
                 <Link className="btn ghost-light" href={heroData.secondaryBtnLink || '/contact'}>
                   {heroData.secondaryBtnLabel || 'Speak With an Advisor'}

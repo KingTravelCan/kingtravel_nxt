@@ -31,7 +31,7 @@ export default function WhoWeAreSection({ data }: { data: any }) {
           {/* Right: Text & Stats */}
           <div>
             <h3 className="eyebrow">{eyebrow}</h3>
-            <h2 
+            <h2
               className="font-serif  leading-tight mb-6"
               dangerouslySetInnerHTML={{ __html: title }}
             />
@@ -49,7 +49,7 @@ export default function WhoWeAreSection({ data }: { data: any }) {
                 <div className="text-[10px] uppercase font-bold text-ink-soft tracking-wider">Years Serving Canada</div>
               </div>
               <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
-                <div className="text-gold font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">10,000+</div>
+                <div className="text-gold font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">10k+</div>
                 <div className="text-[10px] uppercase font-bold text-ink-soft tracking-wider">Pilgrims Guided</div>
               </div>
               <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
