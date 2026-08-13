@@ -32,7 +32,7 @@ export default function WhatsAppFloat({ initialIdentity }: { initialIdentity?: a
   return (
     <a
       href={href}
-      className="fixed bottom-[30px] right-[30px] z-[100] w-[60px] h-[60px] max-sm:w-[50px] max-sm:h-[50px]"
+      className="fixed bottom-[30px] right-[30px] z-[100] w-[60px] h-[60px] max-[576px]:w-[40px] max-[576px]:h-[40px] max-[576px]:right-[10px]"
       target="_blank"
       rel="noopener noreferrer"
       aria-label={label}
@@ -43,7 +43,7 @@ export default function WhatsAppFloat({ initialIdentity }: { initialIdentity?: a
         alt={label}
         width={60}
         height={60}
-        className="w-auto h-auto"
+        className="w-full h-full object-contain"
       />
     </a>
   );

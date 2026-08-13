@@ -6,8 +6,8 @@ import PageBanner from "@/components/PageBanner";
 import CertificationsFlipCardsSection from "@/components/CertificationsFlipCardsSection";
 import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 
-export default function AboutPageClient({ initialPageData }: { initialPageData?: any }) {
-  const pageData = initialPageData || null;
+// --- Start of extracted animated counter component ---
+function AnimatedStats() {
   const [counts, setCounts] = useState({
     travelers: 0,
     rating: 0.0,
@@ -46,16 +46,36 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
     requestAnimationFrame(step);
   }, []);
 
+  const items = [
+    { value: `${counts.travelers}K+`, label: "Happy Travelers" },
+    { value: counts.rating.toFixed(1), label: "Google Rating" },
+    { value: `${counts.satisfaction}%`, label: "Client Satisfaction" },
+    { value: `${counts.experience}+`, label: "Years Experience" },
+  ];
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 -mt-12 relative z-20 mb-8">
+      <div className="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x divide-slate-100">
+        {items.map((it: any, i: number) => (
+          <div key={i} className="flex flex-col items-center justify-center p-2">
+            <h3 className="text-2xl md:text-3xl font-bold text-[#004B39] font-serif m-0">{it.value}</h3>
+            <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 m-0">{it.label}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+// --- End of extracted component ---
+
+export default function AboutPageClient({ initialPageData }: { initialPageData?: any }) {
+  const pageData = initialPageData || null;
+
   const defaultSections = [
     {
       type: "Stats Grid",
       data: {
-        items: [
-          { value: "72K+", label: "Happy Travelers" },
-          { value: "4.4", label: "Google Rating" },
-          { value: "100%", label: "Client Satisfaction" },
-          { value: "25+", label: "Years Experience" },
-        ]
+        items: [] // Data handled internally by the AnimatedStats component now
       }
     },
     {
@@ -126,24 +146,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
       {parsedSections.map((sec: any, idx: number) => {
         // Section Type 1: Stats Grid
         if (sec.type === "Stats Grid") {
-          const items = sec.data?.items || [
-            { value: `${counts.travelers}K+`, label: "Happy Travelers" },
-            { value: counts.rating.toFixed(1), label: "Google Rating" },
-            { value: `${counts.satisfaction}%`, label: "Client Satisfaction" },
-            { value: `${counts.experience}+`, label: "Years Experience" },
-          ];
-          return (
-            <div key={idx} className="max-w-7xl mx-auto px-4 -mt-12 relative z-20 mb-8">
-              <div className="bg-white rounded-2xl p-6 shadow-xl border border-slate-100 grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x-0 md:divide-x divide-slate-100">
-                {items.map((it: any, i: number) => (
-                  <div key={i} className="flex flex-col items-center justify-center p-2">
-                    <h3 className="text-2xl md:text-3xl font-bold text-[#004B39] font-serif m-0">{it.value}</h3>
-                    <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mt-1 m-0">{it.label}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          );
+          return <AnimatedStats key={idx} />;
         }
 
         // Section Type 2: Intro Banner Box
