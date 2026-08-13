@@ -1610,7 +1610,7 @@ section#flights {
 
 .features-list li {
   position: relative;
-  padding-left: 25px;
+  /* padding-left: 25px; */
   font-size: 0.95rem;
   color: var(--dark);
 }

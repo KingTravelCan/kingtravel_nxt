@@ -189,7 +189,6 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
                       width={800}
                       height={450}
                       className="w-full h-auto"
-                      unoptimized
                     />
                   </div>
                   <div className="about-content">
@@ -312,7 +311,7 @@ export default function AboutPageClient({ initialPageData }: { initialPageData?:
                 {defaultPackages.map((pkg) => (
                   <article key={pkg.id} className="bg-white rounded-3xl overflow-hidden shadow-lg border border-slate-100 flex flex-col group">
                     <div className="relative h-56 overflow-hidden">
-                      <Image src={pkg.heroImage} alt={pkg.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" unoptimized />
+                      <Image src={pkg.heroImage} alt={pkg.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30"></div>
                       <div className="absolute top-3 inset-x-3 flex justify-between items-center text-xs">
                         <span className="bg-[#0a422d]/90 text-white font-bold px-2.5 py-1 rounded-md flex items-center gap-1">
