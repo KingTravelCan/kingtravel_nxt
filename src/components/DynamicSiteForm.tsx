@@ -331,7 +331,7 @@ export default function DynamicSiteForm({
                         required={field.required}
                         value={formData[field.id] || ""}
                         onChange={handleChange}
-                        className="w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors appearance-none cursor-pointer pr-6"
+                        className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors appearance-none cursor-pointer pr-6 ${formKey === "flightInquiry" ? "bg-white" : ""}`}
                       >
                         <option value="">Select {field.label}</option>
                         
@@ -392,7 +392,7 @@ export default function DynamicSiteForm({
                       required={field.required}
                       value={formData[field.id] || ""}
                       onChange={handleChange}
-                      className="w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors"
+                      className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors ${formKey === "flightInquiry" ? "bg-white" : ""}`}
                     />
                   ) : isTel ? (
                     <input
@@ -402,9 +402,9 @@ export default function DynamicSiteForm({
                       value={formData[field.id] || ""}
                       onChange={handleChange}
                       placeholder={field.placeholder || "e.g. +1 234 567 890"}
-                      pattern="[0-9+\-() ]*"
+                      pattern="[0-9+() -]*"
                       inputMode="tel"
-                      className="w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors"
+                      className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors ${formKey === "flightInquiry" ? "bg-white" : ""}`}
                     />
                   ) : (
                     <input
@@ -414,7 +414,7 @@ export default function DynamicSiteForm({
                       value={formData[field.id] || ""}
                       onChange={handleChange}
                       placeholder={field.placeholder || ""}
-                      className="w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors"
+                      className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors ${formKey === "flightInquiry" ? "bg-white" : ""}`}
                     />
                   )}
                 </div>
@@ -436,7 +436,7 @@ export default function DynamicSiteForm({
                 onChange={handleChange}
                 placeholder={field.placeholder || ""}
                 rows={4}
-                className="w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors resize-none"
+                className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors resize-none ${formKey === "flightInquiry" ? "bg-white" : ""}`}
               />
             </div>
           ))}
