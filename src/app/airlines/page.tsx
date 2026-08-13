@@ -163,7 +163,7 @@ export default function AirlinesPage() {
                                 <div className="text-right flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4 border-t md:border-0 pt-4 md:pt-0 border-gray-200">
                                   <div>
                                     <span className="text-xs font-semibold text-gray-500 block md:hidden">Price</span>
-                                    <span className="text-2xl font-extrabold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
+                                    <span suppressHydrationWarning className="text-2xl font-bold text-gray-900">{flight.price || "CAD 1,250.00"}</span>
                                   </div>
                                   <a
                                     href={`https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight%20(${encodeURIComponent(flight.name)})`}
@@ -258,7 +258,7 @@ export default function AirlinesPage() {
                               <div className="text-center md:text-left"><span className="block text-xl font-bold text-gray-900">{flight.time}</span><span className="text-xs text-gray-400 font-medium">{flight.originCode}</span></div>
                             </div>
                             <div className="text-right flex flex-row md:flex-col items-center md:items-end justify-between md:justify-center gap-4 border-t md:border-0 pt-4 md:pt-0 border-gray-200">
-                              <div><span className="text-2xl font-extrabold text-gray-900">{flight.price}</span></div>
+                              <div><span className="text-2xl font-bold text-gray-900">{flight.price}</span></div>
                               <a href="https://wa.me/19056248344?text=Hi,%20I'm%20interested%20in%20booking%20this%20flight!" target="_blank" rel="noopener noreferrer" className="bg-emerald-900 text-white hover:bg-gold hover:text-slate-900 font-bold py-3 px-8 rounded-lg tracking-wide shadow-sm transition-colors duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center">Booking</a>
                             </div>
                           </div>

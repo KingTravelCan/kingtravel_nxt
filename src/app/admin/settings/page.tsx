@@ -334,12 +334,17 @@ export default function AdminSettingsPage() {
       { id: '7', label: 'Select Start Date', type: 'date', placeholder: 'mm/dd/yyyy', required: true },
     ],
     flightInquiry: [
-      { id: '1', label: 'Passenger Name', type: 'text', placeholder: 'Full name', required: true },
-      { id: '2', label: 'Departure City', type: 'text', placeholder: 'e.g. Toronto (YYZ)', required: true },
-      { id: '3', label: 'Destination City', type: 'text', placeholder: 'Jeddah (JED) / Madinah (MED)', required: true },
-      { id: '4', label: 'Travel Dates', type: 'text', placeholder: 'Departure & Return dates', required: true },
-      { id: '5', label: 'Number of Passengers', type: 'text', placeholder: 'e.g. 2 Adults, 1 Child', required: true },
-      { id: '6', label: 'Contact Phone', type: 'tel', placeholder: '+1 (555) 000-0000', required: true },
+      { id: '1', label: 'Full Name (As per Passport)', type: 'text', placeholder: 'Enter your full name', required: true },
+      { id: '2', label: 'Email Address', type: 'email', placeholder: 'example@email.com', required: true },
+      { id: '3', label: 'Phone Number', type: 'tel', placeholder: '+1 234 567 890', required: true },
+      { id: '4', label: 'Departure City', type: 'text', placeholder: 'e.g. London', required: true },
+      { id: '5', label: 'Destination City', type: 'text', placeholder: 'e.g. Jeddah', required: true },
+      { id: '6', label: 'Travel Date', type: 'date', placeholder: 'e.g. March 10, 2025', required: true },
+      { id: '7', label: 'Return Date (if round trip)', type: 'date', placeholder: 'e.g. March 20, 2025', required: false },
+      { id: '8', label: 'Trip Type', type: 'select', placeholder: 'One-Way / Round Trip', required: true },
+      { id: '9', label: 'Passengers', type: 'select', placeholder: '1, 2, 3...', required: true },
+      { id: '10', label: 'Class', type: 'select', placeholder: 'Economy / Business / First Class', required: true },
+      { id: '11', label: 'Message', type: 'richtext', placeholder: 'Special request (seat, baggage, meal preference...)', required: false },
     ],
     dropUsMessage: [
       { id: '1', label: 'Full Name', type: 'text', placeholder: 'Full Name', required: true },
@@ -3221,7 +3226,6 @@ export default function AdminSettingsPage() {
                                         placeholder="Field Label"
                                       />
 
-                                      {/* Field Type Dropdown Selector */}
                                       <select
                                         value={field.type}
                                         onChange={(e) => {
@@ -3234,8 +3238,17 @@ export default function AdminSettingsPage() {
                                         <option value="text">Text Input</option>
                                         <option value="email">Email Input</option>
                                         <option value="tel">Phone / Tel Input</option>
+                                        <option value="date">Date Picker</option>
                                         <option value="select">Dropdown Select</option>
                                         <option value="textarea">Textarea</option>
+                                        <option value="richtext">Rich Text Editor</option>
+                                        <option disabled>──────────</option>
+                                        <option value="dropdown_packages">Packages Dropdown</option>
+                                        <option value="dropdown_numbers_1_6">Numbers Dropdown (1 - 6+)</option>
+                                        <option value="dropdown_flight_type">Trip Type Dropdown</option>
+                                        <option value="dropdown_flight_class">Flight Class Dropdown</option>
+                                        <option value="bubble_tabs_journey">Journey Type Tabs</option>
+                                        <option value="dropdown_tab_package">Journey Package Dropdown</option>
                                       </select>
                                     </div>
 
@@ -3281,32 +3294,38 @@ export default function AdminSettingsPage() {
                                 </div>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-                                  {fieldsList.map((fd) => (
-                                    <div key={fd.id} className={fd.type === 'textarea' ? 'sm:col-span-2' : ''}>
-                                      <label className="text-xs font-extrabold text-slate-700 block mb-1">
-                                        {fd.label} {fd.required && <span className="text-red-500 font-bold">*</span>}
-                                      </label>
-                                      {fd.type === 'textarea' ? (
-                                        <textarea
-                                          rows={2}
-                                          readOnly
-                                          placeholder={fd.placeholder || `Enter ${fd.label.toLowerCase()}...`}
-                                          className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium"
-                                        />
-                                      ) : fd.type === 'select' ? (
-                                        <select disabled className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium">
-                                          <option>{fd.placeholder || `Select ${fd.label.toLowerCase()}...`}</option>
-                                        </select>
-                                      ) : (
-                                        <input
-                                          type={fd.type}
-                                          readOnly
-                                          placeholder={fd.placeholder || `Enter ${fd.label.toLowerCase()}...`}
-                                          className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium"
-                                        />
-                                      )}
-                                    </div>
-                                  ))}
+                                  {fieldsList.map((fd) => {
+                                    const isFullWidth = fd.type === 'textarea' || fd.type === 'richtext';
+                                    return (
+                                      <div key={fd.id} className={isFullWidth ? 'sm:col-span-2' : ''}>
+                                        <label className="text-xs font-extrabold text-slate-700 block mb-1">
+                                          {fd.label} {fd.required && <span className="text-red-500 font-bold">*</span>}
+                                        </label>
+                                        {fd.type === 'textarea' || fd.type === 'richtext' ? (
+                                          <div className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 min-h-[60px] text-slate-400 font-medium">
+                                            {fd.type === 'richtext' ? '✍️ Rich Text Editor' : fd.placeholder || `Enter ${fd.label.toLowerCase()}...`}
+                                          </div>
+                                        ) : fd.type === 'select' ? (
+                                          <select disabled className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium">
+                                            <option>{fd.placeholder || `Select ${fd.label.toLowerCase()}...`}</option>
+                                          </select>
+                                        ) : fd.type === 'date' ? (
+                                          <input
+                                            type="date"
+                                            readOnly
+                                            className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium"
+                                          />
+                                        ) : (
+                                          <input
+                                            type={fd.type === 'tel' ? 'tel' : fd.type === 'email' ? 'email' : 'text'}
+                                            readOnly
+                                            placeholder={fd.placeholder || `Enter ${fd.label.toLowerCase()}...`}
+                                            className="w-full p-3 border border-slate-200 rounded-xl text-xs bg-slate-50/70 outline-none font-medium"
+                                          />
+                                        )}
+                                      </div>
+                                    );
+                                  })}
                                 </div>
 
                                 <button
@@ -3880,80 +3899,123 @@ export default function AdminSettingsPage() {
       {activeInboxMsg && (
         <div className="fixed inset-0 z-[100] flex justify-end">
           <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm transition-opacity" onClick={() => setActiveInboxMsg(null)} />
-          <div className="relative w-full max-w-md bg-white h-full shadow-2xl animate-in slide-in-from-right duration-300 flex flex-col border-l border-slate-200">
-             {/* Drawer Header */}
-             <div className="flex items-center justify-between p-6 border-b border-slate-100 bg-slate-50">
-                <h3 className="font-bold text-slate-900 m-0 text-lg">Message Details</h3>
-                <button onClick={() => setActiveInboxMsg(null)} className="p-2 bg-white rounded-full text-slate-500 hover:text-slate-900 shadow-sm border border-slate-200 cursor-pointer">
+          <div className="relative w-full max-w-2xl bg-slate-50 h-full shadow-2xl animate-in slide-in-from-right duration-300 flex flex-col border-l border-slate-200">
+             
+             {/* Drawer Header Toolbar */}
+             <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 bg-white shrink-0">
+                <h3 className="font-bold text-slate-900 m-0 text-base">Message Details</h3>
+                <button onClick={() => setActiveInboxMsg(null)} className="p-2 bg-slate-50 rounded-full text-slate-500 hover:text-slate-900 shadow-sm border border-slate-200 cursor-pointer transition-colors">
                    <X className="w-4 h-4" />
                 </button>
              </div>
-             {/* Drawer Body - Simulated Email Template */}
-             <div className="flex-1 overflow-y-auto p-6 bg-slate-50">
-               <div className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm">
-                 {/* Header */}
-                 <div className="text-center pb-6 border-b border-slate-100 mb-6">
-                   <div className="font-black text-2xl tracking-tighter text-[#004B39]">KING TRAVEL</div>
-                   <p className="text-xs text-slate-500 mt-2">New Lead Submission</p>
+
+             {/* Drawer Body - Email Template Design */}
+             <div className="flex-1 overflow-y-auto p-4 md:p-8">
+               <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden max-w-xl mx-auto flex flex-col font-sans">
+                 
+                 {/* Email Header */}
+                 <div className="bg-[#004B39] px-8 py-10 flex flex-col items-center text-center">
+                   <span className="text-[10px] font-bold text-[#E7BE6E] border border-[#E7BE6E] rounded-full px-4 py-1.5 uppercase tracking-widest mb-6">
+                     INQUIRY RECEIVED
+                   </span>
+                   <h1 className="text-white font-serif text-3xl font-normal m-0 mb-2">
+                     King Travel Canada
+                   </h1>
+                   <p className="text-[#a5d6c8] text-sm m-0 font-medium tracking-wide">
+                     Licensed Hajj &amp; Umrah Travel Operator
+                   </p>
                  </div>
-                 {/* Body */}
-                 <div className="space-y-4 text-sm">
-                   <div>
-                     <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Name</p>
-                     <p className="font-medium text-slate-900">{activeInboxMsg.fullName || 'N/A'}</p>
+
+                 {/* Email Content */}
+                 <div className="p-8 pb-10">
+                   <h2 className="text-slate-900 font-bold text-xl m-0 mb-4">
+                     {activeInboxMsg.type === 'quote_request' ? 'New Quote Request Received' : 'New Inquiry Received'}
+                   </h2>
+                   <p className="text-slate-600 text-sm leading-relaxed m-0 mb-8">
+                     A new inquiry has been received via the website form. The submission details and lead contact information are listed below:
+                   </p>
+
+                   {/* Date Box */}
+                   <div className="bg-slate-50 border border-slate-200 rounded-xl px-5 py-4 flex items-center gap-3 mb-8 text-sm">
+                     <span className="text-lg">📅</span>
+                     <span className="text-slate-600 font-medium">Date: <strong className="text-slate-900 ml-1">{new Date(activeInboxMsg.createdAt || new Date()).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</strong></span>
                    </div>
-                   <div>
-                     <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Email</p>
-                     <p className="font-medium text-slate-900">{activeInboxMsg.email}</p>
+
+                   {/* Details Section */}
+                   <div className="flex items-center gap-2 mb-4">
+                     <span className="text-lg">📋</span>
+                     <h3 className="font-bold text-[#004B39] text-sm uppercase tracking-wider m-0">
+                       SUBMITTED FORM DETAILS
+                     </h3>
                    </div>
-                   {activeInboxMsg.phone && (
-                     <div>
-                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Phone</p>
-                       <p className="font-medium text-slate-900">{activeInboxMsg.phone}</p>
+
+                   <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-200 text-sm">
+                     <div className="flex flex-col sm:flex-row sm:items-center">
+                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Ticket Reference #</div>
+                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600 font-mono text-xs">{activeInboxMsg.enquiryNumber || `TKT-${Math.floor(Math.random() * 1000000)}`}</div>
                      </div>
-                   )}
-                   {activeInboxMsg.whatsapp && (
-                     <div>
-                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">WhatsApp</p>
-                       <p className="font-medium text-slate-900">{activeInboxMsg.whatsapp}</p>
+                     <div className="flex flex-col sm:flex-row sm:items-center">
+                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Full Name</div>
+                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.fullName || 'N/A'}</div>
                      </div>
-                   )}
-                   {(activeInboxMsg.city || activeInboxMsg.province) && (
-                     <div>
-                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Location</p>
-                       <p className="font-medium text-slate-900">{activeInboxMsg.city}, {activeInboxMsg.province}</p>
+                     <div className="flex flex-col sm:flex-row sm:items-center">
+                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Email Address</div>
+                       <div className="w-full sm:w-2/3 px-5 py-4 text-[#0066cc] hover:underline cursor-pointer break-all">
+                         <a href={`mailto:${activeInboxMsg.email}`}>{activeInboxMsg.email}</a>
+                       </div>
                      </div>
-                   )}
-                   {activeInboxMsg.preferredPackageType && (
-                     <div>
-                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Inquiry For</p>
-                       <p className="font-medium text-slate-900">{activeInboxMsg.preferredPackageType}</p>
+                     <div className="flex flex-col sm:flex-row sm:items-center">
+                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Phone Number</div>
+                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.phone || 'N/A'}</div>
                      </div>
-                   )}
-                   {activeInboxMsg.departureMonth && (
-                     <div>
-                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Departure</p>
-                       <p className="font-medium text-slate-900">{activeInboxMsg.departureMonth}</p>
+                     {activeInboxMsg.whatsapp && (
+                       <div className="flex flex-col sm:flex-row sm:items-center">
+                         <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">WhatsApp Number</div>
+                         <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.whatsapp}</div>
+                       </div>
+                     )}
+                     {(activeInboxMsg.city || activeInboxMsg.province) && (
+                       <div className="flex flex-col sm:flex-row sm:items-center">
+                         <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Location</div>
+                         <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{[activeInboxMsg.city, activeInboxMsg.province].filter(Boolean).join(', ')}</div>
+                       </div>
+                     )}
+                     <div className="flex flex-col sm:flex-row sm:items-center">
+                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Selected Package / Service</div>
+                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.preferredPackageType || 'General Inquiry'}</div>
                      </div>
-                   )}
-                   {(activeInboxMsg.adults || activeInboxMsg.children) && (
-                     <div>
-                       <p className="text-xs font-bold text-slate-400 mb-1 uppercase tracking-wider">Passengers</p>
-                       <p className="font-medium text-slate-900">Adults: {activeInboxMsg.adults}, Children: {activeInboxMsg.children}, Infants: {activeInboxMsg.infants}</p>
+                     {activeInboxMsg.departureMonth && (
+                       <div className="flex flex-col sm:flex-row sm:items-center">
+                         <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Departure</div>
+                         <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">{activeInboxMsg.departureMonth}</div>
+                       </div>
+                     )}
+                     {(activeInboxMsg.adults > 0 || activeInboxMsg.children > 0) && (
+                       <div className="flex flex-col sm:flex-row sm:items-center">
+                         <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Passengers</div>
+                         <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600">Adults: {activeInboxMsg.adults || 0}, Children: {activeInboxMsg.children || 0}, Infants: {activeInboxMsg.infants || 0}</div>
+                       </div>
+                     )}
+                     <div className="flex flex-col sm:flex-row">
+                       <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Message / Special Notes</div>
+                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600 whitespace-pre-wrap">{activeInboxMsg.message || 'N/A'}</div>
                      </div>
-                   )}
-                   {activeInboxMsg.message && (
-                     <div className="pt-4 border-t border-slate-100">
-                       <p className="text-xs font-bold text-slate-400 mb-2 uppercase tracking-wider">Message</p>
-                       <p className="text-slate-700 whitespace-pre-wrap">{activeInboxMsg.message}</p>
-                     </div>
-                   )}
-                   
-                   <div className="pt-6 mt-6 border-t border-slate-100 flex justify-center">
-                      <span className="text-[10px] font-bold px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100">
-                        {activeInboxMsg.type ? activeInboxMsg.type.replace('_', ' ').toUpperCase() : 'CONTACT'}
-                      </span>
                    </div>
+                 </div>
+
+                 {/* Email Footer */}
+                 <div className="bg-[#111827] px-8 py-10 flex flex-col items-center text-center">
+                   <h3 className="text-white font-bold m-0 mb-3 text-sm">King Travel Canada Ltd.</h3>
+                   <p className="text-slate-400 text-[11px] leading-relaxed m-0 mb-6 max-w-sm">
+                     1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada<br/>
+                     TICO &amp; IATA Licensed Pilgrimage &amp; Flight Operator
+                   </p>
+                   <a href="#" className="text-[#E7BE6E] text-xs font-bold hover:underline mb-8">
+                     Visit Official Website →
+                   </a>
+                   <p className="text-slate-500 text-[10px] m-0">
+                     © {new Date().getFullYear()} King Travel Canada Ltd. All Rights Reserved.
+                   </p>
                  </div>
                </div>
              </div>
