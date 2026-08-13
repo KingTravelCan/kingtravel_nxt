@@ -206,6 +206,15 @@ function PageBuilderContent() {
     setSections(sections.map(s => s.id === id ? { ...s, [field]: value } : s));
   };
 
+  const getFlightsOrDefault = (items: any) => {
+    if (items && Array.isArray(items) && items.length > 0) return items;
+    return [
+      { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
+      { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
+      { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" }
+    ];
+  };
+
   const updateSectionData = (id: string, key: string, value: any) => {
     setSections(sections.map(s => {
       if (s.id !== id) return s;
@@ -2790,9 +2799,7 @@ function PageBuilderContent() {
                                   </span>
                                   <button
                                     onClick={() => {
-                                      const currentFlights = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
-                                        { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" }
-                                      ])];
+                                      const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                       currentFlights.push({
                                         code: "SV",
                                         name: "Saudi Arabian Airlines",
@@ -2812,16 +2819,12 @@ function PageBuilderContent() {
                                   </button>
                                 </div>
 
-                                {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
-                                  { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
-                                  { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" },
-                                  { code: "PIA", name: "Pakistan International Airlines", operatedBy: "Operated By PIA", originCode: "LHR", originCity: "London", destCode: "JED", destCity: "Jeddah", time: "14:20", price: "CAD 1,250.00" }
-                                ]).map((fl: any, fIdx: number) => (
+                                {getFlightsOrDefault(sec.data?.items).map((fl: any, fIdx: number) => (
                                   <div key={fIdx} className="bg-white border border-slate-200 shadow-sm rounded-xl p-4 flex flex-col gap-4 relative mt-2 group">
                                     <div className="absolute top-2 right-2">
                                       <button
                                         onClick={() => {
-                                          const currentFlights = [...sec.data?.items];
+                                          const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                           currentFlights.splice(fIdx, 1);
                                           updateSectionData(sec.id, 'items', currentFlights);
                                         }}
@@ -2840,7 +2843,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.code || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], code: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2854,7 +2857,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.name || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], name: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2866,7 +2869,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.operatedBy || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], operatedBy: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2884,7 +2887,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.originCode || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], originCode: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2896,7 +2899,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.originCity || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], originCity: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2918,7 +2921,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.destCode || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], destCode: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2930,7 +2933,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.destCity || ''}
                                             onChange={(e) => {
-                                              const currentFlights = [...sec.data?.items];
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], destCity: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2947,7 +2950,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.time || ''}
                                             onChange={(e) => {
-                                              const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], time: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2959,7 +2962,7 @@ function PageBuilderContent() {
                                             type="text"
                                             value={fl.timeOriginCode || ''}
                                             onChange={(e) => {
-                                              const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
+                                              const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                               currentFlights[fIdx] = { ...currentFlights[fIdx], timeOriginCode: e.target.value };
                                               updateSectionData(sec.id, 'items', currentFlights);
                                             }}
@@ -2976,7 +2979,7 @@ function PageBuilderContent() {
                                           type="text"
                                           value={fl.price || ''}
                                           onChange={(e) => {
-                                            const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
+                                            const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                             currentFlights[fIdx] = { ...currentFlights[fIdx], price: e.target.value };
                                             updateSectionData(sec.id, 'items', currentFlights);
                                           }}
@@ -2988,7 +2991,7 @@ function PageBuilderContent() {
                                           type="text"
                                           value={fl.bookingUrl || ''}
                                           onChange={(e) => {
-                                            const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
+                                            const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                             currentFlights[fIdx] = { ...currentFlights[fIdx], bookingUrl: e.target.value };
                                             updateSectionData(sec.id, 'items', currentFlights);
                                           }}
@@ -3005,7 +3008,7 @@ function PageBuilderContent() {
                                         type="text"
                                         value={fl.priceSubtext || ''}
                                         onChange={(e) => {
-                                          const currentFlights = Array.isArray(sec.data?.items) ? [...sec.data.items] : (sec.data?.items ? Object.values(sec.data.items) : []);
+                                          const currentFlights = [...getFlightsOrDefault(sec.data?.items)];
                                           currentFlights[fIdx] = { ...currentFlights[fIdx], priceSubtext: e.target.value };
                                           updateSectionData(sec.id, 'items', currentFlights);
                                         }}
