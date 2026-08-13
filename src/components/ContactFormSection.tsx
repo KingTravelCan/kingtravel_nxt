@@ -162,7 +162,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setForm({ ...form, fullName: e.target.value });
                       if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: "" }));
                     }}
-                    className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
+                    className={`peer w-full border border-primary/30 p-3 rounded-md bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
                   />
                   <label
                     htmlFor="fullName"
@@ -183,7 +183,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setForm({ ...form, email: e.target.value });
                       if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
                     }}
-                    className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
+                    className={`peer w-full border border-primary/30 p-3 rounded-md bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
                   />
                   <label
                     htmlFor="emailAddress"
@@ -201,7 +201,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                     placeholder=" "
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className="peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-[#111111] placeholder-transparent"
+                    className="peer w-full border border-primary/30 p-3 rounded-md bg-transparent outline-none transition-colors duration-300 text-[#111111] placeholder-transparent"
                   />
                   <label
                     htmlFor="phoneNumber"
@@ -219,7 +219,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setForm({ ...form, packageType: e.target.value });
                       if (errors.packageType) setErrors((prev) => ({ ...prev, packageType: "" }));
                     }}
-                    className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 appearance-none ${form.packageType === "" ? "text-slate-400" : "text-slate-900"} ${errors.packageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
+                    className={`peer w-full border border-primary/30 p-3 rounded-md bg-transparent outline-none transition-colors duration-300 appearance-none ${form.packageType === "" ? "text-slate-400" : "text-slate-900"} ${errors.packageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
                     style={{ backgroundImage: "url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%23333%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')", backgroundRepeat: 'no-repeat', backgroundPosition: 'right 1rem center', backgroundSize: '1em' }}
                   >
                     <option value="" disabled hidden>Select Package *</option>
@@ -246,7 +246,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setErrors((prev) => ({ ...prev, message: "" }));
                     }
                   }}
-                  className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
+                  className={`peer w-full border border-primary/30 p-3 rounded-md bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"}`}
                 />
                 <label
                   htmlFor="message"
