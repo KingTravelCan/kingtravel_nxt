@@ -4,18 +4,18 @@
 :root {
   /* Brand & Base Colors */
   --ink: #132723;
-    /* --ink-2: #1c352f; */
+  /* --ink-2: #1c352f; */
   --ink-soft: #2e2e2e;
   --ink-light: color-mix(in srgb, var(--ink), #ffffff 50%);
-  
+
   /* --green: #004B39; */
   /* --green-light: color-mix(in srgb, var(--green), #ffffff 80%); */
-  
+
   --gold: #DB9E30;
   --gold-lt: #E7BE6E;
   --gold-soft: #f5e7c8;
   --yellow-light: color-mix(in srgb, var(--gold), #ffffff 80%);
-  
+
   --cream: #F5EFE1;
   --sage: #F1F5E5;
   --paper: #FBF8F1;
@@ -180,9 +180,9 @@ button {
   transition: .25s;
 }
 
-section {
+/* section {
   padding: 60px 0;
-}
+} */
 
 .incl-label {
   font-size: 12px;
@@ -2700,6 +2700,7 @@ select {
     margin-top: 16px;
     max-width: none;
   }
+
   section {
     padding: 30px 0;
   }
@@ -2771,9 +2772,10 @@ select {
 
 
 /* InnerPages Header Css */
-.page-header-title{
+.page-header-title {
   @apply text-3xl md:text-5xl font-serif font-normal text-white mb-3 tracking-wide [&>span]:text-gold [&>em]:text-gold [&>em]:not-italic;
 }
-.page-header-leadtxt{
+
+.page-header-leadtxt {
   @apply text-sm md:text-[1.2rem] opacity-90 max-w-6xl mx-auto font-light leading-relaxed text-white/90;
 }
