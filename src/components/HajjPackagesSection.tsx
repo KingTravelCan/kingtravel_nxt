@@ -251,7 +251,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                     <div className="flex flex-col sm:flex-row gap-2">
                       <a
                         href={`/${pkg.slug}`}
-                        className="flex-1 py-3.5 border-2 border-ink-soft text-ink-soft hover:bg-ink-soft/5 text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
+                        className="flex-1 py-3.5 border-2 border-ink-soft text-ink-soft hover:bg-ink-soft/5 text-xs font-black rounded-md uppercase tracking-widest transition-colors flex justify-center items-center gap-2"
                       >
                         <LucideIcons.Eye className="w-4 h-4" /> View Detail
                       </a>
@@ -262,7 +262,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                           setSelectedPkgForBooking(pkg);
                           setBookingModalOpen(true);
                         }}
-                        className="flex-1 py-3.5 bg-gold hover:bg-gold-lt text-ink text-xs font-black rounded-xl uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
+                        className="flex-1 py-3.5 bg-gold hover:bg-gold-lt text-ink text-xs font-black rounded-md uppercase tracking-widest transition-colors flex justify-center items-center gap-2 cursor-pointer"
                       >
                         <LucideIcons.BookOpen className="w-4 h-4" /> Book Hajj 2027
                       </button>

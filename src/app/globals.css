@@ -532,10 +532,9 @@ header {
 
 .service-icon {
   font-size: 2.5rem;
-  margin-bottom: 20px;
   display: inline-block;
   height: 70px;
-  min-width: 70px;
+  width: 70px;
   border: 2px solid #ccc;
   box-shadow: var(--shadow);
   display: flex !important;
@@ -1558,7 +1557,7 @@ section#flights {
 }
 
 .about-section {
-  padding: 100px 0;
+  padding: 40px 0;
 }
 
 .grid-2 {
@@ -1581,19 +1580,19 @@ section#flights {
   object-fit: cover;
 }
 
-.section-tag {
-  color: var(--accent);
+/* .section-tag {
+  color: var(--gold);
   text-transform: uppercase;
   font-weight: 700;
   font-size: 0.9rem;
   letter-spacing: 2px;
   margin-bottom: 10px;
   display: block;
-}
+} */
 
 .section-title {
   font-size: 2.2rem;
-  color: var(--primary);
+  color: var(--ink);
   margin-bottom: 20px;
 }
 
@@ -1626,8 +1625,8 @@ section#flights {
 } */
 
 .services-section {
-  background-color: var(--light-bg);
-  padding: 100px 0;
+  background-color: var(--sage);
+  /* padding: 100px 0; */
 }
 
 .section-header {
@@ -1657,7 +1656,7 @@ section#flights {
 
 .service-icon {
   font-size: 2.5rem;
-  margin-bottom: 20px;
+  
   display: inline-block;
 }
 
@@ -2421,7 +2420,7 @@ section#flights {
 input,
 textarea,
 select {
-  color: #949494;
+  color: var(--ink);
   /* slate-900 */
 }
 

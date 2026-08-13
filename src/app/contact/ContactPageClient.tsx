@@ -216,7 +216,7 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                     setContactForm({ ...contactForm, name: e.target.value });
                     if (errors.name) setErrors((prev) => ({ ...prev, name: "" }));
                   }}
-                  className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.name ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                  className={`peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.name ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
                     }`}
                 />
                 <label
@@ -239,7 +239,7 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                     setContactForm({ ...contactForm, email: e.target.value });
                     if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
                   }}
-                  className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
+                  className={`peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent ${errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-slate-300 focus:border-emerald-800"
                     }`}
                 />
                 <label
@@ -259,7 +259,7 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                   placeholder=" "
                   value={contactForm.phone}
                   onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
-                  className="peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
+                  className="peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
                 />
                 <label
                   htmlFor="phone"
@@ -276,7 +276,7 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                   placeholder=" "
                   value={contactForm.website}
                   onChange={(e) => setContactForm({ ...contactForm, website: e.target.value })}
-                  className="peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
+                  className="peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent"
                 />
                 <label
                   htmlFor="website"
@@ -303,7 +303,7 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                     }));
                   }
                 }}
-                className={`peer w-full border border-primary/30 p-3 rounded-xl bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message
+                className={`peer w-full border border-primary/30 p-3 rounded-sm bg-transparent outline-none transition-colors duration-300 text-slate-900 placeholder-transparent resize-none ${errors.message
                   ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
                   : "border-slate-300 focus:border-emerald-800"
                   }`}
@@ -340,7 +340,7 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
             <div>
               <button
                 type="submit"
-                className="group w-full bg-gold hover:bg-primary text-black hover:text-white font-bold py-4 px-8 rounded-md shadow-md hover:shadow-md active:scale-[0.99] transition-all duration-200 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer"
+                className="group w-full bg-gold hover:bg-gold-lt text-ink font-bold py-4 px-8 rounded-md shadow-md hover:shadow-md active:scale-[0.99] transition-all duration-200 tracking-wider uppercase text-sm flex items-center justify-center gap-2 cursor-pointer"
               >
                 <span>SEND MESSAGE</span>
                 <i className="fa-solid fa-paper-plane text-xs group-hover:translate-x-1 group-hover:-translate-y-0.5 transition-transform"></i>

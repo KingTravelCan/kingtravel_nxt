@@ -12,7 +12,7 @@ function VisaProcessStepsSection({ data }: { data?: any }) {
     <section className="visa-section py-12 bg-emerald-950 text-white">
       <div className="container max-w-7xl mx-auto px-4 visa-grid-bottom grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div className="visa-info-pane space-y-6">
-          <span className="visa-tagline text-xs font-extrabold uppercase tracking-widest text-gold">
+          <span className="eyebrow">
             {data?.eyebrow || "IN 3 EASY STEPS"}
           </span>
           <h2 className="text-3xl font-serif text-white">
@@ -42,7 +42,7 @@ function VisaProcessStepsSection({ data }: { data?: any }) {
             </div>
           </div>
 
-          <Link href="/contact" className="inline-block bg-gold hover:bg-[#b88222] text-slate-950 font-extrabold px-6 py-3.5 rounded-md shadow-lg transition-all text-sm mt-4">
+          <Link href="/contact" className="inline-block bg-gold hover:bg-gold-lt text-slate-950 font-extrabold px-6 py-3.5 rounded-md shadow-lg transition-all text-sm mt-4">
             Start Your Visa Application Today
           </Link>
         </div>
