@@ -370,7 +370,8 @@ export default function TiptapEditor({
             onChange(e.target.value);
           }}
           spellCheck={false}
-          className="flex-1 min-h-0 w-full resize-none overflow-y-auto outline-none border-none bg-slate-950 text-slate-100 font-mono text-sm leading-relaxed p-4"
+          style={{ minHeight }}
+          className="flex-1 min-h-0 w-full resize-y overflow-y-auto outline-none border-none bg-slate-950 text-slate-100 font-mono text-sm leading-relaxed p-4"
         />
       ) : (
         <EditorContent
