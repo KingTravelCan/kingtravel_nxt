@@ -10,6 +10,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
   const title = data?.title || "Hajj Packages 2027";
   const description =
     data?.description ||
+    data?.subtext ||
     "Luxury Hajj 2027 Packages with 5-Star Hotels, VIP Services & Complete Spiritual Guidance.";
 
   const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
@@ -211,11 +212,11 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
                               {madinahHotel.location || "Near to Masjid Nabawi"}
                             </div>
                             <div className="flex gap-2">
-                              <span className="bg-primary text-white text-[11px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                              <span className="bg-primary text-white text-[10px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
                                 {madinahHotel.badgeIcon && <DynamicIcon name={madinahHotel.badgeIcon} className="w-2.5 h-2.5" />}
                                 {madinahHotel.badge || "Breakfast"}
                               </span>
-                              <span className="bg-gray-100 text-ink-soft text-[11px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
+                              <span className="bg-gray-100 text-ink-soft text-[10px] px-2 py-0.5 rounded font-bold tracking-wider flex items-center gap-1">
                                 {madinahHotel.nightsIcon && <DynamicIcon name={madinahHotel.nightsIcon} className="w-2.5 h-2.5" />}
                                 {madinahHotel.nights || "6 Nights"}
                               </span>
