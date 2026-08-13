@@ -87,7 +87,7 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
     const title = formData.get('title') as string;
     const customSlug = formData.get('slug') as string;
     const type = (formData.get('type') as 'umrah' | 'hajj') || 'umrah';
-    const month = formData.get('month') as string || 'Flexible 2026';
+    const month = formData.get('month') as string || '';
     const startingPrice = (formData.get('startingPrice') as string) || '1995.00';
     const starRating = (formData.get('starRating') as string) || '5 Star';
     const status = (formData.get('status') as any) || 'available';

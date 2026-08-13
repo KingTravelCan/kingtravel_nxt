@@ -163,6 +163,7 @@ export default function PackageBookingModal({
             <div className="text-center mb-5 px-6 md:px-8 pt-6">
               <h3 className="text-xl md:text-2xl font-serif font-bold text-slate-900 mb-1.5 leading-tight">
                 Book {pkg?.title || "Umrah Package"}
+                {pkg?.month ? ` - ${pkg.month}` : ""}
               </h3>
 
               <p className="text-slate-500 text-xs">

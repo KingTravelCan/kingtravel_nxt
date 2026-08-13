@@ -347,7 +347,7 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
     title: '',
     slug: '',
     type,
-    month: 'Flexible 2026',
+    month: '',
     startingPrice: '1995.00',
     starRating: '5 Star',
     shortDescription: '',
