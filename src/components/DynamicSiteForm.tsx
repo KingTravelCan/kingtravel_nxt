@@ -135,9 +135,17 @@ export default function DynamicSiteForm({
     setStatus({ type: null, msg: "" });
 
     try {
-      const getVal = (keys: string[], defaultVal = "") => {
-        for (const k of keys) {
+      const getVal = (possibleKeys: string[], defaultVal = "") => {
+        for (const k of possibleKeys) {
           if (formData[k]) return formData[k];
+        }
+        const match = fieldsList.find((f: any) =>
+          possibleKeys.some((pk) =>
+            f.label?.toLowerCase().includes(pk.toLowerCase())
+          )
+        );
+        if (match && formData[match.id]) {
+          return formData[match.id];
         }
         return defaultVal;
       };
@@ -165,13 +173,13 @@ export default function DynamicSiteForm({
           fullName,
           email,
           phone,
-          originCity: getVal(["4", "departure_city", "originCity"]),
-          destinationCity: getVal(["5", "destination_city", "destinationCity"]),
-          departureDate: formatDateReadable(getVal(["6", "travel_dates", "departureDate", "start_date"])),
-          returnDate: formatDateReadable(getVal(["7", "return_date", "returnDate"])),
-          tripType: getVal(["8", "trip_type", "tripType"], "Round Trip"),
-          passengers: parseNumberSafe(getVal(["9", "passengers", "number_of_passengers"], "1"), 1),
-          flightClass: getVal(["10", "class", "flightClass"], "Economy"),
+          originCity: getVal(["4", "departure_city", "originCity", "origin", "departure city"]),
+          destinationCity: getVal(["5", "destination_city", "destinationCity", "destination"]),
+          departureDate: formatDateReadable(getVal(["6", "travel_dates", "departureDate", "start_date", "departure date", "travel date"])),
+          returnDate: formatDateReadable(getVal(["7", "return_date", "returnDate", "return date"])),
+          tripType: getVal(["8", "trip_type", "tripType", "trip type"], "Round Trip"),
+          passengers: parseNumberSafe(getVal(["9", "passengers", "number_of_passengers", "number of passengers"], "1"), 1),
+          flightClass: getVal(["10", "class", "flightClass", "flight class"], "Economy"),
           message,
         });
       } else if (formKey === "quoteForm") {
