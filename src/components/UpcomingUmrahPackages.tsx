@@ -68,7 +68,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
     <section className={`py-12 md:py-16 ${pathname === '/' ? 'bg-white' : 'bg-sage'}`}>
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 md:mb-16 gap-6 text-center md:text-left">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 text-center md:text-left">
           <div className="flex flex-col items-center md:items-start">
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2
@@ -111,7 +111,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
 
         {/* Packages Grid */}
         {!loading && pkgs.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch pt-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 items-stretch md:pt-5">
             {displayedPkgs.map((pkg: any, idx: number) => {
               let cd = pkg.cardData || {};
               if (typeof cd === 'string') {
