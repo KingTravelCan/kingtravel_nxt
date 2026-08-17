@@ -411,6 +411,8 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
               if (!content) return null;
               // Unwrap if the HTML was stored inside a wrapping <p> as entity-encoded text
               content = unescapeHtmlEntities(content);
+              // Ensure empty paragraphs (like those created by pressing Enter) don't collapse
+              content = content.replace(/<p>\s*(?:<br\s*\/?>)?\s*<\/p>/gi, '<p>&nbsp;</p>');
               // Strip wrapping <p>...</p> if the inner content starts with a block element
               const innerMatch = content.match(/^<p>([\s\S]*)<\/p>$/);
               if (innerMatch) {
