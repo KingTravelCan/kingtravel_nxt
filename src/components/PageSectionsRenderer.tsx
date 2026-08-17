@@ -23,7 +23,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
   if (!sections || !Array.isArray(sections)) return null;
 
   return (
-    <div className="w-full bg-sage py-10">
+    <div className="w-full">
       {sections.map((sec: any, idx: number) => {
         if (!sec || !sec.type) return null;
         if (sec.type === 'Certifications Flip Cards' || sec.type === 'Our Certifications') {
