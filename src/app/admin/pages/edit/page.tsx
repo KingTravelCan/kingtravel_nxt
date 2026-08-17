@@ -464,21 +464,7 @@ function PageBuilderContent() {
       description: 'Add section content description here...',
     };
 
-    if (type === 'Who We Are' || type === 'Who We Are') {
-      defaultData = {
-        eyebrow: 'WHO WE ARE',
-        title: 'We provide and offer Hajj & Umrah packages',
-        description: 'King Travel proudly provides reliable and professional Hajj and Umrah services across Canada. With years of experience serving the Muslim community, we are committed to making your sacred journey smooth, comfortable, and spiritually fulfilling. Whether you are traveling for Hajj, Umrah, or Saudi Visa services, our expert team is here to guide you every step of the way.',
-        image: 'https://images.unsplash.com/photo-1542856391-010fb87dcfed?auto=format&fit=crop&w=800&q=80',
-        quoteBadgeText: '"Every detail handled — from Visa to hotel, steps from the Haram."',
-        stat1Num: '25+',
-        stat1Label: 'Years Serving Canada',
-        stat2Num: '10k+',
-        stat2Label: 'Pilgrims Guided',
-        stat3Num: '5★',
-        stat3Label: 'Hotels, Every Package',
-      };
-    } else if (type === 'Umrah Packages') {
+    if (type === 'Umrah Packages') {
       defaultData = {
         eyebrow: 'EXCLUSIVE UPCOMING',
         title: 'Umrah Packages from Canada',
@@ -1958,26 +1944,51 @@ function PageBuilderContent() {
                                       className="w-full text-xs p-2 border border-slate-200 rounded-lg outline-none focus:border-[#004B39]"
                                     />
                                   </div>
-                                </div>
-                                <div className="grid grid-cols-3 gap-3">
-                                  {[1, 2, 3].map((num) => (
-                                    <div key={num} className="bg-slate-50 p-2 rounded-lg border border-slate-200">
-                                      <label className="block text-[10px] font-bold text-slate-600 mb-0.5">STAT {num} NUMBER</label>
-                                      <input
-                                        type="text"
-                                        value={sec.data?.[`stat${num}Num`] || ''}
-                                        onChange={(e) => updateSectionData(sec.id, `stat${num}Num`, e.target.value)}
-                                        className="w-full text-xs p-1.5 border border-slate-200 rounded mb-2 outline-none"
-                                      />
-                                      <label className="block text-[10px] font-bold text-slate-600 mb-0.5">STAT {num} LABEL</label>
-                                      <input
-                                        type="text"
-                                        value={sec.data?.[`stat${num}Label`] || ''}
-                                        onChange={(e) => updateSectionData(sec.id, `stat${num}Label`, e.target.value)}
-                                        className="w-full text-xs p-1.5 border border-slate-200 rounded outline-none"
-                                      />
-                                    </div>
-                                  ))}
+
+                                  <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col gap-2.5 mt-2">
+                                    <span className="text-[11px] font-extrabold text-[#004B39] uppercase">📊 KPI Stat Items (Value & Label)</span>
+                                    {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
+                                      { value: '72K+', label: 'Happy Travelers' },
+                                      { value: '4.4', label: 'Google Rating' },
+                                      { value: '100%', label: 'Client Satisfaction' },
+                                      { value: '25+', label: 'Years Experience' }
+                                    ]).map((stat: any, sIdx: number) => (
+                                      <div key={sIdx} className="grid grid-cols-[1fr_2fr] gap-2">
+                                        <input
+                                          type="text"
+                                          value={stat.value || ''}
+                                          placeholder="Value (e.g. 72K+)"
+                                          onChange={(e) => {
+                                            const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
+                                              { value: '72K+', label: 'Happy Travelers' },
+                                              { value: '4.4', label: 'Google Rating' },
+                                              { value: '100%', label: 'Client Satisfaction' },
+                                              { value: '25+', label: 'Years Experience' }
+                                            ])];
+                                            currentItems[sIdx] = { ...currentItems[sIdx], value: e.target.value };
+                                            updateSectionData(sec.id, 'items', currentItems);
+                                          }}
+                                          className="w-full min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                        />
+                                        <input
+                                          type="text"
+                                          value={stat.label || ''}
+                                          placeholder="Label (e.g. Happy Travelers)"
+                                          onChange={(e) => {
+                                            const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
+                                              { value: '72K+', label: 'Happy Travelers' },
+                                              { value: '4.4', label: 'Google Rating' },
+                                              { value: '100%', label: 'Client Satisfaction' },
+                                              { value: '25+', label: 'Years Experience' }
+                                            ])];
+                                            currentItems[sIdx] = { ...currentItems[sIdx], label: e.target.value };
+                                            updateSectionData(sec.id, 'items', currentItems);
+                                          }}
+                                          className="w-full min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs"
+                                        />
+                                      </div>
+                                    ))}
+                                  </div>
                                 </div>
                               </div>
                             )}

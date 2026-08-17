@@ -41,22 +41,22 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             <p className="!text-[18px] text-ink-soft mb-10 leading-relaxed text-sm md:text-base">
               {description2}
             </p>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 max-sm:grid-cols-3 sm:grid-cols-3 gap-4">
-              <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
-                <div className="text-gold font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">25+</div>
-                <div className="text-[10px] uppercase font-bold text-ink-soft tracking-wider">Years Serving Canada</div>
-              </div>
-              <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
-                <div className="text-gold font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">10k+</div>
-                <div className="text-[10px] uppercase font-bold text-ink-soft tracking-wider">Pilgrims Guided</div>
-              </div>
-              <div className="bg-[#fbfbf9] border border-[#e5e7dc] rounded-2xl p-4 sm:p-5 text-center shadow-sm">
-                <div className="text-gold font-serif text-xl sm:text-2xl mb-1 mb-wwa-yellow-font">5★</div>
-                <div className="text-[10px] uppercase font-bold text-ink-soft tracking-wider">Hotels, Every Package</div>
+            <div className="max-w-7xl mx-auto mb-8">
+              <div className="bg-white rounded-2xl shadow-xl flex flex-col md:flex-row items-center justify-between divide-y md:divide-y-0 md:divide-x divide-slate-100 border border-slate-50">
+                {((data?.items && Array.isArray(data.items) && data.items.length > 0) ? data.items : [
+                  { value: '72K+', label: 'Happy Travelers' },
+                  { value: '4.4', label: 'Google Rating' },
+                  { value: '100%', label: 'Client Satisfaction' },
+                  { value: '25+', label: 'Years Experience' }
+                ]).map((stat: any, idx: number) => (
+                  <div key={idx} className="flex-1 w-full text-center py-6 px-4">
+                    <div className="text-[#004B39] font-serif text-2xl md:text-3xl mb-1">{stat.value}</div>
+                    <div className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider">{stat.label}</div>
+                  </div>
+                ))}
               </div>
             </div>
+
           </div>
         </div>
       </div>

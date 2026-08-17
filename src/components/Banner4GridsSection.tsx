@@ -12,7 +12,7 @@ export default function Banner4GridsSection({ data }: { data: any }) {
   ];
 
   return (
-    <div className="w-full bg-white">
+    <div className="w-full bg-sage">
       <section className="relative -mt-15 md:-mt-21 z-10 max-w-4xl w-[calc(100%-3rem)] md:w-full mx-auto !pb-0">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           {items.map((item: any, idx: number) => (

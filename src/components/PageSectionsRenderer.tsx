@@ -18,12 +18,12 @@ import CertificationsFlipCardsSection from '@/components/CertificationsFlipCards
 import SoldOutPackagesSection from '@/components/SoldOutPackagesSection';
 import Banner4GridsSection from '@/components/Banner4GridsSection';
 import DynamicSiteForm from '@/components/DynamicSiteForm';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 export default function PageSectionsRenderer({ sections, pageData, initialPackageData }: { sections: any[], pageData?: any, initialPackageData?: any }) {
   if (!sections || !Array.isArray(sections)) return null;
 
   return (
-    <div className="w-full">
+    <div className="w-full bg-sage py-10">
       {sections.map((sec: any, idx: number) => {
         if (!sec || !sec.type) return null;
         if (sec.type === 'Certifications Flip Cards' || sec.type === 'Our Certifications') {
@@ -37,7 +37,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           if (innerM) { const inner = innerM[1].trim(); if (/^<(h[1-6]|ul|ol|blockquote)/.test(inner)) content = inner; }
           if (!content || content === '<p></p>') return null;
           return (
-            <section key={idx} className="section-rich py-6 px-4 sm:p-6 md:p-8 max-w-5xl mx-auto w-full">
+            <section key={idx} className="section-rich bg-white border border-primary border-4xl rounded-2xl py-6 md:px-4 sm:p-6 max-w-[1360px] mx-auto w-full">
               <div
                 className="prose prose-slate prose-headings:font-serif prose-headings:text-[#004B39] prose-a:text-[#004B39] prose-strong:text-slate-900 max-w-none text-sm leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: content }}
@@ -61,7 +61,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                   <span className="eyebrow mx-auto block">
                     {sec.data?.eyebrow || "AVAILABLE FLIGHTS"}
                   </span>
-                  <h2 className="text-3xl font-serif text-gray-900 tracking-tight">
+                  <h2 className="text-3xl font-serif text-primary tracking-tight">
                     {sec.data?.title || "BEST FARES, LIMITED AVAILABILITY FROM LONDON"}
                   </h2>
                 </div>

@@ -42,7 +42,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
     }
   }, [data?.packageIds, initialPackages]);
   return (
-    <section className="py-20 ">
+    <section className="py-20 bg-sage">
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">

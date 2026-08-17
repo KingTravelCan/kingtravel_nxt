@@ -88,6 +88,20 @@ export default function UmrahPackagesPageClient({ initialPageData, packages = []
   const [selectedDetailPkg, setSelectedDetailPkg] = useState<PackageDetailData | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
+  // Extract heading data if the user configured 'Upcoming Umrah Packages' in CMS
+  let umrahHeadingData: any = null;
+  let parsedSections: any[] = [];
+  try {
+    parsedSections = typeof pageData?.sections === 'string' ? JSON.parse(pageData.sections) : (pageData?.sections || []);
+    const umrahSec = parsedSections.find((s: any) => s.type === 'Upcoming Umrah Packages' || s.type === 'Umrah Packages Grid' || s.type === 'Umrah Packages');
+    if (umrahSec && umrahSec.data) {
+      umrahHeadingData = umrahSec.data;
+    }
+  } catch (e) { }
+
+  const eyebrow = umrahHeadingData?.eyebrow || "EXCLUSIVE UPCOMING";
+  const title = umrahHeadingData?.title || "Umrah Packages<br />from Canada";
+  const description = umrahHeadingData?.description || umrahHeadingData?.subtext || "Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking — contact us before reserving.";
 
   const openDetailModal = (card: any) => {
     setSelectedDetailPkg({
@@ -149,7 +163,19 @@ export default function UmrahPackagesPageClient({ initialPageData, packages = []
       </div>
 
       {/* ================= MAIN PACKAGES GRID ================= */}
-      <section className="packages-grid-container">
+      <section className="packages-grid-container pt-16 bg-sage">
+        <div className="max-w-[1400px] mx-auto px-5">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
+            <div className="flex flex-col items-center md:items-start">
+              <h3 className="eyebrow">{eyebrow}</h3>
+              <h2 className="" dangerouslySetInnerHTML={{ __html: title }} />
+            </div>
+            <div className="max-w-sm text-gray-500 text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
+              {description}
+            </div>
+          </div>
+        </div>
         <div className="cards-grid">
           {(() => {
             let cards = packages && packages.length > 0 ? packages : umrahCardsData;
@@ -294,12 +320,12 @@ export default function UmrahPackagesPageClient({ initialPageData, packages = []
       </section>
 
       {(() => {
-        try {
-          const parsed = typeof pageData?.sections === 'string' ? JSON.parse(pageData.sections) : (pageData?.sections || []);
-          if (parsed.length > 0) {
-            return <PageSectionsRenderer sections={parsed} pageData={pageData} />;
+        if (parsedSections.length > 0) {
+          const filteredSections = parsedSections.filter((s: any) => s.type !== 'Upcoming Umrah Packages' && s.type !== 'Umrah Packages Grid' && s.type !== 'Umrah Packages');
+          if (filteredSections.length > 0) {
+            return <PageSectionsRenderer sections={filteredSections} pageData={pageData} />;
           }
-        } catch (e) { }
+        }
         return null;
       })()}
     </div>
