@@ -71,13 +71,13 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
             ];
 
           return (
-            <section key={idx} className="pt-14 bg-sage">
+            <section key={idx} className="py-12 md:py-16 bg-sage">
               <div className="max-w-5xl mx-auto px-4">
                 <div className="flex flex-col items-center text-center mb-8">
                   <span className="eyebrow mx-auto block">
                     {sec.data?.eyebrow || "AVAILABLE FLIGHTS"}
                   </span>
-                  <h2 className="text-3xl font-serif text-primary tracking-tight">
+                  <h2 className="text-3xl font-serif tracking-tight">
                     {sec.data?.title || "BEST FARES, LIMITED AVAILABILITY FROM LONDON"}
                   </h2>
                 </div>
