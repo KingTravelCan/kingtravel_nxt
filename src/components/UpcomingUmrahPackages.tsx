@@ -170,7 +170,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                       />
                     )}
                     <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-gray-800 tracking-wider">
-                      {starRating} STAR
+                      {starRating}
                     </div>
                   </div>
                   <div className="p-8 flex-1 flex flex-col">

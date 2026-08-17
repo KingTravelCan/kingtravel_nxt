@@ -44,7 +44,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
     }
   }, [data?.packageIds, initialPackages]);
   return (
-    <section className={`pt-12 md:pt-16 ${pathname === '/' ? 'bg-white' : 'bg-sage'}`}>
+    <section className={pathname === '/' ? 'pb-12 md:pb-16 bg-white px-4' : 'pt-12 md:pt-16 bg-sage px-4'}>
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
