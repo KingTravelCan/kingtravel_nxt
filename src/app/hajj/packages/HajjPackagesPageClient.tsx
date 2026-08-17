@@ -423,9 +423,9 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
               return (
                 <section
                   key={`tb-${idx}`}
-                  className="py-12 bg-white"
+                  className="py-12 md:py-16 bg-sage px-4"
                 >
-                  <div className="max-w-5xl mx-auto px-4">
+                  <div className="section-rich bg-white rounded-3xl p-4 md:p-8 max-w-[1360px] mx-auto w-full">
                     <div
                       className={[
                         'prose prose-slate max-w-none text-sm leading-relaxed',
@@ -527,9 +527,9 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
           const parsed = typeof pageData?.sections === 'string' ? JSON.parse(pageData.sections) : (pageData?.sections || []);
           const unhandled = parsed.filter((s: any) => !handledTypes.includes(s.type));
           if (unhandled.length > 0) {
-             return <PageSectionsRenderer sections={unhandled} pageData={pageData} />;
+            return <PageSectionsRenderer sections={unhandled} pageData={pageData} />;
           }
-        } catch (e) {}
+        } catch (e) { }
         return null;
       })()}
     </div>
