@@ -41,17 +41,26 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             <p className="!text-[18px] text-ink-soft mb-10 leading-relaxed text-sm md:text-base">
               {description2}
             </p>
-            <div className="max-w-7xl mx-auto mb-8">
-              <div className="bg-white rounded-2xl shadow-xl flex flex-col md:flex-row items-center justify-between divide-y md:divide-y-0 md:divide-x divide-slate-100 border border-slate-50">
+            <div className="max-w-7xl mx-auto">
+              <div className="bg-white rounded-2xl shadow-xl grid grid-cols-2 md:grid-cols-4 border border-slate-50 overflow-hidden">
                 {((data?.items && Array.isArray(data.items) && data.items.length > 0) ? data.items : [
                   { value: '72K+', label: 'Happy Travelers' },
                   { value: '4.4', label: 'Google Rating' },
                   { value: '100%', label: 'Client Satisfaction' },
                   { value: '25+', label: 'Years Experience' }
                 ]).map((stat: any, idx: number) => (
-                  <div key={idx} className="flex-1 w-full text-center py-6 px-4">
-                    <div className="text-[#004B39] font-serif text-2xl md:text-3xl mb-1">{stat.value}</div>
-                    <div className="text-[10px] md:text-xs font-bold text-slate-500 uppercase tracking-wider">{stat.label}</div>
+                  <div 
+                    key={idx} 
+                    className={`text-center py-6 px-4 border-slate-100 ${
+                      idx % 2 === 0 ? 'border-r' : ''
+                    } ${
+                      idx < 2 ? 'border-b md:border-b-0' : ''
+                    } ${
+                      idx < 3 ? 'md:border-r' : ''
+                    }`}
+                  >
+                    <div className="text-primary font-serif text-2xl md:text-3xl mb-1">{stat.value}</div>
+                    <div className="text-xs font-bold text-ink-light uppercase tracking-wider">{stat.label}</div>
                   </div>
                 ))}
               </div>
