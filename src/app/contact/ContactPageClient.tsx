@@ -8,7 +8,7 @@ import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
 
 function ContactInfoCardsSection({ data }: { data?: any }) {
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 relative z-20 -mt-20 md:-mt-24">
+    <div className="w-full max-w-7xl mx-auto px-5 relative z-20 -mt-20 md:-mt-24">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
         {/* Card 1: Locations */}
         <div className="bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-slate-100/80 flex flex-col items-center text-center">
@@ -441,7 +441,7 @@ export default function ContactPageClient({ initialPageData, initialFormConfig }
       {/* ================= ALWAYS RELIABLE SECTIONS ================= */}
       <ContactInfoCardsSection data={sections.find(s => s.type === "Contact Info Cards" || s.type === "Contact Bar")?.data} />
 
-      <section className="max-w-7xl py-12 mx-auto px-4">
+      <section className="max-w-7xl py-12 mx-auto px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
           <ContactFormSection data={formSec?.data} initialFormConfig={initialFormConfig} />
           <ContactMapsSection data={sections.find((s: any) => s.type === "Contact Maps" || s.type === "Google Maps" || s.type === "Contact Form + Maps")?.data} />
