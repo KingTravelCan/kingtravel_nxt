@@ -319,18 +319,72 @@ export default function UmrahPackagesPageClient({ initialPageData, packages = []
         </div>
       </section>
 
+      {/* ================= DYNAMIC SECTIONS (Text Block, etc.) ================= */}
       {(() => {
-        if (parsedSections.length > 0) {
-          const filteredSections = parsedSections.filter((s: any) => s.type !== 'Upcoming Umrah Packages' && s.type !== 'Umrah Packages Grid' && s.type !== 'Umrah Packages');
-          if (filteredSections.length > 0) {
-            return <PageSectionsRenderer sections={filteredSections} pageData={pageData} />;
-          }
+        if (!pageData?.sections) return null;
+        try {
+          const parsed =
+            typeof pageData.sections === 'string'
+              ? JSON.parse(pageData.sections)
+              : pageData.sections;
+          if (!Array.isArray(parsed)) return null;
+
+          // Unescape HTML entities that may have been stored as text nodes
+          const unescapeHtmlEntities = (str: string): string => {
+            return str
+              .replace(/&lt;/g, '<')
+              .replace(/&gt;/g, '>')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&#39;/g, "'")
+              .replace(/&nbsp;/g, '\u00a0');
+          };
+
+          return parsed
+            .filter((s: any) => s.type === 'Text Block (Rich Text)')
+            .map((sec: any, idx: number) => {
+              let content: string = sec.data?.content || '';
+              if (!content) return null;
               // Unwrap if the HTML was stored inside a wrapping <p> as entity-encoded text
               content = unescapeHtmlEntities(content);
               // Ensure empty paragraphs (like those created by pressing Enter) don't collapse
               content = content.replace(/<p>\s*(?:<br\s*\/?>)?\s*<\/p>/gi, '<p>&nbsp;</p>');
               // Strip wrapping <p>...</p> if the inner content starts with a block element
               const innerMatch = content.match(/^<p>([\s\S]*)<\/p>$/);
+              if (innerMatch) {
+                const inner = innerMatch[1].trim();
+                if (inner.startsWith('<h') || inner.startsWith('<ul') || inner.startsWith('<ol') || inner.startsWith('<blockquote')) {
+                  content = inner;
+                }
+              }
+              if (!content || content === '<p></p>') return null;
+              return (
+                <section
+                  key={`tb-${idx}`}
+                  className="pt-12 md:pt-16 bg-sage px-4"
+                >
+                  <div className="section-rich bg-white rounded-3xl p-4 md:p-8 max-w-[1360px] mx-auto w-full">
+                    <div
+                      className={[
+                        'prose prose-slate max-w-none text-sm leading-relaxed',
+                        '[&_h1]:text-3xl [&_h1]:font-extrabold [&_h1]:text-slate-900',
+                        '[&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-[#004B39]',
+                        '[&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-[#004B39]',
+                        '[&_a]:text-[#004B39] [&_a]:underline',
+                        '[&_ul]:list-disc [&_ul]:pl-5',
+                        '[&_ol]:list-decimal [&_ol]:pl-5',
+                        '[&_blockquote]:border-l-4 [&_blockquote]:border-gold [&_blockquote]:pl-4 [&_blockquote]:italic [&_blockquote]:text-slate-600',
+                        '[&_strong]:text-slate-900',
+                        '[&_p]:text-slate-700 [&_p]:leading-relaxed',
+                      ].join(' ')}
+                      dangerouslySetInnerHTML={{ __html: content }}
+                    />
+                  </div>
+                </section>
+              );
+            });
+        } catch (e) {
+          return null;
         }
       })()}
 
