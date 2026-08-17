@@ -1,5 +1,4 @@
 "use client";
-import { usePathname } from 'next/navigation';
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -21,7 +20,6 @@ import Banner4GridsSection from '@/components/Banner4GridsSection';
 import DynamicSiteForm from '@/components/DynamicSiteForm';
 import { useEffect, useState } from "react";
 export default function PageSectionsRenderer({ sections, pageData, initialPackageData }: { sections: any[], pageData?: any, initialPackageData?: any }) {
-  const pathname = usePathname();
   if (!sections || !Array.isArray(sections)) return null;
 
   return (
@@ -39,11 +37,11 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           if (innerM) { const inner = innerM[1].trim(); if (/^<(h[1-6]|ul|ol|blockquote)/.test(inner)) content = inner; }
           if (!content || content === '<p></p>') return null;
 
-          const isPackagesPage = pathname === '/umrah-packages' || pathname === '/hajj-packages';
+          const isPackagesPage = pageData?.slug === '/umrah-packages' || pageData?.slug === 'umrah-packages' || pageData?.slug === '/hajj-packages' || pageData?.slug === 'hajj-packages';
 
           if (isPackagesPage) {
             return (
-              <section key={idx} className="py-12 md:py-16 bg-sage px-4">
+              <section key={idx} className="pt-12 md:pt-16 bg-sage px-4">
                 <div className="section-rich bg-white rounded-3xl p-4 md:p-8 max-w-[1360px] mx-auto w-full">
                   <div
                     className="prose prose-slate prose-headings:font-serif prose-headings:text-primary prose-a:text-[#004B39] prose-strong:text-slate-900 max-w-none text-sm leading-relaxed"
