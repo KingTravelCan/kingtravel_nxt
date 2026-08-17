@@ -3758,15 +3758,6 @@ function PageBuilderContent() {
                                     />
                                   </div>
                                   <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">LOCAL NUMBER 2</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.localNum2 || '+1 905-624-8344'}
-                                      onChange={(e) => updateSectionData(sec.id, 'localNum2', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    />
-                                  </div>
-                                  <div>
                                     <label className="block text-[9px] font-bold text-slate-500 mb-0.5">WHATSAPP RESERVATION</label>
                                     <input
                                       type="text"
