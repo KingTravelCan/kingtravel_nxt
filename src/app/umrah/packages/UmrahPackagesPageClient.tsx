@@ -325,7 +325,24 @@ export default function UmrahPackagesPageClient({ initialPageData, packages = []
           if (filteredSections.length > 0) {
             return <PageSectionsRenderer sections={filteredSections} pageData={pageData} />;
           }
+              // Unwrap if the HTML was stored inside a wrapping <p> as entity-encoded text
+              content = unescapeHtmlEntities(content);
+              // Ensure empty paragraphs (like those created by pressing Enter) don't collapse
+              content = content.replace(/<p>\s*(?:<br\s*\/?>)?\s*<\/p>/gi, '<p>&nbsp;</p>');
+              // Strip wrapping <p>...</p> if the inner content starts with a block element
+              const innerMatch = content.match(/^<p>([\s\S]*)<\/p>$/);
         }
+      })()}
+
+      {(() => {
+        try {
+          const handledTypes = ['Upcoming Umrah Packages', 'Umrah Packages Grid', 'Umrah Packages', 'Text Block (Rich Text)'];
+          const parsed = typeof pageData?.sections === 'string' ? JSON.parse(pageData.sections) : (pageData?.sections || []);
+          const unhandled = parsed.filter((s: any) => !handledTypes.includes(s.type));
+          if (unhandled.length > 0) {
+            return <PageSectionsRenderer sections={unhandled} pageData={pageData} />;
+          }
+        } catch (e) { }
         return null;
       })()}
     </div>

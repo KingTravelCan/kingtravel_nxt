@@ -33,6 +33,8 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           let content: string = sec.data?.content || '';
           if (!content) return null;
           content = content.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&nbsp;/g, '\u00a0');
+          // Ensure empty paragraphs (like those created by pressing Enter) don't collapse
+          content = content.replace(/<p>\s*(?:<br\s*\/?>)?\s*<\/p>/gi, '<p>&nbsp;</p>');
           const innerM = content.match(/^<p>([\s\S]*)<\/p>$/);
           if (innerM) { const inner = innerM[1].trim(); if (/^<(h[1-6]|ul|ol|blockquote)/.test(inner)) content = inner; }
           if (!content || content === '<p></p>') return null;
