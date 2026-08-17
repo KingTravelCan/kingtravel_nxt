@@ -44,7 +44,7 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
   if (!loading && pkgs.length === 0) return null;
 
   return (
-    <section className="py-20 bg-sage">
+    <section className="py-12 md:py-16 bg-sage">
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header (Two Columns) */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">

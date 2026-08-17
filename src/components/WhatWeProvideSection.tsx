@@ -15,7 +15,7 @@ export default function WhatWeProvideSection({ data }: { data: any }) {
   const items = data?.items?.length ? data.items : defaultItems;
 
   return (
-    <section className="py-24 bg-white">
+    <section className="py-12 md:py-16 bg-white">
       <div className="max-w-[1400px] mx-auto px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Image */}

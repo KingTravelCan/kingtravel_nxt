@@ -10,17 +10,17 @@ export default function WhoWeAreSection({ data }: { data: any }) {
   const reviewText = data?.reviewText || "\"Every detail handled — from visa to hotel, steps from the Haram.\"";
 
   return (
-    <section className="py-16 md:py-24 bg-sage">
+    <section className="py-12 md:py-16 bg-sage">
       <div className="max-w-[1400px] mx-auto px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* Left: Image */}
           <div className="relative justify-self-center lg:justify-self-end">
-            <div className="rounded-[40px] overflow-hidden shadow-2xl relative aspect-square w-[90vw] max-w-[550px]">
+            <div className="rounded-[40px] overflow-hidden shadow-2xl relative aspect-square w-[90vw] max-w-[600px]">
               <img src={image.replace(/\\/g, '/')} alt="Kaaba" className="w-full h-full object-cover" />
             </div>
 
             {/* Review Badge */}
-            <div className="absolute -bottom-6 -left-2 sm:-bottom-8 sm:-left-8 bg-white p-5 rounded-2xl shadow-xl w-64">
+            <div className="absolute bottom-0 -left-2 sm:-bottom-8 sm:-left-8 bg-white p-5 rounded-2xl shadow-xl w-64">
               <div className="flex text-gold text-sm mb-2">★★★★★</div>
               <p className="text-xs text-ink-soft font-medium leading-relaxed">
                 {reviewText}

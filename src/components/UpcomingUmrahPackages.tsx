@@ -65,10 +65,10 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
   // Homepage should only show the first 4 Umrah packages.
   const displayedPkgs = pathname === "/" ? pkgs.slice(0, 4) : pkgs;
   return (
-    <section className={`py-10 ${pathname === '/' ? 'bg-white' : 'bg-sage'}`}>
+    <section className={`py-12 md:py-16 ${pathname === '/' ? 'bg-white' : 'bg-sage'}`}>
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 md:mb-16 gap-6 text-center md:text-left">
           <div className="flex flex-col items-center md:items-start">
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2
