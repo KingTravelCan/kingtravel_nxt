@@ -15,7 +15,7 @@ export default function WhoWeAreSection({ data }: { data: any }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
           {/* Left: Image */}
           <div className="relative justify-self-center lg:justify-self-end">
-            <div className="rounded-[40px] overflow-hidden shadow-2xl relative aspect-[4/3] w-[90vw] max-w-[550px]">
+            <div className="rounded-[40px] overflow-hidden shadow-2xl relative aspect-square w-[90vw] max-w-[550px]">
               <img src={image.replace(/\\/g, '/')} alt="Kaaba" className="w-full h-full object-cover" />
             </div>
 
