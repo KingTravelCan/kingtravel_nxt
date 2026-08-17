@@ -2701,9 +2701,9 @@ select {
     max-width: none;
   }
 
-  section {
+  /* section {
     padding: 30px 0;
-  }
+  } */
 
   .section-rich {
     padding: 0 20px;

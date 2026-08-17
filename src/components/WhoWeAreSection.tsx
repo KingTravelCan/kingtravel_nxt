@@ -20,7 +20,7 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             </div>
 
             {/* Review Badge */}
-            <div className="absolute bottom-0 -left-2 sm:-bottom-8 sm:-left-8 bg-white p-5 rounded-2xl shadow-xl w-64">
+            <div className="absolute bottom-4 -left-2 sm:bottom-8 sm:-left-8 bg-white p-5 rounded-2xl shadow-xl w-64">
               <div className="flex text-gold text-sm mb-2">★★★★★</div>
               <p className="text-xs text-ink-soft font-medium leading-relaxed">
                 {reviewText}
