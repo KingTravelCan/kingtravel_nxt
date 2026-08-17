@@ -169,7 +169,7 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
                         className="w-full h-full object-cover"
                       />
                     )}
-                    <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full text-[10px] font-black text-gray-800 tracking-wider">
+                    <div className="absolute top-4 left-4 bg-white px-3 py-1 rounded-full uppercase text-[10px] font-black text-gray-800 tracking-wider">
                       {starRating}
                     </div>
                   </div>
