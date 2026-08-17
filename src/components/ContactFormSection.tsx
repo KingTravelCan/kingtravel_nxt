@@ -99,9 +99,8 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                 <div>
                   <h4 className="">Landlines:</h4>
                   <div className="">
-                    {data.tollFree || "+1 800-844-5464"}<br />
-                    {data.localNum1 || "+1 905-624-8555"}<br />
-                    {data.localNum2 || "+1 905-624-8344"}
+                    {data.tollFree || "+1 647-982-8555"}<br />
+                    {data.localNum1 || "+1 905-624-8555"}
                   </div>
                 </div>
                 <div>
