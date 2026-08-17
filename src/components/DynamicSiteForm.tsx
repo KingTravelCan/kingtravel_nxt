@@ -335,66 +335,55 @@ export default function DynamicSiteForm({
                       })}
                     </div>
                   ) : field.type.startsWith("dropdown_") || isSelect ? (
-                    <div className="relative">
-                      <select
-                        name={field.id}
-                        required={field.required}
-                        value={formData[field.id] || ""}
-                        onChange={handleChange}
-                        className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors appearance-none cursor-pointer pr-6 ${formKey === "flightInquiry" ? "bg-white" : ""}`}
-                      >
-                        <option value="">Select {field.label}</option>
+                    <select
+                      name={field.id}
+                      required={field.required}
+                      value={formData[field.id] || ""}
+                      onChange={handleChange}
+                      className="w-full border border-line p-3 pr-10 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat cursor-pointer focus:border-emerald-800"
+                    >
+                      <option value="">Select {field.label}</option>
 
-                        {field.type === "dropdown_packages" && allPackages.map(p => (
+                      {field.type === "dropdown_packages" && allPackages.map(p => (
+                        <option key={p.id} value={p.name}>{p.name}</option>
+                      ))}
+
+                      {field.type === "dropdown_tab_package" && allPackages
+                        .filter(p => {
+                          const journeyField = mainFields.find(f => f.type === "bubble_tabs_journey");
+                          const activeTab = journeyField ? formData[journeyField.id] : null;
+                          if (!activeTab) return true;
+                          return p.type?.toLowerCase() === activeTab.toLowerCase();
+                        })
+                        .map(p => (
                           <option key={p.id} value={p.name}>{p.name}</option>
-                        ))}
+                        ))
+                      }
 
-                        {field.type === "dropdown_tab_package" && allPackages
-                          .filter(p => {
-                            const journeyField = mainFields.find(f => f.type === "bubble_tabs_journey");
-                            const activeTab = journeyField ? formData[journeyField.id] : null;
-                            if (!activeTab) return true;
-                            return p.type?.toLowerCase() === activeTab.toLowerCase();
-                          })
-                          .map(p => (
-                            <option key={p.id} value={p.name}>{p.name}</option>
-                          ))
-                        }
+                      {field.type === "dropdown_numbers_1_6" && ["1", "2", "3", "4", "5", "6+"].map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
 
-                        {field.type === "dropdown_numbers_1_6" && ["1", "2", "3", "4", "5", "6+"].map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
+                      {field.type === "dropdown_flight_type" && ["One-Way", "Round Trip"].map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
 
-                        {field.type === "dropdown_flight_type" && ["One-Way", "Round Trip"].map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
+                      {field.type === "dropdown_flight_class" && ["Economy", "Business", "First Class"].map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
 
-                        {field.type === "dropdown_flight_class" && ["Economy", "Business", "First Class"].map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
+                      {isSelect && selectOptions.map(opt => (
+                        <option key={opt} value={opt}>{opt}</option>
+                      ))}
 
-                        {isSelect && selectOptions.map(opt => (
-                          <option key={opt} value={opt}>{opt}</option>
-                        ))}
-
-                        {isSelect && selectOptions.length === 0 && (
-                          <>
-                            <option value="Option 1">Option 1</option>
-                            <option value="Option 2">Option 2</option>
-                            <option value="Option 3">Option 3</option>
-                          </>
-                        )}
-                      </select>
-                      <svg
-                        className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                      </svg>
-                    </div>
+                      {isSelect && selectOptions.length === 0 && (
+                        <>
+                          <option value="Option 1">Option 1</option>
+                          <option value="Option 2">Option 2</option>
+                          <option value="Option 3">Option 3</option>
+                        </>
+                      )}
+                    </select>
                   ) : isDate ? (
                     <input
                       type="date"
@@ -402,7 +391,7 @@ export default function DynamicSiteForm({
                       required={field.required}
                       value={formData[field.id] || ""}
                       onChange={handleChange}
-                      className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors ${formKey === "flightInquiry" ? "bg-white" : ""}`}
+                      className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium focus:border-emerald-800"
                     />
                   ) : isTel ? (
                     <input
@@ -414,8 +403,7 @@ export default function DynamicSiteForm({
                       placeholder={field.placeholder || "e.g. +1 234 567 890"}
                       inputMode="tel"
                       autoComplete="tel"
-                      className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors ${formKey === "flightInquiry" ? "bg-white" : ""
-                        }`}
+                      className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium focus:border-emerald-800"
                     />
                   ) : (
                     <input
@@ -425,7 +413,7 @@ export default function DynamicSiteForm({
                       value={formData[field.id] || ""}
                       onChange={handleChange}
                       placeholder={field.placeholder || ""}
-                      className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors ${formKey === "flightInquiry" ? "bg-white" : ""}`}
+                      className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium focus:border-emerald-800"
                     />
                   )}
                 </div>
@@ -447,7 +435,7 @@ export default function DynamicSiteForm({
                 onChange={handleChange}
                 placeholder={field.placeholder || ""}
                 rows={4}
-                className={`w-full border-1 border-primary px-2 py-3 rounded-md text-sm text-slate-800 placeholder:text-slate-400 font-medium transition-colors resize-none ${formKey === "flightInquiry" ? "bg-white" : ""}`}
+                className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium resize-none focus:border-emerald-800"
               />
             </div>
           ))}

@@ -41,9 +41,9 @@ export default function PackageBookingModal({
 
   const price = pkg?.startingPrice
     ? Number(pkg.startingPrice).toLocaleString("en-CA", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })
     : "12,995";
 
   const currencyCode = cd.currencyCode || "CAD";
@@ -211,11 +211,8 @@ export default function PackageBookingModal({
                       }));
                     }
                   }}
-                  className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                    errors.fullName
-                      ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                      : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                  }`}
+                  className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                    }`}
                 />
 
                 {errors.fullName && (
@@ -252,11 +249,8 @@ export default function PackageBookingModal({
                         }));
                       }
                     }}
-                    className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                      errors.phone
-                        ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                        : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                    }`}
+                    className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                      }`}
                   />
 
                   {errors.phone && (
@@ -287,11 +281,8 @@ export default function PackageBookingModal({
                         }));
                       }
                     }}
-                    className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${
-                      errors.email
-                        ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                        : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
-                    }`}
+                    className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                      }`}
                   />
 
                   {errors.email && (
@@ -321,7 +312,8 @@ export default function PackageBookingModal({
                     onChange={(e) =>
                       setAdults(e.target.value)
                     }
-                    className="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 font-bold focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer text-center"
+                    className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                      }`}
                   >
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -344,7 +336,8 @@ export default function PackageBookingModal({
                     onChange={(e) =>
                       setChildrenCount(e.target.value)
                     }
-                    className="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 font-bold focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer text-center"
+                    className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                      }`}
                   >
                     <option value="0">0</option>
                     <option value="1">1</option>
@@ -366,7 +359,8 @@ export default function PackageBookingModal({
                     onChange={(e) =>
                       setInfantsCount(e.target.value)
                     }
-                    className="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 font-bold focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer text-center"
+                    className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                      }`}
                   >
                     <option value="0">0</option>
                     <option value="1">1</option>
@@ -392,11 +386,8 @@ export default function PackageBookingModal({
 
                   {/* Visible date display */}
                   <div
-                    className={`w-full border rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all flex items-center justify-between ${
-                      errors.selectedDate
-                        ? "border-red-500 bg-red-50/50 text-red-900"
-                        : "bg-slate-50 border-slate-200 text-slate-800"
-                    }`}
+                    className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.2rem_center] bg-no-repeat flex items-center justify-between ${errors.selectedDate ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                      }`}
                   >
                     <span
                       className={
@@ -407,25 +398,25 @@ export default function PackageBookingModal({
                     >
                       {selectedDate
                         ? (() => {
-                            const [
-                              year,
-                              month,
-                              day,
-                            ] = selectedDate.split("-");
+                          const [
+                            year,
+                            month,
+                            day,
+                          ] = selectedDate.split("-");
 
-                            return new Date(
-                              Number(year),
-                              Number(month) - 1,
-                              Number(day)
-                            ).toLocaleDateString(
-                              "en-US",
-                              {
-                                month: "long",
-                                day: "2-digit",
-                                year: "numeric",
-                              }
-                            );
-                          })()
+                          return new Date(
+                            Number(year),
+                            Number(month) - 1,
+                            Number(day)
+                          ).toLocaleDateString(
+                            "en-US",
+                            {
+                              month: "long",
+                              day: "2-digit",
+                              year: "numeric",
+                            }
+                          );
+                        })()
                         : "e.g. March 25, 2025"}
                     </span>
 
