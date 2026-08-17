@@ -423,7 +423,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
               return (
                 <section
                   key={`tb-${idx}`}
-                  className="py-12 md:py-16 bg-sage px-4"
+                  className="pt-12 md:pt-16 bg-sage px-4"
                 >
                   <div className="section-rich bg-white rounded-3xl p-4 md:p-8 max-w-[1360px] mx-auto w-full">
                     <div
