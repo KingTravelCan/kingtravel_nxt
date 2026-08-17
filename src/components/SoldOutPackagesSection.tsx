@@ -19,7 +19,7 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
 
   useEffect(() => {
     if (initialPackages && initialPackages.length > 0) return;
-    
+
     if (packageIds.length === 0) {
       getSoldOutPackages()
         .then((rows) => setPkgs(rows))
@@ -101,16 +101,16 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
                 pkg.featuredImage ||
                 "https://images.unsplash.com/photo-1553755088-ef1973c7b4a1?auto=format&fit=crop&w=700&q=80";
               const typeName = pkg.type === "hajj" ? "HAJJ" : "UMRAH";
-              
+
               // We could use `pkg.month` or `cd.duration` here, let's show the package type and duration
               const monthLabel = `${typeName} \u00B7 ${cd.duration || pkg.durationDays + ' Days'}`;
-              
+
               const price = pkg.startingPrice
                 ? `CAD ${Number(pkg.startingPrice).toLocaleString("en-CA")}`
                 : "CAD 0";
               const priceUnit = cd.priceSubtext || "/ Person";
               const includesText = "PACKAGE INCLUDES";
-              
+
               // Map some common text to icons based on the UI
               const getIconForText = (text: string, defaultIcon: string = "Check") => {
                 const lower = text.toLowerCase();
@@ -127,10 +127,10 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
               const includes = Array.isArray(cd.includes) && cd.includes.length > 0
                 ? cd.includes
                 : [
-                    { text: 'Return Flights from Toronto', icon: 'Plane' },
-                    { text: 'Luxury Ground Transportation', icon: 'Bus' },
-                    { text: '5 Star Hotels Makkah & Madinah', icon: 'Building' }
-                  ];
+                  { text: 'Return Flights from Toronto', icon: 'Plane' },
+                  { text: 'Luxury Ground Transportation', icon: 'Bus' },
+                  { text: '5 Star Hotels Makkah & Madinah', icon: 'Building' }
+                ];
 
               return (
                 <article

@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import * as LucideIcons from "lucide-react";
 import DynamicIcon from "@/components/ui/DynamicIcon";
 import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
 import PackageBookingModal from "@/components/PackageBookingModal";
 export default function HajjPackagesSection({ data, initialPackages }: { data: any, initialPackages?: any }) {
+  const pathname = usePathname();
   const eyebrow = data?.eyebrow || "LUXURY HAJJ PACKAGES";
   const title = data?.title || "Hajj Packages 2027";
   const description =
@@ -42,7 +44,7 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
     }
   }, [data?.packageIds, initialPackages]);
   return (
-    <section className="py-20 bg-sage">
+    <section className={`py-20 ${pathname === '/' ? 'bg-white' : 'bg-sage'}`}>
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
