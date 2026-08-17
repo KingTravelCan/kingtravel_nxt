@@ -37,7 +37,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
           if (innerM) { const inner = innerM[1].trim(); if (/^<(h[1-6]|ul|ol|blockquote)/.test(inner)) content = inner; }
           if (!content || content === '<p></p>') return null;
           return (
-            <section key={idx} className="section-rich bg-white border border-primary border-4xl rounded-2xl py-6 md:px-4 sm:p-6 max-w-[1360px] mx-auto w-full">
+            <section key={idx} className="section-rich bg-white rounded-3xl md:p-8 sm:p-4 max-w-[1360px] mx-auto w-full">
               <div
                 className="prose prose-slate prose-headings:font-serif prose-headings:text-[#004B39] prose-a:text-[#004B39] prose-strong:text-slate-900 max-w-none text-sm leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: content }}
