@@ -29,8 +29,7 @@ export default function CustomizeHajjPage() {
         email: formData.email,
         phone: formData.phone,
         packageType: `Customize Hajj 2027 (${formData.occupancy})`,
-        departureDate: 'Hajj 2027',
-        adults: 1,
+        numberOfPilgrims: 1,
       });
 
       setLoading(false);
