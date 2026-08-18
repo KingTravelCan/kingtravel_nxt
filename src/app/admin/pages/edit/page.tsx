@@ -4079,17 +4079,30 @@ function PageBuilderContent() {
                                                     )}
                                                   </div>
                                                 </div>
-                                                <input
-                                                  type="text"
-                                                  value={item.number || ''}
-                                                  onChange={(e) => {
-                                                    const updated = [...landlinesList];
-                                                    updated[lIdx] = { ...updated[lIdx], number: e.target.value };
-                                                    updateSectionData(sec.id, 'landlines', updated);
-                                                  }}
-                                                  placeholder="+1 905-624-8555"
-                                                  className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-mono text-slate-800 outline-none bg-white focus:border-[#004B39]"
-                                                />
+                                                <div className="grid grid-cols-2 gap-2">
+                                                  <input
+                                                    type="text"
+                                                    value={item.number || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...landlinesList];
+                                                      updated[lIdx] = { ...updated[lIdx], number: e.target.value };
+                                                      updateSectionData(sec.id, 'landlines', updated);
+                                                    }}
+                                                    placeholder="Number (e.g. +1 800 844 5464)"
+                                                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-mono text-slate-800 outline-none bg-white focus:border-[#004B39]"
+                                                  />
+                                                  <input
+                                                    type="text"
+                                                    value={item.label || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...landlinesList];
+                                                      updated[lIdx] = { ...updated[lIdx], label: e.target.value };
+                                                      updateSectionData(sec.id, 'landlines', updated);
+                                                    }}
+                                                    placeholder="Label (e.g. Toll Free / Main)"
+                                                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-800 outline-none bg-white focus:border-[#004B39]"
+                                                  />
+                                                </div>
                                               </div>
                                             ))}
                                           </div>

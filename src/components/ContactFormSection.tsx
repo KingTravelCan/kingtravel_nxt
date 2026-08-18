@@ -92,11 +92,11 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
   };
 
   // Resolve Landlines list (repeater or legacy fallback)
-  const resolvedLandlines: Array<{ number: string; openInNewTab?: boolean }> = (data?.landlines && Array.isArray(data.landlines) && data.landlines.length > 0)
-    ? data.landlines.filter(l => l && l.number?.trim()).map(l => ({ number: l.number!.trim(), openInNewTab: l.openInNewTab }))
+  const resolvedLandlines: Array<{ number: string; label?: string; openInNewTab?: boolean }> = (data?.landlines && Array.isArray(data.landlines) && data.landlines.length > 0)
+    ? data.landlines.filter(l => l && l.number?.trim()).map(l => ({ number: l.number!.trim(), label: l.label, openInNewTab: l.openInNewTab }))
     : [
-      ...(data?.tollFree ? [{ number: data.tollFree, openInNewTab: data.tollFreeNewTab ?? true }] : [{ number: "+1 905-624-8555", openInNewTab: true }]),
-      ...(data?.localNum1 ? [{ number: data.localNum1, openInNewTab: data.localNum1NewTab ?? true }] : [{ number: "+1 905-624-8344", openInNewTab: true }]),
+      ...(data?.tollFree ? [{ number: data.tollFree, label: 'Toll Free / Main', openInNewTab: data.tollFreeNewTab ?? true }] : [{ number: "+1 905-624-8555", openInNewTab: true }]),
+      ...(data?.localNum1 ? [{ number: data.localNum1, label: 'Local Line 2', openInNewTab: data.localNum1NewTab ?? true }] : [{ number: "+1 905-624-8344", openInNewTab: true }]),
     ];
 
   // Resolve WhatsApp list (repeater or legacy fallback)
@@ -124,38 +124,42 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
             </div>
 
             <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-14">
                 <div>
                   <h4 className="">LANDLINES:</h4>
-                  <div className="flex flex-col gap-0.5">
+                  <div className="flex flex-col gap-1">
                     {resolvedLandlines.map((item, idx) => (
-                      <a
-                        key={idx}
-                        href={`tel:${item.number.replace(/\s+/g, '')}`}
-                        target={item.openInNewTab ?? true ? "_blank" : "_self"}
-                        rel={item.openInNewTab ?? true ? "noopener noreferrer" : undefined}
-                        className="hover:text-emerald-800 transition-colors"
-                      >
-                        {item.number}
-                      </a>
+                      <div key={idx} className="whitespace-nowrap">
+                        <a
+                          href={`tel:${item.number.replace(/\s+/g, '')}`}
+                          target={item.openInNewTab ?? true ? "_blank" : "_self"}
+                          rel={item.openInNewTab ?? true ? "noopener noreferrer" : undefined}
+                          className="hover:text-emerald-800 transition-colors inline-block"
+                        >
+                          {item.number}
+                        </a>
+                        {item.label && (
+                          <span className="text-xs font-normal text-slate-500 whitespace-nowrap"> - {item.label}</span>
+                        )}
+                      </div>
                     ))}
                   </div>
                 </div>
                 <div>
                   <h4 className="">WHATSAPP:</h4>
-                  <div className="flex flex-col gap-0.5">
+                  <div className="flex flex-col gap-1">
                     {resolvedWhatsApp.map((item, idx) => (
-                      <div key={idx}>
+                      <div key={idx} className="whitespace-nowrap">
                         <a
                           href={`https://wa.me/${item.number.replace(/[^0-9]/g, '')}`}
                           target={item.openInNewTab ?? true ? "_blank" : "_self"}
                           rel={item.openInNewTab ?? true ? "noopener noreferrer" : undefined}
-                          className="hover:text-emerald-800 transition-colors"
+                          className="hover:text-emerald-800 transition-colors inline-block"
                         >
                           {item.number}
                         </a>
                         {item.label && (
-                          <span className="text-xs font-normal text-slate-500"> - {item.label}</span>
+                          <span className="text-xs font-normal text-slate-500 whitespace-nowrap"> - {item.label}</span>
                         )}
                       </div>
                     ))}
