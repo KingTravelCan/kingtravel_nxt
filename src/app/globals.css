@@ -2844,7 +2844,7 @@ select {
 
 .prose p {
   margin-bottom: 16px;
-  font-size: 1rem;
+  font-size: clamp(0.9375rem, 1.2vw, 1rem);
   line-height: 1.6;
   font-weight: 400;
 }
