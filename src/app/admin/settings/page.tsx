@@ -1500,43 +1500,86 @@ export default function AdminSettingsPage() {
                     className="p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#004B39]"
                   />
                   <div className="flex flex-col gap-2">
-                    {(footerData.servicesLinks || []).map((link: any, lIdx: number) => (
-                      <div key={lIdx} className="flex gap-2 items-center">
-                        <input
-                          type="text"
-                          placeholder="Label"
-                          value={link.label || ''}
-                          onChange={(e) => {
-                            const updated = [...footerData.servicesLinks];
-                            updated[lIdx] = { ...updated[lIdx], label: e.target.value };
-                            setFooterData({ ...footerData, servicesLinks: updated });
-                          }}
-                          className="flex-1 p-1.5 rounded border border-slate-300 text-xs"
-                        />
-                        <input
-                          type="text"
-                          placeholder="URL"
-                          value={link.url || ''}
-                          onChange={(e) => {
-                            const updated = [...footerData.servicesLinks];
-                            updated[lIdx] = { ...updated[lIdx], url: e.target.value };
-                            setFooterData({ ...footerData, servicesLinks: updated });
-                          }}
-                          className="flex-1 p-1.5 rounded border border-slate-300 text-xs font-mono"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = (footerData.servicesLinks || []).filter((_: any, i: number) => i !== lIdx);
-                            setFooterData({ ...footerData, servicesLinks: updated });
-                          }}
-                          className="text-white hover:bg-red-700 text-xs bg-red-600 border-none rounded-lg p-1.5 cursor-pointer font-bold flex items-center justify-center transition-colors shrink-0"
-                          title="Remove link"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
+                    {(footerData.servicesLinks || []).map((link: any, lIdx: number) => {
+                      const isFirst = lIdx === 0;
+                      const isLast = lIdx === (footerData.servicesLinks || []).length - 1;
+
+                      return (
+                        <div key={lIdx} className="flex gap-1.5 items-center">
+                          <div className="flex items-center gap-0.5 shrink-0">
+                            <button
+                              type="button"
+                              disabled={isFirst}
+                              onClick={() => {
+                                if (isFirst) return;
+                                const updated = [...footerData.servicesLinks];
+                                const temp = updated[lIdx - 1];
+                                updated[lIdx - 1] = updated[lIdx];
+                                updated[lIdx] = temp;
+                                setFooterData({ ...footerData, servicesLinks: updated });
+                              }}
+                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
+                                isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                              }`}
+                              title="Move Up"
+                            >
+                              <MoveUp className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isLast}
+                              onClick={() => {
+                                if (isLast) return;
+                                const updated = [...footerData.servicesLinks];
+                                const temp = updated[lIdx + 1];
+                                updated[lIdx + 1] = updated[lIdx];
+                                updated[lIdx] = temp;
+                                setFooterData({ ...footerData, servicesLinks: updated });
+                              }}
+                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
+                                isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                              }`}
+                              title="Move Down"
+                            >
+                              <MoveDown className="w-3 h-3" />
+                            </button>
+                          </div>
+                          <input
+                            type="text"
+                            placeholder="Label"
+                            value={link.label || ''}
+                            onChange={(e) => {
+                              const updated = [...footerData.servicesLinks];
+                              updated[lIdx] = { ...updated[lIdx], label: e.target.value };
+                              setFooterData({ ...footerData, servicesLinks: updated });
+                            }}
+                            className="flex-1 p-1.5 rounded border border-slate-300 text-xs"
+                          />
+                          <input
+                            type="text"
+                            placeholder="URL"
+                            value={link.url || ''}
+                            onChange={(e) => {
+                              const updated = [...footerData.servicesLinks];
+                              updated[lIdx] = { ...updated[lIdx], url: e.target.value };
+                              setFooterData({ ...footerData, servicesLinks: updated });
+                            }}
+                            className="flex-1 p-1.5 rounded border border-slate-300 text-xs font-mono"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = (footerData.servicesLinks || []).filter((_: any, i: number) => i !== lIdx);
+                              setFooterData({ ...footerData, servicesLinks: updated });
+                            }}
+                            className="text-white hover:bg-red-700 text-xs bg-red-600 border-none rounded-lg p-1.5 cursor-pointer font-bold flex items-center justify-center transition-colors shrink-0"
+                            title="Remove link"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
 
@@ -1563,43 +1606,86 @@ export default function AdminSettingsPage() {
                     className="p-2 rounded-lg border border-slate-300 text-xs font-bold text-[#004B39]"
                   />
                   <div className="flex flex-col gap-2">
-                    {(footerData.sitemapLinks || []).map((link: any, lIdx: number) => (
-                      <div key={lIdx} className="flex gap-2 items-center">
-                        <input
-                          type="text"
-                          placeholder="Label"
-                          value={link.label || ''}
-                          onChange={(e) => {
-                            const updated = [...footerData.sitemapLinks];
-                            updated[lIdx] = { ...updated[lIdx], label: e.target.value };
-                            setFooterData({ ...footerData, sitemapLinks: updated });
-                          }}
-                          className="flex-1 p-1.5 rounded border border-slate-300 text-xs"
-                        />
-                        <input
-                          type="text"
-                          placeholder="URL"
-                          value={link.url || ''}
-                          onChange={(e) => {
-                            const updated = [...footerData.sitemapLinks];
-                            updated[lIdx] = { ...updated[lIdx], url: e.target.value };
-                            setFooterData({ ...footerData, sitemapLinks: updated });
-                          }}
-                          className="flex-1 p-1.5 rounded border border-slate-300 text-xs font-mono"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = (footerData.sitemapLinks || []).filter((_: any, i: number) => i !== lIdx);
-                            setFooterData({ ...footerData, sitemapLinks: updated });
-                          }}
-                          className="text-white hover:bg-red-700 text-xs bg-red-600 border-none rounded-lg p-1.5 cursor-pointer font-bold flex items-center justify-center transition-colors shrink-0"
-                          title="Remove link"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
-                      </div>
-                    ))}
+                    {(footerData.sitemapLinks || []).map((link: any, lIdx: number) => {
+                      const isFirst = lIdx === 0;
+                      const isLast = lIdx === (footerData.sitemapLinks || []).length - 1;
+
+                      return (
+                        <div key={lIdx} className="flex gap-1.5 items-center">
+                          <div className="flex items-center gap-0.5 shrink-0">
+                            <button
+                              type="button"
+                              disabled={isFirst}
+                              onClick={() => {
+                                if (isFirst) return;
+                                const updated = [...footerData.sitemapLinks];
+                                const temp = updated[lIdx - 1];
+                                updated[lIdx - 1] = updated[lIdx];
+                                updated[lIdx] = temp;
+                                setFooterData({ ...footerData, sitemapLinks: updated });
+                              }}
+                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
+                                isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                              }`}
+                              title="Move Up"
+                            >
+                              <MoveUp className="w-3 h-3" />
+                            </button>
+                            <button
+                              type="button"
+                              disabled={isLast}
+                              onClick={() => {
+                                if (isLast) return;
+                                const updated = [...footerData.sitemapLinks];
+                                const temp = updated[lIdx + 1];
+                                updated[lIdx + 1] = updated[lIdx];
+                                updated[lIdx] = temp;
+                                setFooterData({ ...footerData, sitemapLinks: updated });
+                              }}
+                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
+                                isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                              }`}
+                              title="Move Down"
+                            >
+                              <MoveDown className="w-3 h-3" />
+                            </button>
+                          </div>
+                          <input
+                            type="text"
+                            placeholder="Label"
+                            value={link.label || ''}
+                            onChange={(e) => {
+                              const updated = [...footerData.sitemapLinks];
+                              updated[lIdx] = { ...updated[lIdx], label: e.target.value };
+                              setFooterData({ ...footerData, sitemapLinks: updated });
+                            }}
+                            className="flex-1 p-1.5 rounded border border-slate-300 text-xs"
+                          />
+                          <input
+                            type="text"
+                            placeholder="URL"
+                            value={link.url || ''}
+                            onChange={(e) => {
+                              const updated = [...footerData.sitemapLinks];
+                              updated[lIdx] = { ...updated[lIdx], url: e.target.value };
+                              setFooterData({ ...footerData, sitemapLinks: updated });
+                            }}
+                            className="flex-1 p-1.5 rounded border border-slate-300 text-xs font-mono"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = (footerData.sitemapLinks || []).filter((_: any, i: number) => i !== lIdx);
+                              setFooterData({ ...footerData, sitemapLinks: updated });
+                            }}
+                            className="text-white hover:bg-red-700 text-xs bg-red-600 border-none rounded-lg p-1.5 cursor-pointer font-bold flex items-center justify-center transition-colors shrink-0"
+                            title="Remove link"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -1629,58 +1715,102 @@ export default function AdminSettingsPage() {
                 />
 
                 <div className="flex flex-col gap-2.5">
-                  {(footerData.supportItems || []).map((item: any, cIdx: number) => (
-                    <div key={cIdx} className="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col md:flex-row gap-3 items-center justify-between">
-                      <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
-                        <input
-                          type="text"
-                          placeholder="Display Text (e.g. +1905-624-8555)"
-                          value={item.text || ''}
-                          onChange={(e) => {
-                            const updated = [...footerData.supportItems];
-                            updated[cIdx] = { ...updated[cIdx], text: e.target.value };
-                            setFooterData({ ...footerData, supportItems: updated });
-                          }}
-                          className="p-1.5 rounded border border-slate-300 text-xs font-medium"
-                        />
-                        <input
-                          type="text"
-                          placeholder="Action Link (e.g. tel:+19056248555 or mailto:...)"
-                          value={item.url || ''}
-                          onChange={(e) => {
-                            const updated = [...footerData.supportItems];
-                            updated[cIdx] = { ...updated[cIdx], url: e.target.value };
-                            setFooterData({ ...footerData, supportItems: updated });
-                          }}
-                          className="p-1.5 rounded border border-slate-300 text-xs font-mono"
-                        />
-                      </div>
-                      <div className="flex items-center gap-4 w-full md:w-auto justify-between">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-bold text-slate-600">Open in New Tab</span>
-                          <Switch
-                            checked={item.openInNewTab ?? false}
-                            onChange={(val) => {
+                  {(footerData.supportItems || []).map((item: any, cIdx: number) => {
+                    const isFirst = cIdx === 0;
+                    const isLast = cIdx === (footerData.supportItems || []).length - 1;
+
+                    return (
+                      <div key={cIdx} className="bg-white p-2.5 rounded-xl border border-slate-200 flex flex-col md:flex-row gap-3 items-center justify-between">
+                        <div className="flex items-center gap-1 shrink-0">
+                          <button
+                            type="button"
+                            disabled={isFirst}
+                            onClick={() => {
+                              if (isFirst) return;
                               const updated = [...footerData.supportItems];
-                              updated[cIdx] = { ...updated[cIdx], openInNewTab: val };
+                              const temp = updated[cIdx - 1];
+                              updated[cIdx - 1] = updated[cIdx];
+                              updated[cIdx] = temp;
                               setFooterData({ ...footerData, supportItems: updated });
                             }}
+                            className={`p-1.5 rounded-lg border border-slate-200 flex items-center justify-center transition-colors ${
+                              isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                            }`}
+                            title="Move Up"
+                          >
+                            <MoveUp className="w-3.5 h-3.5" />
+                          </button>
+                          <button
+                            type="button"
+                            disabled={isLast}
+                            onClick={() => {
+                              if (isLast) return;
+                              const updated = [...footerData.supportItems];
+                              const temp = updated[cIdx + 1];
+                              updated[cIdx + 1] = updated[cIdx];
+                              updated[cIdx] = temp;
+                              setFooterData({ ...footerData, supportItems: updated });
+                            }}
+                            className={`p-1.5 rounded-lg border border-slate-200 flex items-center justify-center transition-colors ${
+                              isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                            }`}
+                            title="Move Down"
+                          >
+                            <MoveDown className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+
+                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                          <input
+                            type="text"
+                            placeholder="Display Text (e.g. +1905-624-8555)"
+                            value={item.text || ''}
+                            onChange={(e) => {
+                              const updated = [...footerData.supportItems];
+                              updated[cIdx] = { ...updated[cIdx], text: e.target.value };
+                              setFooterData({ ...footerData, supportItems: updated });
+                            }}
+                            className="p-1.5 rounded border border-slate-300 text-xs font-medium"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Action Link (e.g. tel:+19056248555 or mailto:...)"
+                            value={item.url || ''}
+                            onChange={(e) => {
+                              const updated = [...footerData.supportItems];
+                              updated[cIdx] = { ...updated[cIdx], url: e.target.value };
+                              setFooterData({ ...footerData, supportItems: updated });
+                            }}
+                            className="p-1.5 rounded border border-slate-300 text-xs font-mono"
                           />
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const updated = (footerData.supportItems || []).filter((_: any, i: number) => i !== cIdx);
-                            setFooterData({ ...footerData, supportItems: updated });
-                          }}
-                          className="text-white hover:bg-red-700 bg-red-600 border-none rounded-lg p-1.5 cursor-pointer flex items-center justify-center transition-colors"
-                          title="Remove item"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                        </button>
+                        <div className="flex items-center gap-4 w-full md:w-auto justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-bold text-slate-600">Open in New Tab</span>
+                            <Switch
+                              checked={item.openInNewTab ?? false}
+                              onChange={(val) => {
+                                const updated = [...footerData.supportItems];
+                                updated[cIdx] = { ...updated[cIdx], openInNewTab: val };
+                                setFooterData({ ...footerData, supportItems: updated });
+                              }}
+                            />
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updated = (footerData.supportItems || []).filter((_: any, i: number) => i !== cIdx);
+                              setFooterData({ ...footerData, supportItems: updated });
+                            }}
+                            className="text-white hover:bg-red-700 bg-red-600 border-none rounded-lg p-1.5 cursor-pointer flex items-center justify-center transition-colors"
+                            title="Remove item"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
