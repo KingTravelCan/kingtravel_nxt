@@ -210,7 +210,7 @@ export default function PackageDetailPageClient({
     }
 
     setErrors({});
-    setBookingStatus("Submitting booking to database...");
+    setBookingStatus("Submitting Booking...");
     try {
       const res = await submitPackageBookingEnquiryAction({
         packageId: pkg?.id ? parseInt(pkg.id, 10) || undefined : undefined,
@@ -754,7 +754,7 @@ export default function PackageDetailPageClient({
                   </label>
                   <input
                     type="text"
-                    placeholder="Enter your full name"
+                    placeholder="Full Name"
                     value={fullName}
                     onChange={(e) => {
                       setFullName(e.target.value);
@@ -776,10 +776,16 @@ export default function PackageDetailPageClient({
                     </label>
                     <input
                       type="tel"
-                      placeholder="Mobile #"
+                      placeholder="Phone Number"
+                      maxLength={11}
                       value={phone}
                       onChange={(e) => {
-                        setPhone(e.target.value);
+                        let val = e.target.value;
+                        const startsWithPlus = val.startsWith("+");
+                        const digits = val.replace(/[^0-9]/g, "");
+                        val = (startsWithPlus ? "+" : "") + digits;
+                        if (val.length > 11) val = val.slice(0, 11);
+                        setPhone(val);
                         if (errors.phone) setErrors((prev) => ({ ...prev, phone: false }));
                       }}
                       className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
@@ -795,7 +801,7 @@ export default function PackageDetailPageClient({
                     </label>
                     <input
                       type="email"
-                      placeholder="Enter your email"
+                      placeholder="Email"
                       value={email}
                       onChange={(e) => {
                         setEmail(e.target.value);

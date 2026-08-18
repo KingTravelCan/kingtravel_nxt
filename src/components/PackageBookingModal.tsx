@@ -74,7 +74,7 @@ export default function PackageBookingModal({
     }
 
     setErrors({});
-    setBookingStatus("Submitting booking...");
+    setBookingStatus("Submitting Booking...");
 
     try {
       const res = await submitPackageBookingEnquiryAction({
@@ -199,7 +199,7 @@ export default function PackageBookingModal({
 
                 <input
                   type="text"
-                  placeholder="Enter your full name"
+                  placeholder="Full Name"
                   value={fullName}
                   onChange={(e) => {
                     setFullName(e.target.value);
@@ -237,10 +237,16 @@ export default function PackageBookingModal({
 
                   <input
                     type="tel"
-                    placeholder="Mobile #"
+                    placeholder="Phone Number"
+                    maxLength={11}
                     value={phone}
                     onChange={(e) => {
-                      setPhone(e.target.value);
+                      let val = e.target.value;
+                      const startsWithPlus = val.startsWith("+");
+                      const digits = val.replace(/[^0-9]/g, "");
+                      val = (startsWithPlus ? "+" : "") + digits;
+                      if (val.length > 11) val = val.slice(0, 11);
+                      setPhone(val);
 
                       if (errors.phone) {
                         setErrors((prev) => ({
@@ -269,7 +275,7 @@ export default function PackageBookingModal({
 
                   <input
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder="Email"
                     value={email}
                     onChange={(e) => {
                       setEmail(e.target.value);
@@ -548,9 +554,9 @@ export default function PackageBookingModal({
 
           {/* Reference Number */}
           {modalRef && (
-            <div className="bg-slate-50 p-4 rounded-xl mb-6 w-full">
+            <div className="bg-primary/10 p-4 rounded-xl mb-6 w-full">
 
-              <span className="text-xs font-bold text-slate-400 block mb-1">
+              <span className="text-xs font-bold text-slate-600 block mb-1">
                 Reference Number
               </span>
 

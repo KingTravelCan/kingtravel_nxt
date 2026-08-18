@@ -97,8 +97,16 @@ export default function CustomizeHajjPage() {
                   type="text"
                   placeholder="Phone Number"
                   required
+                  maxLength={11}
                   value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                  onChange={(e) => {
+                    let val = e.target.value;
+                    const startsWithPlus = val.startsWith("+");
+                    const digits = val.replace(/[^0-9]/g, "");
+                    val = (startsWithPlus ? "+" : "") + digits;
+                    if (val.length > 11) val = val.slice(0, 11);
+                    setFormData({ ...formData, phone: val });
+                  }}
                   className="w-full p-3 rounded-xl border border-slate-200 text-xs outline-none focus:border-[#004B39]"
                 />
               </div>

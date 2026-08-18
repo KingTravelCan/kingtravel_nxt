@@ -278,8 +278,16 @@ function ContactFormSection({ data, initialFormConfig }: { data?: any; initialFo
                   type="tel"
                   id="phone"
                   placeholder=" "
+                  maxLength={11}
                   value={contactForm.phone}
-                  onChange={(e) => setContactForm({ ...contactForm, phone: e.target.value })}
+                  onChange={(e) => {
+                    let val = e.target.value;
+                    const startsWithPlus = val.startsWith("+");
+                    const digits = val.replace(/[^0-9]/g, "");
+                    val = (startsWithPlus ? "+" : "") + digits;
+                    if (val.length > 11) val = val.slice(0, 11);
+                    setContactForm({ ...contactForm, phone: val });
+                  }}
                   className={`peer w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"}`}
                 />
                 <label

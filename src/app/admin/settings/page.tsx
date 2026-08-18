@@ -294,7 +294,7 @@ export default function AdminSettingsPage() {
 
   const [formFieldsState, setFormFieldsState] = useState<Record<string, Array<{ id: string; label: string; type: string; placeholder: string; required: boolean }>>>({
     contact: [
-      { id: '1', label: 'Full Name', type: 'text', placeholder: 'Enter your full name', required: true },
+      { id: '1', label: 'Full Name', type: 'text', placeholder: 'Full Name', required: true },
       { id: '2', label: 'Email Address', type: 'email', placeholder: 'name@example.com', required: true },
       { id: '3', label: 'Phone Number', type: 'tel', placeholder: '+1 (555) 000-0000', required: true },
       { id: '4', label: 'Subject', type: 'text', placeholder: 'Inquiry subject', required: false },
@@ -317,24 +317,24 @@ export default function AdminSettingsPage() {
       { id: '6', label: 'Consultation Details', type: 'textarea', placeholder: 'Describe your visa needs...', required: false },
     ],
     quoteForm: [
-      { id: '1', label: 'Your Name', type: 'text', placeholder: 'Enter your full name', required: true },
+      { id: '1', label: 'Your Name', type: 'text', placeholder: 'Full Name', required: true },
       { id: '2', label: 'Phone Number', type: 'tel', placeholder: '+1 905 624 8344', required: true },
-      { id: '3', label: 'Email Address', type: 'email', placeholder: 'Enter your email', required: true },
+      { id: '3', label: 'Email Address', type: 'email', placeholder: 'Email', required: true },
       { id: '4', label: 'Select Your Package', type: 'select', placeholder: 'Select your package choice', required: true },
       { id: '5', label: 'Departure Date', type: 'date', placeholder: 'mm/dd/yyyy', required: true },
       { id: '6', label: 'Number of Adults', type: 'number', placeholder: '1', required: true },
     ],
     packageDetailForm: [
-      { id: '1', label: 'Full Name', type: 'text', placeholder: 'Enter your full name', required: true },
+      { id: '1', label: 'Full Name', type: 'text', placeholder: 'Full Name', required: true },
       { id: '2', label: 'Phone Number', type: 'tel', placeholder: '+1 905 624 8344', required: true },
-      { id: '3', label: 'Email Address', type: 'email', placeholder: 'Enter your email', required: true },
+      { id: '3', label: 'Email Address', type: 'email', placeholder: 'Email', required: true },
       { id: '4', label: 'Adults', type: 'select', placeholder: '1', required: true },
       { id: '5', label: 'Children', type: 'select', placeholder: '0', required: true },
       { id: '6', label: 'Infants', type: 'select', placeholder: '0', required: true },
       { id: '7', label: 'Select Start Date', type: 'date', placeholder: 'mm/dd/yyyy', required: true },
     ],
     flightInquiry: [
-      { id: '1', label: 'Full Name (As per Passport)', type: 'text', placeholder: 'Enter your full name', required: true },
+      { id: '1', label: 'Full Name (As per Passport)', type: 'text', placeholder: 'Full Name', required: true },
       { id: '2', label: 'Email Address', type: 'email', placeholder: 'example@email.com', required: true },
       { id: '3', label: 'Phone Number', type: 'tel', placeholder: '+1 234 567 890', required: true },
       { id: '4', label: 'Departure City', type: 'text', placeholder: 'e.g. London', required: true },

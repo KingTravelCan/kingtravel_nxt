@@ -237,21 +237,16 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                   <input
                     type="text"
                     id="fullName"
-                    placeholder=" "
+                    placeholder="Full Name *"
                     value={form.fullName}
                     onChange={(e) => {
                       setForm({ ...form, fullName: e.target.value });
                       if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: "" }));
                     }}
-                    className={`w-full border !border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                      }`}
+                    className={`w-full border !border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${
+                      errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                    }`}
                   />
-                  <label
-                    htmlFor="fullName"
-                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.fullName ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"}`}
-                  >
-                    Full Name *
-                  </label>
                   {errors.fullName && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.fullName}</span>}
                 </div>
 
@@ -259,21 +254,16 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                   <input
                     type="email"
                     id="emailAddress"
-                    placeholder=" "
+                    placeholder="Email Address *"
                     value={form.email}
                     onChange={(e) => {
                       setForm({ ...form, email: e.target.value });
                       if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
                     }}
-                    className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                      }`}
+                    className={`w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${
+                      errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                    }`}
                   />
-                  <label
-                    htmlFor="emailAddress"
-                    className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.email ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"}`}
-                  >
-                    Email Address *
-                  </label>
                   {errors.email && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.email}</span>}
                 </div>
 
@@ -281,18 +271,19 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                   <input
                     type="tel"
                     id="phoneNumber"
-                    placeholder=" "
+                    placeholder="Phone Number"
+                    maxLength={11}
                     value={form.phone}
-                    onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                    className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                      }`}
+                    onChange={(e) => {
+                      let val = e.target.value;
+                      const startsWithPlus = val.startsWith("+");
+                      const digits = val.replace(/[^0-9]/g, "");
+                      val = (startsWithPlus ? "+" : "") + digits;
+                      if (val.length > 11) val = val.slice(0, 11);
+                      setForm({ ...form, phone: val });
+                    }}
+                    className="w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium focus:border-emerald-800"
                   />
-                  <label
-                    htmlFor="phoneNumber"
-                    className="absolute left-3 top-3 text-slate-400 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs peer-focus:text-emerald-800 font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs"
-                  >
-                    Phone Number
-                  </label>
                 </div>
 
                 <div className="relative">
@@ -303,16 +294,17 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setForm({ ...form, packageType: e.target.value });
                       if (errors.packageType) setErrors((prev) => ({ ...prev, packageType: "" }));
                     }}
-                    className={`cursor-pointer w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                      }`}
+                    className={`cursor-pointer w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${
+                      form.packageType ? "text-[#111111]" : "text-slate-400"
+                    } ${errors.packageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"}`}
                   >
                     <option value="" disabled hidden>Select Package *</option>
-                    <option value="Hajj/Umrah Packages">Hajj/Umrah Packages</option>
-                    <option value="Umrah Package">Umrah Package</option>
-                    <option value="Hajj Package">Hajj Package</option>
-                    <option value="Flight Only">Flight Only</option>
-                    <option value="Saudi Visa">Saudi Visa</option>
-                    <option value="Other">Other</option>
+                    <option value="Hajj/Umrah Packages" className="text-[#111111]">Hajj/Umrah Packages</option>
+                    <option value="Umrah Package" className="text-[#111111]">Umrah Package</option>
+                    <option value="Hajj Package" className="text-[#111111]">Hajj Package</option>
+                    <option value="Flight Only" className="text-[#111111]">Flight Only</option>
+                    <option value="Saudi Visa" className="text-[#111111]">Saudi Visa</option>
+                    <option value="Other" className="text-[#111111]">Other</option>
                   </select>
                   {errors.packageType && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.packageType}</span>}
                 </div>
@@ -322,7 +314,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                 <textarea
                   id="message"
                   rows={4}
-                  placeholder=" "
+                  placeholder="Message *"
                   value={form.message}
                   onChange={(e) => {
                     setForm({ ...form, message: e.target.value });
@@ -330,15 +322,10 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setErrors((prev) => ({ ...prev, message: "" }));
                     }
                   }}
-                  className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.phone ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                    }`}
+                  className={`w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${
+                    errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                  }`}
                 />
-                <label
-                  htmlFor="message"
-                  className={`absolute left-3 top-3 text-sm transition-all duration-300 pointer-events-none peer-placeholder-shown:text-base peer-placeholder-shown:top-3 peer-focus:-top-4 peer-focus:left-0 peer-focus:text-xs font-semibold peer-[:not(:placeholder-shown)]:-top-4 peer-[:not(:placeholder-shown)]:left-0 peer-[:not(:placeholder-shown)]:text-xs ${errors.message ? "text-red-600 peer-focus:text-red-600" : "text-slate-400 peer-focus:text-emerald-800"}`}
-                >
-                  Message *
-                </label>
                 {errors.message && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.message}</span>}
               </div>
 
