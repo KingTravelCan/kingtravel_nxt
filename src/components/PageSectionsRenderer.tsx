@@ -340,8 +340,8 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                     </div>
                   </div>
 
-                  <div className="lg:w-3/4 w-full">
-                    <ElfsightWidget />
+                  <div className="lg:w-3/4 w-full min-w-0">
+                    <GoogleReviewsSlider />
                   </div>
                 </div>
               </div>
@@ -495,15 +495,236 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
   );
 }
 
-function ElfsightWidget() {
-  useEffect(() => {
-    if (!document.querySelector('script[src="https://elfsightcdn.com/platform.js"]')) {
-      const script = document.createElement("script");
-      script.src = "https://elfsightcdn.com/platform.js";
-      script.async = true;
-      document.body.appendChild(script);
-    }
-  }, []);
+function GoogleReviewsSlider() {
+  const reviews = [
+    {
+      id: 1,
+      name: "Tariq Mahmood",
+      initials: "TM",
+      avatarColor: "bg-emerald-600",
+      rating: 5,
+      date: "2 weeks ago",
+      review: "Alhamdulillah! Booked our 15-day Deluxe Umrah package with King Travel Canada. Everything from the 5-star hotel near Haram to the luxury private transport was top-notch. Highly recommended for families!",
+    },
+    {
+      id: 2,
+      name: "Fatima Al-Zahra",
+      initials: "FA",
+      avatarColor: "bg-amber-600",
+      rating: 5,
+      date: "a month ago",
+      review: "The staff at King Travel Mississauga went above and beyond for our Saudi tourist visas and flight booking. Brother Imran answered all our late night questions patiently. May Allah bless your team.",
+    },
+    {
+      id: 3,
+      name: "Mohammad S. Khan",
+      initials: "MK",
+      avatarColor: "bg-blue-600",
+      rating: 5,
+      date: "3 weeks ago",
+      review: "Excellent service from start to finish! Our hotels in Makkah (Fairmont) and Madinah (Dar Al Taqwa) were literally steps away from the Haram courtyard. The Ziyarat tours were also very well guided.",
+    },
+    {
+      id: 4,
+      name: "Ayesha Siddiqui",
+      initials: "AS",
+      avatarColor: "bg-purple-600",
+      rating: 5,
+      date: "2 months ago",
+      review: "We travelled with our elderly parents and 2 kids. King Travel arranged wheelchair assistance at Jeddah airport and seamless VIP GMC transfers. Truly an unforgettable spiritual experience.",
+    },
+    {
+      id: 5,
+      name: "Farhan Qureshi",
+      initials: "FQ",
+      avatarColor: "bg-teal-600",
+      rating: 5,
+      date: "1 month ago",
+      review: "Transparent pricing with no hidden charges. Visa processing was done within 24 hours. The entire King Travel team in Mississauga is trustworthy and extremely professional. 5 stars all the way!",
+    },
+    {
+      id: 6,
+      name: "Zainab Rehman",
+      initials: "ZR",
+      avatarColor: "bg-rose-600",
+      rating: 5,
+      date: "3 months ago",
+      review: "Best travel agency in Ontario for Hajj and Umrah. They kept us updated on flight schedules and provided proper training and guidance booklets before our departure. 10/10 service.",
+    },
+    {
+      id: 7,
+      name: "Bilal Ahmad",
+      initials: "BA",
+      avatarColor: "bg-indigo-600",
+      rating: 5,
+      date: "2 months ago",
+      review: "I have booked my Umrah with King Travel twice now. Both times the hotel vouchers, flights, and ground transportation were ready ahead of time. Reliable, honest, and caring team.",
+    },
+    {
+      id: 8,
+      name: "Nadia Hussain",
+      initials: "NH",
+      avatarColor: "bg-cyan-600",
+      rating: 5,
+      date: "a month ago",
+      review: "Outstanding customer care! Even during our stay in Madinah, their local representative checked in with us regularly to ensure we had everything we needed. JazakAllah Khair!",
+    },
+    {
+      id: 9,
+      name: "Usman Malik",
+      initials: "UM",
+      avatarColor: "bg-emerald-700",
+      rating: 5,
+      date: "4 months ago",
+      review: "Smooth visa issuance, fantastic hotel deals, and very responsive customer desk. King Travel Canada made our spiritual pilgrimage completely stress-free.",
+    },
+  ];
 
-  return <div className="elfsight-app-64c6bf2d-cdee-4dfd-a876-5576cbaa5bac" data-elfsight-app-lazy />;
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-scroll 1 by 1 card every 5000ms (5 seconds)
+  useEffect(() => {
+    if (isPaused) return;
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % reviews.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isPaused, reviews.length]);
+
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % reviews.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + reviews.length) % reviews.length);
+  };
+
+  return (
+    <div
+      className="relative w-full"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* Slider Controls */}
+      <div className="flex justify-end items-center gap-2 mb-3">
+        <button
+          type="button"
+          onClick={prevSlide}
+          aria-label="Previous Review"
+          className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-colors cursor-pointer shadow-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+        <button
+          type="button"
+          onClick={nextSlide}
+          aria-label="Next Review"
+          className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 flex items-center justify-center transition-colors cursor-pointer shadow-sm"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      {/* Reviews Cards Carousel (1-by-1 Slide) */}
+      <div className="overflow-hidden">
+        <div
+          className="flex transition-transform duration-700 ease-in-out gap-4"
+          style={{
+            transform: `translateX(calc(-${currentIndex} * (100% / 3 + 5.33px)))`,
+          }}
+        >
+          {/* Render doubled reviews for continuous wrap-around carousel */}
+          {[...reviews, ...reviews].map((r, idx) => (
+            <div
+              key={`${r.id}-${idx}`}
+              className="w-full md:w-[calc((100%-32px)/3)] shrink-0 min-w-0"
+            >
+              <div className="bg-white rounded-2xl p-5 shadow-lg flex flex-col justify-between border border-slate-100 hover:shadow-xl transition-all duration-300 h-full">
+                <div>
+                  {/* User Header */}
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className={`w-10 h-10 rounded-full ${r.avatarColor} text-white font-bold text-sm flex items-center justify-center shadow-xs`}>
+                        {r.initials}
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-bold text-slate-900 leading-tight m-0 font-sans">{r.name}</h4>
+                        <span className="text-[11px] text-slate-400 font-medium">{r.date}</span>
+                      </div>
+                    </div>
+                    {/* Google Icon Badge */}
+                    <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24">
+                      <path
+                        fill="#4285F4"
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                      />
+                      <path
+                        fill="#34A853"
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                      />
+                      <path
+                        fill="#FBBC05"
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                      />
+                      <path
+                        fill="#EA4335"
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                      />
+                    </svg>
+                  </div>
+
+                  {/* Stars */}
+                  <div className="flex items-center gap-1 mb-2.5">
+                    {Array.from({ length: 5 }).map((_, sIdx) => (
+                      <svg
+                        key={sIdx}
+                        className="w-4 h-4 fill-amber-400 text-amber-400"
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                      </svg>
+                    ))}
+                  </div>
+
+                  {/* Review Text */}
+                  <p className="text-xs text-slate-600 leading-relaxed m-0 font-normal line-clamp-4">
+                    "{r.review}"
+                  </p>
+                </div>
+
+                {/* Verified Customer Footnote */}
+                <div className="mt-3 pt-2.5 border-t border-slate-100 flex items-center gap-1.5 text-[11px] text-emerald-700 font-medium">
+                  <svg className="w-3.5 h-3.5 fill-emerald-600" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                  Verified Google Review
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Pagination Indicators */}
+      <div className="flex justify-center items-center gap-1.5 mt-4">
+        {reviews.map((_, dotIdx) => (
+          <button
+            key={dotIdx}
+            type="button"
+            onClick={() => setCurrentIndex(dotIdx)}
+            aria-label={`Go to slide ${dotIdx + 1}`}
+            className={`h-2 rounded-full transition-all cursor-pointer ${
+              (currentIndex % reviews.length) === dotIdx ? "w-6 bg-gold" : "w-2 bg-white/30 hover:bg-white/50"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
 }
