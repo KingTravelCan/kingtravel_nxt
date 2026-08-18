@@ -147,9 +147,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
               setFullName(e.target.value);
               if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: false }));
             }}
-            className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.fullName
-              ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-              : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+            className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
               }`}
           />
           {errors.fullName && (
@@ -171,9 +169,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
                 setPhone(e.target.value);
                 if (errors.phone) setErrors((prev) => ({ ...prev, phone: false }));
               }}
-              className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.phone
-                ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+              className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
                 }`}
             />
             {errors.phone && (
@@ -192,9 +188,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
                 setEmail(e.target.value);
                 if (errors.email) setErrors((prev) => ({ ...prev, email: false }));
               }}
-              className={`w-full border rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:outline-none transition-all ${errors.email
-                ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                : "bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#004B39]"
+              className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
                 }`}
             />
             {errors.email && (
@@ -220,11 +214,10 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
                     setErrors((prev) => ({ ...prev, selectedPackage: false }));
                   }
                 }}
-                className={`py-2.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
-                  packageType === "hajj"
-                    ? "bg-[#004B39] text-white shadow-sm"
-                    : "bg-transparent text-slate-500 hover:text-slate-800"
-                }`}
+                className={`py-2.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${packageType === "hajj"
+                  ? "bg-[#004B39] text-white shadow-sm"
+                  : "bg-transparent text-slate-500 hover:text-slate-800"
+                  }`}
               >
                 Hajj
               </button>
@@ -238,11 +231,10 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
                     setErrors((prev) => ({ ...prev, selectedPackage: false }));
                   }
                 }}
-                className={`py-2.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${
-                  packageType === "umrah"
-                    ? "bg-[#004B39] text-white shadow-sm"
-                    : "bg-transparent text-slate-500 hover:text-slate-800"
-                }`}
+                className={`py-2.5 rounded-lg text-xs font-extrabold transition-all cursor-pointer ${packageType === "umrah"
+                  ? "bg-[#004B39] text-white shadow-sm"
+                  : "bg-transparent text-slate-500 hover:text-slate-800"
+                  }`}
               >
                 Umrah
               </button>
@@ -264,11 +256,8 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
                   setErrors((prev) => ({ ...prev, selectedPackage: false }));
                 }
               }}
-              className={`w-full border rounded-xl px-3.5 py-2.5 text-xs font-medium focus:outline-none transition-all cursor-pointer ${
-                errors.selectedPackage
-                  ? "border-red-500 bg-red-50/50 text-red-900 focus:ring-2 focus:ring-red-500"
-                  : "bg-slate-50 border-slate-200 text-slate-800 focus:ring-2 focus:ring-[#004B39]"
-              }`}
+              className={`w-full border border-line p-2 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                }`}
             >
               <option value="">
                 {packagesLoading
@@ -302,7 +291,8 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
             <select
               value={adults}
               onChange={(e) => setAdults(e.target.value)}
-              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 font-bold focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer text-center"
+              className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                }`}
             >
               <option value="1">1</option>
               <option value="2">2</option>
@@ -319,7 +309,8 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
             <select
               value={childrenCount}
               onChange={(e) => setChildrenCount(e.target.value)}
-              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 font-bold focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer text-center"
+              className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                }`}
             >
               <option value="0">0</option>
               <option value="1">1</option>
@@ -335,7 +326,8 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
             <select
               value={infantsCount}
               onChange={(e) => setInfantsCount(e.target.value)}
-              className="w-full bg-slate-100 border border-slate-200 rounded-xl px-2.5 py-2 text-xs text-slate-800 font-bold focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer text-center"
+              className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                }`}
             >
               <option value="0">0</option>
               <option value="1">1</option>
@@ -353,9 +345,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
           </label>
           <div className="relative">
             <div
-              className={`w-full border rounded-xl px-3.5 py-2.5 text-xs font-medium transition-all flex items-center justify-between ${errors.selectedDate
-                ? "border-red-500 bg-red-50/50 text-red-900"
-                : "bg-slate-50 border-slate-200 text-slate-800"
+              className={`w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat flex items-center justify-between ${errors.selectedDate ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
                 }`}
             >
               <span className={selectedDate ? "text-slate-900" : "text-slate-400"}>
