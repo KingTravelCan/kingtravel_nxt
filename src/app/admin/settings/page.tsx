@@ -1324,9 +1324,9 @@ export default function AdminSettingsPage() {
                       <div className="flex gap-3 items-center">
                         <div className="w-10 h-10 bg-[#004B39] rounded-lg p-1.5 flex items-center justify-center shrink-0 border border-slate-200">
                           {item.icon ? (
-                            <img src={item.icon} alt={item.name} className="max-h-full max-w-full object-contain" />
+                            <img src={item.icon} alt={item.name} className="w-6 h-6 max-h-full max-w-full object-contain" />
                           ) : (
-                            <span className="text-[9px] text-white font-bold">Icon</span>
+                            <span className="text-[9px] text-white font-bold">SVG</span>
                           )}
                         </div>
                         <div className="flex-1 flex flex-col gap-1.5">
@@ -1355,15 +1355,19 @@ export default function AdminSettingsPage() {
                             />
                           </div>
                           <div className="flex gap-2 items-center justify-between">
-                            <label className="flex bg-slate-200 text-slate-800 px-2 py-1 rounded text-[10px] font-bold cursor-pointer gap-2">
-                              <CloudUpload className="w-3 h-3" /> Upload Icon
+                            <label className="flex bg-slate-200 hover:bg-slate-300 text-slate-800 px-2 py-1 rounded text-[10px] font-bold cursor-pointer gap-2 items-center transition-colors">
+                              <CloudUpload className="w-3 h-3" /> Upload SVG
                               <input
                                 type="file"
-                                accept="image/*"
+                                accept=".svg,image/svg+xml"
                                 className="hidden"
                                 onChange={async (e) => {
                                   const file = e.target.files?.[0];
                                   if (file) {
+                                    if (!file.name.toLowerCase().endsWith('.svg') && file.type !== 'image/svg+xml') {
+                                      showNotification('Invalid File Type', 'Please upload an SVG icon (.svg format only).', 'error');
+                                      return;
+                                    }
                                     const url = await uploadFileToFtp(file, 'social');
                                     if (url) {
                                       const updated = [...footerData.socialLinks];
@@ -1396,7 +1400,7 @@ export default function AdminSettingsPage() {
               {/* Trust Badges Manager */}
               <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex flex-col gap-3">
                 <div className="flex justify-between items-center">
-                  <span className="text-xs font-bold text-[#004B39] uppercase">3. Trust Accreditation Badges</span>
+                  <span className="text-xs font-bold text-[#004B39] uppercase">3. Trust Accreditation Badges (SVG Format)</span>
                   <button
                     type="button"
                     onClick={() => {
@@ -1417,7 +1421,7 @@ export default function AdminSettingsPage() {
                         {badge.icon ? (
                           <img src={badge.icon} alt={badge.name} className="max-h-full max-w-full object-contain" />
                         ) : (
-                          <span className="text-[9px] text-slate-400 font-bold">{badge.name}</span>
+                          <span className="text-[9px] text-slate-400 font-bold">{badge.name || 'SVG Icon'}</span>
                         )}
                       </div>
                       <input
@@ -1431,15 +1435,19 @@ export default function AdminSettingsPage() {
                         className="w-full p-1 rounded border border-slate-300 text-[10px] text-center font-bold"
                       />
                       <div className="flex gap-1 w-full justify-between items-center">
-                        <label className="bg-emerald-700 text-white px-2 py-1 rounded text-[9px] font-bold cursor-pointer">
-                          Upload
+                        <label className="bg-emerald-700 hover:bg-emerald-800 text-white px-2 py-1 rounded text-[9px] font-bold cursor-pointer transition-colors">
+                          Upload SVG
                           <input
                             type="file"
-                            accept="image/*"
+                            accept=".svg,image/svg+xml"
                             className="hidden"
                             onChange={async (e) => {
                               const file = e.target.files?.[0];
                               if (file) {
+                                if (!file.name.toLowerCase().endsWith('.svg') && file.type !== 'image/svg+xml') {
+                                  showNotification('Invalid File Type', 'Please upload an SVG icon (.svg format only).', 'error');
+                                  return;
+                                }
                                 const url = await uploadFileToFtp(file, 'badges');
                                 if (url) {
                                   const updated = [...footerData.trustBadges];

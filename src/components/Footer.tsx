@@ -55,14 +55,15 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
                         href={item.url || '#'}
                         target={item.openInNewTab ? "_blank" : "_self"}
                         rel={item.openInNewTab ? "noopener noreferrer" : undefined}
-                        className="opacity-50 hover:opacity-100 transition-all duration-300 ease-in-out inline-block"
+                        className="opacity-50 hover:opacity-100 transition-all duration-300 ease-in-out inline-flex items-center justify-center"
+                        title={item.name || 'Social Link'}
                       >
                         {item.icon ? (
-                          item.icon.startsWith('data:') ? (
-                            <img src={item.icon} alt={item.name || 'Social Icon'} className="w-[32px] h-[32px] max-w-[32px] max-h-[32px] block object-contain" />
-                          ) : (
-                            <Image src={item.icon} alt={item.name || 'Social Icon'} width={32} height={32} unoptimized className="w-[32px] h-[32px] max-w-[32px] max-h-[32px] block" />
-                          )
+                          <img
+                            src={item.icon}
+                            alt={item.name || 'Social Icon'}
+                            className="w-[32px] h-[32px] max-w-[32px] max-h-[32px] block object-contain"
+                          />
                         ) : (
                           <span className="text-xs font-bold text-white">{item.name}</span>
                         )}
@@ -77,13 +78,13 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
             {footerData.trustBadges && footerData.trustBadges.length > 0 && (
               <div className="flex flex-wrap items-center gap-2 mt-4">
                 {footerData.trustBadges.map((badge: any, bIdx: number) => (
-                  <div key={bIdx} className="bg-white rounded-lg flex items-center justify-center h-12 w-12">
+                  <div key={bIdx} className="bg-white rounded-lg flex items-center justify-center h-12 w-12 p-1 overflow-hidden" title={badge.name || 'Accreditation'}>
                     {badge.icon ? (
-                      badge.icon.startsWith('data:') ? (
-                        <img src={badge.icon} alt={badge.name || 'Trust Badge'} className="max-h-7 max-w-full object-contain" />
-                      ) : (
-                        <Image src={badge.icon} alt={badge.name || 'Trust Badge'} width={48} height={48} className="max-h-7 w-auto object-contain" unoptimized />
-                      )
+                      <img
+                        src={badge.icon}
+                        alt={badge.name || 'Trust Badge'}
+                        className="max-h-7 max-w-full object-contain"
+                      />
                     ) : (
                       <span className="text-[9px] font-extrabold text-[#004B39] text-center">{badge.name}</span>
                     )}

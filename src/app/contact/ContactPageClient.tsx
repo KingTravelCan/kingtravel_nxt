@@ -87,25 +87,44 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
 
           <div className="w-full border-t border-slate-100 pt-3 flex flex-col items-center">
             <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-[#004B39] mb-2.5">FOLLOW US</h4>
-            <div className="flex gap-2">
-              <a href={data?.facebookUrl || "https://www.facebook.com/kingtravelcan"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-[#1877F2]/10 text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition duration-200 flex items-center justify-center no-underline">
-                <i className="fa-brands fa-facebook-f text-sm"></i>
-              </a>
-              <a href={data?.instagramUrl || "https://www.instagram.com/kingtravelcan/"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-[#E4405F]/10 text-[#E4405F] hover:bg-[#E4405F] hover:text-white transition duration-200 flex items-center justify-center no-underline">
-                <i className="fa-brands fa-instagram text-sm"></i>
-              </a>
-              <a href={data?.linkedinUrl || "https://ca.linkedin.com/company/kingtravelcan"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-[#0077B5]/10 text-[#0077B5] hover:bg-[#0077B5] hover:text-white transition duration-200 flex items-center justify-center no-underline">
-                <i className="fa-brands fa-linkedin-in text-sm"></i>
-              </a>
-              <a href={data?.tiktokUrl || "https://www.tiktok.com/@kingtravelcan"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-black/5 text-black hover:bg-black hover:text-white transition duration-200 flex items-center justify-center no-underline">
-                <i className="fa-brands fa-tiktok text-sm"></i>
-              </a>
-              <a href={data?.twitterUrl || "https://twitter.com/kingtravelcan"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-black/5 text-black hover:bg-black hover:text-white transition duration-200 flex items-center justify-center no-underline">
-                <i className="fa-brands fa-x-twitter text-sm"></i>
-              </a>
-              <a href={data?.pinterestUrl || "https://pinterest.com/kingtravelcan"} target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-lg bg-[#E60023]/10 text-[#E60023] hover:bg-[#E60023] hover:text-white transition duration-200 flex items-center justify-center no-underline">
-                <i className="fa-brands fa-pinterest-p text-sm"></i>
-              </a>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {(() => {
+                const socialList: any[] = (data?.socialLinks && Array.isArray(data.socialLinks) && data.socialLinks.length > 0)
+                  ? data.socialLinks
+                  : [
+                    { name: 'Facebook', url: data?.facebookUrl || 'https://www.facebook.com/kingtravelcan', icon: '/img/fb.svg', openInNewTab: true },
+                    { name: 'Instagram', url: data?.instagramUrl || 'https://www.instagram.com/kingtravelcan/', icon: '/img/insta.svg', openInNewTab: true },
+                    { name: 'LinkedIn', url: data?.linkedinUrl || 'https://ca.linkedin.com/company/kingtravelcan', icon: '/img/in.svg', openInNewTab: true },
+                    { name: 'TikTok', url: data?.tiktokUrl || 'https://www.tiktok.com/@kingtravelcan', icon: '/img/tik.svg', openInNewTab: true },
+                    { name: 'Twitter X', url: data?.twitterUrl || 'https://twitter.com/kingtravelcan', icon: '/img/x.svg', openInNewTab: true },
+                    { name: 'Pinterest', url: data?.pinterestUrl || 'https://pinterest.com/kingtravelcan', icon: '/img/pinterest.svg', openInNewTab: true },
+                  ];
+
+                return socialList
+                  .filter((item: any) => item && (item.url || item.icon))
+                  .map((item: any, sIdx: number) => (
+                    <a
+                      key={sIdx}
+                      href={item.url || '#'}
+                      target={item.openInNewTab ? "_blank" : "_self"}
+                      rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                      title={item.name || 'Social Link'}
+                      className="w-8 h-8 rounded-xl bg-slate-100 flex items-center justify-center no-underline p-1.5 group shadow-xs"
+                    >
+                      {item.icon ? (
+                        <img
+                          src={item.icon}
+                          alt={item.name || 'Social Icon'}
+                          className="w-full h-full object-contain filter"
+                        />
+                      ) : (
+                        <span className="text-[10px] font-bold text-slate-700 group-hover:text-white transition-colors">
+                          {item.name?.slice(0, 2) || '🔗'}
+                        </span>
+                      )}
+                    </a>
+                  ));
+              })()}
             </div>
           </div>
         </div>

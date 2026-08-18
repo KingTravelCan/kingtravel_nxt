@@ -3420,187 +3420,321 @@ function PageBuilderContent() {
                             )}
 
                             {(sec.type === 'Contact Info Cards' || sec.type === 'Contact Bar') && (
-                              <div className="flex flex-col bg-slate-50">
-                                <span className="text-xs font-bold text-slate-800">
-                                  📍 Contact Info Cards & Locations Manager
-                                </span>
+                              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-5 flex flex-col gap-5">
+                                <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                                  <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-xl bg-[#004B39] text-white flex items-center justify-center shadow-sm">
+                                      <i className="fa-solid fa-map-location-dot text-sm"></i>
+                                    </div>
+                                    <div>
+                                      <h4 className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                                        Contact Info Cards & Locations Manager
+                                      </h4>
+                                      <p className="text-[10px] text-slate-500 font-medium">
+                                        Configure addresses, phone lines, emails, and direct social URLs for contact cards
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                    3 Live Cards
+                                  </span>
+                                </div>
 
-                                <div className="grid">
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                   {/* Card 1: Locations Box */}
-                                  <div className="flex flex-col bg-white">
-                                    <div className="flex items-center gap-8">
-                                      <div className="flex items-center justify-center text-[#004B39]">
-                                        <i className="fa-solid fa-location-dot text-xs"></i>
+                                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3.5 hover:border-[#004B39]/30 transition-all">
+                                    <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100">
+                                      <div className="w-6 h-6 rounded-lg bg-emerald-50 text-[#004B39] flex items-center justify-center text-xs">
+                                        <i className="fa-solid fa-location-dot"></i>
                                       </div>
                                       <span className="text-xs font-bold text-slate-800">Card 1: Locations Info</span>
                                     </div>
 
-                                    <div className="grid">
+                                    <div className="flex flex-col gap-3">
                                       <div>
-                                        <label className="block font-bold text-[#004B39]">CARD TITLE</label>
+                                        <label className="block text-[10px] font-bold text-slate-700 uppercase mb-1">
+                                          Card Title
+                                        </label>
                                         <input
                                           type="text"
                                           value={sec.data?.card1Title || 'OUR LOCATIONS'}
                                           onChange={(e) => updateSectionData(sec.id, 'card1Title', e.target.value)}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px] font-bold"
+                                          placeholder="e.g. OUR LOCATIONS"
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-800 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
                                         />
                                       </div>
-                                      <div className="grid grid-cols-2 gap-8">
-                                        <div>
-                                          <label className="block text-[9px] font-bold text-slate-500 mb-0.5">HEAD OFFICE ADDRESS</label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.headAddress || '1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada'}
-                                            onChange={(e) => updateSectionData(sec.id, 'headAddress', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
-                                        <div>
-                                          <label className="block text-[9px] font-bold text-slate-500 mb-0.5">BRANCH OFFICE ADDRESS</label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.branchAddress || '22 Ontario St S, Milton, ON L9T 2M6, Canada'}
-                                            onChange={(e) => updateSectionData(sec.id, 'branchAddress', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
+
+                                      <div>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                                          Head Office Address
+                                        </label>
+                                        <textarea
+                                          rows={2}
+                                          value={sec.data?.headAddress || '1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada'}
+                                          onChange={(e) => updateSectionData(sec.id, 'headAddress', e.target.value)}
+                                          placeholder="Enter head office full address..."
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-700 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39] resize-none"
+                                        />
+                                      </div>
+
+                                      <div>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                                          Branch Office Address
+                                        </label>
+                                        <textarea
+                                          rows={2}
+                                          value={sec.data?.branchAddress || '22 Ontario St S, Milton, ON L9T 2M6, Canada'}
+                                          onChange={(e) => updateSectionData(sec.id, 'branchAddress', e.target.value)}
+                                          placeholder="Enter branch office full address..."
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-700 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39] resize-none"
+                                        />
                                       </div>
                                     </div>
                                   </div>
 
                                   {/* Card 2: Support Box */}
-                                  <div className="flex flex-col bg-white">
-                                    <div className="flex items-center gap-8">
-                                      <div className="flex items-center justify-center text-[#004B39]">
-                                        <i className="fa-solid fa-phone text-xs"></i>
+                                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3.5 hover:border-[#004B39]/30 transition-all">
+                                    <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100">
+                                      <div className="w-6 h-6 rounded-lg bg-emerald-50 text-[#004B39] flex items-center justify-center text-xs">
+                                        <i className="fa-solid fa-phone"></i>
                                       </div>
                                       <span className="text-xs font-bold text-slate-800">Card 2: 24/7 Phone Support</span>
                                     </div>
 
-                                    <div className="grid">
+                                    <div className="flex flex-col gap-3">
                                       <div>
-                                        <label className="block font-bold text-[#004B39]">CARD TITLE</label>
+                                        <label className="block text-[10px] font-bold text-slate-700 uppercase mb-1">
+                                          Card Title
+                                        </label>
                                         <input
                                           type="text"
                                           value={sec.data?.card2Title || '24/7 SUPPORT'}
                                           onChange={(e) => updateSectionData(sec.id, 'card2Title', e.target.value)}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px] font-bold"
+                                          placeholder="e.g. 24/7 SUPPORT"
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-800 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
                                         />
                                       </div>
-                                      <div className="grid grid-cols-3 gap-8">
-                                        <div>
-                                          <label className="block text-[9px] font-bold text-slate-500 mb-0.5">SUPPORT PHONE 1</label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.phone1 || '+1 800-844-5464'}
-                                            onChange={(e) => updateSectionData(sec.id, 'phone1', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
-                                        <div>
-                                          <label className="block text-[9px] font-bold text-slate-500 mb-0.5">SUPPORT PHONE 2</label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.phone2 || '+1 905-624-8555'}
-                                            onChange={(e) => updateSectionData(sec.id, 'phone2', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
-                                        <div>
-                                          <label className="block text-[9px] font-bold text-slate-500 mb-0.5">SUPPORT PHONE 3</label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.phone3 || '+1 905-624-8344'}
-                                            onChange={(e) => updateSectionData(sec.id, 'phone3', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
+
+                                      <div>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                                          Support Phone 1 (Toll Free / Main)
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={sec.data?.phone1 || '+1 800-844-5464'}
+                                          onChange={(e) => updateSectionData(sec.id, 'phone1', e.target.value)}
+                                          placeholder="+1 800-844-5464"
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-800 font-mono outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
+                                        />
+                                      </div>
+
+                                      <div>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                                          Support Phone 2 (Direct line)
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={sec.data?.phone2 || '+1 905-624-8555'}
+                                          onChange={(e) => updateSectionData(sec.id, 'phone2', e.target.value)}
+                                          placeholder="+1 905-624-8555"
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-800 font-mono outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
+                                        />
+                                      </div>
+
+                                      <div>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                                          Support Phone 3 (Alternative)
+                                        </label>
+                                        <input
+                                          type="text"
+                                          value={sec.data?.phone3 || '+1 905-624-8344'}
+                                          onChange={(e) => updateSectionData(sec.id, 'phone3', e.target.value)}
+                                          placeholder="+1 905-624-8344"
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-800 font-mono outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
+                                        />
                                       </div>
                                     </div>
                                   </div>
 
                                   {/* Card 3: Email Box */}
-                                  <div className="flex flex-col bg-white">
-                                    <div className="flex items-center gap-8">
-                                      <div className="flex items-center justify-center text-[#004B39]">
-                                        <i className="fa-solid fa-envelope text-xs"></i>
+                                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3.5 hover:border-[#004B39]/30 transition-all">
+                                    <div className="flex items-center gap-2 pb-2.5 border-b border-slate-100">
+                                      <div className="w-6 h-6 rounded-lg bg-emerald-50 text-[#004B39] flex items-center justify-center text-xs">
+                                        <i className="fa-solid fa-envelope"></i>
                                       </div>
                                       <span className="text-xs font-bold text-slate-800">Card 3: Email & Socials</span>
                                     </div>
 
-                                    <div className="grid grid-cols-2 gap-8">
+                                    <div className="flex flex-col gap-3">
                                       <div>
-                                        <label className="block font-bold text-[#004B39]">CARD TITLE</label>
+                                        <label className="block text-[10px] font-bold text-slate-700 uppercase mb-1">
+                                          Card Title
+                                        </label>
                                         <input
                                           type="text"
                                           value={sec.data?.card3Title || 'EMAIL US'}
                                           onChange={(e) => updateSectionData(sec.id, 'card3Title', e.target.value)}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px] font-bold"
+                                          placeholder="e.g. EMAIL US"
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-800 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
                                         />
                                       </div>
+
                                       <div>
-                                        <label className="block text-[9px] font-bold text-slate-500 mb-0.5">EMAIL ADDRESS</label>
+                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
+                                          Official Email Address
+                                        </label>
                                         <input
-                                          type="text"
+                                          type="email"
                                           value={sec.data?.email || 'saudivisa@kingtravelcan.com'}
                                           onChange={(e) => updateSectionData(sec.id, 'email', e.target.value)}
-                                          className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
+                                          placeholder="info@kingtravelcan.com"
+                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-800 font-mono outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
                                         />
-                                      </div>
-                                    </div>
-
-                                    <div className="font-sans">
-                                      <label className="block font-extrabold uppercase text-[#004B39]">
-                                        📱 Social Media Links (Opens in New Tab)
-                                      </label>
-                                      <div className="grid grid-cols-2 gap-8">
-                                        <div>
-                                          <label className="flex items-center gap-4">
-                                            <i className="fa-brands fa-facebook-f"></i> FACEBOOK URL
-                                          </label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.facebookUrl !== undefined ? sec.data.facebookUrl : 'https://www.facebook.com/kingtravelcan'}
-                                            onChange={(e) => updateSectionData(sec.id, 'facebookUrl', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
-                                        <div>
-                                          <label className="flex items-center gap-4">
-                                            <i className="fa-brands fa-instagram"></i> INSTAGRAM URL
-                                          </label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.instagramUrl !== undefined ? sec.data.instagramUrl : 'https://www.instagram.com/kingtravelcan/'}
-                                            onChange={(e) => updateSectionData(sec.id, 'instagramUrl', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
-                                        <div>
-                                          <label className="flex items-center gap-4">
-                                            <i className="fa-brands fa-linkedin-in"></i> LINKEDIN URL
-                                          </label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.linkedinUrl !== undefined ? sec.data.linkedinUrl : 'https://ca.linkedin.com/company/kingtravelcan'}
-                                            onChange={(e) => updateSectionData(sec.id, 'linkedinUrl', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
-                                        <div>
-                                          <label className="flex items-center gap-4">
-                                            <i className="fa-brands fa-tiktok"></i> TIKTOK URL
-                                          </label>
-                                          <input
-                                            type="text"
-                                            value={sec.data?.tiktokUrl !== undefined ? sec.data.tiktokUrl : 'https://www.tiktok.com/@kingtravelcan'}
-                                            onChange={(e) => updateSectionData(sec.id, 'tiktokUrl', e.target.value)}
-                                            className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                          />
-                                        </div>
                                       </div>
                                     </div>
                                   </div>
+                                </div>
+
+                                {/* Dynamic Social Media Links Manager (With SVG Uploaders) */}
+                                <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col gap-3">
+                                  <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-xs font-bold text-slate-800 uppercase">
+                                        📱 Social Media Profiles (With SVG Icons)
+                                      </span>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={() => {
+                                        const currentSocials = sec.data?.socialLinks && Array.isArray(sec.data.socialLinks)
+                                          ? [...sec.data.socialLinks]
+                                          : [
+                                              { name: 'Facebook', url: sec.data?.facebookUrl || 'https://www.facebook.com/kingtravelcan', icon: '/img/fb.svg', openInNewTab: true },
+                                              { name: 'Instagram', url: sec.data?.instagramUrl || 'https://www.instagram.com/kingtravelcan/', icon: '/img/insta.svg', openInNewTab: true },
+                                              { name: 'LinkedIn', url: sec.data?.linkedinUrl || 'https://ca.linkedin.com/company/kingtravelcan', icon: '/img/in.svg', openInNewTab: true },
+                                              { name: 'TikTok', url: sec.data?.tiktokUrl || 'https://www.tiktok.com/@kingtravelcan', icon: '/img/tik.svg', openInNewTab: true },
+                                            ];
+                                        currentSocials.push({ name: 'New Network', url: 'https://', icon: '', openInNewTab: true });
+                                        updateSectionData(sec.id, 'socialLinks', currentSocials);
+                                      }}
+                                      className="bg-[#004B39] hover:bg-[#00382B] text-white px-3 py-1.5 rounded-lg text-xs font-bold border-none cursor-pointer flex items-center gap-1.5 transition-colors"
+                                    >
+                                      <i className="fa-solid fa-plus text-[10px]"></i> Add Social Icon
+                                    </button>
+                                  </div>
+
+                                  {(() => {
+                                    const socialList: any[] = (sec.data?.socialLinks && Array.isArray(sec.data.socialLinks) && sec.data.socialLinks.length > 0)
+                                      ? sec.data.socialLinks
+                                      : [
+                                          { name: 'Facebook', url: sec.data?.facebookUrl || 'https://www.facebook.com/kingtravelcan', icon: sec.data?.facebookIcon || '/img/fb.svg', openInNewTab: true },
+                                          { name: 'Instagram', url: sec.data?.instagramUrl || 'https://www.instagram.com/kingtravelcan/', icon: sec.data?.instagramIcon || '/img/insta.svg', openInNewTab: true },
+                                          { name: 'LinkedIn', url: sec.data?.linkedinUrl || 'https://ca.linkedin.com/company/kingtravelcan', icon: sec.data?.linkedinIcon || '/img/in.svg', openInNewTab: true },
+                                          { name: 'TikTok', url: sec.data?.tiktokUrl || 'https://www.tiktok.com/@kingtravelcan', icon: sec.data?.tiktokIcon || '/img/tik.svg', openInNewTab: true },
+                                          { name: 'Twitter X', url: sec.data?.twitterUrl || 'https://twitter.com/kingtravelcan', icon: sec.data?.twitterIcon || '/img/x.svg', openInNewTab: true },
+                                          { name: 'Pinterest', url: sec.data?.pinterestUrl || 'https://pinterest.com/kingtravelcan', icon: sec.data?.pinterestIcon || '/img/pinterest.svg', openInNewTab: true },
+                                        ];
+
+                                    return (
+                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                        {socialList.map((item: any, sIdx: number) => (
+                                          <div key={sIdx} className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex flex-col gap-2.5">
+                                            <div className="flex justify-between items-center">
+                                              <span className="text-[10px] font-bold text-slate-500 uppercase">
+                                                Icon #{sIdx + 1}: {item.name || 'Social Link'}
+                                              </span>
+                                              <button
+                                                type="button"
+                                                onClick={() => {
+                                                  const updated = socialList.filter((_: any, i: number) => i !== sIdx);
+                                                  updateSectionData(sec.id, 'socialLinks', updated);
+                                                }}
+                                                className="text-white hover:bg-red-700 bg-red-600 border-none rounded-lg p-1.5 cursor-pointer flex items-center justify-center transition-colors"
+                                                title="Remove icon"
+                                              >
+                                                <Trash2 className="w-3 h-3" />
+                                              </button>
+                                            </div>
+
+                                            <div className="flex gap-3 items-center">
+                                              <div className="w-10 h-10 bg-[#004B39] rounded-lg p-1.5 flex items-center justify-center shrink-0 border border-slate-200 shadow-sm">
+                                                {item.icon ? (
+                                                  <img src={item.icon} alt={item.name} className="w-6 h-6 max-h-full max-w-full object-contain" />
+                                                ) : (
+                                                  <span className="text-[9px] text-white font-bold">SVG</span>
+                                                )}
+                                              </div>
+
+                                              <div className="flex-1 flex flex-col gap-1.5">
+                                                <div className="grid grid-cols-2 gap-2">
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Name (e.g. Facebook)"
+                                                    value={item.name || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...socialList];
+                                                      updated[sIdx] = { ...updated[sIdx], name: e.target.value };
+                                                      updateSectionData(sec.id, 'socialLinks', updated);
+                                                    }}
+                                                    className="p-1.5 rounded border border-slate-300 text-xs bg-white"
+                                                  />
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Target URL (https://...)"
+                                                    value={item.url || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...socialList];
+                                                      updated[sIdx] = { ...updated[sIdx], url: e.target.value };
+                                                      updateSectionData(sec.id, 'socialLinks', updated);
+                                                    }}
+                                                    className="p-1.5 rounded border border-slate-300 text-xs font-mono bg-white"
+                                                  />
+                                                </div>
+
+                                                <div className="flex gap-2 items-center justify-between">
+                                                  <label className="flex bg-slate-200 hover:bg-slate-300 text-slate-800 px-2 py-1 rounded text-[10px] font-bold cursor-pointer gap-1.5 items-center transition-colors">
+                                                    <Upload className="w-3 h-3" /> Upload SVG
+                                                    <input
+                                                      type="file"
+                                                      accept=".svg,image/svg+xml"
+                                                      className="hidden"
+                                                      onChange={async (e) => {
+                                                        const file = e.target.files?.[0];
+                                                        if (file) {
+                                                          if (!file.name.toLowerCase().endsWith('.svg') && file.type !== 'image/svg+xml') {
+                                                            alert('Please upload an SVG file (.svg format only).');
+                                                            return;
+                                                          }
+                                                          const url = await uploadFileToFtp(file, 'social');
+                                                          if (url) {
+                                                            const updated = [...socialList];
+                                                            updated[sIdx] = { ...updated[sIdx], icon: url };
+                                                            updateSectionData(sec.id, 'socialLinks', updated);
+                                                          }
+                                                        }
+                                                      }}
+                                                    />
+                                                  </label>
+
+                                                  <div className="flex items-center gap-2">
+                                                    <span className="text-[10px] font-bold text-slate-600">Open in New Tab</span>
+                                                    <Switch
+                                                      checked={item.openInNewTab ?? true}
+                                                      onChange={(val) => {
+                                                        const updated = [...socialList];
+                                                        updated[sIdx] = { ...updated[sIdx], openInNewTab: val };
+                                                        updateSectionData(sec.id, 'socialLinks', updated);
+                                                      }}
+                                                    />
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    );
+                                  })()}
                                 </div>
                               </div>
                             )}
