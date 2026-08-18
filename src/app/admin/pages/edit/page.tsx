@@ -152,7 +152,7 @@ function PageBuilderContent() {
   // Homepage Hero Banner Specific Fields
   const [heroEyebrow, setHeroEyebrow] = useState('Est. in Canada · Licensed Pilgrimage Operator');
   const [primaryBtnLabel, setPrimaryBtnLabel] = useState('View Umrah Packages →');
-  const [primaryBtnLink, setPrimaryBtnLink] = useState('#packages');
+  const [primaryBtnLink, setPrimaryBtnLink] = useState('/umrah-packages');
   const [secondaryBtnLabel, setSecondaryBtnLabel] = useState('Speak With an Advisor');
   const [secondaryBtnLink, setSecondaryBtnLink] = useState('/contact');
   const [badge1Top, setBadge1Top] = useState('10k+');
@@ -268,6 +268,18 @@ function PageBuilderContent() {
               const parsed = JSON.parse(p.sections);
               if (Array.isArray(parsed) && parsed.length > 0) {
                 setSections(parsed);
+                const heroSec = parsed.find((s: any) => s.type === 'Homepage Hero Banner' || s.type === 'Hero Slider');
+                if (heroSec && heroSec.data) {
+                  if (heroSec.data.heroEyebrow !== undefined) setHeroEyebrow(heroSec.data.heroEyebrow);
+                  if (heroSec.data.primaryBtnLabel !== undefined) setPrimaryBtnLabel(heroSec.data.primaryBtnLabel);
+                  if (heroSec.data.primaryBtnLink !== undefined) setPrimaryBtnLink(heroSec.data.primaryBtnLink);
+                  if (heroSec.data.secondaryBtnLabel !== undefined) setSecondaryBtnLabel(heroSec.data.secondaryBtnLabel);
+                  if (heroSec.data.secondaryBtnLink !== undefined) setSecondaryBtnLink(heroSec.data.secondaryBtnLink);
+                  if (heroSec.data.badge1Top !== undefined) setBadge1Top(heroSec.data.badge1Top);
+                  if (heroSec.data.badge1Sub !== undefined) setBadge1Sub(heroSec.data.badge1Sub);
+                  if (heroSec.data.badge2Top !== undefined) setBadge2Top(heroSec.data.badge2Top);
+                  if (heroSec.data.badge2Sub !== undefined) setBadge2Sub(heroSec.data.badge2Sub);
+                }
               } else if (p.slug === '/saudi-visa' || pageId === 5) {
                 setSections([
                   {
@@ -1984,9 +1996,8 @@ function PageBuilderContent() {
                                                 currentItems[sIdx] = temp;
                                                 updateSectionData(sec.id, 'items', currentItems);
                                               }}
-                                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
-                                                isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                                              }`}
+                                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                                }`}
                                               title="Move Up"
                                             >
                                               <MoveUp className="w-3 h-3" />
@@ -2002,9 +2013,8 @@ function PageBuilderContent() {
                                                 currentItems[sIdx] = temp;
                                                 updateSectionData(sec.id, 'items', currentItems);
                                               }}
-                                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
-                                                isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                                              }`}
+                                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                                }`}
                                               title="Move Down"
                                             >
                                               <MoveDown className="w-3 h-3" />
