@@ -112,22 +112,13 @@ export function getResponsiveEmailTemplateHtml(
 ): string {
   const safeFormName = escapeHtml(formName);
 
-  const headingTitle = isForUser
-    ? 'Thank You for Contacting King Travel Canada'
-    : `New Form Submission: ${safeFormName}`;
+  const badgeText = isForUser
+    ? 'INQUIRY RECEIVED'
+    : 'NEW INQUIRY NOTIFICATION';
 
-  const descriptionHtml = isForUser
-    ? `
-      Thank you for contacting King Travel Canada.
-      We have successfully received your inquiry via
-      <strong>${safeFormName}</strong>.
-      Your submission details are listed below:
-    `
-    : `
-      A new inquiry has been submitted via
-      <strong>${safeFormName}</strong>.
-      Submission details are listed below:
-    `;
+  const introTextHtml = isForUser
+    ? `Thank you for contacting King Travel Canada. We have received your inquiry submitted via <strong>${safeFormName}</strong>. Submission details are listed below:`
+    : `A new inquiry has been submitted via <strong>${safeFormName}</strong>. Submission details are listed below:`;
 
   /**
    * Fields that should not appear inside email.
@@ -158,53 +149,15 @@ export function getResponsiveEmailTemplateHtml(
     .map(([key, value], index) => {
       const label = escapeHtml(formatFieldLabel(key));
       const displayValue = formatFieldValue(value);
-
-      const backgroundColor =
-        index % 2 === 0 ? '#ffffff' : '#f8fafc';
-
-      const borderBottom =
-        index === filteredData.length - 1
-          ? 'none'
-          : '1px solid #e2e8f0';
+      const backgroundColor = index % 2 === 0 ? '#ffffff' : '#f8fafc';
+      const borderBottom = index === filteredData.length - 1 ? 'none' : '1px solid #e2e8f0';
 
       return `
-        <tr style="background-color:${backgroundColor};">
-          <td
-            width="38%"
-            valign="top"
-            style="
-              width:38%;
-              padding:12px 16px;
-              font-family:'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-              font-size:13px;
-              line-height:19px;
-              font-weight:700;
-              color:#0f172a;
-              vertical-align:top;
-              background-color:${backgroundColor};
-              border-bottom:${borderBottom};
-            "
-          >
+        <tr style="background-color: ${backgroundColor}; border-bottom: ${borderBottom};">
+          <td style="padding: 12px 16px; font-size: 13px; font-weight: 700; color: #0f172a; width: 38%; vertical-align: top; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
             ${label}
           </td>
-
-          <td
-            width="62%"
-            valign="top"
-            style="
-              width:62%;
-              padding:12px 16px;
-              font-family:'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-              font-size:13px;
-              line-height:19px;
-              font-weight:500;
-              color:#334155;
-              vertical-align:top;
-              background-color:${backgroundColor};
-              border-bottom:${borderBottom};
-              word-break:break-word;
-            "
-          >
+          <td style="padding: 12px 16px; font-size: 13px; font-weight: 500; color: #334155; width: 62%; vertical-align: top; word-break: break-word; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
             ${displayValue}
           </td>
         </tr>
@@ -226,452 +179,127 @@ export function getResponsiveEmailTemplateHtml(
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-  <meta
-    http-equiv="X-UA-Compatible"
-    content="IE=edge"
-  >
-  <title>${headingTitle}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>${escapeHtml(formName)} - King Travel Canada</title>
+  <style type="text/css">
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+    body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #f1f5f9; }
+    
+    @media screen and (max-width: 600px) {
+      .email-container { width: 100% !important; margin: auto !important; border-radius: 0 !important; }
+      .fluid-padding { padding: 20px 16px !important; }
+      .header-title { font-size: 20px !important; }
+    }
+  </style>
 </head>
+<body style="margin: 0; padding: 0; background-color: #f1f5f9; font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
 
-<body
-  style="
-    margin:0;
-    padding:0;
-    width:100%;
-    background-color:#f1f5f9;
-    font-family:'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    -webkit-text-size-adjust:100%;
-    -ms-text-size-adjust:100%;
-  "
->
-
-  <!-- Email Background -->
-  <table
-    border="0"
-    cellpadding="0"
-    cellspacing="0"
-    width="100%"
-    role="presentation"
-    style="
-      width:100%;
-      margin:0;
-      padding:0;
-      background-color:#f1f5f9;
-      border-collapse:collapse;
-      mso-table-lspace:0pt;
-      mso-table-rspace:0pt;
-    "
-  >
+  <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f1f5f9; padding: 30px 0;">
     <tr>
-      <td
-        align="center"
-        style="padding:30px 15px;"
-      >
-
-        <!-- Main Email Container -->
-        <table
-          border="0"
-          cellpadding="0"
-          cellspacing="0"
-          width="100%"
-          role="presentation"
-          style="
-            width:100%;
-            max-width:600px;
-            background-color:#ffffff;
-            border:1px solid #e2e8f0;
-            border-radius:20px;
-            overflow:hidden;
-            border-collapse:separate;
-            mso-table-lspace:0pt;
-            mso-table-rspace:0pt;
-          "
-        >
-
+      <td align="center">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%" class="email-container" style="max-width: 600px; background-color: #ffffff; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08); border: 1px solid #e2e8f0;">
+          
           <!-- Header -->
           <tr>
-            <td
-              align="center"
-              bgcolor="#004B39"
-              style="
-                padding:32px 24px;
-                background-color:#004B39;
-                border-bottom:4px solid #DB9E30;
-                border-radius:20px 20px 0 0;
-              "
-            >
-
-              <table
-                border="0"
-                cellpadding="0"
-                cellspacing="0"
-                width="100%"
-                role="presentation"
-                style="
-                  width:100%;
-                  border-collapse:collapse;
-                "
-              >
-                <tr>
-                  <td
-                    align="center"
-                    style="padding-bottom:12px;"
-                  >
-
-                    <!-- Notification Badge -->
-                    <table
-                      border="0"
-                      cellpadding="0"
-                      cellspacing="0"
-                      role="presentation"
-                      style="
-                        margin:0 auto;
-                        border-collapse:separate;
-                      "
-                    >
-                      <tr>
-                        <td
-                          align="center"
-                          bgcolor="#1f624f"
-                          style="
-                            padding:5px 12px;
-                            background-color:#1f624f;
-                            border:1px solid #DB9E30;
-                            border-radius:50px;
-                            color:#DB9E30;
-                            font-size:10px;
-                            line-height:14px;
-                            font-weight:800;
-                            text-transform:uppercase;
-                            letter-spacing:1px;
-                          "
-                        >
-                          ${
-                            isForUser
-                              ? 'INQUIRY RECEIVED'
-                              : 'NEW INQUIRY NOTIFICATION'
-                          }
-                        </td>
-                      </tr>
-                    </table>
-
-                  </td>
-                </tr>
-
-                <!-- Company Name -->
+            <td align="center" style="background: linear-gradient(135deg, #004B39 0%, #003326 100%); padding: 32px 24px; border-bottom: 4px solid #DB9E30;">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="center">
-                    <h1
-                      style="
-                        margin:0;
-                        padding:0;
-                        color:#ffffff;
-                        font-family:Marcellus, Georgia, 'Times New Roman', serif;
-                        font-size:24px;
-                        line-height:30px;
-                        font-weight:900;
-                        letter-spacing:-0.5px;
-                      "
-                    >
+                    <div style="display: inline-block; background-color: rgba(219, 158, 48, 0.15); border: 1px solid #DB9E30; color: #DB9E30; font-size: 10px; font-weight: 800; padding: 4px 12px; border-radius: 50px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;">
+                      ${badgeText}
+                    </div>
+                    <h1 class="header-title" style="color: #ffffff; font-size: 24px; font-weight: 900; margin: 0; letter-spacing: -0.5px; font-family: Marcellus, Georgia, serif;">
                       King Travel Canada
                     </h1>
-                  </td>
-                </tr>
-
-                <!-- Subtitle -->
-                <tr>
-                  <td align="center">
-                    <p
-                      style="
-                        margin:4px 0 0 0;
-                        padding:0;
-                        color:#a7f3d0;
-                        font-size:12px;
-                        line-height:18px;
-                        font-weight:600;
-                      "
-                    >
+                    <p style="color: #a7f3d0; font-size: 12px; margin: 4px 0 0 0; font-weight: 600;">
                       Licensed Hajj &amp; Umrah Travel Operator
                     </p>
                   </td>
                 </tr>
-
               </table>
-
             </td>
           </tr>
 
-
-          <!-- Main Content -->
+          <!-- Body -->
           <tr>
-            <td
-              bgcolor="#ffffff"
-              style="
-                padding:32px 28px;
-                background-color:#ffffff;
-              "
-            >
+            <td class="fluid-padding" style="padding: 32px 28px; background-color: #ffffff;">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%">
 
-              <table
-                border="0"
-                cellpadding="0"
-                cellspacing="0"
-                width="100%"
-                role="presentation"
-                style="
-                  width:100%;
-                  border-collapse:collapse;
-                "
-              >
-
-                <!-- Heading -->
                 <tr>
-                  <td style="padding-bottom:12px;">
-                    <h2
-                      style="
-                        margin:0;
-                        padding:0;
-                        color:#0f172a;
-                        font-size:20px;
-                        line-height:1.3;
-                        font-weight:800;
-                      "
-                    >
-                      ${headingTitle}
-                    </h2>
-                  </td>
-                </tr>
-
-
-                <!-- Description -->
-                <tr>
-                  <td style="padding-bottom:24px;">
-                    <p
-                      style="
-                        margin:0;
-                        padding:0;
-                        color:#475569;
-                        font-size:14px;
-                        line-height:1.6;
-                      "
-                    >
-                      ${descriptionHtml}
+                  <td style="padding-bottom: 24px;">
+                    <p style="color: #475569; font-size: 14px; line-height: 1.6; margin: 0;">
+                      ${introTextHtml}
                     </p>
                   </td>
                 </tr>
 
-
-                <!-- Submission Date -->
                 <tr>
-                  <td style="padding-bottom:24px;">
-
-                    <table
-                      border="0"
-                      cellpadding="0"
-                      cellspacing="0"
-                      width="100%"
-                      role="presentation"
-                      style="
-                        width:100%;
-                        background-color:#f8fafc;
-                        border:1px solid #e2e8f0;
-                        border-radius:12px;
-                        border-collapse:separate;
-                      "
-                    >
+                  <td style="padding-bottom: 24px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 12px 16px;">
                       <tr>
-                        <td
-                          style="
-                            padding:12px 16px;
-                            font-size:12px;
-                            line-height:18px;
-                            color:#64748b;
-                            font-weight:600;
-                          "
-                        >
-                          📅 Date:
-                          <strong style="color:#0f172a;">
-                            ${escapeHtml(submissionDate)}
-                          </strong>
+                        <td style="font-size: 12px; color: #64748b; font-weight: 600;">
+                          Date: <strong style="color: #0f172a;">${escapeHtml(submissionDate)}</strong>
                         </td>
                       </tr>
                     </table>
-
                   </td>
                 </tr>
 
-
-                <!-- Form Details Heading -->
                 <tr>
-                  <td style="padding-bottom:12px;">
-                    <h3
-                      style="
-                        margin:0;
-                        padding:0;
-                        color:#004B39;
-                        font-size:14px;
-                        line-height:20px;
-                        font-weight:800;
-                        text-transform:uppercase;
-                        letter-spacing:0.5px;
-                      "
-                    >
-                      📋 Submitted Form Details
+                  <td style="padding-bottom: 12px;">
+                    <h3 style="color: #004B39; font-size: 14px; font-weight: 800; margin: 0; text-transform: uppercase; letter-spacing: 0.5px;">
+                      Submitted Form Details
                     </h3>
                   </td>
                 </tr>
 
-
-                <!-- Form Details -->
                 <tr>
-                  <td style="padding-bottom:28px;">
-
-                    <table
-                      border="0"
-                      cellpadding="0"
-                      cellspacing="0"
-                      width="100%"
-                      role="presentation"
-                      style="
-                        width:100%;
-                        border:1px solid #cbd5e1;
-                        border-radius:14px;
-                        overflow:hidden;
-                        border-collapse:separate;
-                        border-spacing:0;
-                      "
-                    >
+                  <td style="padding-bottom: 28px;">
+                    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: separate; border-spacing: 0; border: 1px solid #cbd5e1; border-radius: 14px; overflow: hidden;">
                       ${tableRowsHtml}
                     </table>
-
                   </td>
                 </tr>
 
               </table>
-
             </td>
           </tr>
 
-
           <!-- Footer -->
           <tr>
-            <td
-              align="center"
-              bgcolor="#0f172a"
-              style="
-                padding:28px 24px;
-                background-color:#0f172a;
-                border-top:1px solid #1e293b;
-                border-radius:0 0 20px 20px;
-                color:#94a3b8;
-                font-size:12px;
-              "
-            >
-
-              <table
-                border="0"
-                cellpadding="0"
-                cellspacing="0"
-                width="100%"
-                role="presentation"
-                style="
-                  width:100%;
-                  border-collapse:collapse;
-                "
-              >
-
-                <!-- Company Details -->
+            <td align="center" style="background-color: #000000; padding: 28px 24px; border-top: 1px solid #1e293b; color: #ffffff; font-size: 12px;">
+              <table border="0" cellpadding="0" width="100%">
                 <tr>
-                  <td
-                    align="center"
-                    style="padding-bottom:12px;"
-                  >
-                    <p
-                      style="
-                        margin:0 0 4px 0;
-                        color:#ffffff;
-                        font-size:14px;
-                        line-height:20px;
-                        font-weight:800;
-                      "
-                    >
+                  <td align="center" style="padding-bottom: 12px;">
+                    <p style="color:#ffffff; font-weight: 800; font-size: 14px; margin: 0 0 4px 0;">
                       King Travel Canada Ltd.
                     </p>
-
-                    <p
-                      style="
-                        margin:0;
-                        color:#64748b;
-                        font-size:11px;
-                        line-height:1.5;
-                      "
-                    >
-                      1325 Eglinton Ave E Suite Number 218,
-                      Mississauga, ON L4W 4L9, Canada
-                      <br>
-                      TICO &amp; IATA Licensed Pilgrimage
-                      &amp; Flight Operator
+                    <p style="color: #ffffff; font-size: 11px; margin: 0; line-height: 1.5;">
+                      1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada<br>
+                      TICO &amp; IATA Licensed Pilgrimage &amp; Flight Operator
                     </p>
                   </td>
                 </tr>
-
-
-                <!-- Website -->
                 <tr>
-                  <td
-                    align="center"
-                    style="padding-bottom:16px;"
-                  >
-                    <a
-                      href="https://kingtravelcan.com"
-                      target="_blank"
-                      style="
-                        color:#DB9E30;
-                        text-decoration:none;
-                        font-size:12px;
-                        font-weight:700;
-                      "
-                    >
+                  <td align="center" style="padding-bottom: 16px;">
+                    <a href="https://kingtravelcan.com" target="_blank" style="color: #DB9E30; text-decoration: none; font-weight: 700; font-size: 12px; margin: 0 8px;">
                       Visit Official Website →
                     </a>
                   </td>
                 </tr>
-
-
-                <!-- Copyright -->
                 <tr>
-                  <td
-                    align="center"
-                    style="
-                      padding-top:16px;
-                      border-top:1px solid #1e293b;
-                      color:#475569;
-                      font-size:11px;
-                      line-height:17px;
-                    "
-                  >
-                    © ${new Date().getFullYear()}
-                    King Travel Canada Ltd.
-                    All Rights Reserved.
-                    ${
-                      isForUser
-                        ? ''
-                        : 'Automated system notification.'
-                    }
+                  <td align="center" style="border-top: 1px solid #1e293b; padding-top: 16px; font-size: 11px; color: #ffffff;">
+                    © ${new Date().getFullYear()} King Travel Canada Ltd. All Rights Reserved. Automated system notification.
                   </td>
                 </tr>
-
               </table>
-
             </td>
           </tr>
 
         </table>
-
       </td>
     </tr>
   </table>
