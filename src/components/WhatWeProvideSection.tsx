@@ -33,7 +33,7 @@ export default function WhatWeProvideSection({ data }: { data: any }) {
           <div className="order-1 lg:order-2">
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2 
-              className="text-4xl md:text-5xl font-serif text-ink leading-[1.15] mb-12"
+              className="text-4xl md:text-5xl font-serif text-ink leading-[1.15] mb-6"
               dangerouslySetInnerHTML={{ __html: title }}
             />
 

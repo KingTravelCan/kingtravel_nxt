@@ -218,14 +218,14 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                       setQuoteForm({ ...quoteForm, email: e.target.value });
                       if (quoteErrors.email) setQuoteErrors((prev) => ({ ...prev, email: "" }));
                     }}
-                    className={`w-full border p-3 rounded-sm bg-slate-50 outline-none transition-colors duration-300 text-slate-900 text-sm font-medium placeholder:text-slate-400 ${quoteErrors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-line focus:border-gold"
+                    className={`w-full border p-3 rounded-sm bg-slate-50 outline-none transition-colors duration-300 text-slate-900 text-sm font-normal placeholder:text-slate-400 ${quoteErrors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "border-line focus:border-gold"
                       }`}
                   />
                   {quoteErrors.email && <span className="text-red-600 text-xs font-semibold mt-1 block">{quoteErrors.email}</span>}
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                 <div className="relative">
                   <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Select Your Package
