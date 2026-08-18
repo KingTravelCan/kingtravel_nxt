@@ -28,7 +28,6 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
     phone: "",
     email: "",
     packageType: "Select your package",
-    departureDate: "",
     adults: 1,
   });
   const [quoteStatus, setQuoteStatus] = useState<string | null>(null);
@@ -62,8 +61,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
         phone: quoteForm.phone,
         email: quoteForm.email,
         packageType: quoteForm.packageType,
-        departureDate: quoteForm.departureDate,
-        adults: quoteForm.adults,
+        numberOfPilgrims: quoteForm.adults,
       });
 
       if (res.success) {
@@ -77,7 +75,6 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
           phone: "",
           email: "",
           packageType: "Select your package",
-          departureDate: "",
           adults: 1,
         });
       } else {
@@ -246,21 +243,10 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                   </select>
                 </div>
 
-                <div className="relative">
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
-                    Departure Date
-                  </label>
-                  <input
-                    type="date"
-                    value={quoteForm.departureDate}
-                    onChange={(e) => setQuoteForm({ ...quoteForm, departureDate: e.target.value })}
-                    className="cursor-pointer w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-slate-900 text-sm font-medium"
-                  />
-                </div>
 
                 <div className="relative">
                   <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
-                    Number of Adults
+                    Number of Pilgrims
                   </label>
                   <input
                     type="number"
@@ -271,7 +257,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                   />
                 </div>
 
-                <div>
+                <div className="lg:col-start-4">
                   <button
                     type="submit"
                     className="w-full bg-gold text-ink font-extrabold py-3.5 px-6 rounded-sm shadow-md hover:bg-gold-lt active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"

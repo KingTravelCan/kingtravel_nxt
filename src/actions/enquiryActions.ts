@@ -11,11 +11,10 @@ export async function submitQuoteEnquiryAction(data: {
   phone: string;
   email: string;
   packageType?: string;
-  departureDate?: string;
-  adults?: number;
+  numberOfPilgrims?: number;
 }) {
   try {
-    const { fullName, phone, email, packageType = 'Umrah Package', departureDate = '', adults = 1 } = data;
+    const { fullName, phone, email, packageType = 'Umrah Package', numberOfPilgrims = 1 } = data;
 
     if (!fullName || !email || !phone) {
       return { success: false, error: 'Full Name, Email, and Phone number are required.' };
@@ -31,8 +30,7 @@ export async function submitQuoteEnquiryAction(data: {
         phone,
         email,
         packageType,
-        departureDate,
-        adults,
+        numberOfPilgrims,
         status: 'new',
       });
     } catch (subErr) {
@@ -47,8 +45,7 @@ export async function submitQuoteEnquiryAction(data: {
       email,
       phone,
       preferredPackageType: packageType,
-      departureMonth: departureDate,
-      adults,
+      adults: numberOfPilgrims,
       status: 'new',
     });
 
@@ -61,8 +58,7 @@ export async function submitQuoteEnquiryAction(data: {
         email,
         phone,
         packageType,
-        departureDate,
-        adults,
+        numberOfPilgrims,
       }
     );
 
@@ -333,10 +329,9 @@ export async function submitQuoteRequest(formData: FormData) {
   const email = formData.get('email') as string;
   const phone = formData.get('phone') as string;
   const packageType = (formData.get('packageType') as string) || 'Umrah Package';
-  const departureDate = (formData.get('departureDate') as string) || '';
-  const adults = parseInt((formData.get('adults') as string) || '1', 10);
+  const numberOfPilgrims = parseInt((formData.get('adults') as string) || (formData.get('numberOfPilgrims') as string) || '1', 10);
 
-  return await submitQuoteEnquiryAction({ fullName, email, phone, packageType, departureDate, adults });
+  return await submitQuoteEnquiryAction({ fullName, email, phone, packageType, numberOfPilgrims });
 }
 
 export async function submitPackageEnquiry(formData: FormData) {

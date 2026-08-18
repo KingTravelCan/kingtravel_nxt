@@ -190,8 +190,7 @@ export default function DynamicSiteForm({
           phone,
           email,
           packageType,
-          departureDate: getVal(["departureDate", "travel_date"]),
-          adults: parseNumberSafe(getVal(["adults", "passengers"], "1"), 1),
+          numberOfPilgrims: parseNumberSafe(getVal(["adults", "passengers"], "1"), 1),
         });
       } else if (formKey === "packageDetailForm" || formKey === "packageInquiry") {
         res = await submitPackageBookingEnquiryAction({

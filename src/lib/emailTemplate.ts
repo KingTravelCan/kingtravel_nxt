@@ -28,6 +28,7 @@ export function formatFieldLabel(key: string): string {
     travelDates: 'Travel Dates',
 
     adults: 'Number of Adults',
+    numberOfPilgrims: 'Number of Pilgrims',
     travelersCount: 'Number of Travelers',
     numberOfPassengers: 'Number of Passengers',
     children: 'Children',

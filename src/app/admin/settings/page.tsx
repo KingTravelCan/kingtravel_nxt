@@ -1207,7 +1207,7 @@ export default function AdminSettingsPage() {
               </div>
 
               {/* Visibility Toggles */}
-              <div className="border-b border-slate-100 pb-6">
+              {/* <div className="border-b border-slate-100 pb-6">
                 <h3 className="text-xs font-extrabold text-slate-500 uppercase tracking-wider mb-4">
                   👁 VISIBILITY TOGGLES
                 </h3>
@@ -1222,7 +1222,7 @@ export default function AdminSettingsPage() {
                     </Field>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Bottom Action Save Bar */}
               <div className="flex justify-between items-center pt-4 border-t border-slate-100 mt-2">
