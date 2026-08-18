@@ -225,7 +225,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-end">
                 <div className="relative">
                   <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Select Your Package
@@ -257,7 +257,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                   />
                 </div>
 
-                <div className="lg:col-start-4">
+                <div className="">
                   <button
                     type="submit"
                     className="w-full bg-gold text-ink font-extrabold py-3.5 px-6 rounded-sm shadow-md hover:bg-gold-lt active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
