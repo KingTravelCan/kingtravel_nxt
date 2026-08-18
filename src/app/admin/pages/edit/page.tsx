@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch';
 import { getPageById, savePageAction } from '@/actions/pageActions';
 import { getAllPackages } from '@/actions/packageActions';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
-import { Trash2, Upload, Settings } from 'lucide-react';
+import { Trash2, Upload, Settings, MoveUp, MoveDown, ArrowUp, ArrowDown } from 'lucide-react';
 import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
 import { uploadFileToFtp, generateAutoAltText } from '@/lib/uploadClient';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
@@ -1781,22 +1781,20 @@ function PageBuilderContent() {
                               <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-2.5">
                                 <span className="text-[11px] font-extrabold text-[#004B39] uppercase">📊 KPI Stat Items (Value & Label)</span>
                                 {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
-                                  { value: '72K+', label: 'Happy Travelers' },
-                                  { value: '4.4', label: 'Google Rating' },
-                                  { value: '100%', label: 'Client Satisfaction' },
-                                  { value: '25+', label: 'Years Experience' }
+                                  { value: '25+', label: 'Years Serving Canada' },
+                                  { value: '10,000+', label: 'Pilgrims Guided' },
+                                  { value: '5★', label: 'Hotels, Every Package' }
                                 ]).map((stat: any, sIdx: number) => (
                                   <div key={sIdx} className="grid grid-cols-[1fr_2fr] gap-2">
                                     <input
                                       type="text"
                                       value={stat.value || ''}
-                                      placeholder="Value (e.g. 72K+)"
+                                      placeholder="Value (e.g. 25+)"
                                       onChange={(e) => {
                                         const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
-                                          { value: '72K+', label: 'Happy Travelers' },
-                                          { value: '4.4', label: 'Google Rating' },
-                                          { value: '100%', label: 'Client Satisfaction' },
-                                          { value: '25+', label: 'Years Experience' }
+                                          { value: '25+', label: 'Years Serving Canada' },
+                                          { value: '10,000+', label: 'Pilgrims Guided' },
+                                          { value: '5★', label: 'Hotels, Every Package' }
                                         ])];
                                         currentItems[sIdx] = { ...currentItems[sIdx], value: e.target.value };
                                         updateSectionData(sec.id, 'items', currentItems);
@@ -1806,13 +1804,12 @@ function PageBuilderContent() {
                                     <input
                                       type="text"
                                       value={stat.label || ''}
-                                      placeholder="Label (e.g. Happy Travelers)"
+                                      placeholder="Label (e.g. Years Serving Canada)"
                                       onChange={(e) => {
                                         const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
-                                          { value: '72K+', label: 'Happy Travelers' },
-                                          { value: '4.4', label: 'Google Rating' },
-                                          { value: '100%', label: 'Client Satisfaction' },
-                                          { value: '25+', label: 'Years Experience' }
+                                          { value: '25+', label: 'Years Serving Canada' },
+                                          { value: '10,000+', label: 'Pilgrims Guided' },
+                                          { value: '5★', label: 'Hotels, Every Package' }
                                         ])];
                                         currentItems[sIdx] = { ...currentItems[sIdx], label: e.target.value };
                                         updateSectionData(sec.id, 'items', currentItems);
@@ -1946,48 +1943,115 @@ function PageBuilderContent() {
                                   </div>
 
                                   <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 flex flex-col gap-2.5 mt-2">
-                                    <span className="text-[11px] font-extrabold text-[#004B39] uppercase">📊 KPI Stat Items (Value & Label)</span>
+                                    <div className="flex items-center justify-between">
+                                      <span className="text-[11px] font-extrabold text-[#004B39] uppercase">📊 KPI Stat Items (Value & Label)</span>
+                                      <button
+                                        type="button"
+                                        onClick={() => {
+                                          const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
+                                            { value: '25+', label: 'Years Serving Canada' },
+                                            { value: '10,000+', label: 'Pilgrims Guided' },
+                                            { value: '5★', label: 'Hotels, Every Package' }
+                                          ])];
+                                          currentItems.push({ value: '100%', label: 'Client Satisfaction' });
+                                          updateSectionData(sec.id, 'items', currentItems);
+                                        }}
+                                        className="bg-[#004B39] text-white border-none rounded-md px-2.5 py-1 text-[11px] font-bold cursor-pointer hover:bg-[#00382B]"
+                                      >
+                                        + Add New KPI
+                                      </button>
+                                    </div>
                                     {((sec.data?.items && Array.isArray(sec.data.items) && sec.data.items.length > 0) ? sec.data.items : [
-                                      { value: '72K+', label: 'Happy Travelers' },
-                                      { value: '4.4', label: 'Google Rating' },
-                                      { value: '100%', label: 'Client Satisfaction' },
-                                      { value: '25+', label: 'Years Experience' }
-                                    ]).map((stat: any, sIdx: number) => (
-                                      <div key={sIdx} className="grid grid-cols-[1fr_2fr] gap-2">
-                                        <input
-                                          type="text"
-                                          value={stat.value || ''}
-                                          placeholder="Value (e.g. 72K+)"
-                                          onChange={(e) => {
-                                            const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
-                                              { value: '72K+', label: 'Happy Travelers' },
-                                              { value: '4.4', label: 'Google Rating' },
-                                              { value: '100%', label: 'Client Satisfaction' },
-                                              { value: '25+', label: 'Years Experience' }
-                                            ])];
-                                            currentItems[sIdx] = { ...currentItems[sIdx], value: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentItems);
-                                          }}
-                                          className="w-full min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                        />
-                                        <input
-                                          type="text"
-                                          value={stat.label || ''}
-                                          placeholder="Label (e.g. Happy Travelers)"
-                                          onChange={(e) => {
-                                            const currentItems = [...((sec.data?.items && Array.isArray(sec.data.items)) ? sec.data.items : [
-                                              { value: '72K+', label: 'Happy Travelers' },
-                                              { value: '4.4', label: 'Google Rating' },
-                                              { value: '100%', label: 'Client Satisfaction' },
-                                              { value: '25+', label: 'Years Experience' }
-                                            ])];
-                                            currentItems[sIdx] = { ...currentItems[sIdx], label: e.target.value };
-                                            updateSectionData(sec.id, 'items', currentItems);
-                                          }}
-                                          className="w-full min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs"
-                                        />
-                                      </div>
-                                    ))}
+                                      { value: '25+', label: 'Years Serving Canada' },
+                                      { value: '10,000+', label: 'Pilgrims Guided' },
+                                      { value: '5★', label: 'Hotels, Every Package' }
+                                    ]).map((stat: any, sIdx: number, arr: any[]) => {
+                                      const isFirst = sIdx === 0;
+                                      const isLast = sIdx === arr.length - 1;
+
+                                      return (
+                                        <div key={sIdx} className="flex items-center gap-2 bg-white p-2 rounded-lg border border-slate-200">
+                                          {/* Reorder Buttons */}
+                                          <div className="flex flex-col gap-0.5 shrink-0">
+                                            <button
+                                              type="button"
+                                              disabled={isFirst}
+                                              onClick={() => {
+                                                if (isFirst) return;
+                                                const currentItems = [...arr];
+                                                const temp = currentItems[sIdx - 1];
+                                                currentItems[sIdx - 1] = currentItems[sIdx];
+                                                currentItems[sIdx] = temp;
+                                                updateSectionData(sec.id, 'items', currentItems);
+                                              }}
+                                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
+                                                isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                              }`}
+                                              title="Move Up"
+                                            >
+                                              <MoveUp className="w-3 h-3" />
+                                            </button>
+                                            <button
+                                              type="button"
+                                              disabled={isLast}
+                                              onClick={() => {
+                                                if (isLast) return;
+                                                const currentItems = [...arr];
+                                                const temp = currentItems[sIdx + 1];
+                                                currentItems[sIdx + 1] = currentItems[sIdx];
+                                                currentItems[sIdx] = temp;
+                                                updateSectionData(sec.id, 'items', currentItems);
+                                              }}
+                                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
+                                                isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                              }`}
+                                              title="Move Down"
+                                            >
+                                              <MoveDown className="w-3 h-3" />
+                                            </button>
+                                          </div>
+
+                                          <div className="grid grid-cols-[1fr_2fr] gap-2 flex-1 min-w-0">
+                                            <input
+                                              type="text"
+                                              value={stat.value || ''}
+                                              placeholder="Value (e.g. 25+)"
+                                              onChange={(e) => {
+                                                const currentItems = [...arr];
+                                                currentItems[sIdx] = { ...currentItems[sIdx], value: e.target.value };
+                                                updateSectionData(sec.id, 'items', currentItems);
+                                              }}
+                                              className="w-full min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
+                                            />
+                                            <input
+                                              type="text"
+                                              value={stat.label || ''}
+                                              placeholder="Label (e.g. Years Serving Canada)"
+                                              onChange={(e) => {
+                                                const currentItems = [...arr];
+                                                currentItems[sIdx] = { ...currentItems[sIdx], label: e.target.value };
+                                                updateSectionData(sec.id, 'items', currentItems);
+                                              }}
+                                              className="w-full min-w-0 px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs"
+                                            />
+                                          </div>
+
+                                          {/* Delete button */}
+                                          <button
+                                            type="button"
+                                            onClick={() => {
+                                              const currentItems = [...arr];
+                                              currentItems.splice(sIdx, 1);
+                                              updateSectionData(sec.id, 'items', currentItems);
+                                            }}
+                                            className="p-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg border border-red-200 cursor-pointer flex items-center justify-center transition-colors shrink-0"
+                                            title="Remove KPI"
+                                          >
+                                            <Trash2 className="w-3.5 h-3.5" />
+                                          </button>
+                                        </div>
+                                      );
+                                    })}
                                   </div>
                                 </div>
                               </div>

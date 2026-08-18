@@ -14,10 +14,9 @@ export default function WhoWeAreSection({ data }: { data: any }) {
   const rawItems = (data?.items && Array.isArray(data.items) && data.items.length > 0)
     ? data.items
     : [
-      { value: '72K+', label: 'Happy Travelers' },
-      { value: '4.4', label: 'Google Rating' },
-      { value: '100%', label: 'Client Satisfaction' },
-      { value: '25+', label: 'Years Experience' }
+      { value: '25+', label: 'Years Serving Canada' },
+      { value: '1k+', label: 'Pilgrims Guided' },
+      { value: '5★', label: 'Hotels, Every Package' }
     ];
 
   const [progress, setProgress] = useState(0);
@@ -100,21 +99,16 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             <p className="!text-[18px] text-ink-soft mb-10 leading-relaxed text-sm md:text-base">
               {description2}
             </p>
-            <div className="max-w-7xl mx-auto">
-              <div className="bg-white rounded-2xl shadow-xl grid grid-cols-2 md:grid-cols-4 border border-slate-50 overflow-hidden">
-                {statsItems.map((stat: any, idx: number) => (
-                  <div
-                    key={idx}
-                    className={`text-center py-6 px-4 border-slate-100 ${idx % 2 === 0 ? 'border-r' : ''
-                      } ${idx < 2 ? 'border-b md:border-b-0' : ''
-                      } ${idx < 3 ? 'md:border-r' : ''
-                      }`}
-                  >
-                    <div className="text-primary font-serif text-2xl md:text-3xl mb-1">{stat.displayValue}</div>
-                    <div className="text-xs font-bold text-ink-light uppercase tracking-wider">{stat.label}</div>
-                  </div>
-                ))}
-              </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
+              {statsItems.map((stat: any, idx: number) => (
+                <div
+                  key={idx}
+                  className="bg-[#FAF9F5]/90 rounded-2xl p-5 md:p-6 text-center border border-[#E3D9C6] shadow-xs flex flex-col items-center justify-center transition-all hover:shadow-md"
+                >
+                  <div className="text-[#C89336] font-serif text-3xl md:text-4xl mb-2 font-normal leading-none">{stat.displayValue}</div>
+                  <div className="text-xs sm:text-[13px] font-medium text-ink-soft leading-snug">{stat.label}</div>
+                </div>
+              ))}
             </div>
 
           </div>

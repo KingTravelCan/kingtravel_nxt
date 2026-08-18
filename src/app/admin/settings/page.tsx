@@ -1698,7 +1698,7 @@ export default function AdminSettingsPage() {
                     type="button"
                     onClick={() => {
                       const current = [...(footerData.supportItems || [])];
-                      current.push({ text: 'New Support Detail', url: '', openInNewTab: false });
+                      current.push({ phone: '', label: '', text: 'New Support Detail', url: '', openInNewTab: false });
                       setFooterData({ ...footerData, supportItems: current });
                     }}
                     className="bg-[#004B39] text-white px-3 py-1.5 rounded-lg text-xs font-bold border-none cursor-pointer"
@@ -1760,14 +1760,53 @@ export default function AdminSettingsPage() {
                           </button>
                         </div>
 
-                        <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2 w-full">
+                        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-2 w-full">
                           <input
                             type="text"
-                            placeholder="Display Text (e.g. +1905-624-8555)"
-                            value={item.text || ''}
+                            placeholder="Phone / Text (e.g. +1905-624-8555)"
+                            value={item.phone || item.text || ''}
                             onChange={(e) => {
                               const updated = [...footerData.supportItems];
-                              updated[cIdx] = { ...updated[cIdx], text: e.target.value };
+                              const phoneVal = e.target.value;
+                              const labelVal = item.label || '';
+                              const combined = labelVal ? `${phoneVal} - ${labelVal}` : phoneVal;
+                              
+                              // Auto-generate tel/mailto if url is empty or matches previous
+                              let autoUrl = item.url;
+                              if (!autoUrl || autoUrl.startsWith('tel:') || autoUrl.startsWith('mailto:')) {
+                                if (phoneVal.includes('@')) {
+                                  autoUrl = `mailto:${phoneVal.trim()}`;
+                                } else if (phoneVal.replace(/[^0-9+]/g, '').length > 5) {
+                                  autoUrl = `tel:${phoneVal.replace(/[^0-9+]/g, '')}`;
+                                }
+                              }
+
+                              updated[cIdx] = { 
+                                ...updated[cIdx], 
+                                phone: phoneVal,
+                                label: labelVal,
+                                text: combined,
+                                url: autoUrl || updated[cIdx].url || ''
+                              };
+                              setFooterData({ ...footerData, supportItems: updated });
+                            }}
+                            className="p-1.5 rounded border border-slate-300 text-xs font-medium"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Label (e.g. Reservation, Saudi Visa)"
+                            value={item.label || ''}
+                            onChange={(e) => {
+                              const updated = [...footerData.supportItems];
+                              const labelVal = e.target.value;
+                              const phoneVal = item.phone || item.text || '';
+                              const combined = labelVal ? `${phoneVal} - ${labelVal}` : phoneVal;
+                              updated[cIdx] = { 
+                                ...updated[cIdx], 
+                                label: labelVal,
+                                phone: phoneVal,
+                                text: combined
+                              };
                               setFooterData({ ...footerData, supportItems: updated });
                             }}
                             className="p-1.5 rounded border border-slate-300 text-xs font-medium"

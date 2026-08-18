@@ -122,22 +122,28 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
           <div className="col-span-2 md:col-span-1 lg:col-span-1">
             <h5 className="text-[15px] tracking-[0.16em] uppercase text-gold mb-[18px] font-semibold">{footerData.supportTitle || '24/7 CUSTOMER SUPPORT'}</h5>
             <ul className="list-none p-0 m-0 space-y-2.5">
-              {(footerData.supportItems || []).map((item: any, cIdx: number) => (
-                <li key={cIdx} className="font-light whitespace-nowrap">
-                  {item.url ? (
-                    <a
-                      href={item.url}
-                      target={item.openInNewTab ? "_blank" : "_self"}
-                      rel={item.openInNewTab ? "noopener noreferrer" : undefined}
-                      className="whitespace-nowrap inline-block"
-                    >
-                      {item.text}
-                    </a>
-                  ) : (
-                    <span className="whitespace-nowrap inline-block">{item.text}</span>
-                  )}
-                </li>
-              ))}
+              {(footerData.supportItems || []).map((item: any, cIdx: number) => {
+                const displayText = item.phone && item.label 
+                  ? `${item.phone} - ${item.label}` 
+                  : (item.phone || item.text || '');
+
+                return (
+                  <li key={cIdx} className="font-light whitespace-nowrap">
+                    {item.url ? (
+                      <a
+                        href={item.url}
+                        target={item.openInNewTab ? "_blank" : "_self"}
+                        rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                        className="whitespace-nowrap inline-block"
+                      >
+                        {displayText}
+                      </a>
+                    ) : (
+                      <span className="whitespace-nowrap inline-block">{displayText}</span>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
 
