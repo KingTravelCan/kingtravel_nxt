@@ -99,14 +99,14 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                 <div>
                   <h4 className="">Landlines:</h4>
                   <div className="">
-                    {data.tollFree || "+1 647-982-8555"}<br />
+                    {data.tollFree || "+1 800 844 5464"}<br />
                     {data.localNum1 || "+1 905-624-8555"}
                   </div>
                 </div>
                 <div>
                   <h4 className="">Whatsapp:</h4>
                   <div className="">
-                    {data.waReservation || "+1 905-624-8344"} - <span className="text-xs font-normal">Reservation</span><br />
+                    {data.waReservation || "+1 905-624-8555"} - <span className="text-xs font-normal">Reservation</span><br />
                     {data.waVisa || "+1 647-982-8555"} - <span className="text-xs font-normal">Saudi Visa</span>
                   </div>
                 </div>
