@@ -99,14 +99,14 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             <p className="!text-[18px] text-ink-soft mb-10 leading-relaxed text-sm md:text-base">
               {description2}
             </p>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-5">
+            <div className="grid grid-cols-3 gap-2 sm:gap-4 md:gap-5">
               {statsItems.map((stat: any, idx: number) => (
                 <div
                   key={idx}
-                  className="bg-[#FAF9F5]/90 rounded-2xl p-5 md:p-6 text-center border border-[#E3D9C6] shadow-xs flex flex-col items-center justify-center transition-all hover:shadow-md"
+                  className="bg-[#FAF9F5]/90 rounded-xl sm:rounded-2xl p-2.5 sm:p-5 md:p-6 text-center border border-[#E3D9C6] shadow-xs flex flex-col items-center justify-center transition-all hover:shadow-md"
                 >
-                  <div className="text-[#C89336] font-serif text-3xl md:text-4xl mb-2 font-normal leading-none">{stat.displayValue}</div>
-                  <div className="text-xs sm:text-[13px] font-medium text-ink-soft leading-snug">{stat.label}</div>
+                  <div className="text-[#C89336] font-serif text-xl sm:text-3xl md:text-4xl mb-1 sm:mb-2 font-normal leading-none">{stat.displayValue}</div>
+                  <div className="text-[10px] sm:text-xs md:text-[13px] font-medium text-ink-soft leading-tight sm:leading-snug">{stat.label}</div>
                 </div>
               ))}
             </div>
