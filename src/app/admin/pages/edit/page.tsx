@@ -1562,7 +1562,7 @@ function PageBuilderContent() {
                             </span>
                             <div>
                               <div className="text-xs font-bold text-slate-900">{sec.type}</div>
-                              <div className="text-[11px] text-slate-500">{sec.title || sec.data?.title || `Section ${index + 1}`}</div>
+                              <div className="text-[11px] text-white">{sec.title || sec.data?.title || `Section ${index + 1}`}</div>
                             </div>
                           </div>
 
@@ -1678,7 +1678,7 @@ function PageBuilderContent() {
                                 <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 flex items-center justify-between">
                                   <div>
                                     <div className="text-xs font-bold text-slate-800">Blog Manager & Detail Page Popups</div>
-                                    <div className="text-[11px] text-slate-500">Manage all articles, image thumbnails, titles, dates, and rich text editor popup for each blog card.</div>
+                                    <div className="text-[11px] text-white">Manage all articles, image thumbnails, titles, dates, and rich text editor popup for each blog card.</div>
                                   </div>
                                   <Link
                                     href="/admin/blogs"
@@ -1771,7 +1771,7 @@ function PageBuilderContent() {
                                 <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 flex items-center justify-between">
                                   <div>
                                     <div className="text-xs font-bold text-slate-800">Testimonial Cards</div>
-                                    <div className="text-[11px] text-slate-500">Review cards are managed in the TestimonialsCarousel component and display automatically.</div>
+                                    <div className="text-[11px] text-white">Review cards are managed in the TestimonialsCarousel component and display automatically.</div>
                                   </div>
                                 </div>
                               </div>
@@ -2177,7 +2177,7 @@ function PageBuilderContent() {
                                   </span>
                                 </div>
 
-                                <div className="text-[11px] text-slate-500 mb-2">
+                                <div className="text-[11px] text-white mb-2">
                                   Add packages from the dropdown below. Drag and drop to reorder.
                                 </div>
 
@@ -3609,11 +3609,11 @@ function PageBuilderContent() {
                                         const currentSocials = sec.data?.socialLinks && Array.isArray(sec.data.socialLinks)
                                           ? [...sec.data.socialLinks]
                                           : [
-                                              { name: 'Facebook', url: sec.data?.facebookUrl || 'https://www.facebook.com/kingtravelcan', icon: '/img/fb.svg', openInNewTab: true },
-                                              { name: 'Instagram', url: sec.data?.instagramUrl || 'https://www.instagram.com/kingtravelcan/', icon: '/img/insta.svg', openInNewTab: true },
-                                              { name: 'LinkedIn', url: sec.data?.linkedinUrl || 'https://ca.linkedin.com/company/kingtravelcan', icon: '/img/in.svg', openInNewTab: true },
-                                              { name: 'TikTok', url: sec.data?.tiktokUrl || 'https://www.tiktok.com/@kingtravelcan', icon: '/img/tik.svg', openInNewTab: true },
-                                            ];
+                                            { name: 'Facebook', url: sec.data?.facebookUrl || 'https://www.facebook.com/kingtravelcan', icon: '/img/fb.svg', openInNewTab: true },
+                                            { name: 'Instagram', url: sec.data?.instagramUrl || 'https://www.instagram.com/kingtravelcan/', icon: '/img/insta.svg', openInNewTab: true },
+                                            { name: 'LinkedIn', url: sec.data?.linkedinUrl || 'https://ca.linkedin.com/company/kingtravelcan', icon: '/img/in.svg', openInNewTab: true },
+                                            { name: 'TikTok', url: sec.data?.tiktokUrl || 'https://www.tiktok.com/@kingtravelcan', icon: '/img/tik.svg', openInNewTab: true },
+                                          ];
                                         currentSocials.push({ name: 'New Network', url: 'https://', icon: '', openInNewTab: true });
                                         updateSectionData(sec.id, 'socialLinks', currentSocials);
                                       }}
@@ -3627,13 +3627,13 @@ function PageBuilderContent() {
                                     const socialList: any[] = (sec.data?.socialLinks && Array.isArray(sec.data.socialLinks) && sec.data.socialLinks.length > 0)
                                       ? sec.data.socialLinks
                                       : [
-                                          { name: 'Facebook', url: sec.data?.facebookUrl || 'https://www.facebook.com/kingtravelcan', icon: sec.data?.facebookIcon || '/img/fb.svg', openInNewTab: true },
-                                          { name: 'Instagram', url: sec.data?.instagramUrl || 'https://www.instagram.com/kingtravelcan/', icon: sec.data?.instagramIcon || '/img/insta.svg', openInNewTab: true },
-                                          { name: 'LinkedIn', url: sec.data?.linkedinUrl || 'https://ca.linkedin.com/company/kingtravelcan', icon: sec.data?.linkedinIcon || '/img/in.svg', openInNewTab: true },
-                                          { name: 'TikTok', url: sec.data?.tiktokUrl || 'https://www.tiktok.com/@kingtravelcan', icon: sec.data?.tiktokIcon || '/img/tik.svg', openInNewTab: true },
-                                          { name: 'Twitter X', url: sec.data?.twitterUrl || 'https://twitter.com/kingtravelcan', icon: sec.data?.twitterIcon || '/img/x.svg', openInNewTab: true },
-                                          { name: 'Pinterest', url: sec.data?.pinterestUrl || 'https://pinterest.com/kingtravelcan', icon: sec.data?.pinterestIcon || '/img/pinterest.svg', openInNewTab: true },
-                                        ];
+                                        { name: 'Facebook', url: sec.data?.facebookUrl || 'https://www.facebook.com/kingtravelcan', icon: sec.data?.facebookIcon || '/img/fb.svg', openInNewTab: true },
+                                        { name: 'Instagram', url: sec.data?.instagramUrl || 'https://www.instagram.com/kingtravelcan/', icon: sec.data?.instagramIcon || '/img/insta.svg', openInNewTab: true },
+                                        { name: 'LinkedIn', url: sec.data?.linkedinUrl || 'https://ca.linkedin.com/company/kingtravelcan', icon: sec.data?.linkedinIcon || '/img/in.svg', openInNewTab: true },
+                                        { name: 'TikTok', url: sec.data?.tiktokUrl || 'https://www.tiktok.com/@kingtravelcan', icon: sec.data?.tiktokIcon || '/img/tik.svg', openInNewTab: true },
+                                        { name: 'Twitter X', url: sec.data?.twitterUrl || 'https://twitter.com/kingtravelcan', icon: sec.data?.twitterIcon || '/img/x.svg', openInNewTab: true },
+                                        { name: 'Pinterest', url: sec.data?.pinterestUrl || 'https://pinterest.com/kingtravelcan', icon: sec.data?.pinterestIcon || '/img/pinterest.svg', openInNewTab: true },
+                                      ];
 
                                     return (
                                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -3739,33 +3739,7 @@ function PageBuilderContent() {
                               </div>
                             )}
 
-                            {(sec.type === 'Contact') && (
-                              <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
-                                <span className="text-[11px] font-extrabold text-[#004B39] uppercase">
-                                  ✉️ Interactive Contact Manager
-                                </span>
-                                <div className="grid grid-cols-2 gap-8">
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">FORM TITLE</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.title || 'Drop Us A Message'}
-                                      onChange={(e) => updateSectionData(sec.id, 'title', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">FORM SUBTITLE</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.subtitle || "Fill out the form below and we'll get back to you shortly."}
-                                      onChange={(e) => updateSectionData(sec.id, 'subtitle', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-[11px]"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            )}
+
 
                             {["Quote Form", "Package Inquiry Form", "Package Detail Form", "Visa Consultation Form", "Flight Booking Form", "Contact Us Form", "Drop Us A Message Form"].includes(sec.type) && (
                               <div className="bg-white border border-slate-200 rounded-xl p-3 flex flex-col gap-3 mt-1">
@@ -3877,85 +3851,356 @@ function PageBuilderContent() {
 
 
                             {(sec.type === 'Contact') && (
-                              <div className="flex flex-col bg-white gap-4">
-                                <div className="flex justify-between items-center mb-2">
-                                  <span className="text-xs font-bold text-slate-800">
-                                    📞 Contact MANAGER
+                              <div className="flex flex-col gap-4">
+                                <div className="flex items-center justify-between pb-3 border-b border-slate-200">
+                                  <div className="flex items-center gap-2.5">
+                                    <div className="w-8 h-8 rounded-xl bg-emerald-50 text-[#004B39] flex items-center justify-center text-sm font-bold shadow-xs">
+                                      <i className="fa-solid fa-address-book"></i>
+                                    </div>
+                                    <div>
+                                      <h3 className="text-sm font-bold text-white m-0">Contact &amp; Support Info Manager</h3>
+                                      <p className="text-[11px] text-white m-0">Configure contact details, landlines, WhatsApp desks &amp; office addresses displayed beside the homepage form.</p>
+                                    </div>
+                                  </div>
+                                  <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-[#004B39] px-2.5 py-1 rounded-full border border-emerald-200">
+                                    Homepage Contact
                                   </span>
                                 </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">TOLL FREE NUMBER</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.tollFree || '+1 800-844-5464'}
-                                      onChange={(e) => updateSectionData(sec.id, 'tollFree', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    />
+
+                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                                  {/* Group 1: Section Headings & Email */}
+                                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col gap-3">
+                                    <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                                      <div className="w-6 h-6 rounded-lg bg-emerald-50 text-[#004B39] flex items-center justify-center text-xs">
+                                        <i className="fa-solid fa-heading"></i>
+                                      </div>
+                                      <span className="text-xs font-bold text-slate-800">1. Section Headings &amp; Email</span>
+                                    </div>
+
+                                    <div>
+                                      <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">
+                                        Eyebrow Tag
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={sec.data?.eyebrow !== undefined ? sec.data.eyebrow : 'GET IN TOUCH'}
+                                        onChange={(e) => updateSectionData(sec.id, 'eyebrow', e.target.value)}
+                                        placeholder="e.g. GET IN TOUCH"
+                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-800 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
+                                      />
+                                    </div>
+
+                                    <div>
+                                      <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">
+                                        Main Section Title
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={sec.data?.title !== undefined ? sec.data.title : 'Drop Us A Message'}
+                                        onChange={(e) => updateSectionData(sec.id, 'title', e.target.value)}
+                                        placeholder="e.g. Drop Us A Message"
+                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-800 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
+                                      />
+                                    </div>
+
+                                    <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-col gap-2">
+                                      <div className="flex justify-between items-center">
+                                        <label className="text-[10px] font-bold text-slate-700 uppercase">
+                                          General Support Email
+                                        </label>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="text-[9px] font-bold text-slate-500">New Tab</span>
+                                          <Switch
+                                            checked={sec.data?.emailNewTab ?? true}
+                                            onChange={(val) => updateSectionData(sec.id, 'emailNewTab', val)}
+                                          />
+                                        </div>
+                                      </div>
+                                      <input
+                                        type="email"
+                                        value={sec.data?.email !== undefined ? sec.data.email : 'info@kingtravelcan.com'}
+                                        onChange={(e) => updateSectionData(sec.id, 'email', e.target.value)}
+                                        placeholder="info@kingtravelcan.com"
+                                        className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-xs font-mono text-slate-800 outline-none bg-white focus:border-[#004B39]"
+                                      />
+                                    </div>
+
+                                    <div>
+                                      <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">
+                                        Office Hours
+                                      </label>
+                                      <input
+                                        type="text"
+                                        value={sec.data?.officeHours !== undefined ? sec.data.officeHours : 'Mon–Sat, 9am – 7pm EST'}
+                                        onChange={(e) => updateSectionData(sec.id, 'officeHours', e.target.value)}
+                                        placeholder="Mon–Sat, 9am – 7pm EST"
+                                        className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-800 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
+                                      />
+                                    </div>
                                   </div>
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">LOCAL NUMBER 1</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.localNum1 || '+1 905-624-8555'}
-                                      onChange={(e) => updateSectionData(sec.id, 'localNum1', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    />
+
+                                  {/* Group 2: Landlines & WhatsApp (Dynamic Lists) */}
+                                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col gap-4">
+                                    <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                                      <div className="w-6 h-6 rounded-lg bg-emerald-50 text-[#004B39] flex items-center justify-center text-xs">
+                                        <i className="fa-solid fa-phone"></i>
+                                      </div>
+                                      <span className="text-xs font-bold text-slate-800">2. Landlines &amp; WhatsApp Links</span>
+                                    </div>
+
+                                    {/* Sub-section A: Landlines List */}
+                                    <div className="flex flex-col gap-2.5">
+                                      <div className="flex justify-between items-center">
+                                        <label className="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-1.5">
+                                          <i className="fa-solid fa-phone-volume text-[#004B39]"></i> Landlines
+                                        </label>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const currentList: any[] = (sec.data?.landlines && Array.isArray(sec.data.landlines))
+                                              ? [...sec.data.landlines]
+                                              : [
+                                                  { number: sec.data?.tollFree || '+1 800 844 5464', label: 'Toll Free / Main', openInNewTab: sec.data?.tollFreeNewTab ?? true },
+                                                  { number: sec.data?.localNum1 || '+1 905-624-8555', label: 'Local Line 2', openInNewTab: sec.data?.localNum1NewTab ?? true },
+                                                ];
+                                            currentList.push({ number: '', label: '', openInNewTab: true });
+                                            updateSectionData(sec.id, 'landlines', currentList);
+                                          }}
+                                          className="text-[10px] font-bold bg-[#004B39] hover:bg-[#00382B] text-white px-2.5 py-1 rounded-md border-none cursor-pointer flex items-center gap-1 transition-colors"
+                                        >
+                                          <i className="fa-solid fa-plus text-[9px]"></i> Add Landline
+                                        </button>
+                                      </div>
+
+                                      {(() => {
+                                        const landlinesList: any[] = (sec.data?.landlines && Array.isArray(sec.data.landlines) && sec.data.landlines.length > 0)
+                                          ? sec.data.landlines
+                                          : [
+                                              { number: sec.data?.tollFree !== undefined ? sec.data.tollFree : '+1 800 844 5464', label: 'Toll Free / Main', openInNewTab: sec.data?.tollFreeNewTab ?? true },
+                                              { number: sec.data?.localNum1 !== undefined ? sec.data.localNum1 : '+1 905-624-8555', label: 'Local Line 2', openInNewTab: sec.data?.localNum1NewTab ?? true },
+                                            ];
+
+                                        return (
+                                          <div className="flex flex-col gap-2">
+                                            {landlinesList.map((item: any, lIdx: number) => (
+                                              <div key={lIdx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-col gap-1.5">
+                                                <div className="flex justify-between items-center">
+                                                  <span className="text-[9px] font-bold text-slate-500 uppercase">
+                                                    Landline #{lIdx + 1}
+                                                  </span>
+                                                  <div className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-1">
+                                                      <span className="text-[9px] font-bold text-slate-500">New Tab</span>
+                                                      <Switch
+                                                        checked={item.openInNewTab ?? true}
+                                                        onChange={(val) => {
+                                                          const updated = [...landlinesList];
+                                                          updated[lIdx] = { ...updated[lIdx], openInNewTab: val };
+                                                          updateSectionData(sec.id, 'landlines', updated);
+                                                        }}
+                                                      />
+                                                    </div>
+                                                    {landlinesList.length > 1 && (
+                                                      <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                          const updated = landlinesList.filter((_: any, i: number) => i !== lIdx);
+                                                          updateSectionData(sec.id, 'landlines', updated);
+                                                        }}
+                                                        className="text-white hover:bg-red-700 bg-red-600 border-none rounded p-1 cursor-pointer flex items-center justify-center transition-colors"
+                                                        title="Remove Landline"
+                                                      >
+                                                        <Trash2 className="w-2.5 h-2.5" />
+                                                      </button>
+                                                    )}
+                                                  </div>
+                                                </div>
+                                                <input
+                                                  type="text"
+                                                  value={item.number || ''}
+                                                  onChange={(e) => {
+                                                    const updated = [...landlinesList];
+                                                    updated[lIdx] = { ...updated[lIdx], number: e.target.value };
+                                                    updateSectionData(sec.id, 'landlines', updated);
+                                                  }}
+                                                  placeholder="+1 905-624-8555"
+                                                  className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-mono text-slate-800 outline-none bg-white focus:border-[#004B39]"
+                                                />
+                                              </div>
+                                            ))}
+                                          </div>
+                                        );
+                                      })()}
+                                    </div>
+
+                                    {/* Sub-section B: WhatsApp Numbers List */}
+                                    <div className="flex flex-col gap-2.5 pt-2 border-t border-slate-100">
+                                      <div className="flex justify-between items-center">
+                                        <label className="text-[11px] font-bold text-slate-700 uppercase flex items-center gap-1.5">
+                                          <i className="fa-brands fa-whatsapp text-emerald-600"></i> WhatsApp Numbers
+                                        </label>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            const currentList: any[] = (sec.data?.whatsappList && Array.isArray(sec.data.whatsappList))
+                                              ? [...sec.data.whatsappList]
+                                              : [
+                                                  { number: sec.data?.waReservation || '905-624-8555', label: sec.data?.waReservationLabel || 'Reservation', openInNewTab: sec.data?.waReservationNewTab ?? true },
+                                                  { number: sec.data?.waVisa || '647-982-8555', label: sec.data?.waVisaLabel || 'Saudi Visa', openInNewTab: sec.data?.waVisaNewTab ?? true },
+                                                ];
+                                            currentList.push({ number: '', label: '', openInNewTab: true });
+                                            updateSectionData(sec.id, 'whatsappList', currentList);
+                                          }}
+                                          className="text-[10px] font-bold bg-[#004B39] hover:bg-[#00382B] text-white px-2.5 py-1 rounded-md border-none cursor-pointer flex items-center gap-1 transition-colors"
+                                        >
+                                          <i className="fa-solid fa-plus text-[9px]"></i> Add WhatsApp
+                                        </button>
+                                      </div>
+
+                                      {(() => {
+                                        const waList: any[] = (sec.data?.whatsappList && Array.isArray(sec.data.whatsappList) && sec.data.whatsappList.length > 0)
+                                          ? sec.data.whatsappList
+                                          : [
+                                              { number: sec.data?.waReservation !== undefined ? sec.data.waReservation : '905-624-8555', label: sec.data?.waReservationLabel !== undefined ? sec.data.waReservationLabel : 'Reservation', openInNewTab: sec.data?.waReservationNewTab ?? true },
+                                              { number: sec.data?.waVisa !== undefined ? sec.data.waVisa : '647-982-8555', label: sec.data?.waVisaLabel !== undefined ? sec.data.waVisaLabel : 'Saudi Visa', openInNewTab: sec.data?.waVisaNewTab ?? true },
+                                            ];
+
+                                        return (
+                                          <div className="flex flex-col gap-2">
+                                            {waList.map((item: any, wIdx: number) => (
+                                              <div key={wIdx} className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-col gap-1.5">
+                                                <div className="flex justify-between items-center">
+                                                  <span className="text-[9px] font-bold text-slate-500 uppercase">
+                                                    WhatsApp #{wIdx + 1}
+                                                  </span>
+                                                  <div className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-1">
+                                                      <span className="text-[9px] font-bold text-slate-500">New Tab</span>
+                                                      <Switch
+                                                        checked={item.openInNewTab ?? true}
+                                                        onChange={(val) => {
+                                                          const updated = [...waList];
+                                                          updated[wIdx] = { ...updated[wIdx], openInNewTab: val };
+                                                          updateSectionData(sec.id, 'whatsappList', updated);
+                                                        }}
+                                                      />
+                                                    </div>
+                                                    {waList.length > 1 && (
+                                                      <button
+                                                        type="button"
+                                                        onClick={() => {
+                                                          const updated = waList.filter((_: any, i: number) => i !== wIdx);
+                                                          updateSectionData(sec.id, 'whatsappList', updated);
+                                                        }}
+                                                        className="text-white hover:bg-red-700 bg-red-600 border-none rounded p-1 cursor-pointer flex items-center justify-center transition-colors"
+                                                        title="Remove WhatsApp"
+                                                      >
+                                                        <Trash2 className="w-2.5 h-2.5" />
+                                                      </button>
+                                                    )}
+                                                  </div>
+                                                </div>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Number (e.g. 905-624-8555)"
+                                                    value={item.number || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...waList];
+                                                      updated[wIdx] = { ...updated[wIdx], number: e.target.value };
+                                                      updateSectionData(sec.id, 'whatsappList', updated);
+                                                    }}
+                                                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs font-mono text-slate-800 outline-none bg-white focus:border-[#004B39]"
+                                                  />
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Label (e.g. Reservation)"
+                                                    value={item.label || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...waList];
+                                                      updated[wIdx] = { ...updated[wIdx], label: e.target.value };
+                                                      updateSectionData(sec.id, 'whatsappList', updated);
+                                                    }}
+                                                    className="w-full px-2.5 py-1.5 rounded-md border border-slate-300 text-xs text-slate-800 outline-none bg-white focus:border-[#004B39]"
+                                                  />
+                                                </div>
+                                              </div>
+                                            ))}
+                                          </div>
+                                        );
+                                      })()}
+                                    </div>
                                   </div>
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">WHATSAPP RESERVATION</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.waReservation || '+1 905-624-8344'}
-                                      onChange={(e) => updateSectionData(sec.id, 'waReservation', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    />
+
+                                  {/* Group 3: Office Addresses */}
+                                  <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-xs flex flex-col gap-3">
+                                    <div className="flex items-center gap-2 pb-2 border-b border-slate-100">
+                                      <div className="w-6 h-6 rounded-lg bg-emerald-50 text-[#004B39] flex items-center justify-center text-xs">
+                                        <i className="fa-solid fa-location-dot"></i>
+                                      </div>
+                                      <span className="text-xs font-bold text-slate-800">3. Physical Office Locations</span>
+                                    </div>
+
+                                    {/* Head Office */}
+                                    <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-col gap-2">
+                                      <div className="flex justify-between items-center">
+                                        <label className="text-[10px] font-bold text-slate-700 uppercase">
+                                          Head Office Address
+                                        </label>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="text-[9px] font-bold text-slate-500">New Tab</span>
+                                          <Switch
+                                            checked={sec.data?.headOfficeNewTab ?? true}
+                                            onChange={(val) => updateSectionData(sec.id, 'headOfficeNewTab', val)}
+                                          />
+                                        </div>
+                                      </div>
+                                      <textarea
+                                        value={sec.data?.headOffice !== undefined ? sec.data.headOffice : '1325 Eglinton Ave E Suite Number 218,\nMississauga, ON L4W 4L9, Canada'}
+                                        onChange={(e) => updateSectionData(sec.id, 'headOffice', e.target.value)}
+                                        placeholder="1325 Eglinton Ave E Suite Number 218, Mississauga, ON L4W 4L9, Canada"
+                                        rows={2}
+                                        className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-xs leading-relaxed text-slate-800 outline-none bg-white focus:border-[#004B39]"
+                                      />
+                                      <input
+                                        type="text"
+                                        placeholder="Google Maps URL (Optional: https://maps.app.goo.gl/...)"
+                                        value={sec.data?.headOfficeMapUrl !== undefined ? sec.data.headOfficeMapUrl : 'https://maps.app.goo.gl/1BRUoBxtt4wWw58t6'}
+                                        onChange={(e) => updateSectionData(sec.id, 'headOfficeMapUrl', e.target.value)}
+                                        className="w-full px-2.5 py-1 rounded-md border border-slate-300 text-[11px] font-mono text-slate-700 outline-none bg-white focus:border-[#004B39]"
+                                      />
+                                    </div>
+
+                                    {/* Branch Office */}
+                                    <div className="p-2.5 bg-slate-50 border border-slate-200 rounded-lg flex flex-col gap-2">
+                                      <div className="flex justify-between items-center">
+                                        <label className="text-[10px] font-bold text-slate-700 uppercase">
+                                          Branch Office Address
+                                        </label>
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="text-[9px] font-bold text-slate-500">New Tab</span>
+                                          <Switch
+                                            checked={sec.data?.branchOfficeNewTab ?? true}
+                                            onChange={(val) => updateSectionData(sec.id, 'branchOfficeNewTab', val)}
+                                          />
+                                        </div>
+                                      </div>
+                                      <textarea
+                                        value={sec.data?.branchOffice !== undefined ? sec.data.branchOffice : '22 Ontario St S,\nMilton, ON L9T 2M6, Canada'}
+                                        onChange={(e) => updateSectionData(sec.id, 'branchOffice', e.target.value)}
+                                        placeholder="22 Ontario St S, Milton, ON L9T 2M6, Canada"
+                                        rows={2}
+                                        className="w-full px-3 py-1.5 rounded-md border border-slate-300 text-xs leading-relaxed text-slate-800 outline-none bg-white focus:border-[#004B39]"
+                                      />
+                                      <input
+                                        type="text"
+                                        placeholder="Google Maps URL (Optional: https://maps.app.goo.gl/...)"
+                                        value={sec.data?.branchOfficeMapUrl !== undefined ? sec.data.branchOfficeMapUrl : 'https://maps.app.goo.gl/U6B4fci2Jas4sh6S6'}
+                                        onChange={(e) => updateSectionData(sec.id, 'branchOfficeMapUrl', e.target.value)}
+                                        className="w-full px-2.5 py-1 rounded-md border border-slate-300 text-[11px] font-mono text-slate-700 outline-none bg-white focus:border-[#004B39]"
+                                      />
+                                    </div>
                                   </div>
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">WHATSAPP VISA</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.waVisa || '+1 647-982-8555'}
-                                      onChange={(e) => updateSectionData(sec.id, 'waVisa', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">GENERAL EMAIL</label>
-                                    <input
-                                      type="email"
-                                      value={sec.data?.email || 'saudivisa@kingtravelcan.com'}
-                                      onChange={(e) => updateSectionData(sec.id, 'email', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    />
-                                  </div>
-                                  <div>
-                                    <label className="block text-[9px] font-bold text-slate-500 mb-0.5">OFFICE HOURS</label>
-                                    <input
-                                      type="text"
-                                      value={sec.data?.officeHours || 'Mon–Sat, 9am – 7pm EST'}
-                                      onChange={(e) => updateSectionData(sec.id, 'officeHours', e.target.value)}
-                                      className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    />
-                                  </div>
-                                </div>
-                                <div className="mt-2">
-                                  <label className="block text-[9px] font-bold text-slate-500 mb-0.5">HEAD OFFICE ADDRESS (HTML ALLOWED)</label>
-                                  <textarea
-                                    value={sec.data?.headOffice || '1325 Eglinton Ave E Suite Number 218,<br />Mississauga, ON L4W 4L9, Canada'}
-                                    onChange={(e) => updateSectionData(sec.id, 'headOffice', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    rows={2}
-                                  />
-                                </div>
-                                <div className="mt-2">
-                                  <label className="block text-[9px] font-bold text-slate-500 mb-0.5">BRANCH OFFICE ADDRESS (HTML ALLOWED)</label>
-                                  <textarea
-                                    value={sec.data?.branchOffice || '22 Ontario St S,<br />Milton, ON L9T 2M6, Canada'}
-                                    onChange={(e) => updateSectionData(sec.id, 'branchOffice', e.target.value)}
-                                    className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold"
-                                    rows={2}
-                                  />
                                 </div>
                               </div>
                             )}
@@ -4126,7 +4371,7 @@ function PageBuilderContent() {
             <div className="flex items-center justify-between pb-3 border-b border-slate-100">
               <div>
                 <span className="text-xs font-extrabold text-slate-900 uppercase tracking-wider block">PAGE STATUS</span>
-                <span className="text-[11px] text-slate-500">Visibility on live website</span>
+                <span className="text-[11px] text-white">Visibility on live website</span>
               </div>
               <select
                 value={status}
@@ -4141,7 +4386,7 @@ function PageBuilderContent() {
             <div className="flex items-center justify-between pt-1">
               <div>
                 <span className="text-xs font-extrabold text-slate-900 block">Show in menu</span>
-                <span className="text-[11px] text-slate-500 font-medium">Include link in site header nav</span>
+                <span className="text-[11px] text-white font-medium">Include link in site header nav</span>
               </div>
               <Field orientation="horizontal">
                 <Switch id="switch-show-in-menu" checked={showInMenu} onChange={setShowInMenu} />

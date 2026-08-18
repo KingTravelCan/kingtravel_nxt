@@ -247,7 +247,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-sm font-bold text-slate-800 truncate">{makkahName}</h4>
-                          <p className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
+                          <p className="text-[11px] text-white flex items-center gap-1 mt-0.5">
                             <i className="fa-solid fa-location-dot text-[#004B39]"></i>
                             <span>{makkahLoc}</span>
                           </p>
@@ -274,7 +274,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
                         </div>
                         <div className="flex-1 min-w-0">
                           <h4 className="text-sm font-bold text-[#004B39] truncate">{madinahName}</h4>
-                          <p className="text-[11px] text-slate-500 flex items-center gap-1 mt-0.5">
+                          <p className="text-[11px] text-white flex items-center gap-1 mt-0.5">
                             <i className="fa-solid fa-location-dot text-gold"></i>
                             <span>{madinahLoc}</span>
                           </p>
@@ -374,7 +374,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
                       <DynamicIcon name={svc.icon || 'Star'} className="w-8 h-8" />
                     </div>
                     <h3 className="text-sm font-extrabold text-[#004B39] leading-snug">{svc.title}</h3>
-                    <p className="text-[11px] text-slate-500 leading-relaxed">{svc.description}</p>
+                    <p className="text-[11px] text-white leading-relaxed">{svc.description}</p>
                   </div>
                 ))}
               </div>

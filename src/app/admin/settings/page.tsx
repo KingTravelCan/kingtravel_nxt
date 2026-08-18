@@ -1945,7 +1945,7 @@ export default function AdminSettingsPage() {
                     <div className="flex justify-between items-center p-3 rounded-xl bg-slate-50 border border-slate-100">
                       <div>
                         <div className="text-xs font-bold text-slate-800">Enable Share Sidebar</div>
-                        <div className="text-[11px] text-slate-500">Turn the floating share tools on or off globally.</div>
+                        <div className="text-[11px] text-white">Turn the floating share tools on or off globally.</div>
                       </div>
                       <Switch
                         checked={shareData.enabled === true || shareData.enabled === 'true'}
@@ -2101,7 +2101,7 @@ export default function AdminSettingsPage() {
                     <div className="flex justify-between items-center">
                       <div>
                         <div className="text-xs font-bold text-slate-800">Show Labels</div>
-                        <div className="text-[11px] text-slate-500">Display platform name text.</div>
+                        <div className="text-[11px] text-white">Display platform name text.</div>
                       </div>
                       <Switch
                         checked={shareData.showLabels ?? true}
@@ -2112,7 +2112,7 @@ export default function AdminSettingsPage() {
                     <div className="flex justify-between items-center pt-2 border-t border-slate-100">
                       <div>
                         <div className="text-xs font-bold text-slate-800">Hide on Scroll Down</div>
-                        <div className="text-[11px] text-slate-500">Auto-hide when scrolling down.</div>
+                        <div className="text-[11px] text-white">Auto-hide when scrolling down.</div>
                       </div>
                       <Switch
                         checked={shareData.hideOnScrollDown ?? false}
@@ -2200,7 +2200,7 @@ export default function AdminSettingsPage() {
                     <div className="flex justify-between items-center pt-2 border-t border-slate-100">
                       <div>
                         <div className="text-xs font-bold text-slate-800">UTM Parameters</div>
-                        <div className="text-[11px] text-slate-500">Append UTM tags to shared links.</div>
+                        <div className="text-[11px] text-white">Append UTM tags to shared links.</div>
                       </div>
                       <Switch
                         checked={shareData.utmParameters ?? false}
@@ -2215,7 +2215,7 @@ export default function AdminSettingsPage() {
                     <div className="flex justify-between items-center">
                       <div>
                         <div className="text-xs font-bold text-slate-800">Track Share Clicks</div>
-                        <div className="text-[11px] text-slate-500">Send events to Google Analytics.</div>
+                        <div className="text-[11px] text-white">Send events to Google Analytics.</div>
                       </div>
                       <Switch
                         checked={shareData.trackClicks ?? true}
@@ -2237,7 +2237,7 @@ export default function AdminSettingsPage() {
                   {/* 6. Active Platforms (Drag/Reorder & Toggle) */}
                   <div className="p-5 rounded-2xl bg-white border border-slate-200 flex flex-col gap-4 shadow-xs">
                     <h3 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider m-0">Active Platforms</h3>
-                    <span className="text-[11px] text-slate-500">Drag/reorder or toggle checkbox to enable/disable sharing channels.</span>
+                    <span className="text-[11px] text-white">Drag/reorder or toggle checkbox to enable/disable sharing channels.</span>
 
                     <div className="flex flex-col gap-2">
                       {(shareData.activePlatforms || []).map((p: any, pIdx: number) => (
@@ -3151,7 +3151,7 @@ export default function AdminSettingsPage() {
                                     <h5 className="text-xs font-extrabold text-slate-900 m-0 uppercase tracking-wider">
                                       MANAGE INPUT FIELDS FOR {f.title}
                                     </h5>
-                                    <p className="text-[11px] text-slate-500 m-0 mt-0.5">Reorder fields, add new inputs, or change field labels.</p>
+                                    <p className="text-[11px] text-white m-0 mt-0.5">Reorder fields, add new inputs, or change field labels.</p>
                                   </div>
                                 </div>
                                 <button
@@ -3395,7 +3395,7 @@ export default function AdminSettingsPage() {
                           </label>
                           <span className="text-[10px] font-bold bg-emerald-100/80 text-emerald-800 px-2 py-0.5 rounded-full">Admin Recipient</span>
                         </div>
-                        <p className="text-[11px] text-slate-500 m-0">Admin email address that receives all website form submissions.</p>
+                        <p className="text-[11px] text-white m-0">Admin email address that receives all website form submissions.</p>
                         <input
                           type="email"
                           value={emailConfigs.sendToEmail}
@@ -3412,7 +3412,7 @@ export default function AdminSettingsPage() {
                           </label>
                           <span className="text-[10px] font-bold bg-blue-50 text-blue-700 px-2 py-0.5 rounded-full">Smart Tags Enabled</span>
                         </div>
-                        <p className="text-[11px] text-slate-500 m-0">Use [subject] or [name] as dynamic smart tags in subject.</p>
+                        <p className="text-[11px] text-white m-0">Use [subject] or [name] as dynamic smart tags in subject.</p>
                         <input
                           type="text"
                           value={emailConfigs.emailSubjectLine}
@@ -3424,7 +3424,7 @@ export default function AdminSettingsPage() {
                       {/* From Name */}
                       <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
                         <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">FROM NAME</label>
-                        <p className="text-[11px] text-slate-500 m-0">Display sender name shown to email recipients.</p>
+                        <p className="text-[11px] text-white m-0">Display sender name shown to email recipients.</p>
                         <input
                           type="text"
                           value={emailConfigs.fromName}
@@ -3436,7 +3436,7 @@ export default function AdminSettingsPage() {
                       {/* From Email */}
                       <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors">
                         <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">FROM EMAIL</label>
-                        <p className="text-[11px] text-slate-500 m-0">Must match authenticated sender address.</p>
+                        <p className="text-[11px] text-white m-0">Must match authenticated sender address.</p>
                         <input
                           type="email"
                           value={emailConfigs.fromEmail}
@@ -3448,7 +3448,7 @@ export default function AdminSettingsPage() {
                       {/* Reply-To Email */}
                       <div className="flex flex-col gap-1.5 bg-slate-50/70 p-4 rounded-2xl border border-slate-200/60 hover:border-slate-300 transition-colors md:col-span-2">
                         <label className="font-extrabold text-xs text-slate-900 uppercase tracking-wide">REPLY-TO EMAIL ADDRESS</label>
-                        <p className="text-[11px] text-slate-500 m-0">When admin clicks Reply in their inbox, email goes here. Leave blank to use submitter&apos;s email address.</p>
+                        <p className="text-[11px] text-white m-0">When admin clicks Reply in their inbox, email goes here. Leave blank to use submitter&apos;s email address.</p>
                         <input
                           type="email"
                           value={emailConfigs.replyTo}

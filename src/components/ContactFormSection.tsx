@@ -10,14 +10,27 @@ interface ContactSectionData {
   eyebrow?: string;
   successMessage?: string;
   tollFree?: string;
+  tollFreeNewTab?: boolean;
   localNum1?: string;
+  localNum1NewTab?: boolean;
   localNum2?: string;
+  landlines?: Array<{ number?: string; label?: string; openInNewTab?: boolean }>;
   waReservation?: string;
+  waReservationLabel?: string;
+  waReservationNewTab?: boolean;
   waVisa?: string;
+  waVisaLabel?: string;
+  waVisaNewTab?: boolean;
+  whatsappList?: Array<{ number?: string; label?: string; openInNewTab?: boolean }>;
   email?: string;
+  emailNewTab?: boolean;
   officeHours?: string;
   headOffice?: string;
+  headOfficeMapUrl?: string;
+  headOfficeNewTab?: boolean;
   branchOffice?: string;
+  branchOfficeMapUrl?: string;
+  branchOfficeNewTab?: boolean;
 }
 
 export default function ContactFormSection({ data }: { data: ContactSectionData }) {
@@ -78,6 +91,22 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
     }
   };
 
+  // Resolve Landlines list (repeater or legacy fallback)
+  const resolvedLandlines: Array<{ number: string; openInNewTab?: boolean }> = (data?.landlines && Array.isArray(data.landlines) && data.landlines.length > 0)
+    ? data.landlines.filter(l => l && l.number?.trim()).map(l => ({ number: l.number!.trim(), openInNewTab: l.openInNewTab }))
+    : [
+        ...(data?.tollFree ? [{ number: data.tollFree, openInNewTab: data.tollFreeNewTab ?? true }] : [{ number: "+1 905-624-8555", openInNewTab: true }]),
+        ...(data?.localNum1 ? [{ number: data.localNum1, openInNewTab: data.localNum1NewTab ?? true }] : [{ number: "+1 905-624-8344", openInNewTab: true }]),
+      ];
+
+  // Resolve WhatsApp list (repeater or legacy fallback)
+  const resolvedWhatsApp: Array<{ number: string; label?: string; openInNewTab?: boolean }> = (data?.whatsappList && Array.isArray(data.whatsappList) && data.whatsappList.length > 0)
+    ? data.whatsappList.filter(w => w && w.number?.trim()).map(w => ({ number: w.number!.trim(), label: w.label, openInNewTab: w.openInNewTab }))
+    : [
+        ...(data?.waReservation ? [{ number: data.waReservation, label: data.waReservationLabel || "Reservation", openInNewTab: data.waReservationNewTab ?? true }] : [{ number: "+1 647-982-8555", label: "Reservation", openInNewTab: true }]),
+        ...(data?.waVisa ? [{ number: data.waVisa, label: data.waVisaLabel || "Saudi Visa", openInNewTab: data.waVisaNewTab ?? true }] : [{ number: "+1 800-844-5464", label: "Saudi Visa", openInNewTab: true }]),
+      ];
+
   return (
     <section className="py-12 md:py-16 bg-gray">
       <div className="max-w-7xl mx-auto px-5">
@@ -90,56 +119,109 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                 {data.eyebrow || "GET IN TOUCH"}
               </span>
               <h2 className="text-3xl md:text-4xl font-serif text-ink font-normal mb-3">
-                {data.title || "We're here to help"}
+                {data.title || "Drop Us A Message"}
               </h2>
             </div>
 
             <div className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="">Landlines:</h4>
-                  <div className="">
-                    {data.tollFree || "+1 800 844 5464"}<br />
-                    {data.localNum1 || "+1 905-624-8555"}
+                  <h4 className="">LANDLINES:</h4>
+                  <div className="flex flex-col gap-0.5">
+                    {resolvedLandlines.map((item, idx) => (
+                      <a
+                        key={idx}
+                        href={`tel:${item.number.replace(/\s+/g, '')}`}
+                        target={item.openInNewTab ?? true ? "_blank" : "_self"}
+                        rel={item.openInNewTab ?? true ? "noopener noreferrer" : undefined}
+                        className="hover:text-emerald-800 transition-colors"
+                      >
+                        {item.number}
+                      </a>
+                    ))}
                   </div>
                 </div>
                 <div>
-                  <h4 className="">Whatsapp:</h4>
-                  <div className="">
-                    {data.waReservation || "+1 905-624-8555"} - <span className="text-xs font-normal">Reservation</span><br />
-                    {data.waVisa || "+1 647-982-8555"} - <span className="text-xs font-normal">Saudi Visa</span>
+                  <h4 className="">WHATSAPP:</h4>
+                  <div className="flex flex-col gap-0.5">
+                    {resolvedWhatsApp.map((item, idx) => (
+                      <div key={idx}>
+                        <a
+                          href={`https://wa.me/${item.number.replace(/[^0-9]/g, '')}`}
+                          target={item.openInNewTab ?? true ? "_blank" : "_self"}
+                          rel={item.openInNewTab ?? true ? "noopener noreferrer" : undefined}
+                          className="hover:text-emerald-800 transition-colors"
+                        >
+                          {item.number}
+                        </a>
+                        {item.label && (
+                          <span className="text-xs font-normal text-slate-500"> - {item.label}</span>
+                        )}
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>
 
+              {/* Email */}
               <div>
-                <h4 className="">Email</h4>
+                <h4 className="">EMAIL</h4>
                 <div className="">
-                  {data.email || "saudivisa@kingtravelcan.com"}
+                  <a
+                    href={`mailto:${data.email || "info@kingtravelcan.com"}`}
+                    target={data.emailNewTab ?? true ? "_blank" : "_self"}
+                    rel={data.emailNewTab ?? true ? "noopener noreferrer" : undefined}
+                    className="hover:text-emerald-800 transition-colors"
+                  >
+                    {data.email || "info@kingtravelcan.com"}
+                  </a>
                 </div>
               </div>
 
+              {/* Office Hours */}
               <div>
-                <h4 className="">Office Hours</h4>
+                <h4 className="">OFFICE HOURS</h4>
                 <div className="">
-                  {data.officeHours || "Mon-Sat, 9am - 7pm EST"}
+                  {data.officeHours || "Mon–Sat, 9am – 7pm EST"}
                 </div>
               </div>
 
+              {/* Head Office */}
               <div>
-                <h4 className="">Head Office</h4>
-                <div
-                  className=" leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: data.headOffice || "1325 Eglinton Ave E Suite Number 218,<br/>Mississauga, ON L4W 4L9, Canada" }}
-                />
+                <h4 className="">HEAD OFFICE</h4>
+                {(data.headOfficeMapUrl || "https://maps.app.goo.gl/1BRUoBxtt4wWw58t6") ? (
+                  <a
+                    href={data.headOfficeMapUrl || "https://maps.app.goo.gl/1BRUoBxtt4wWw58t6"}
+                    target={data.headOfficeNewTab ?? true ? "_blank" : "_self"}
+                    rel={data.headOfficeNewTab ?? true ? "noopener noreferrer" : undefined}
+                    className="leading-relaxed block hover:text-emerald-800 transition-colors no-underline text-inherit"
+                    dangerouslySetInnerHTML={{ __html: (data.headOffice || "1325 Eglinton Ave E Suite Number 218,\nMississauga, ON L4W 4L9, Canada").replace(/\n/g, '<br />') }}
+                  />
+                ) : (
+                  <div
+                    className="leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: (data.headOffice || "1325 Eglinton Ave E Suite Number 218,\nMississauga, ON L4W 4L9, Canada").replace(/\n/g, '<br />') }}
+                  />
+                )}
               </div>
 
+              {/* Branch Office */}
               <div>
-                <h4 className="">Branch Office</h4>
-                <div
-                  className=" leading-relaxed"
-                  dangerouslySetInnerHTML={{ __html: data.branchOffice || "22 Ontario St S,<br/>Milton, ON L9T 2M6, Canada" }}
-                />
+                <h4 className="">BRANCH OFFICE</h4>
+                {(data.branchOfficeMapUrl || "https://maps.app.goo.gl/U6B4fci2Jas4sh6S6") ? (
+                  <a
+                    href={data.branchOfficeMapUrl || "https://maps.app.goo.gl/U6B4fci2Jas4sh6S6"}
+                    target={data.branchOfficeNewTab ?? true ? "_blank" : "_self"}
+                    rel={data.branchOfficeNewTab ?? true ? "noopener noreferrer" : undefined}
+                    className="leading-relaxed block hover:text-emerald-800 transition-colors no-underline text-inherit"
+                    dangerouslySetInnerHTML={{ __html: (data.branchOffice || "22 Ontario St S,\nMilton, ON L9T 2M6, Canada").replace(/\n/g, '<br />') }}
+                  />
+                ) : (
+                  <div
+                    className="leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: (data.branchOffice || "22 Ontario St S,\nMilton, ON L9T 2M6, Canada").replace(/\n/g, '<br />') }}
+                  />
+                )}
               </div>
             </div>
           </div>

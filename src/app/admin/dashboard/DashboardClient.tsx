@@ -201,11 +201,10 @@ function Cinematic3DPieChart({
                 key={s.label}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
-                className={`p-3 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-between ${
-                  isHovered
+                className={`p-3 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-between ${isHovered
                     ? `${s.bgLight} ${s.borderLight} shadow-md translate-x-1 scale-[1.02]`
                     : `${s.bgLight} border-slate-100/70 hover:border-slate-200`
-                }`}
+                  }`}
               >
                 <div className="flex items-center gap-2.5">
                   <span
@@ -623,7 +622,7 @@ export default function DashboardClient({
                 <div className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
                   <Activity className="w-4 h-4 text-emerald-700" /> Recent Activity
                 </div>
-                <p className="text-[11px] text-slate-500 mt-0.5 mb-0">
+                <p className="text-[11px] text-white mt-0.5 mb-0">
                   Real-time action audit trail
                 </p>
               </div>
@@ -715,7 +714,7 @@ export default function DashboardClient({
                 <div className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
                   <Layers className="w-4 h-4 text-teal-700" /> Recent Pages
                 </div>
-                <p className="text-[11px] text-slate-500 mt-0.5 mb-0">Last 5 edited website pages</p>
+                <p className="text-[11px] text-white mt-0.5 mb-0">Last 5 edited website pages</p>
               </div>
               <Link
                 href="/admin/pages"
