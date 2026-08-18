@@ -3925,7 +3925,7 @@ function PageBuilderContent() {
                                       />
                                     </div>
 
-                                    <div>
+                                    {/* <div>
                                       <label className="block text-[10px] font-bold text-slate-600 uppercase mb-1">
                                         Office Hours
                                       </label>
@@ -3936,7 +3936,7 @@ function PageBuilderContent() {
                                         placeholder="Mon–Sat, 9am – 7pm EST"
                                         className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold text-slate-800 outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
                                       />
-                                    </div>
+                                    </div> */}
                                   </div>
 
                                   {/* Group 2: Landlines & WhatsApp (Dynamic Lists) */}
@@ -3960,9 +3960,9 @@ function PageBuilderContent() {
                                             const currentList: any[] = (sec.data?.landlines && Array.isArray(sec.data.landlines))
                                               ? [...sec.data.landlines]
                                               : [
-                                                  { number: sec.data?.tollFree || '+1 800 844 5464', label: 'Toll Free / Main', openInNewTab: sec.data?.tollFreeNewTab ?? true },
-                                                  { number: sec.data?.localNum1 || '+1 905-624-8555', label: 'Local Line 2', openInNewTab: sec.data?.localNum1NewTab ?? true },
-                                                ];
+                                                { number: sec.data?.tollFree || '+1 800 844 5464', label: 'Toll Free / Main', openInNewTab: sec.data?.tollFreeNewTab ?? true },
+                                                { number: sec.data?.localNum1 || '+1 905-624-8555', label: 'Local Line 2', openInNewTab: sec.data?.localNum1NewTab ?? true },
+                                              ];
                                             currentList.push({ number: '', label: '', openInNewTab: true });
                                             updateSectionData(sec.id, 'landlines', currentList);
                                           }}
@@ -3976,9 +3976,9 @@ function PageBuilderContent() {
                                         const landlinesList: any[] = (sec.data?.landlines && Array.isArray(sec.data.landlines) && sec.data.landlines.length > 0)
                                           ? sec.data.landlines
                                           : [
-                                              { number: sec.data?.tollFree !== undefined ? sec.data.tollFree : '+1 800 844 5464', label: 'Toll Free / Main', openInNewTab: sec.data?.tollFreeNewTab ?? true },
-                                              { number: sec.data?.localNum1 !== undefined ? sec.data.localNum1 : '+1 905-624-8555', label: 'Local Line 2', openInNewTab: sec.data?.localNum1NewTab ?? true },
-                                            ];
+                                            { number: sec.data?.tollFree !== undefined ? sec.data.tollFree : '+1 800 844 5464', label: 'Toll Free / Main', openInNewTab: sec.data?.tollFreeNewTab ?? true },
+                                            { number: sec.data?.localNum1 !== undefined ? sec.data.localNum1 : '+1 905-624-8555', label: 'Local Line 2', openInNewTab: sec.data?.localNum1NewTab ?? true },
+                                          ];
 
                                         return (
                                           <div className="flex flex-col gap-2">
@@ -4045,9 +4045,9 @@ function PageBuilderContent() {
                                             const currentList: any[] = (sec.data?.whatsappList && Array.isArray(sec.data.whatsappList))
                                               ? [...sec.data.whatsappList]
                                               : [
-                                                  { number: sec.data?.waReservation || '905-624-8555', label: sec.data?.waReservationLabel || 'Reservation', openInNewTab: sec.data?.waReservationNewTab ?? true },
-                                                  { number: sec.data?.waVisa || '647-982-8555', label: sec.data?.waVisaLabel || 'Saudi Visa', openInNewTab: sec.data?.waVisaNewTab ?? true },
-                                                ];
+                                                { number: sec.data?.waReservation || '905-624-8555', label: sec.data?.waReservationLabel || 'Reservation', openInNewTab: sec.data?.waReservationNewTab ?? true },
+                                                { number: sec.data?.waVisa || '647-982-8555', label: sec.data?.waVisaLabel || 'Saudi Visa', openInNewTab: sec.data?.waVisaNewTab ?? true },
+                                              ];
                                             currentList.push({ number: '', label: '', openInNewTab: true });
                                             updateSectionData(sec.id, 'whatsappList', currentList);
                                           }}
@@ -4061,9 +4061,9 @@ function PageBuilderContent() {
                                         const waList: any[] = (sec.data?.whatsappList && Array.isArray(sec.data.whatsappList) && sec.data.whatsappList.length > 0)
                                           ? sec.data.whatsappList
                                           : [
-                                              { number: sec.data?.waReservation !== undefined ? sec.data.waReservation : '905-624-8555', label: sec.data?.waReservationLabel !== undefined ? sec.data.waReservationLabel : 'Reservation', openInNewTab: sec.data?.waReservationNewTab ?? true },
-                                              { number: sec.data?.waVisa !== undefined ? sec.data.waVisa : '647-982-8555', label: sec.data?.waVisaLabel !== undefined ? sec.data.waVisaLabel : 'Saudi Visa', openInNewTab: sec.data?.waVisaNewTab ?? true },
-                                            ];
+                                            { number: sec.data?.waReservation !== undefined ? sec.data.waReservation : '905-624-8555', label: sec.data?.waReservationLabel !== undefined ? sec.data.waReservationLabel : 'Reservation', openInNewTab: sec.data?.waReservationNewTab ?? true },
+                                            { number: sec.data?.waVisa !== undefined ? sec.data.waVisa : '647-982-8555', label: sec.data?.waVisaLabel !== undefined ? sec.data.waVisaLabel : 'Saudi Visa', openInNewTab: sec.data?.waVisaNewTab ?? true },
+                                          ];
 
                                         return (
                                           <div className="flex flex-col gap-2">
