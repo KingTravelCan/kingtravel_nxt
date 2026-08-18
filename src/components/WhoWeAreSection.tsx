@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 export default function WhoWeAreSection({ data }: { data: any }) {
   // Use data from the CMS if available, otherwise fallback to hardcoded
   const eyebrow = data?.eyebrow || "WHO WE ARE";
@@ -8,6 +10,63 @@ export default function WhoWeAreSection({ data }: { data: any }) {
   const description2 = data?.description2 || "Whether you are traveling for Hajj, Umrah, or Saudi Visa services, our expert team is here to guide you every step of the way.";
   const image = data?.image || "uploads\\sections\\hajj_1.jpg";
   const reviewText = data?.reviewText || "\"Every detail handled — from visa to hotel, steps from the Haram.\"";
+
+  const rawItems = (data?.items && Array.isArray(data.items) && data.items.length > 0)
+    ? data.items
+    : [
+      { value: '72K+', label: 'Happy Travelers' },
+      { value: '4.4', label: 'Google Rating' },
+      { value: '100%', label: 'Client Satisfaction' },
+      { value: '25+', label: 'Years Experience' }
+    ];
+
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    let start: number | null = null;
+    const duration = 2500;
+    let animationFrameId: number;
+
+    const step = (timestamp: number) => {
+      if (!start) start = timestamp;
+      const linear = Math.min((timestamp - start) / duration, 1);
+      const ease = linear * (2 - linear);
+      setProgress(ease);
+
+      if (linear < 1) {
+        animationFrameId = requestAnimationFrame(step);
+      } else {
+        setProgress(1);
+      }
+    };
+
+    animationFrameId = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  const formatStatValue = (valStr: string, p: number) => {
+    if (!valStr || typeof valStr !== 'string') return valStr;
+    const match = valStr.match(/^([^\d.]*)(\d+(?:\.\d+)?)(.*)$/);
+    if (!match) return valStr;
+
+    const prefix = match[1] || '';
+    const num = parseFloat(match[2]);
+    const suffix = match[3] || '';
+    const isDecimal = match[2].includes('.');
+
+    if (isDecimal) {
+      const current = (num * p).toFixed(1);
+      return `${prefix}${current}${suffix}`;
+    }
+
+    const current = Math.floor(num * p);
+    return `${prefix}${current}${suffix}`;
+  };
+
+  const statsItems = rawItems.map((stat: any) => ({
+    ...stat,
+    displayValue: formatStatValue(String(stat.value || ''), progress)
+  }));
 
   return (
     <section className="py-12 md:py-16 bg-sage">
@@ -43,23 +102,15 @@ export default function WhoWeAreSection({ data }: { data: any }) {
             </p>
             <div className="max-w-7xl mx-auto">
               <div className="bg-white rounded-2xl shadow-xl grid grid-cols-2 md:grid-cols-4 border border-slate-50 overflow-hidden">
-                {((data?.items && Array.isArray(data.items) && data.items.length > 0) ? data.items : [
-                  { value: '72K+', label: 'Happy Travelers' },
-                  { value: '4.4', label: 'Google Rating' },
-                  { value: '100%', label: 'Client Satisfaction' },
-                  { value: '25+', label: 'Years Experience' }
-                ]).map((stat: any, idx: number) => (
-                  <div 
-                    key={idx} 
-                    className={`text-center py-6 px-4 border-slate-100 ${
-                      idx % 2 === 0 ? 'border-r' : ''
-                    } ${
-                      idx < 2 ? 'border-b md:border-b-0' : ''
-                    } ${
-                      idx < 3 ? 'md:border-r' : ''
-                    }`}
+                {statsItems.map((stat: any, idx: number) => (
+                  <div
+                    key={idx}
+                    className={`text-center py-6 px-4 border-slate-100 ${idx % 2 === 0 ? 'border-r' : ''
+                      } ${idx < 2 ? 'border-b md:border-b-0' : ''
+                      } ${idx < 3 ? 'md:border-r' : ''
+                      }`}
                   >
-                    <div className="text-primary font-serif text-2xl md:text-3xl mb-1">{stat.value}</div>
+                    <div className="text-primary font-serif text-2xl md:text-3xl mb-1">{stat.displayValue}</div>
                     <div className="text-xs font-bold text-ink-light uppercase tracking-wider">{stat.label}</div>
                   </div>
                 ))}

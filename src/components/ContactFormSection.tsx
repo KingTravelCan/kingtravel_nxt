@@ -95,17 +95,17 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
   const resolvedLandlines: Array<{ number: string; openInNewTab?: boolean }> = (data?.landlines && Array.isArray(data.landlines) && data.landlines.length > 0)
     ? data.landlines.filter(l => l && l.number?.trim()).map(l => ({ number: l.number!.trim(), openInNewTab: l.openInNewTab }))
     : [
-        ...(data?.tollFree ? [{ number: data.tollFree, openInNewTab: data.tollFreeNewTab ?? true }] : [{ number: "+1 905-624-8555", openInNewTab: true }]),
-        ...(data?.localNum1 ? [{ number: data.localNum1, openInNewTab: data.localNum1NewTab ?? true }] : [{ number: "+1 905-624-8344", openInNewTab: true }]),
-      ];
+      ...(data?.tollFree ? [{ number: data.tollFree, openInNewTab: data.tollFreeNewTab ?? true }] : [{ number: "+1 905-624-8555", openInNewTab: true }]),
+      ...(data?.localNum1 ? [{ number: data.localNum1, openInNewTab: data.localNum1NewTab ?? true }] : [{ number: "+1 905-624-8344", openInNewTab: true }]),
+    ];
 
   // Resolve WhatsApp list (repeater or legacy fallback)
   const resolvedWhatsApp: Array<{ number: string; label?: string; openInNewTab?: boolean }> = (data?.whatsappList && Array.isArray(data.whatsappList) && data.whatsappList.length > 0)
     ? data.whatsappList.filter(w => w && w.number?.trim()).map(w => ({ number: w.number!.trim(), label: w.label, openInNewTab: w.openInNewTab }))
     : [
-        ...(data?.waReservation ? [{ number: data.waReservation, label: data.waReservationLabel || "Reservation", openInNewTab: data.waReservationNewTab ?? true }] : [{ number: "+1 647-982-8555", label: "Reservation", openInNewTab: true }]),
-        ...(data?.waVisa ? [{ number: data.waVisa, label: data.waVisaLabel || "Saudi Visa", openInNewTab: data.waVisaNewTab ?? true }] : [{ number: "+1 800-844-5464", label: "Saudi Visa", openInNewTab: true }]),
-      ];
+      ...(data?.waReservation ? [{ number: data.waReservation, label: data.waReservationLabel || "Reservation", openInNewTab: data.waReservationNewTab ?? true }] : [{ number: "+1 647-982-8555", label: "Reservation", openInNewTab: true }]),
+      ...(data?.waVisa ? [{ number: data.waVisa, label: data.waVisaLabel || "Saudi Visa", openInNewTab: data.waVisaNewTab ?? true }] : [{ number: "+1 800-844-5464", label: "Saudi Visa", openInNewTab: true }]),
+    ];
 
   return (
     <section className="py-12 md:py-16 bg-gray">
@@ -179,12 +179,12 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
               </div>
 
               {/* Office Hours */}
-              <div>
+              {/* <div>
                 <h4 className="">OFFICE HOURS</h4>
                 <div className="">
                   {data.officeHours || "Mon–Sat, 9am – 7pm EST"}
                 </div>
-              </div>
+              </div> */}
 
               {/* Head Office */}
               <div>
@@ -243,9 +243,8 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setForm({ ...form, fullName: e.target.value });
                       if (errors.fullName) setErrors((prev) => ({ ...prev, fullName: "" }));
                     }}
-                    className={`w-full border !border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${
-                      errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                    }`}
+                    className={`w-full border !border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${errors.fullName ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                      }`}
                   />
                   {errors.fullName && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.fullName}</span>}
                 </div>
@@ -260,9 +259,8 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setForm({ ...form, email: e.target.value });
                       if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
                     }}
-                    className={`w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${
-                      errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                    }`}
+                    className={`w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${errors.email ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                      }`}
                   />
                   {errors.email && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.email}</span>}
                 </div>
@@ -294,9 +292,8 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setForm({ ...form, packageType: e.target.value });
                       if (errors.packageType) setErrors((prev) => ({ ...prev, packageType: "" }));
                     }}
-                    className={`cursor-pointer w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${
-                      form.packageType ? "text-[#111111]" : "text-slate-400"
-                    } ${errors.packageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"}`}
+                    className={`cursor-pointer w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${form.packageType ? "text-[#111111]" : "text-slate-400"
+                      } ${errors.packageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"}`}
                   >
                     <option value="" disabled hidden>Select Package *</option>
                     <option value="Hajj/Umrah Packages" className="text-[#111111]">Hajj/Umrah Packages</option>
@@ -322,9 +319,8 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       setErrors((prev) => ({ ...prev, message: "" }));
                     }
                   }}
-                  className={`w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${
-                    errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                  }`}
+                  className={`w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium ${errors.message ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                    }`}
                 />
                 {errors.message && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.message}</span>}
               </div>

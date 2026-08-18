@@ -17,7 +17,7 @@ function AnimatedStats() {
 
   useEffect(() => {
     let start: number | null = null;
-    const duration = 1500;
+    const duration = 2500;
 
     const step = (timestamp: number) => {
       if (!start) start = timestamp;
