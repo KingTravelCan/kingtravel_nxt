@@ -124,7 +124,10 @@ export default function DynamicSiteForm({
     const { name, value, type } = e.target as HTMLInputElement;
     // Phone fields: strip non-numeric chars except + - ( ) space
     if (type === "tel") {
-      const cleaned = value.replace(/[^0-9+\-() ]/g, "");
+      let cleaned = value.replace(/[^0-9+\-() ]/g, "");
+      if (formKey === "flightInquiry" && cleaned.length > 11) {
+        cleaned = cleaned.slice(0, 11);
+      }
       setFormData((prev) => ({ ...prev, [name]: cleaned }));
     } else {
       setFormData((prev) => ({ ...prev, [name]: value }));
@@ -400,6 +403,7 @@ export default function DynamicSiteForm({
                       value={formData[field.id] || ""}
                       onChange={handleChange}
                       placeholder={field.placeholder || "e.g. +1 234 567 890"}
+                      maxLength={formKey === "flightInquiry" ? 11 : undefined}
                       inputMode="tel"
                       autoComplete="tel"
                       className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium focus:border-emerald-800"
