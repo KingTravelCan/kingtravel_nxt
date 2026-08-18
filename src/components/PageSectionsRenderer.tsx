@@ -574,6 +574,16 @@ function GoogleReviewsSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const [expandedReviewId, setExpandedReviewId] = useState<number | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 640);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Auto-scroll 1 by 1 card every 5000ms (5 seconds)
   useEffect(() => {
@@ -627,7 +637,9 @@ function GoogleReviewsSlider() {
         <div
           className="flex items-start transition-transform duration-700 ease-in-out gap-4"
           style={{
-            transform: `translateX(calc(-${currentIndex} * (100% / 3 + 5.33px)))`,
+            transform: isMobile
+              ? `translateX(calc(-${currentIndex} * (100% + 16px)))`
+              : `translateX(calc(-${currentIndex} * (100% / 3 + 5.33px)))`,
           }}
         >
           {/* Render doubled reviews for continuous wrap-around carousel */}
