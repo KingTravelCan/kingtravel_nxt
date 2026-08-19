@@ -90,7 +90,7 @@ export default function WhoWeAreSection({ data }: { data: any }) {
           <div>
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2
-              className="font-serif  leading-tight mb-6"
+              className="font-serif section-heading leading-tight mb-6"
               dangerouslySetInnerHTML={{ __html: title }}
             />
             <p className="!text-[18px] text-ink-soft mb-6 leading-relaxed text-sm md:text-base">

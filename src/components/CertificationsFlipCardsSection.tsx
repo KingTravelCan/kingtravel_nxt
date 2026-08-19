@@ -144,7 +144,7 @@ export default function CertificationsFlipCardsSection({
             {eyebrow}
           </span>
 
-          <h2 className="text-4xl md:text-5xl font-serif text-ink">
+          <h2 className="section-heading font-serif text-ink">
             {title}
           </h2>
         </div>

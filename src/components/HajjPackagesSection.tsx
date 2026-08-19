@@ -80,7 +80,7 @@ export default function HajjPackagesSection({
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
           <div className="flex flex-col items-center md:items-start">
             <h3 className="eyebrow">{eyebrow}</h3>
-            <h2 className="">{title}</h2>
+            <h2 className="section-heading">{title}</h2>
           </div>
           <div className="max-w-sm text-ink-soft text-sm leading-relaxed border-t-2 md:border-t-0 md:border-l-2 border-gray-200 pt-4 md:pt-0 pl-0 md:pl-4">
             {description}

@@ -26,7 +26,7 @@ export default function TravelServicesSection({ data }: { data: any }) {
         <div className="text-center flex flex-col items-center mb-10">
           <h3 className="eyebrow">{eyebrow}</h3>
           <h2 
-            className=""
+            className="section-heading"
             dangerouslySetInnerHTML={{ __html: title }}
           />
           {subtitle && (

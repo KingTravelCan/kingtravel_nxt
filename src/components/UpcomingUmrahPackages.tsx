@@ -99,7 +99,7 @@ export default function UpcomingUmrahPackages({
           <div className="flex flex-col items-center md:items-start">
             <h3 className="eyebrow">{eyebrow}</h3>
             <h2
-              className=""
+              className="section-heading"
               dangerouslySetInnerHTML={{ __html: title }}
             />
           </div>

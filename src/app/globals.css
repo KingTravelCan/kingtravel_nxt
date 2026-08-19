@@ -230,7 +230,7 @@ h4 {
   letter-spacing: .2px;
 }
 
-h2 {
+h2.section-heading {
   font-size: clamp(28px, 3.2vw, 38px);
 }
 

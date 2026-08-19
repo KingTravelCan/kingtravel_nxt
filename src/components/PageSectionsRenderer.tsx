@@ -79,7 +79,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                   <span className="eyebrow mx-auto block">
                     {sec.data?.eyebrow || "AVAILABLE FLIGHTS"}
                   </span>
-                  <h2 className="text-3xl font-serif tracking-tight">
+                  <h2 className="section-heading font-serif tracking-tight">
                     {sec.data?.title || "BEST FARES, LIMITED AVAILABILITY FROM LONDON"}
                   </h2>
                 </div>
@@ -378,7 +378,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                       {sec.data.eyebrow}
                     </span>
                   )}
-                  <h2 className="text-2xl font-serif text-ink font-normal">
+                  <h2 className="section-heading font-serif text-ink font-normal">
                     {sec.data?.title || "Airlines We Sourced Deals From"}
                   </h2>
                 </div>
@@ -424,7 +424,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                       {sec.data.eyebrow}
                     </span>
                   )}
-                  <h2 className="font-normal">
+                  <h2 className="section-heading font-normal">
                     {sec.data?.title || "Trusted Travel Organizations"}
                   </h2>
                 </div>
