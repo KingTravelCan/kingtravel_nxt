@@ -148,7 +148,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                             target={pageData?.slug === "/cheap-flights-air-tickets" || pageData?.slug === "cheap-flights-air-tickets" ? undefined : "_blank"}
                             rel="noopener noreferrer"
                             suppressHydrationWarning
-                            className="bg-emerald-900 text-white hover:bg-gold hover:text-slate-900 font-bold py-3 px-6 md:px-8 rounded-md tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
+                            className="bg-primary text-white hover:bg-primary-light font-bold py-3 px-6 md:px-8 rounded-md tracking-wide shadow-sm transition-all duration-150 cursor-pointer text-sm w-full md:w-auto inline-block text-center"
                           >
                             Booking
                           </a>
