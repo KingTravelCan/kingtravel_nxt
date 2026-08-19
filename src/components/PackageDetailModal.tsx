@@ -44,8 +44,10 @@ export interface PackageDetailData {
   importantNotice?: string;
   faqs?: Array<{ question: string; answer: string }>;
   detailPageData?: any;
+  cardData?: any;
   month?: string;
   startingPrice?: string | number;
+  [key: string]: any;
 }
 
 interface PackageDetailModalProps {
