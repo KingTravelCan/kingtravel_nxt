@@ -392,8 +392,13 @@ export default function DynamicSiteForm({
                       name={field.id}
                       required={field.required}
                       value={formData[field.id] || ""}
+                      onClick={(e) => {
+                        try {
+                          (e.target as HTMLInputElement).showPicker?.();
+                        } catch { }
+                      }}
                       onChange={handleChange}
-                      className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium focus:border-emerald-800"
+                      className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium focus:border-emerald-800 cursor-pointer"
                     />
                   ) : isTel ? (
                     <input
@@ -446,7 +451,7 @@ export default function DynamicSiteForm({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-[#004B39] hover:bg-[#003829] text-white font-bold py-4 rounded-xl shadow-md transition-all active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+            className="w-full bg-gold text-ink font-extrabold py-3.5 px-6 rounded-sm shadow-md hover:bg-gold-lt active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
           >
             {isSubmitting
               ? "Submitting Request..."

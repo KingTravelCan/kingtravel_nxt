@@ -435,6 +435,11 @@ export default function PackageBookingModal({
                     type="date"
                     min={todayDateStr}
                     value={selectedDate}
+                    onClick={(e) => {
+                      try {
+                        (e.target as HTMLInputElement).showPicker?.();
+                      } catch { }
+                    }}
                     onChange={(e) => {
                       setSelectedDate(
                         e.target.value
@@ -484,9 +489,9 @@ export default function PackageBookingModal({
 
               <button
                 type="submit"
-                className="w-full bg-gold hover:bg-[#004B39] text-black hover:text-white font-semibold py-3.5 px-4 rounded-xl text-sm transition-all duration-300 shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 group cursor-pointer"
+                className="w-full bg-gold text-ink font-extrabold py-3.5 px-6 rounded-sm shadow-md hover:bg-gold-lt active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
               >
-                <TicketPercent className="w-4 h-4" />
+                <TicketPercent className="w-4 h-4 mr-2" />
 
                 <span>
                   Book {badgeTag}

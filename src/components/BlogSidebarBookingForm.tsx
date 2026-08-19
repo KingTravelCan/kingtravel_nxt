@@ -368,6 +368,11 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
               type="date"
               min={todayDateStr}
               value={selectedDate}
+              onClick={(e) => {
+                try {
+                  (e.target as HTMLInputElement).showPicker?.();
+                } catch {}
+              }}
               onChange={(e) => {
                 setSelectedDate(e.target.value);
                 if (errors.selectedDate) setErrors((prev) => ({ ...prev, selectedDate: false }));

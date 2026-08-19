@@ -142,6 +142,34 @@ button {
   @apply text-sm text-[var(--ink-light)] font-bold
 }
 
+/* ============ DATE INPUTS CALENDAR PICKER CLICKABILITY ============ */
+input[type="date"] {
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+/* For direct/visible date inputs, expand picker indicator to full field width so entire input opens the calendar */
+input[type="date"]:not(.opacity-0):not([class*="opacity-0"]) {
+  position: relative;
+}
+
+input[type="date"]:not(.opacity-0):not([class*="opacity-0"])::-webkit-calendar-picker-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: auto;
+  height: auto;
+  color: transparent;
+  background-position: calc(100% - 12px) center;
+  background-size: 16px 16px;
+  cursor: pointer;
+}
+
 .normal-text {
   font-weight: 500;
   @apply text-ink-soft leading-relaxed mb-5 line-clamp-3
