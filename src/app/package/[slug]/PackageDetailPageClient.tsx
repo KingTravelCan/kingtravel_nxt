@@ -142,7 +142,7 @@ export default function PackageDetailPageClient({
     : String(rawPrice).replace("CAD", "").replace("$", "").trim();
 
   const priceSubtext = cardData.priceSubtext || pkg.priceSubtext || "PER PERSON, QUAD OCCUPANCY";
-  const exclusiveBadge = detailData.exclusiveBadge || cardData.exclusiveBadge || pkg.exclusiveBadge || "EXCLUSIVE PACKAGE";
+  const exclusiveBadge = detailData.exclusiveBadge || cardData.exclusiveBadge || pkg.exclusiveBadge || "STARTING FROM";
   const currencyCode = pkg.currency || pkg.currencyCode || "CAD";
 
   const operatorName = cardData.operatorName || pkg.operatorName || "King Travel";
@@ -945,7 +945,7 @@ export default function PackageDetailPageClient({
                       onClick={(e) => {
                         try {
                           (e.target as HTMLInputElement).showPicker?.();
-                        } catch {}
+                        } catch { }
                       }}
                       onChange={(e) => {
                         setSelectedDate(e.target.value);
