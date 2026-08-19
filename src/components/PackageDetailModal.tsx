@@ -497,8 +497,13 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                     <input
                       type="date"
                       value={selectedDate}
+                      onClick={(e) => {
+                        try {
+                          (e.target as HTMLInputElement).showPicker?.();
+                        } catch {}
+                      }}
                       onChange={(e) => setSelectedDate(e.target.value)}
-                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none"
+                      className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer"
                     />
                   </div>
                 </div>
