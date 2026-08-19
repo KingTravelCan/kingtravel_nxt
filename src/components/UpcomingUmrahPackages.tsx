@@ -276,7 +276,7 @@ export default function UpcomingUmrahPackages({
                           setSelectedPkgForBooking(pkg);
                           setBookingModalOpen(true);
                         }}
-                        className={`w-full bg-gold text-ink font-extrabold py-3.5 px-6 rounded-sm shadow-md hover:bg-gold-lt active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer ${isGold
+                        className={`flex-1 py-3 text-center text-xs font-black rounded-md uppercase tracking-widest transition-colors block border-2 border-transparent cursor-pointer ${isGold
                           ? "bg-ink-soft hover:bg-ink text-white"
                           : "bg-gold hover:bg-gold-lt text-black"
                           }`}
