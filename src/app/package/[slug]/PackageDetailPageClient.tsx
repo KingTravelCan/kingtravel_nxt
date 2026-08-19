@@ -171,9 +171,74 @@ export default function PackageDetailPageClient({
   const madinahNights = rawMadinahHotel.nights || (dbMadinahHotel?.nights ? `${dbMadinahHotel.nights} Nights Stay` : "");
   const madinahNightsIcon = rawMadinahHotel.nightsIcon || "";
 
+  const isHajjPkg = /hajj/i.test(title) || (pkg.type === 'hajj');
+
+  const defaultHajjOverview = [
+    {
+      groupTitle: "DURING STAY AT MADINAH - Hotel close to Haram (Breakfast & Dinner)",
+      items: [
+        "01 Dhul-Hajjah Check in at Madinah hotel and spend time in Prophet's Mosque",
+        "02 Dhul-Hajjah Spend time in Haram & prayers",
+        "03 Dhul-Hajjah Guided Ziarat in Madinah at 08:00 am",
+        "04 Dhul-Hajjah Check out from Madinah and leave for Makkah Aziziya by air-conditioned coach"
+      ]
+    },
+    {
+      groupTitle: "DURING STAY AT AZIZIYA - Hotel (Full Board)",
+      items: [
+        "04 - 07 Dhul-Hajjah Stay at Aziziya Accommodation & preparation for Hajj days."
+      ]
+    },
+    {
+      groupTitle: "DURING STAY AT MINA - Near Jamarat Maktab-A-Category (Full Board)",
+      items: [
+        "07 - 12 Dhul-Hajjah Rituals at Mina / Arafat / Muzdalifah."
+      ]
+    },
+    {
+      groupTitle: "DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)",
+      items: [
+        "12 to 14 Dhul-Hajjah Stay, Tawaf Ziyarah, and preparation for departure.",
+        "14 Dhul-Hajjah Check out from Aziziya and leave for Jeddah airport for departure to Toronto."
+      ]
+    }
+  ];
+
+  const defaultUmrahOverview = [
+    {
+      groupTitle: "DAY 01 - ARRIVAL IN SAUDIA (JEDDAH / MADINAH)",
+      items: [
+        "Meet and assist service at the airport by King Travel representative",
+        "Comfortable transfer by air-conditioned private/executive coach to your luxury hotel",
+        "Hotel check-in and leisure time to relax and perform initial prayers"
+      ]
+    },
+    {
+      groupTitle: "DAY 02-07 - MADINAH MUNAWWARAH (PROPHET'S MOSQUE)",
+      items: [
+        "Daily prayers at Masjid an-Nabawi and Rawdah Sharif visits",
+        "Comprehensive guided Ziyarat tour to historical sites: Mount Uhud, Masjid Quba, Masjid Qiblatain, and Seven Mosques",
+        "Group orientation seminar and spiritual guidance by experienced religious scholars"
+      ]
+    },
+    {
+      groupTitle: "DAY 08-14 - MAKKAH MUKARRAMAH (PERFORMING UMRAH)",
+      items: [
+        "Departure in Ahram towards Makkah via high-speed Haramain train / luxury air-conditioned coach",
+        "Perform Umrah rituals under the step-by-step guidance of qualified guides",
+        "Guided Ziyarat in Makkah: Cave of Hira (Jabal al-Nour), Jabal Thawr, Mina, and Arafat",
+        "Tawaf al-Wada (Farewell Tawaf) and scheduled airport transfer for departure back to Canada"
+      ]
+    }
+  ];
+
+  const defaultOverview = isHajjPkg ? defaultHajjOverview : defaultUmrahOverview;
+
   const rawOverview = detailData.overview || pkg.overview;
-  const overviewArray: { heading: string; details: string[] }[] = Array.isArray(rawOverview)
-    ? rawOverview
+  let overviewArray: { heading: string; details: string[] }[] = [];
+
+  if (Array.isArray(rawOverview) && rawOverview.length > 0) {
+    overviewArray = rawOverview
       .map((block: any) => {
         if (!block) return null;
         if (typeof block === 'string') {
@@ -189,25 +254,73 @@ export default function PackageDetailPageClient({
         if (!heading && details.length === 0) return null;
         return { heading, details };
       })
-      .filter(Boolean) as { heading: string; details: string[] }[]
-    : [];
+      .filter(Boolean) as { heading: string; details: string[] }[];
+  } else if (typeof rawOverview === 'string' && rawOverview.trim()) {
+    overviewArray = rawOverview.split('\n\n').map(section => {
+      const lines = section.split('\n').map(l => l.trim()).filter(Boolean);
+      return {
+        heading: lines[0] || "Overview",
+        details: lines.slice(1)
+      };
+    });
+  }
+
+  if (overviewArray.length === 0) {
+    overviewArray = defaultOverview.map(g => ({ heading: g.groupTitle, details: g.items }));
+  }
+
+  const defaultHighlights = isHajjPkg
+    ? [
+      { text: "Group Will Be Led By A Qualified Imam & Guide", isCross: false },
+      { text: "Free Complete Ahram Kit Provided To Pilgrims", isCross: false },
+      { text: "Pre-departure Educational Seminar with Dinner & Guidance", isCross: false },
+      { text: "Luxury 5-Star Accommodations near Haram", isCross: false },
+      { text: "All Ground Transportation by Luxury Air-Conditioned VIP Coaches", isCross: false },
+      { text: "Qurbani Not Included (Available upon request)", isCross: true }
+    ]
+    : [
+      { text: "Round-trip Flights from Major Canadian Gateways (YYZ, YVR, YUL)", isCross: false },
+      { text: "Official Saudi Umrah Tourist/EVisa Processing Included", isCross: false },
+      { text: "5-Star Accommodations with Daily Buffet Breakfast & Dinner Options", isCross: false },
+      { text: "Comprehensive Guided Ziyarat Tours in Makkah & Madinah", isCross: false },
+      { text: "24/7 Dedicated Bilingual On-ground Support Staff in Saudia", isCross: false },
+      { text: "Complimentary Zamzam Water & Travel Ahram Kit per Pilgrim", isCross: false }
+    ];
 
   const rawHighlights = detailData.highlights || pkg.highlights;
-  const highlightsList: { text: string; isCross: boolean }[] = Array.isArray(rawHighlights)
-    ? rawHighlights.map((hl: any) => {
+  let highlightsList: { text: string; isCross: boolean }[] = [];
+  if (Array.isArray(rawHighlights) && rawHighlights.length > 0) {
+    highlightsList = rawHighlights.map((hl: any) => {
       if (typeof hl === 'string') return { text: hl, isCross: false };
       return { text: hl.text || '', isCross: !!hl.isCross };
-    }).filter((hl: any) => !!hl.text)
-    : [];
+    }).filter((hl: any) => !!hl.text);
+  }
+  if (highlightsList.length === 0) {
+    highlightsList = defaultHighlights;
+  }
+
+  const defaultEligibility = [
+    "Canadian & U.S. Citizens with Valid Passport (Minimum 6 Months Validity).",
+    "Canadian Permanent Residents (PR Card Holders) and Work/Study Permit Holders.",
+    "Pakistani & International Passport holders with valid Canadian residency or visas.",
+    "Custom extensions, side trips, and stopovers available upon request."
+  ];
 
   const rawEligibility = detailData.eligibility || pkg.eligibility;
-  const eligibilityList: string[] = Array.isArray(rawEligibility)
-    ? rawEligibility.filter(Boolean)
-    : typeof rawEligibility === 'string'
-      ? rawEligibility.split('\n').map((s: string) => s.trim()).filter(Boolean)
-      : [];
+  let eligibilityList: string[] = [];
+  if (Array.isArray(rawEligibility) && rawEligibility.length > 0) {
+    eligibilityList = rawEligibility.filter(Boolean);
+  } else if (typeof rawEligibility === 'string' && rawEligibility.trim()) {
+    eligibilityList = rawEligibility.split('\n').map((s: string) => s.trim()).filter(Boolean);
+  }
+  if (eligibilityList.length === 0) {
+    eligibilityList = defaultEligibility;
+  }
 
-  const importantNotice = detailData.importantNotice || detailData.importantBooking || pkg.importantNotice || "";
+  const importantNotice = detailData.importantNotice || detailData.importantBooking || pkg.importantNotice ||
+    (isHajjPkg
+      ? "To secure your Hajj visa slot, please make sure your Canadian passport is valid for at least 6 months beyond travel dates, and you have completed all mandatory immunizations required by the Saudi Ministry of Hajj."
+      : "Umrah packages and seat availability are subject to confirmation at the time of booking. Ensure your passport has minimum 6 months validity. Contact King Travel for custom flight dates and family room occupancy options.");
 
   // Gallery is intentionally Umrah-only. Existing Hajj pages are unchanged.
   const rawPackagesGallery = pkg.packagesGallery ?? [];
@@ -239,10 +352,44 @@ export default function PackageDetailPageClient({
     setGalleryOpenIndex((galleryOpenIndex + 1) % packagesGallery.length);
   };
 
+  const defaultFaqs = isHajjPkg
+    ? [
+      {
+        question: "Can I upgrade to double or triple occupancy?",
+        answer: "Yes! Upgrades to Double or Triple room occupancy are available upon request. Please select your occupancy preference or contact our support team during booking."
+      },
+      {
+        question: "Are flights included in the package price?",
+        answer: "Yes, round-trip international flights from major Canadian cities to Saudi Arabia are fully included in the package pricing."
+      },
+      {
+        question: "How does the visa application process work?",
+        answer: "Our licensed team takes care of the entire visa documentation, Nusuk coordination, biometric requirements, and authorization with the Saudi Ministry of Hajj."
+      }
+    ]
+    : [
+      {
+        question: "Can I customize the departure date and number of days?",
+        answer: "Absolutely! We offer flexible departure dates, custom durations (7, 10, 14, 21 nights), and personalized hotel selections to suit your travel schedule."
+      },
+      {
+        question: "What items are included with the package?",
+        answer: "Our packages include visa processing, 5-star hotel accommodations near Haram, guided Ziyarat tours, airport & intercity transfers, and 24/7 on-ground assistance."
+      },
+      {
+        question: "Is visa processing and medical insurance included?",
+        answer: "Yes, standard tourist and Umrah eVisa processing along with mandatory Saudi health and travel insurance are included in the package cost."
+      }
+    ];
+
   const rawFaqs = detailData.faqs || pkg.faqs;
-  const faqs: { question: string; answer: string }[] = Array.isArray(rawFaqs)
-    ? rawFaqs.filter((f: any) => f && (f.question || f.answer))
-    : [];
+  let faqs: { question: string; answer: string }[] = [];
+  if (Array.isArray(rawFaqs) && rawFaqs.length > 0) {
+    faqs = rawFaqs.filter((f: any) => f && (f.question || f.answer));
+  }
+  if (faqs.length === 0) {
+    faqs = defaultFaqs;
+  }
 
   return (
     <div className="bg-[#faf7f2] min-h-screen text-slate-800">

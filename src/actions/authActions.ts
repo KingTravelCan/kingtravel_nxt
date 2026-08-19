@@ -28,9 +28,9 @@ export async function adminLogin(formData: FormData) {
   try {
     // Initial setup fallback if database table is empty or not yet created
     if (!userList.length) {
-      const envEmail = (process.env.INITIAL_ADMIN_EMAIL || 'hassan@kingtravelcan.com').trim().toLowerCase();
-      const envPassword = process.env.INITIAL_ADMIN_PASSWORD || 'KingTravel2026!';
-      if (email === envEmail && (password === envPassword || password === 'Kingtravel$@hassan')) {
+      const envEmail = (process.env.INITIAL_ADMIN_EMAIL || '').trim().toLowerCase();
+      const envPassword = process.env.INITIAL_ADMIN_PASSWORD || '';
+      if (email === envEmail && (password === envPassword || password === '')) {
         await createSessionCookie({
           userId: 1,
           email: envEmail,
@@ -66,7 +66,7 @@ export async function adminLogin(formData: FormData) {
       isValid = true;
       try {
         await db.update(users).set({ passwordHash: hashPassword(password) }).where(eq(users.id, user.id));
-      } catch (e) {}
+      } catch (e) { }
     }
 
     if (!isValid) {
@@ -115,7 +115,7 @@ export async function adminLogout() {
         details: 'Admin user session terminated',
       });
     }
-  } catch (e) {}
+  } catch (e) { }
 
   await destroySession();
   return redirect('/letstravel');
