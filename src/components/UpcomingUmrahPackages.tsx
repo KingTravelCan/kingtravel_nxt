@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import * as LucideIcons from "lucide-react";
+import DynamicIcon from "@/components/ui/DynamicIcon";
 import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
 import PackageBookingModal from "@/components/PackageBookingModal";
 export default function UpcomingUmrahPackages({
@@ -223,28 +224,27 @@ export default function UpcomingUmrahPackages({
                     <div className="incl-label">PACKAGE INCLUDES</div>
                     <ul className="space-y-4 mb-8 flex-1">
                       {includes.map((inc: any, i: number) => {
-                        let Icon = LucideIcons.CheckCircle;
+                        let iconName = "CheckCircle";
                         let text = "";
 
                         if (typeof inc === 'string') {
                           text = inc;
                           const firstWord = text.split(" ")[0].toLowerCase();
                           if (firstWord === "return" || firstWord === "flights")
-                            Icon = LucideIcons.Plane;
+                            iconName = "Plane";
                           else if (firstWord === "luxury" || firstWord === "transport")
-                            Icon = LucideIcons.Bus;
+                            iconName = "Bus";
                           else if (firstWord === "free" || firstWord === "ihram")
-                            Icon = LucideIcons.Gift;
+                            iconName = "Gift";
                           else if (firstWord === "registration" || firstWord === "visa")
-                            Icon = LucideIcons.FileText;
+                            iconName = "FileText";
                           else if (firstWord === "imam" || firstWord === "guide")
-                            Icon = LucideIcons.Users;
+                            iconName = "Users";
                           else if (firstWord === "5" || firstWord === "hotel")
-                            Icon = LucideIcons.Hotel;
+                            iconName = "Hotel";
                         } else {
                           text = inc.text || "";
-                          // @ts-ignore
-                          Icon = LucideIcons[inc.icon] || LucideIcons.CheckCircle;
+                          iconName = inc.icon || "CheckCircle";
                         }
 
                         return (
@@ -253,7 +253,8 @@ export default function UpcomingUmrahPackages({
                             className={`flex gap-3 text-sm ${isGold ? "" : "text-ink-soft"
                               }`}
                           >
-                            <Icon
+                            <DynamicIcon
+                              name={iconName}
                               className={`w-4 h-4 shrink-0 ${isGold ? "" : "text-ink-soft"
                                 }`}
                             />{" "}
