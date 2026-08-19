@@ -33,7 +33,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
     switch (strength) {
       case 0:
       case 1:
-        return { percent: 25, label: 'Weak', color: 'bg-red-500', textColor: 'text-red-400' };
+        return { percent: 25, label: 'Weak', color: 'bg-red-500', textColor: 'text-red-500' };
       case 2:
         return { percent: 50, label: 'Fair', color: 'bg-orange-500', textColor: 'text-orange-400' };
       case 3:
@@ -128,7 +128,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
       )}
 
       {/* Card Wrapper */}
-      <div className="w-full max-w-md bg-white backdrop-blur-md rounded-xl shadow-[0_24px_20px_rgba(0,0,0,0.2)] p-8 relative z-10">
+      <div className="w-full max-w-md bg-white backdrop-blur-md rounded-xl shadow-[0_24px_20px_rgba(0,0,0,0.2)] p-6 sm:p-8 relative z-10">
 
         {/* Header Branding */}
         <div className="text-center mb-6">
@@ -162,7 +162,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
 
         {/* Error Alert */}
         {error && (
-          <div className="text-red-400 font-semibold text-xs bg-red-500/5 px-3.5 py-2 rounded-md border border-red-500/50 mb-5 flex items-center gap-2 shadow-inner">
+          <div className="text-red-500 font-semibold text-xs bg-red-500/5 px-3.5 py-2 rounded-md border border-red-500/50 mb-5 flex items-center gap-2 shadow-inner">
             <span className="">⚠️</span>
             <span>{error}</span>
           </div>
@@ -330,7 +330,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
             </div>
 
             <div>
-              <label className={`block text-[11px] font-bold uppercase tracking-wider mb-2 ${confirmPasswordInput && passwordInput !== confirmPasswordInput ? 'text-red-400' : 'text-[#EAEAE4]'}`}>
+              <label className={`block text-[11px] font-bold uppercase tracking-wider mb-2 ${confirmPasswordInput && passwordInput !== confirmPasswordInput ? 'text-red-500' : 'text-[#EAEAE4]'}`}>
                 Confirm New Password
               </label>
               <input
@@ -346,7 +346,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                 placeholder="••••••••••••"
               />
               {confirmPasswordInput && passwordInput !== confirmPasswordInput && (
-                <p className="text-red-400 text-xs mt-1.5">Passwords do not match.</p>
+                <p className="text-red-500 text-xs mt-1.5">Passwords do not match.</p>
               )}
             </div>
 
