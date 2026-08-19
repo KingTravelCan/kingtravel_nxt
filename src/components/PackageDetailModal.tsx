@@ -61,35 +61,49 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
 
   if (!isOpen || !pkg) return null;
 
-  const detailData = pkg.detailPageData || {};
+  const parseJsonSafe = (val: any) => {
+    if (!val) return {};
+    if (typeof val === "object") return val;
+    if (typeof val === "string") {
+      try {
+        return JSON.parse(val);
+      } catch {
+        return {};
+      }
+    }
+    return {};
+  };
+
+  const detailData = parseJsonSafe(pkg.detailPageData);
+  const cardData = parseJsonSafe(pkg.cardData);
 
   const title = pkg.title || "ECONOMY HAJJ PACKAGE 2027";
-  const durationText = detailData.durationText || pkg.durationText || `${pkg.duration || pkg.month || "14 DAYS"} / 13 NIGHTS`;
-  const departure = detailData.departure || pkg.departure || "CANADA";
-  const destination = detailData.destination || pkg.destination || "SAUDIA";
+  const durationText = detailData.durationText || cardData.duration || pkg.durationText || `${pkg.duration || pkg.month || "14 DAYS"} / 13 NIGHTS`;
+  const departure = detailData.departure || cardData.departure || pkg.departure || "CANADA";
+  const destination = detailData.destination || cardData.destination || pkg.destination || "SAUDIA";
   const rawPrice = (pkg.startingPrice || pkg.price || "12,995").toString();
   const price = rawPrice.startsWith("CAD") ? rawPrice.replace("CAD", "").trim() : rawPrice.replace("$", "").trim();
-  const priceSubtext = pkg.priceSubtext || "PER PERSON, QUAD OCCUPANCY";
-  const exclusiveBadge = detailData.exclusiveBadge || pkg.exclusiveBadge || "EXCLUSIVE PACKAGE";
+  const priceSubtext = cardData.priceSubtext || pkg.priceSubtext || "PER PERSON, QUAD OCCUPANCY";
+  const exclusiveBadge = detailData.exclusiveBadge || cardData.exclusiveBadge || pkg.exclusiveBadge || "EXCLUSIVE PACKAGE";
   const currencyCode = detailData.currencyCode || pkg.currencyCode || "CAD";
 
-  const operatorName = pkg.operatorName || "King Travel";
-  const operatorRating = pkg.operatorRating || "4.4/5";
-  const operatorReviews = pkg.operatorReviews || "928 verified reviews";
+  const operatorName = cardData.operatorName || pkg.operatorName || "King Travel";
+  const operatorRating = cardData.operatorRating || pkg.operatorRating || "4.4/5";
+  const operatorReviews = cardData.operatorReviews || pkg.operatorReviews || "928 verified reviews";
 
-  const makkahHotel = detailData.makkahHotel || pkg.makkahHotel || {};
-  const makkahImg = makkahHotel?.image || makkahHotel?.image_url || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/865309229.jpg";
-  const makkahName = makkahHotel?.name || "5 Star Luxury Hotel";
-  const makkahLoc = makkahHotel?.location || "Walking distance to Al-Haram";
-  const makkahBadge = makkahHotel?.badge || "Breakfast & Dinner Inc.";
-  const makkahNights = makkahHotel?.nights || "6 Nights Stay";
+  const makkahHotel = detailData.makkahHotel || cardData.makkahHotel || pkg.makkahHotel || {};
+  const makkahImg = makkahHotel?.image || makkahHotel?.image_url || "";
+  const makkahName = makkahHotel?.name || "";
+  const makkahLoc = makkahHotel?.location || "";
+  const makkahBadge = makkahHotel?.badge || "";
+  const makkahNights = makkahHotel?.nights || "";
 
-  const madinahHotel = detailData.madinahHotel || pkg.madinahHotel || {};
-  const madinahImg = madinahHotel?.image || madinahHotel?.image_url || "https://cf.bstatic.com/xdata/images/hotel/max1024x768/523311776.jpg";
-  const madinahName = madinahHotel?.name || "5 Star Luxury Hotel";
-  const madinahLoc = madinahHotel?.location || "Near Masjid Al-Nabawi courtyard";
-  const madinahBadge = madinahHotel?.badge || "Breakfast & Dinner Inc.";
-  const madinahNights = madinahHotel?.nights || "6 Nights Stay";
+  const madinahHotel = detailData.madinahHotel || cardData.madinahHotel || pkg.madinahHotel || {};
+  const madinahImg = madinahHotel?.image || madinahHotel?.image_url || "";
+  const madinahName = madinahHotel?.name || "";
+  const madinahLoc = madinahHotel?.location || "";
+  const madinahBadge = madinahHotel?.badge || "";
+  const madinahNights = madinahHotel?.nights || "";
 
   const overviewText = detailData.overview || pkg.overview || `DURING STAY AT MADINAH - Hotel close to Haram (Breakfast & Dinner)
 01 Dhul-Hajjah Check in at Madinah hotel and spend time in Prophet's Mosque
@@ -208,81 +222,115 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
           <div className="lg:col-span-8 flex flex-col gap-10">
 
             {/* 1. Premium Accommodations */}
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5 flex items-center gap-2">
-                Premium Accommodations
-              </h3>
+            {(makkahName || makkahImg || madinahName || madinahImg) && (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5 flex items-center gap-2">
+                  Premium Accommodations
+                </h3>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                {/* Makkah Hotel Card */}
-                <div className="bg-white rounded-2xl overflow-hidden border border-emerald-100 shadow-md flex flex-col">
-                  <div className="relative h-48 w-full bg-slate-200">
-                    <Image
-                      src={makkahImg}
-                      alt={makkahName}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                    <span className="absolute top-3 left-3 bg-[#004B39] text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                      Makkah
-                    </span>
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                    <div>
-                      <h4 className="font-bold text-slate-900 text-base line-clamp-1">{makkahName}</h4>
-                      <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                        <MapPin className="w-3.5 h-3.5 text-[#004B39]" />
-                        <span>{makkahLoc}</span>
-                      </p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {/* Makkah Hotel Card */}
+                  {(makkahName || makkahImg) && (
+                    <div className="bg-white rounded-2xl overflow-hidden border border-emerald-100 shadow-md flex flex-col">
+                      <div className="relative h-48 w-full bg-slate-200">
+                        {makkahImg ? (
+                          <Image
+                            src={makkahImg}
+                            alt={makkahName || "Makkah Hotel"}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-emerald-900/10 flex items-center justify-center text-slate-400 text-xs">
+                            No image available
+                          </div>
+                        )}
+                        <span className="absolute top-3 left-3 bg-[#004B39] text-white text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                          Makkah
+                        </span>
+                      </div>
+                      <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-base line-clamp-1">{makkahName}</h4>
+                          {makkahLoc && (
+                            <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                              <MapPin className="w-3.5 h-3.5 text-[#004B39]" />
+                              <span>{makkahLoc}</span>
+                            </p>
+                          )}
+                        </div>
+                        {(makkahBadge || makkahNights) && (
+                          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs font-semibold text-slate-600">
+                            {makkahBadge && (
+                              <span className="bg-emerald-50 text-[#004B39] px-2.5 py-1 rounded-lg border border-emerald-200/60 flex items-center gap-1 text-[11px]">
+                                {makkahHotel?.badgeIcon ? <DynamicIcon name={makkahHotel.badgeIcon} className="w-3 h-3" /> : <Utensils className="w-3 h-3" />} {makkahBadge}
+                              </span>
+                            )}
+                            {makkahNights && (
+                              <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1">
+                                {makkahHotel?.nightsIcon && <DynamicIcon name={makkahHotel.nightsIcon} className="w-3 h-3" />}
+                                {makkahNights}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs font-semibold text-slate-600">
-                      <span className="bg-emerald-50 text-[#004B39] px-2.5 py-1 rounded-lg border border-emerald-200/60 flex items-center gap-1 text-[11px]">
-                        {makkahHotel?.badgeIcon ? <DynamicIcon name={makkahHotel.badgeIcon} className="w-3 h-3" /> : <Utensils className="w-3 h-3" />} {makkahBadge}
-                      </span>
-                      <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1">
-                        {makkahHotel?.nightsIcon && <DynamicIcon name={makkahHotel.nightsIcon} className="w-3 h-3" />}
-                        {makkahNights}
-                      </span>
-                    </div>
-                  </div>
-                </div>
+                  )}
 
-                {/* Madinah Hotel Card */}
-                <div className="bg-white rounded-2xl overflow-hidden border border-amber-100 shadow-md flex flex-col">
-                  <div className="relative h-48 w-full bg-slate-200">
-                    <Image
-                      src={madinahImg}
-                      alt={madinahName}
-                      fill
-                      className="object-cover"
-                      unoptimized
-                    />
-                    <span className="absolute top-3 left-3 bg-gold text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
-                      Madinah
-                    </span>
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
-                    <div>
-                      <h4 className="font-bold text-slate-900 text-base line-clamp-1">{madinahName}</h4>
-                      <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                        <MapPin className="w-3.5 h-3.5 text-gold" />
-                        <span>{madinahLoc}</span>
-                      </p>
+                  {/* Madinah Hotel Card */}
+                  {(madinahName || madinahImg) && (
+                    <div className="bg-white rounded-2xl overflow-hidden border border-amber-100 shadow-md flex flex-col">
+                      <div className="relative h-48 w-full bg-slate-200">
+                        {madinahImg ? (
+                          <Image
+                            src={madinahImg}
+                            alt={madinahName || "Madinah Hotel"}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-amber-900/10 flex items-center justify-center text-slate-400 text-xs">
+                            No image available
+                          </div>
+                        )}
+                        <span className="absolute top-3 left-3 bg-gold text-slate-950 text-[10px] font-extrabold px-3 py-1 rounded-full uppercase tracking-wider shadow-md">
+                          Madinah
+                        </span>
+                      </div>
+                      <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                          <h4 className="font-bold text-slate-900 text-base line-clamp-1">{madinahName}</h4>
+                          {madinahLoc && (
+                            <p className="text-xs text-slate-500 flex items-center gap-1 mt-1">
+                              <MapPin className="w-3.5 h-3.5 text-gold" />
+                              <span>{madinahLoc}</span>
+                            </p>
+                          )}
+                        </div>
+                        {(madinahBadge || madinahNights) && (
+                          <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs font-semibold text-slate-600">
+                            {madinahBadge && (
+                              <span className="bg-amber-50 text-amber-900 px-2.5 py-1 rounded-lg border border-amber-200/60 flex items-center gap-1 text-[11px]">
+                                {madinahHotel?.badgeIcon ? <DynamicIcon name={madinahHotel.badgeIcon} className="w-3 h-3" /> : <Utensils className="w-3 h-3" />} {madinahBadge}
+                              </span>
+                            )}
+                            {madinahNights && (
+                              <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1">
+                                {madinahHotel?.nightsIcon && <DynamicIcon name={madinahHotel.nightsIcon} className="w-3 h-3" />}
+                                {madinahNights}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs font-semibold text-slate-600">
-                      <span className="bg-amber-50 text-amber-900 px-2.5 py-1 rounded-lg border border-amber-200/60 flex items-center gap-1 text-[11px]">
-                        {madinahHotel?.badgeIcon ? <DynamicIcon name={madinahHotel.badgeIcon} className="w-3 h-3" /> : <Utensils className="w-3 h-3" />} {madinahBadge}
-                      </span>
-                      <span className="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg text-[11px] flex items-center gap-1">
-                        {madinahHotel?.nightsIcon && <DynamicIcon name={madinahHotel.nightsIcon} className="w-3 h-3" />}
-                        {madinahNights}
-                      </span>
-                    </div>
-                  </div>
+                  )}
                 </div>
               </div>
-            </div>
+            )}
 
             {/* 2. Package Overview (Timeline) */}
             <div>
