@@ -342,7 +342,7 @@ export default function DashboardClient({
   return (
     <div className="max-w-[1550px] mx-auto flex flex-col gap-6 font-sans">
       {/* ── Cinematic Hero Header Banner ── */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#071814] via-[#0E2C24] to-[#004B39] text-white p-6 lg:p-7 border border-[#DB9E30]/25 shadow-2xl">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-primary to-[#071814] text-white p-6 lg:p-7 border border-[#DB9E30]/25 shadow-2xl">
         <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#DB9E30_1px,transparent_1px)] [background-size:20px_20px] pointer-events-none" />
         <div className="absolute -top-32 -right-32 w-80 h-80 bg-gold rounded-full blur-[100px] opacity-20 pointer-events-none" />
 
