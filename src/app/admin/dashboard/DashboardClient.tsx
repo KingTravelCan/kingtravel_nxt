@@ -693,7 +693,14 @@ export default function DashboardClient({
                         )}
                         <div className="text-[9px] text-slate-400 mt-1 flex items-center justify-between">
                           <span>⏱ {act.timeAgo || 'Recently'}</span>
-                          <span className="bg-emerald-100 text-emerald-900 font-bold px-1.5 py-0.2 rounded-xs border border-emerald-200">
+                          <span
+                            style={{
+                              backgroundColor: act.badgeBg || '#D1FAE5',
+                              color: act.badgeTextColor || '#065F46',
+                              borderColor: act.badgeBg ? 'transparent' : '#A7F3D0',
+                            }}
+                            className="font-bold px-1.5 py-0.2 rounded-xs border text-[9px]"
+                          >
                             {act.user}
                           </span>
                         </div>

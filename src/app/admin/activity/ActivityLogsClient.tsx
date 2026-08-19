@@ -24,6 +24,7 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
   const [activities, setActivities] = useState<ActivityItem[]>(initialActivities);
   const [search, setSearch] = useState('');
   const [selectedType, setSelectedType] = useState('all');
+  const [selectedUser, setSelectedUser] = useState('all');
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [justRefreshed, setJustRefreshed] = useState(false);
 
@@ -70,6 +71,15 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
     }
   };
 
+  // Extract all unique users who performed activities
+  const uniqueUsers = Array.from(
+    new Set(
+      activities
+        .map((act) => act.user?.trim())
+        .filter((u): u is string => Boolean(u && u.length > 0))
+    )
+  ).sort();
+
   const filtered = activities.filter((act) => {
     const q = search.trim().toLowerCase();
     const matchesSearch =
@@ -79,7 +89,8 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
       (act.userEmail || '').toLowerCase().includes(q) ||
       (act.details || '').toLowerCase().includes(q);
     const matchesType = selectedType === 'all' || act.type === selectedType;
-    return matchesSearch && matchesType;
+    const matchesUser = selectedUser === 'all' || act.user.toLowerCase() === selectedUser.toLowerCase();
+    return matchesSearch && matchesType && matchesUser;
   });
 
   return (
@@ -94,7 +105,7 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Detailed chronological record of all administrative actions and user CRUD operations.
+            Detailed chronological record of all administrative actions and user CRUD operations across all team members.
           </p>
         </div>
 
@@ -131,8 +142,8 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs">
-        <div className="relative flex-1 w-full max-w-md">
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex-wrap">
+        <div className="relative flex-1 w-full min-w-[240px]">
           <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
@@ -143,22 +154,42 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
           />
         </div>
 
-        <div className="flex items-center gap-2 w-full sm:w-auto">
-          <Filter className="w-4 h-4 text-slate-400" />
-          <select
-            value={selectedType}
-            onChange={(e) => setSelectedType(e.target.value)}
-            className="px-3.5 py-2 border border-slate-200 rounded-xl text-xs bg-white text-slate-700 font-bold outline-none cursor-pointer"
-          >
-            <option value="all">All Entities</option>
-            <option value="users">Users / Login</option>
-            <option value="pages">Pages / CMS</option>
-            <option value="packages">Packages</option>
-            <option value="visas">Visas</option>
-            <option value="enquiries">Enquiries</option>
-            <option value="menus">Menus</option>
-            <option value="settings">Settings</option>
-          </select>
+        <div className="flex items-center gap-2.5 w-full sm:w-auto flex-wrap">
+          {/* User Filter Dropdown */}
+          <div className="flex items-center gap-1.5">
+            <Users className="w-4 h-4 text-slate-400" />
+            <select
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.target.value)}
+              className="px-3.5 py-2 border border-slate-200 rounded-xl text-xs bg-white text-slate-700 font-bold outline-none cursor-pointer hover:border-slate-300 transition-colors"
+            >
+              <option value="all">All Users ({uniqueUsers.length})</option>
+              {uniqueUsers.map((userName) => (
+                <option key={userName} value={userName}>
+                  {userName}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Entity Type Filter Dropdown */}
+          <div className="flex items-center gap-1.5">
+            <Filter className="w-4 h-4 text-slate-400" />
+            <select
+              value={selectedType}
+              onChange={(e) => setSelectedType(e.target.value)}
+              className="px-3.5 py-2 border border-slate-200 rounded-xl text-xs bg-white text-slate-700 font-bold outline-none cursor-pointer hover:border-slate-300 transition-colors"
+            >
+              <option value="all">All Entities</option>
+              <option value="users">Users / Login</option>
+              <option value="pages">Pages / CMS</option>
+              <option value="packages">Packages</option>
+              <option value="visas">Visas</option>
+              <option value="enquiries">Enquiries</option>
+              <option value="menus">Menus</option>
+              <option value="settings">Settings</option>
+            </select>
+          </div>
         </div>
       </div>
 
@@ -229,9 +260,9 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
                   <Activity className="w-8 h-8 text-slate-300 mx-auto mb-2" />
                   <div className="font-bold text-slate-600">No activity log entries found</div>
                   <div className="text-[11px] text-slate-400 mt-0.5">
-                    {search || selectedType !== 'all'
-                      ? 'Try adjusting your search query or entity filter'
-                      : 'Activity logs will appear automatically as administrative actions occur'}
+                    {search || selectedType !== 'all' || selectedUser !== 'all'
+                      ? 'Try adjusting your search query, user filter, or entity filter'
+                      : 'Activity logs will appear automatically as administrative actions occur across all users'}
                   </div>
                 </td>
               </tr>
@@ -264,11 +295,19 @@ export default function ActivityLogsClient({ initialActivities }: ActivityLogsCl
                     </td>
                     <td className="py-3.5 px-4">
                       <div className="flex items-center gap-2.5">
-                        <div className="w-7 h-7 rounded-full bg-[#004B39] text-white font-black text-[11px] flex items-center justify-center shadow-xs shrink-0">
+                        <div
+                          style={{
+                            backgroundColor: act.badgeBg || '#004B39',
+                            color: act.badgeTextColor || '#FFFFFF',
+                          }}
+                          className="w-7 h-7 rounded-full font-black text-[11px] flex items-center justify-center shadow-xs shrink-0"
+                        >
                           {act.user ? act.user.charAt(0).toUpperCase() : 'A'}
                         </div>
                         <div className="min-w-0">
-                          <div className="font-bold text-slate-800 truncate">{act.user}</div>
+                          <div className="font-bold text-slate-800 truncate flex items-center gap-1.5">
+                            <span>{act.user}</span>
+                          </div>
                           {act.userEmail && (
                             <div className="text-[10px] text-slate-400 truncate">{act.userEmail}</div>
                           )}

@@ -13,6 +13,8 @@ export interface ActivityItem {
   action: string;
   user: string;
   userEmail?: string;
+  badgeBg?: string;
+  badgeTextColor?: string;
   details?: string;
   timestamp: string;
   timeAgo?: string;
@@ -44,18 +46,22 @@ export async function logAdminActivityAction(entry: {
   action: string;
   user?: string;
   userEmail?: string;
+  badgeBg?: string;
+  badgeTextColor?: string;
   details?: string;
 }) {
   try {
     let resolvedUser = entry.user;
     let resolvedEmail = entry.userEmail;
+    let resolvedBadgeBg = entry.badgeBg;
+    let resolvedBadgeTextColor = entry.badgeTextColor;
 
-    if (!resolvedUser) {
+    if (!resolvedUser || !resolvedBadgeBg) {
       try {
         const session = await getCurrentSession();
         if (session) {
-          resolvedUser = session.name || session.email;
-          resolvedEmail = session.email;
+          resolvedUser = resolvedUser || session.name || session.email;
+          resolvedEmail = resolvedEmail || session.email;
         }
       } catch (sessionErr) {
         // Ignore session extraction error
@@ -68,6 +74,8 @@ export async function logAdminActivityAction(entry: {
       action: entry.action,
       user: resolvedUser || 'Administrator',
       userEmail: resolvedEmail || undefined,
+      badgeBg: resolvedBadgeBg || undefined,
+      badgeTextColor: resolvedBadgeTextColor || undefined,
       details: entry.details,
       timestamp: new Date().toISOString(),
       timeAgo: 'Just now',
