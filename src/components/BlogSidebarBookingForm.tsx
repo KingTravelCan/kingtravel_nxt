@@ -383,9 +383,9 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
         {/* Submit CTA Button */}
         <button
           type="submit"
-          className="w-full bg-gold hover:bg-primary text-black hover:text-white font-semibold py-3.5 px-4 rounded-md text-sm transition-all duration-300 shadow-lg shadow-emerald-900/20 flex items-center justify-center gap-2 group cursor-pointer mt-4"
+          className="w-full bg-gold text-ink font-extrabold py-3.5 px-6 rounded-sm shadow-md hover:bg-gold-lt active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
         >
-          <TicketPercent className="w-4 h-4" />
+          <TicketPercent className="w-4 h-4 mr-2" />
           <span>Submit Inquiry</span>
         </button>
 

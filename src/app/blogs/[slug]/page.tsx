@@ -246,7 +246,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 <div className="px-5 py-4 border-t border-slate-100">
                   <Link
                     href="/blogs"
-                    className="block w-full text-center text-xs font-bold text-[#004B39] py-2.5 rounded-xl border-2 border-[#004B39]/20 hover:border-[#004B39] hover:bg-emerald-50 transition-all no-underline"
+                    className="block w-full text-center text-xs font-bold text-[#004B39] py-2.5 rounded-md border border-[#004B39]/20 text-[11px] font-extrabold text-[#004B39] hover:bg-[#004B39] hover:text-white hover:border-[#004B39] transition-all no-underline"
                   >
                     View All Articles →
                   </Link>
@@ -322,9 +322,9 @@ function SidebarPackageSection({
 
             const price = pkg.startingPrice
               ? Number(pkg.startingPrice).toLocaleString('en-CA', {
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-                })
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              })
               : null;
 
             return (
