@@ -304,7 +304,7 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
                 type="text"
                 value={inc.icon || ''}
                 onChange={e => updateIncludes(idx, { ...inc, icon: e.target.value })}
-                placeholder="Lucide Icon (e.g. Plane)"
+                placeholder="Lucide/Dynamic Icons"
                 className="w-1/3 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs"
               />
               <input

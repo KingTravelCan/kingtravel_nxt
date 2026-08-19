@@ -192,9 +192,9 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
   const includes: IncludeItem[] = Array.isArray(cd.includes)
     ? cd.includes.map((item: any) =>
       typeof item === 'string'
-        ? { icon: 'Check', text: item }
+        ? { icon: '', text: item }
         : {
-          icon: item?.icon || 'Check',
+          icon: item?.icon || '',
           text: item?.text || '',
         }
     )
@@ -311,7 +311,7 @@ function UmrahCardFields({ pkgData, setPkgData }: { pkgData: any; setPkgData: (v
                 type="text"
                 value={inc.icon || ''}
                 onChange={e => updateIncludes(idx, { ...inc, icon: e.target.value })}
-                placeholder="Lucide Icon (e.g. Plane)"
+                placeholder="Lucide/Dynamic Icon"
                 className="w-1/3 px-2.5 py-1.5 rounded-lg border border-slate-200 text-xs"
               />
               <input
@@ -547,11 +547,10 @@ export default function EditPackageClient({ packageData }: EditPackageClientProp
                     <select
                       value={editingPkg.status || 'available'}
                       onChange={e => setEditingPkg({ ...editingPkg, status: e.target.value as any })}
-                      className={`flex-1 px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:border-[#004B39] bg-white ${
-                        editingPkg.status === 'available' ? '!text-emerald-600' :
+                      className={`flex-1 px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:border-[#004B39] bg-white ${editingPkg.status === 'available' ? '!text-emerald-600' :
                         editingPkg.status === 'coming_soon' ? '!text-amber-500' :
-                        '!text-slate-500'
-                      }`}
+                          '!text-slate-500'
+                        }`}
                     >
                       <option value="available" className="text-emerald-600 font-semibold">● Available</option>
                       <option value="coming_soon" className="text-amber-500 font-semibold">● Coming Soon</option>

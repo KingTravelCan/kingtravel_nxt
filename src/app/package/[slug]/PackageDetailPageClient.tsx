@@ -171,49 +171,43 @@ export default function PackageDetailPageClient({
   const madinahNights = rawMadinahHotel.nights || (dbMadinahHotel?.nights ? `${dbMadinahHotel.nights} Nights Stay` : "");
   const madinahNightsIcon = rawMadinahHotel.nightsIcon || "";
 
-  const overviewArray = detailData.overview?.length > 0 ? detailData.overview : [
-    {
-      heading: "DURING STAY AT MADINAH - Hotel close to Haram (Breakfast & Dinner)",
-      details: [
-        "01 Dhul-Hajjah Check in at Madinah hotel and spend time in Prophet's Mosque",
-        "02 Dhul-Hajjah Spend time in Haram",
-        "03 Dhul-Hajjah Leave for Ziarat in Madinah at 08:00 am",
-        "04 Dhul-Hajjah Check out from Madinah and Leave for Makkah Aziziya by air-conditioned coach"
-      ]
-    },
-    {
-      heading: "DURING STAY AT AZIZIYA - Hotel (Full Board)",
-      details: ["04 - 07 Dhul-Hajjah Stay at Aziziya Accommodation."]
-    },
-    {
-      heading: "DURING STAY AT MINA - Near Jamarat Maktab-A-Category (Full Board)",
-      details: ["07 - 12 Dhul-Hajjah Rituals at Mina / Arafat / Muzalfa."]
-    },
-    {
-      heading: "DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)",
-      details: [
-        "12 to 14 Dhul-Hajjah Stay and preparation for departure.",
-        "14 Dhul-Hajjah Check out from Aziziya and leave for Jeddah airport for departure to Toronto."
-      ]
-    }
-  ];
+  const rawOverview = detailData.overview || pkg.overview;
+  const overviewArray: { heading: string; details: string[] }[] = Array.isArray(rawOverview)
+    ? rawOverview
+      .map((block: any) => {
+        if (!block) return null;
+        if (typeof block === 'string') {
+          return { heading: block, details: [] };
+        }
+        const heading = block.groupTitle || block.heading || block.title || "";
+        const rawItems = block.items || block.details || [];
+        const details = Array.isArray(rawItems)
+          ? rawItems.filter(Boolean)
+          : typeof rawItems === 'string'
+            ? rawItems.split('\n').map((s: string) => s.trim()).filter(Boolean)
+            : [];
+        if (!heading && details.length === 0) return null;
+        return { heading, details };
+      })
+      .filter(Boolean) as { heading: string; details: string[] }[]
+    : [];
 
-  const highlightsList = detailData.highlights?.length > 0 ? detailData.highlights : [
-    "Group Will Be Led By A Qualified Imam",
-    "Free Complete Ahram Kit Provided To Pilgrims",
-    "Before Departure we offer Seminar with Dinner & Hajj under the Imam Guidance",
-    "Flexible Dates are Available",
-    "Qurbani Not Included"
-  ];
+  const rawHighlights = detailData.highlights || pkg.highlights;
+  const highlightsList: { text: string; isCross: boolean }[] = Array.isArray(rawHighlights)
+    ? rawHighlights.map((hl: any) => {
+      if (typeof hl === 'string') return { text: hl, isCross: false };
+      return { text: hl.text || '', isCross: !!hl.isCross };
+    }).filter((hl: any) => !!hl.text)
+    : [];
 
-  const eligibilityList = detailData.eligibility?.length > 0 ? detailData.eligibility : [
-    "Canadian & U.S. citizens with Pakistan Passports.",
-    "Pakistani Passport holders with Canadian PR or American Green Cards.",
-    "All Foreign Passport holders with Pakistan Passports.",
-    "Side trips to Pakistan or any other destination available with an additional cost."
-  ];
+  const rawEligibility = detailData.eligibility || pkg.eligibility;
+  const eligibilityList: string[] = Array.isArray(rawEligibility)
+    ? rawEligibility.filter(Boolean)
+    : typeof rawEligibility === 'string'
+      ? rawEligibility.split('\n').map((s: string) => s.trim()).filter(Boolean)
+      : [];
 
-  const importantNotice = detailData.importantNotice || "To secure your visa slot, please make sure your Canadian passport is valid for at least 6 months beyond travel dates, and you have completed all mandatory immunizations required by the Saudi Ministry of Hajj.";
+  const importantNotice = detailData.importantNotice || detailData.importantBooking || pkg.importantNotice || "";
 
   // Gallery is intentionally Umrah-only. Existing Hajj pages are unchanged.
   const rawPackagesGallery = pkg.packagesGallery ?? [];
@@ -245,16 +239,10 @@ export default function PackageDetailPageClient({
     setGalleryOpenIndex((galleryOpenIndex + 1) % packagesGallery.length);
   };
 
-  const faqs = detailData.faqs?.length > 0 ? detailData.faqs : [
-    {
-      question: "Can I upgrade to double or triple occupancy?",
-      answer: "Yes! Upgrades to Double or Triple occupancy are available upon request. Please select your occupancy preference or contact our support team during booking."
-    },
-    {
-      question: "Are flights included in the CAD package price?",
-      answer: "Yes, round-trip flights from Canada to Saudi Arabia are fully included in the package pricing."
-    }
-  ];
+  const rawFaqs = detailData.faqs || pkg.faqs;
+  const faqs: { question: string; answer: string }[] = Array.isArray(rawFaqs)
+    ? rawFaqs.filter((f: any) => f && (f.question || f.answer))
+    : [];
 
   return (
     <div className="bg-[#faf7f2] min-h-screen text-slate-800">
@@ -451,87 +439,95 @@ export default function PackageDetailPageClient({
             )}
 
             {/* 2. Package Overview (Timeline) */}
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
-                Package Overview
-              </h3>
-              <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-md space-y-6">
-                {overviewArray.map((block: any, bIdx: number) => {
-                  const heading = block.heading;
-                  const details = block.details || [];
+            {overviewArray.length > 0 && (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
+                  Package Overview
+                </h3>
+                <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200/80 shadow-md space-y-6">
+                  {overviewArray.map((block: any, bIdx: number) => {
+                    const heading = block.heading;
+                    const details = block.details || [];
 
-                  return (
-                    <div key={bIdx} className="relative pl-6 border-l-2 border-[#004B39] space-y-2">
-                      <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#004B39] border-2 border-white" />
-                      <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
-                        {heading}
-                      </h4>
-                      {details.length > 0 && (
-                        <ul className="space-y-1.5 pt-1">
-                          {details.map((d: string, dIdx: number) => (
-                            <li key={dIdx} className="text-xs sm:text-sm text-slate-600 leading-relaxed flex items-start gap-2">
-                              <span className="text-gold font-bold text-xs mt-0.5">•</span>
-                              <span>{d}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  );
-                })}
+                    return (
+                      <div key={bIdx} className="relative pl-6 border-l-2 border-[#004B39] space-y-2">
+                        <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-[#004B39] border-2 border-white" />
+                        {heading && (
+                          <h4 className="font-bold text-slate-900 text-sm sm:text-base leading-snug">
+                            {heading}
+                          </h4>
+                        )}
+                        {details.length > 0 && (
+                          <ul className="space-y-1.5 pt-1">
+                            {details.map((d: string, dIdx: number) => (
+                              <li key={dIdx} className="text-xs sm:text-sm text-slate-600 leading-relaxed flex items-start gap-2">
+                                <span className="text-gold font-bold text-xs mt-0.5">•</span>
+                                <span>{d}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* 3. Package Highlights & Eligibility (Side-by-Side Cards) */}
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
-                Highlights & Eligibility
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Highlights */}
-                <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
-                  <h4 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
-                    {/* <Star className="w-5 h-5 fill-amber-400 text-amber-500" />  */}
-                    ⭐️
-                    Package Highlights
-                  </h4>
-                  <ul className="space-y-3">
-                    {highlightsList.map((hl: string, idx: number) => {
-                      const isNotIncluded = hl.toLowerCase().includes("not included");
-                      return (
-                        <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                          {isNotIncluded ? (
-                            <span className="text-red-500 font-bold shrink-0 text-base leading-none">✕</span>
-                          ) : (
-                            <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
-                          )}
-                          <span className={isNotIncluded ? "text-red-500" : "font-medium"}>
-                            {hl}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
+            {(highlightsList.length > 0 || eligibilityList.length > 0) && (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
+                  Highlights & Eligibility
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Highlights */}
+                  {highlightsList.length > 0 && (
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
+                      <h4 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
+                        ⭐️
+                        Package Highlights
+                      </h4>
+                      <ul className="space-y-3">
+                        {highlightsList.map((hl: any, idx: number) => {
+                          const isCross = !!hl.isCross;
+                          return (
+                            <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                              {isCross ? (
+                                <span className="text-red-500 font-bold shrink-0 text-base leading-none">✕</span>
+                              ) : (
+                                <span className="text-amber-500 font-bold shrink-0 text-base leading-none">✦</span>
+                              )}
+                              <span className={isCross ? "text-red-500" : "font-medium"}>
+                                {hl.text}
+                              </span>
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  )}
 
-                {/* Eligibility Requirements */}
-                <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
-                  <h4 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
-                    {/* <Check className="w-5 h-5 text-emerald-600" />  */}
-                    📋
-                    Eligibility Requirements
-                  </h4>
-                  <ul className="space-y-3">
-                    {eligibilityList.map((el: string, idx: number) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
-                        <span className="text-emerald-600 font-bold shrink-0 text-base leading-none">✓</span>
-                        <span className="font-medium">{el}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Eligibility Requirements */}
+                  {eligibilityList.length > 0 && (
+                    <div className="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-md">
+                      <h4 className="text-lg font-bold font-serif text-slate-900 mb-4 flex items-center gap-2">
+                        📋
+                        Eligibility Requirements
+                      </h4>
+                      <ul className="space-y-3">
+                        {eligibilityList.map((el: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                            <span className="text-emerald-600 font-bold shrink-0 text-base leading-none">✓</span>
+                            <span className="font-medium">{el}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
+            )}
 
             {/* 4. Package Gallery */}
             {packagesGallery.length > 0 && (
@@ -574,54 +570,58 @@ export default function PackageDetailPageClient({
             )}
 
             {/* 5. Important Booking Notice */}
-            <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-5 sm:p-6 flex items-start gap-4 shadow-sm">
-              <div className="p-2.5 bg-amber-500/10 rounded-xl shrink-0">
-                <AlertCircle className="w-6 h-6 text-amber-700" />
+            {importantNotice && (
+              <div className="bg-amber-50/80 border border-amber-200/80 rounded-2xl p-5 sm:p-6 flex items-start gap-4 shadow-sm">
+                <div className="p-2.5 bg-amber-500/10 rounded-xl shrink-0">
+                  <AlertCircle className="w-6 h-6 text-amber-700" />
+                </div>
+                <div className="space-y-1">
+                  <h4 className="font-bold text-amber-950 text-sm">Important Booking Notice</h4>
+                  <p className="text-xs text-amber-900/80 leading-relaxed font-medium">
+                    {importantNotice}
+                  </p>
+                </div>
               </div>
-              <div className="space-y-1">
-                <h4 className="font-bold text-amber-950 text-sm">Important Booking Notice</h4>
-                <p className="text-xs text-amber-900/80 leading-relaxed font-medium">
-                  {importantNotice}
-                </p>
-              </div>
-            </div>
+            )}
 
             {/* 6. Frequently Asked Questions (Accordion) */}
-            <div>
-              <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
-                Frequently Asked Questions
-              </h3>
-              <div className="space-y-3">
-                {faqs.map((faq: any, idx: number) => {
-                  const isOpenItem = openFaqIdx === idx;
-                  return (
-                    <div
-                      key={idx}
-                      className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm transition-all"
-                    >
-                      <button
-                        onClick={() => setOpenFaqIdx(isOpenItem ? null : idx)}
-                        className="w-full p-5 text-left flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors"
+            {faqs.length > 0 && (
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-800 mb-5">
+                  Frequently Asked Questions
+                </h3>
+                <div className="space-y-3">
+                  {faqs.map((faq: any, idx: number) => {
+                    const isOpenItem = openFaqIdx === idx;
+                    return (
+                      <div
+                        key={idx}
+                        className="bg-white rounded-2xl border border-slate-200/80 overflow-hidden shadow-sm transition-all"
                       >
-                        <span className="font-bold text-slate-900 text-sm sm:text-base">
-                          {faq.question}
-                        </span>
-                        {isOpenItem ? (
-                          <ChevronUp className="w-5 h-5 text-slate-400 shrink-0" />
-                        ) : (
-                          <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
+                        <button
+                          onClick={() => setOpenFaqIdx(isOpenItem ? null : idx)}
+                          className="w-full p-5 text-left flex justify-between items-center gap-4 hover:bg-slate-50 transition-colors"
+                        >
+                          <span className="font-bold text-slate-900 text-sm sm:text-base">
+                            {faq.question}
+                          </span>
+                          {isOpenItem ? (
+                            <ChevronUp className="w-5 h-5 text-slate-400 shrink-0" />
+                          ) : (
+                            <ChevronDown className="w-5 h-5 text-slate-400 shrink-0" />
+                          )}
+                        </button>
+                        {isOpenItem && (
+                          <div className="px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
+                            {faq.answer}
+                          </div>
                         )}
-                      </button>
-                      {isOpenItem && (
-                        <div className="px-5 pb-5 text-xs sm:text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                          {faq.answer}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
           </div>
 
