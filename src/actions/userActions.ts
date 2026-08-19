@@ -16,10 +16,10 @@ async function ensureUserColumnsExist() {
   ensureColumnsRan = true;
   try {
     await db.execute(sql`ALTER TABLE \`users\` ADD COLUMN \`badge_bg\` varchar(32) DEFAULT '#0F766E'`);
-  } catch (e) {}
+  } catch (e) { }
   try {
     await db.execute(sql`ALTER TABLE \`users\` ADD COLUMN \`badge_text_color\` varchar(32) DEFAULT '#FFFFFF'`);
-  } catch (e) {}
+  } catch (e) { }
 }
 
 export interface UserPresenceInfo {
@@ -146,8 +146,8 @@ export async function getUsersList() {
 
     // If database table is empty, seed default admin user into database
     if (!list || list.length === 0) {
-      const initEmail = (process.env.INITIAL_ADMIN_EMAIL || 'hassan@kingtravelcan.com').trim().toLowerCase();
-      const initPwd = process.env.INITIAL_ADMIN_PASSWORD || 'Kingtravel$@hassan';
+      const initEmail = (process.env.INITIAL_ADMIN_EMAIL || '').trim().toLowerCase();
+      const initPwd = process.env.INITIAL_ADMIN_PASSWORD || '';
       const defaultUser = {
         name: 'Hassan',
         email: initEmail,
@@ -304,7 +304,7 @@ export async function deleteUserAction(id: number) {
       if (found && found.length > 0) {
         userName = `"${found[0].name}" (${found[0].email})`;
       }
-    } catch (e) {}
+    } catch (e) { }
 
     await db.delete(users).where(eq(users.id, id));
 
