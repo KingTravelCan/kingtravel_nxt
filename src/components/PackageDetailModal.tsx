@@ -575,18 +575,25 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
                     Package Type
                   </label>
-                  <select
-                    value={selectedPackageType}
-                    onChange={(e) => setSelectedPackageType(e.target.value)}
-                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer"
-                  >
-                    <option value="" className="bg-white text-slate-900">Select Package Type</option>
-                    {packagePrices.map((item, idx) => (
-                      <option key={idx} value={item.packageType} className="bg-white text-slate-900">
-                        CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={selectedPackageType}
+                      onChange={(e) => setSelectedPackageType(e.target.value)}
+                      className="w-full bg-white border border-slate-200 rounded-xl p-3.5 pr-9 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none appearance-none cursor-pointer"
+                    >
+                      <option value="" className="bg-white text-slate-900">Select Package Type</option>
+                      {packagePrices.map((item, idx) => (
+                        <option key={idx} value={item.packageType} className="bg-white text-slate-900">
+                          CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Total Calculation Display */}

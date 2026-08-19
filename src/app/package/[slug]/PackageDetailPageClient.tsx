@@ -1023,22 +1023,29 @@ export default function PackageDetailPageClient({
                   <label className="block text-xs font-bold text-slate-700 mb-1">
                     Package Type
                   </label>
-                  <select
-                    value={selectedPackageType}
-                    onChange={(e) => {
-                      setSelectedPackageType(e.target.value);
-                      if (errors.selectedPackageType) setErrors((prev) => ({ ...prev, selectedPackageType: false }));
-                    }}
-                    className={`w-full border border-line p-3 pr-8 rounded-sm bg-white outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat cursor-pointer ${errors.selectedPackageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
-                      }`}
-                  >
-                    <option value="" className="bg-white text-slate-900">Select Package Type</option>
-                    {packagePrices.map((item, idx) => (
-                      <option key={idx} value={item.packageType} className="bg-white text-slate-900">
-                        CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="relative">
+                    <select
+                      value={selectedPackageType}
+                      onChange={(e) => {
+                        setSelectedPackageType(e.target.value);
+                        if (errors.selectedPackageType) setErrors((prev) => ({ ...prev, selectedPackageType: false }));
+                      }}
+                      className={`w-full border border-line p-3 pr-9 rounded-sm bg-white outline-none focus:border-gold transition-colors text-ink text-sm font-medium appearance-none cursor-pointer ${errors.selectedPackageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+                        }`}
+                    >
+                      <option value="" className="bg-white text-ink py-1">Select Package Type</option>
+                      {packagePrices.map((item, idx) => (
+                        <option key={idx} value={item.packageType} className="bg-white text-ink py-1">
+                          CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
+                        </option>
+                      ))}
+                    </select>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  </div>
                   {errors.selectedPackageType && (
                     <span className="text-[10px] font-bold text-red-600 mt-1 block">Please select a package type.</span>
                   )}
@@ -1046,8 +1053,8 @@ export default function PackageDetailPageClient({
 
                 {/* Total Calculation Display */}
                 <div className="pt-2 flex justify-between items-center">
-                  <span className="text-xs font-bold text-slate-500">Estimated Total</span>
-                  <span className="text-xl font-black text-slate-900 font-serif">
+                  <span className="text-xs font-bold text-ink">Estimated Total</span>
+                  <span className="text-xl font-black text-ink font-serif">
                     {estimatedTotalFormatted ? `${currencyCode} ${estimatedTotalFormatted}` : "—"}
                   </span>
                 </div>
