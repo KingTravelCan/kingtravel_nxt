@@ -30,11 +30,18 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
     if (/\d/.test(password)) strength += 1;
     if (/[^a-zA-Z\d]/.test(password)) strength += 1;
 
-    if (password.length === 0) return { label: '', percent: 0, color: 'bg-transparent' };
-    if (strength <= 1) return { label: 'Weak', percent: 25, color: 'bg-red-500', textColor: 'text-red-500' };
-    if (strength === 2) return { label: 'Average', percent: 50, color: 'bg-orange-500', textColor: 'text-orange-500' };
-    if (strength === 3) return { label: 'Normal', percent: 75, color: 'bg-yellow-500', textColor: 'text-yellow-500' };
-    return { label: 'Strong', percent: 100, color: 'bg-green-500', textColor: 'text-green-500' };
+    switch (strength) {
+      case 0:
+      case 1:
+        return { percent: 25, label: 'Weak', color: 'bg-red-500', textColor: 'text-red-400' };
+      case 2:
+        return { percent: 50, label: 'Fair', color: 'bg-orange-500', textColor: 'text-orange-400' };
+      case 3:
+        return { percent: 75, label: 'Good', color: 'bg-yellow-500', textColor: 'text-yellow-400' };
+      case 4:
+      default:
+        return { percent: 100, label: 'Strong', color: 'bg-emerald-500', textColor: 'text-emerald-400' };
+    }
   };
 
   const pwStrength = calculateStrength(passwordInput);
@@ -121,7 +128,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
       )}
 
       {/* Card Wrapper */}
-      <div className="w-full max-w-md bg-[#132723]/95 backdrop-blur-md rounded-2xl shadow-[0_24px_60px_rgba(0,0,0,0.7)] p-8 border border-[#DB9E30]/25 relative z-10">
+      <div className="w-full max-w-md bg-[#132723]/50 backdrop-blur-md rounded-2xl shadow-[0_24px_60px_rgba(0,0,0,0.7)] p-8 border border-[#DB9E30]/25 relative z-10">
 
         {/* Header Branding */}
         <div className="text-center mb-6">
@@ -180,11 +187,11 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                 type="email"
                 name="email"
                 required
-                className={`w-full px-4 py-3 text-sm bg-gold/30 text-white rounded-xl outline-none transition placeholder:text-white ${error
+                className={`w-full px-4 py-3 text-sm bg-gold/30 !text-white rounded-md outline-none transition !placeholder:text-slate-200 ${error
                   ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
                   : 'border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]'
                   }`}
-                placeholder="user@kingtravelcan.com"
+              // placeholder="Email"
               />
             </div>
 
@@ -193,13 +200,6 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                 <label className={`block text-[11px] font-bold uppercase tracking-wider ${error ? 'text-red-400' : 'text-[#EAEAE4]'}`}>
                   Password
                 </label>
-                <button
-                  type="button"
-                  onClick={() => { setFlowType('forgot_password'); setError(null); setSuccessMsg(null); }}
-                  className="text-[10px] font-bold text-gold hover:text-white transition-colors uppercase tracking-wider"
-                >
-                  Forgot Password?
-                </button>
               </div>
               <div className="relative flex items-center">
                 <input
@@ -208,17 +208,17 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                   required
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className={`w-full px-4 py-3 text-sm bg-gold/30 text-white rounded-xl outline-none transition placeholder:text-white ${error
+                  className={`w-full px-4 py-3 text-sm bg-gold/30 !text-white rounded-md outline-none transition !placeholder:text-slate-200 ${error
                     ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
                     : 'border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]'
                     }`}
-                  placeholder="••••••••••••"
+                // placeholder="Password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 text-[#EAEAE4]/60 hover:text-gold transition p-1 text-sm focus:outline-none"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  className="absolute right-3 text-[#EAEAE4]/60 hover:text-white transition p-1 text-sm focus:outline-none"
+                  aria-label={showPassword ? "Hide Password" : "Show Password"}
                 >
                   {showPassword ? (
                     <i className="fa-solid fa-eye"></i>
@@ -227,25 +227,20 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                   )}
                 </button>
               </div>
-
-              {/* Password Strength Indicator */}
-              {passwordInput.length > 0 && (
-                <div className="mt-3">
-                  <div className="w-full bg-[#1A332E] h-1.5 rounded-full overflow-hidden">
-                    <div className={`h-full transition-all duration-300 ${pwStrength.color}`} style={{ width: `${pwStrength.percent}%` }}></div>
-                  </div>
-                  <div className="flex justify-between items-end text-[10px] uppercase font-bold tracking-wider mt-1.5">
-                    <span className={pwStrength.textColor}>{pwStrength.label}</span>
-                  </div>
-                </div>
-              )}
+              <button
+                type="button"
+                onClick={() => { setFlowType('forgot_password'); setError(null); setSuccessMsg(null); }}
+                className="text-[10px] font-bold text-gold hover:text-white transition-colors uppercase tracking-wider"
+              >
+                Forgot Password?
+              </button>
             </div>
 
             <div className="pt-2">
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gold hover:bg-[#E7BE6E] text-[#132723] font-bold text-sm py-3.5 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
+                className="w-full bg-gold hover:bg-[#E7BE6E] text-black font-bold text-sm py-3.5 rounded-md shadow-lg transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
               >
                 {loading ? 'Authenticating...' : 'Sign In to Portal →'}
               </button>
@@ -263,7 +258,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                 type="email"
                 name="email"
                 required
-                className={`w-full px-4 py-3 text-sm bg-[#0c1a17] text-white rounded-xl outline-none transition placeholder:text-gray-500 ${error
+                className={`w-full px-4 py-3 text-sm bg-[#0c1a17] !text-white rounded-md outline-none transition !placeholder:text-gray-500 ${error
                   ? 'border-2 border-red-500 focus:ring-2 focus:ring-red-500 focus:border-red-500'
                   : 'border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]'
                   }`}
@@ -275,14 +270,14 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gold hover:bg-[#E7BE6E] text-[#132723] font-bold text-sm py-3.5 rounded-xl shadow-lg transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer mb-3"
+                className="w-full bg-gold hover:bg-[#E7BE6E] text-[#132723] font-bold text-sm py-3.5 rounded-md shadow-lg transition duration-200 flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer mb-3"
               >
                 {loading ? 'Verifying...' : 'Verify Email'}
               </button>
               <button
                 type="button"
                 onClick={() => { setFlowType('login'); setError(null); setSuccessMsg(null); }}
-                className="w-full bg-transparent hover:bg-white/5 text-[#EAEAE4] border border-[#EAEAE4]/20 font-bold text-sm py-3.5 rounded-xl transition duration-200 flex items-center justify-center gap-2"
+                className="w-full bg-transparent hover:bg-white/5 text-[#EAEAE4] border border-[#EAEAE4]/20 font-bold text-sm py-3.5 rounded-md transition duration-200 flex items-center justify-center gap-2"
               >
                 ← Back to Login
               </button>
@@ -303,7 +298,7 @@ export default function LetsTravelPageClient({ initialIdentity, initialLoginAuth
                   required
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className={`w-full px-4 py-3 text-sm bg-[#0c1a17] text-white rounded-xl outline-none transition placeholder:text-gray-500 pr-10 border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]`}
+                  className={`w-full px-4 py-3 text-sm bg-[#0c1a17] !text-white rounded-md outline-none transition !placeholder:text-gray-500 pr-10 border border-[#E4DAC0]/20 focus:ring-2 focus:ring-[#DB9E30] focus:border-[#DB9E30]`}
                   placeholder="••••••••••••"
                 />
                 <button

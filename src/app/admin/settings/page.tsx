@@ -2742,6 +2742,53 @@ export default function AdminSettingsPage() {
                             {showModalPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                           </button>
                         </div>
+
+                        {/* Password Strength Indicator */}
+                        {userFormData.password && userFormData.password.length > 0 && (() => {
+                          const pw = userFormData.password;
+                          let strength = 0;
+                          if (pw.length >= 8) strength += 1;
+                          if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) strength += 1;
+                          if (/\d/.test(pw)) strength += 1;
+                          if (/[^a-zA-Z\d]/.test(pw)) strength += 1;
+
+                          let label = 'Weak';
+                          let percent = 25;
+                          let color = 'bg-red-500';
+                          let textColor = 'text-red-500';
+
+                          if (strength === 2) {
+                            label = 'Average';
+                            percent = 50;
+                            color = 'bg-orange-500';
+                            textColor = 'text-orange-500';
+                          } else if (strength === 3) {
+                            label = 'Normal';
+                            percent = 75;
+                            color = 'bg-yellow-500';
+                            textColor = 'text-yellow-600';
+                          } else if (strength >= 4) {
+                            label = 'Strong';
+                            percent = 100;
+                            color = 'bg-emerald-600';
+                            textColor = 'text-emerald-700';
+                          }
+
+                          return (
+                            <div className="mt-2.5">
+                              <div className="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden">
+                                <div
+                                  className={`h-full transition-all duration-300 ${color}`}
+                                  style={{ width: `${percent}%` }}
+                                ></div>
+                              </div>
+                              <div className="flex justify-between items-center text-[10px] uppercase font-extrabold tracking-wider mt-1">
+                                <span className={textColor}>{label}</span>
+                                <span className="text-slate-400 font-semibold lowercase">{percent}% secure</span>
+                              </div>
+                            </div>
+                          );
+                        })()}
                       </div>
 
                       <div className="grid grid-cols-2 gap-4">
