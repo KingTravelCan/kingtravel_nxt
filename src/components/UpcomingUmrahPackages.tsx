@@ -5,7 +5,15 @@ import { usePathname } from "next/navigation";
 import * as LucideIcons from "lucide-react";
 import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
 import PackageBookingModal from "@/components/PackageBookingModal";
-export default function UpcomingUmrahPackages({ data, initialPackages }: { data: any, initialPackages?: any }) {
+export default function UpcomingUmrahPackages({
+  data,
+  initialPackages,
+  pageData,
+}: {
+  data: any;
+  initialPackages?: any;
+  pageData?: any;
+}) {
   const pathname = usePathname();
   const eyebrow = data?.eyebrow || "EXCLUSIVE UPCOMING";
   const title = data?.title || "Umrah Packages<br />from Canada";
@@ -14,6 +22,23 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
     data?.subtext ||
     "Departures from CAD 2,595 per person. Availability and accommodations are confirmed with every booking — contact us before reserving.";
 
+  const isUmrahListingPage =
+    pathname === "/umrah-packages" ||
+    pathname === "/umrah" ||
+    pathname?.startsWith("/umrah") ||
+    pageData?.slug === "/umrah-packages" ||
+    pageData?.slug === "umrah-packages";
+
+  const isHomepage =
+    pathname === "/" ||
+    pathname === "" ||
+    pathname === "/home" ||
+    pageData?.slug === "/" ||
+    pageData?.slug === "" ||
+    pageData?.slug === "/home" ||
+    pageData?.slug === "home" ||
+    (!isUmrahListingPage && (!pathname || pathname === "/"));
+
   const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
   const [loading, setLoading] = useState(!initialPackages);
   const [bookingModalOpen, setBookingModalOpen] = useState(false);
@@ -21,7 +46,6 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
 
   useEffect(() => {
     const packageIds = data?.packageIds || [];
-    const isUmrahListingPage = pathname === "/umrah-packages";
 
     // The main Umrah listing page must always show every non-draft, non-sold-out
     // Umrah package from the database. Ignore CMS-selected packageIds here.
@@ -60,12 +84,14 @@ export default function UpcomingUmrahPackages({ data, initialPackages }: { data:
         .catch(() => setPkgs([]))
         .finally(() => setLoading(false));
     }
-  }, [data?.packageIds, initialPackages, pathname]);
+  }, [data?.packageIds, initialPackages, pathname, isUmrahListingPage]);
 
   // Homepage should only show the first 4 Umrah packages.
-  const displayedPkgs = pathname === "/" ? pkgs.slice(0, 4) : pkgs;
+  const displayedPkgs = isHomepage ? pkgs.slice(0, 4) : pkgs;
+  const sectionBgClass = isUmrahListingPage ? "bg-sage" : isHomepage ? "bg-white" : (pathname === "/" ? "bg-white" : "bg-sage");
+
   return (
-    <section className={`py-12 md:py-16 ${pathname === '/' ? 'bg-white' : 'bg-sage'}`}>
+    <section className={`py-12 md:py-16 ${sectionBgClass}`}>
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-10 md:mb-16 gap-6 text-center md:text-left">

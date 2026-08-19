@@ -202,8 +202,8 @@ function Cinematic3DPieChart({
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 className={`p-3 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-between ${isHovered
-                    ? `${s.bgLight} ${s.borderLight} shadow-md translate-x-1 scale-[1.02]`
-                    : `${s.bgLight} border-slate-100/70 hover:border-slate-200`
+                  ? `${s.bgLight} ${s.borderLight} shadow-md translate-x-1 scale-[1.02]`
+                  : `${s.bgLight} border-slate-100/70 hover:border-slate-200`
                   }`}
               >
                 <div className="flex items-center gap-2.5">
@@ -622,7 +622,7 @@ export default function DashboardClient({
                 <div className="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
                   <Activity className="w-4 h-4 text-emerald-700" /> Recent Activity
                 </div>
-                <p className="text-[11px] text-white mt-0.5 mb-0">
+                <p className="text-[11px] text-slate-500 mt-0.5 mb-0">
                   Real-time action audit trail
                 </p>
               </div>
@@ -640,19 +640,15 @@ export default function DashboardClient({
               {Object.entries(TYPE_CONFIG).map(([key, cfg]) => (
                 <span
                   key={key}
-                  ref={(el) => {
-                    if (el) {
-                      el.style.backgroundColor = cfg.bg;
-                      el.style.color = cfg.text;
-                      el.style.borderColor = cfg.border;
-                    }
+                  style={{
+                    backgroundColor: cfg.bg,
+                    color: cfg.text,
+                    borderColor: cfg.border,
                   }}
                   className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border"
                 >
                   <span
-                    ref={(dot) => {
-                      if (dot) dot.style.backgroundColor = cfg.dot;
-                    }}
+                    style={{ backgroundColor: cfg.dot }}
                     className="w-1.5 h-1.5 rounded-full"
                   />
                   {cfg.label}
@@ -662,50 +658,53 @@ export default function DashboardClient({
 
             {/* Activity List */}
             <div className="flex flex-col gap-3 max-h-[300px] overflow-y-auto pr-1">
-              {initialActivities.slice(0, 6).map((act) => {
-                const cfg = TYPE_CONFIG[act.type] || TYPE_CONFIG.pages;
-                return (
-                  <div key={act.id} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/90 border border-slate-200/60 shadow-2xs">
-                    <span
-                      ref={(dot) => {
-                        if (dot) dot.style.backgroundColor = cfg.dot;
-                      }}
-                      className="w-2.5 h-2.5 rounded-full mt-1 shrink-0"
-                      title={cfg.label}
-                    />
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="font-bold text-xs text-slate-900 truncate">{act.action}</span>
-                        <span
-                          ref={(badge) => {
-                            if (badge) {
-                              badge.style.backgroundColor = cfg.bg;
-                              badge.style.color = cfg.text;
-                              badge.style.borderColor = cfg.border;
-                            }
-                          }}
-                          className="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shrink-0 border"
-                        >
-                          {cfg.label}
-                        </span>
-                      </div>
-                      {act.details && (
-                        <div className="text-[10px] font-mono text-slate-600 mt-0.5 truncate">
-                          {act.details}
+              {initialActivities.length === 0 ? (
+                <div className="p-6 text-center text-xs text-slate-400 bg-white/70 rounded-2xl border border-slate-200/60">
+                  No activity log entries yet. Administrative actions will appear here in real-time.
+                </div>
+              ) : (
+                initialActivities.slice(0, 6).map((act) => {
+                  const cfg = TYPE_CONFIG[act.type] || TYPE_CONFIG.pages;
+                  return (
+                    <div key={act.id} className="flex items-start gap-2.5 p-2.5 rounded-xl bg-white/90 border border-slate-200/60 shadow-2xs">
+                      <span
+                        style={{ backgroundColor: cfg.dot }}
+                        className="w-2.5 h-2.5 rounded-full mt-1 shrink-0"
+                        title={cfg.label}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="font-bold text-xs text-slate-900 truncate">{act.action}</span>
+                          <span
+                            style={{
+                              backgroundColor: cfg.bg,
+                              color: cfg.text,
+                              borderColor: cfg.border,
+                            }}
+                            className="text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shrink-0 border"
+                          >
+                            {cfg.label}
+                          </span>
                         </div>
-                      )}
-                      <div className="text-[9px] text-slate-400 mt-1 flex items-center justify-between">
-                        <span>⏱ {act.timeAgo || 'Recently'}</span>
-                        <span className="bg-lime-300 text-slate-950 font-bold px-1.5 py-0.2 rounded-xs">
-                          {act.user}
-                        </span>
+                        {act.details && (
+                          <div className="text-[10px] font-sans text-slate-600 mt-0.5 truncate">
+                            {act.details}
+                          </div>
+                        )}
+                        <div className="text-[9px] text-slate-400 mt-1 flex items-center justify-between">
+                          <span>⏱ {act.timeAgo || 'Recently'}</span>
+                          <span className="bg-emerald-100 text-emerald-900 font-bold px-1.5 py-0.2 rounded-xs border border-emerald-200">
+                            {act.user}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
           </div>
+
 
           {/* Recent Pages Card */}
           <div className="bg-[#F2F6F5] rounded-3xl p-5 border border-slate-200/80 shadow-2xs flex flex-col justify-between">

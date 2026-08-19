@@ -5,6 +5,7 @@ import { sitePages, siteSettings } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
 import { getResponsiveEmailTemplateHtml } from '@/lib/emailTemplate';
+import { logAdminActivityAction } from '@/actions/activityActions';
 
 // Cached reads go stale after this long (seconds) and refetch in the background.
 // Saves from the admin also bust these instantly via revalidateTag(), so content
@@ -177,6 +178,13 @@ export async function savePageAction(formData: FormData) {
       console.error('Failed to sync nav_items on savePageAction:', e);
     }
 
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'pages',
+      action: id ? 'Updated CMS Page' : 'Created CMS Page',
+      details: `Page "${title}" (${slug}) - Status: ${status}`,
+    });
+
     revalidatePath('/admin/pages');
     revalidatePath(slug);
     revalidatePath('/', 'layout');
@@ -238,6 +246,13 @@ export async function saveNavItemsAction(navItems: any[]) {
     } else {
       await db.insert(siteSettings).values({ key: 'nav_items', value: JSON.stringify(navItems) });
     }
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'menus',
+      action: 'Updated Navigation Menus',
+      details: `Header navigation menu saved (${navItems.length} top-level items)`,
+    });
+
     revalidatePath('/', 'layout');
     revalidateTag('nav-items', 'max');
     return { success: true };
@@ -328,6 +343,13 @@ export async function saveFooterSettingsAction(footerData: any) {
     } else {
       await db.insert(siteSettings).values({ key: 'footer_settings', value: JSON.stringify(footerData) });
     }
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'settings',
+      action: 'Updated Footer Settings',
+      details: 'Footer configuration and columns updated',
+    });
+
     revalidatePath('/', 'layout');
     revalidateTag('footer-data', 'max');
     return { success: true };
@@ -344,7 +366,16 @@ export async function deletePageAction(id: number) {
   try {
     const pages = await db.select().from(sitePages).where(eq(sitePages.id, id)).limit(1);
     if (pages && pages.length > 0) {
+      const pageTitle = pages[0].title || `ID #${id}`;
       await db.delete(sitePages).where(eq(sitePages.id, id));
+
+      // Log Activity
+      await logAdminActivityAction({
+        type: 'pages',
+        action: 'Deleted CMS Page',
+        details: `Removed page: "${pageTitle}" (${pages[0].slug})`,
+      });
+
       revalidatePath('/admin/pages');
       revalidatePath('/', 'layout');
     }
@@ -411,6 +442,13 @@ export async function saveSiteIdentityAction(data: any) {
     } else {
       await db.insert(siteSettings).values({ key: 'site_identity', value: JSON.stringify(data) });
     }
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'settings',
+      action: 'Updated Site Identity',
+      details: `Branding settings updated: "${data.siteName || 'Site Identity'}"`,
+    });
+
     revalidatePath('/', 'layout');
     revalidateTag('site-identity', 'max');
     return { success: true };
@@ -522,6 +560,13 @@ export async function saveGlobalCssAction(css: string) {
     } else {
       await db.insert(siteSettings).values({ key: 'global_css', value: css });
     }
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'settings',
+      action: 'Updated Global Custom CSS',
+      details: 'Custom CSS style sheet updated',
+    });
+
     revalidatePath('/', 'layout');
     return { success: true };
   } catch (err: any) {
@@ -539,6 +584,14 @@ export async function updatePageOrderAction(orderedIds: number[]) {
     } else {
       await db.insert(siteSettings).values({ key: 'ordered_pages', value: JSON.stringify(orderedIds) });
     }
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'pages',
+      action: 'Reordered CMS Pages',
+      details: `Reordered ${orderedIds.length} CMS pages sequence`,
+    });
+
     revalidatePath('/admin/pages');
     return { success: true };
   } catch (err: any) {
@@ -551,6 +604,14 @@ export async function updatePageOrderAction(orderedIds: number[]) {
 export async function updatePageStatusAction(id: number, status: 'published' | 'draft') {
   try {
     await db.update(sitePages).set({ status, updatedAt: new Date() }).where(eq(sitePages.id, id));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'pages',
+      action: 'Updated Page Status',
+      details: `Page ID #${id} status changed to "${status}"`,
+    });
+
     revalidatePath('/admin/pages');
     return { success: true };
   } catch (err: any) {
@@ -605,6 +666,13 @@ export async function saveLoginAuthSettingsAction(data: any) {
     } else {
       await db.insert(siteSettings).values({ key: 'login_auth_settings', value: JSON.stringify(data) });
     }
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'settings',
+      action: 'Updated Security Settings',
+      details: 'Login screen and security options saved',
+    });
+
     revalidatePath('/letstravel');
     revalidatePath('/', 'layout');
     revalidateTag('login-auth-settings', 'max');
@@ -801,6 +869,13 @@ export async function saveFormsSettingsAction(settingsData: any) {
     } else {
       await db.insert(siteSettings).values({ key: 'forms_settings', value: json });
     }
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'settings',
+      action: 'Updated Form Settings',
+      details: 'CRM enquiry & booking form endpoints and templates saved',
+    });
+
     revalidatePath('/', 'layout');
     return { success: true };
   } catch (err: any) {
@@ -884,6 +959,13 @@ export async function savePageSeoAction(pageId: number | string, seoData: any) {
     } else {
       await db.insert(siteSettings).values({ key, value });
     }
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'pages',
+      action: 'Updated Page SEO',
+      details: `SEO metadata updated for page ID #${pageId}`,
+    });
 
     revalidatePath('/admin/pages');
     revalidatePath('/admin/dashboard');

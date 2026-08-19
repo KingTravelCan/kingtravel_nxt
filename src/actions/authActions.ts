@@ -3,9 +3,11 @@
 import { db } from '@/db';
 import { users } from '@/db/schema';
 import { eq } from 'drizzle-orm';
-import { createSessionCookie, destroySession } from '@/lib/auth';
+import { createSessionCookie, destroySession, getCurrentSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { verifyPassword, hashPassword } from '@/lib/password';
+import { logAdminActivityAction } from '@/actions/activityActions';
+import { recordUserHeartbeatAction } from '@/actions/userActions';
 
 export async function adminLogin(formData: FormData) {
   const email = (formData.get('email') as string)?.trim().toLowerCase();
@@ -35,6 +37,17 @@ export async function adminLogin(formData: FormData) {
           name: 'Super Admin',
           role: 'super_admin',
         });
+
+        // Record heartbeat & activity
+        await recordUserHeartbeatAction({ email: envEmail, name: 'Super Admin', role: 'super_admin' });
+        await logAdminActivityAction({
+          type: 'users',
+          action: 'User Logged In',
+          user: 'Super Admin',
+          userEmail: envEmail,
+          details: 'Initial setup admin authenticated successfully',
+        });
+
         return redirect('/admin/dashboard');
       }
       return { success: false, error: 'Invalid Credentials.' };
@@ -67,6 +80,22 @@ export async function adminLogin(formData: FormData) {
       role: user.role,
     });
 
+    // Record presence heartbeat & activity
+    await recordUserHeartbeatAction({
+      email: user.email,
+      name: user.name,
+      role: user.role,
+      badgeBg: user.badgeBg,
+      badgeTextColor: user.badgeTextColor,
+    });
+    await logAdminActivityAction({
+      type: 'users',
+      action: 'User Logged In',
+      user: user.name,
+      userEmail: user.email,
+      details: `Successful sign-in to Admin Portal (${user.role})`,
+    });
+
     return redirect('/admin/dashboard');
   } catch (error: any) {
     if (error.message?.includes('NEXT_REDIRECT')) throw error;
@@ -75,6 +104,19 @@ export async function adminLogin(formData: FormData) {
 }
 
 export async function adminLogout() {
+  try {
+    const session = await getCurrentSession();
+    if (session) {
+      await logAdminActivityAction({
+        type: 'users',
+        action: 'User Logged Out',
+        user: session.name,
+        userEmail: session.email,
+        details: 'Admin user session terminated',
+      });
+    }
+  } catch (e) {}
+
   await destroySession();
   return redirect('/letstravel');
 }
@@ -127,6 +169,15 @@ export async function resetAdminPassword(formData: FormData) {
     }
 
     await db.update(users).set({ passwordHash: hashPassword(newPassword) }).where(eq(users.id, user.id));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'users',
+      action: 'Password Reset',
+      user: user.name,
+      userEmail: user.email,
+      details: `Password was successfully changed for ${user.email}`,
+    });
 
     return { success: true, message: 'Password has been successfully reset.' };
   } catch (error: any) {

@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { visaServices } from '@/db/schema';
 import { eq, asc } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { logAdminActivityAction } from '@/actions/activityActions';
 
 const defaultVisaServicesSeed = [
   {
@@ -123,6 +124,13 @@ export async function createVisaService(formData: FormData): Promise<{ success: 
       isPublished: true,
     });
 
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'visas',
+      action: 'Created Visa Service',
+      details: `Created new Saudi visa category: "${title}" (${processingTime})`,
+    });
+
     revalidatePath('/admin/visas');
     revalidatePath('/saudi-visa');
     revalidatePath('/');
@@ -154,6 +162,13 @@ export async function updateVisaServiceAction(
       isPublished: data.isPublished,
     }).where(eq(visaServices.id, id));
 
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'visas',
+      action: 'Updated Visa Service',
+      details: `Updated visa service "${data.title}" (ID #${id})`,
+    });
+
     revalidatePath('/admin/visas');
     revalidatePath('/saudi-visa');
     revalidatePath('/');
@@ -166,7 +181,23 @@ export async function updateVisaServiceAction(
 
 export async function deleteVisaServiceAction(id: number): Promise<{ success: boolean; error?: string }> {
   try {
+    let visaTitle = `ID #${id}`;
+    try {
+      const found = await db.select().from(visaServices).where(eq(visaServices.id, id)).limit(1);
+      if (found && found.length > 0) {
+        visaTitle = `"${found[0].title}"`;
+      }
+    } catch (e) {}
+
     await db.delete(visaServices).where(eq(visaServices.id, id));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'visas',
+      action: 'Deleted Visa Service',
+      details: `Removed Saudi visa category: ${visaTitle}`,
+    });
+
     revalidatePath('/admin/visas');
     revalidatePath('/saudi-visa');
     revalidatePath('/');

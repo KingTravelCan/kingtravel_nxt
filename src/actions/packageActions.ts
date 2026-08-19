@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { packages, packagePrices, packageHotels } from '@/db/schema';
 import { eq, desc, and, ne } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
+import { logAdminActivityAction } from '@/actions/activityActions';
 
 /**
  * Fetch every non-draft package of a given type ('umrah' | 'hajj'), newest first.
@@ -63,8 +64,6 @@ export async function getPackagesByIds(ids: number[]): Promise<any[]> {
   }
 }
 
-
-
 export async function getPackageBySlug(slug: string) {
   try {
     const pkgList = await db.select().from(packages).where(eq(packages.slug, slug)).limit(1);
@@ -80,7 +79,6 @@ export async function getPackageBySlug(slug: string) {
     return null;
   }
 }
-
 
 export async function createPackage(formData: FormData): Promise<{ success: boolean; error?: string }> {
   try {
@@ -126,7 +124,16 @@ export async function createPackage(formData: FormData): Promise<{ success: bool
 
     await db.insert(packages).values(insertData);
 
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'packages',
+      action: 'Created Package',
+      details: `Created ${type.toUpperCase()} package "${title}" ($${startingPrice} ${status})`,
+    });
+
     revalidatePath('/admin/packages');
+    revalidatePath('/admin/hajj-packages');
+    revalidatePath('/admin/umrah-packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah-packages');
     revalidatePath('/');
@@ -183,7 +190,16 @@ export async function updatePackageAction(
 
     await db.update(packages).set(updateData).where(eq(packages.id, id));
 
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'packages',
+      action: 'Updated Package',
+      details: `Updated package "${data.title}" (ID #${id}) - Status: ${data.status}`,
+    });
+
     revalidatePath('/admin/packages');
+    revalidatePath('/admin/hajj-packages');
+    revalidatePath('/admin/umrah-packages');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah-packages');
     revalidatePath('/');
@@ -196,8 +212,26 @@ export async function updatePackageAction(
 
 export async function updatePackageStatus(id: number, status: 'available' | 'sold_out' | 'coming_soon' | 'draft'): Promise<void> {
   try {
+    let pkgTitle = `ID #${id}`;
+    try {
+      const found = await db.select().from(packages).where(eq(packages.id, id)).limit(1);
+      if (found && found.length > 0) {
+        pkgTitle = `"${found[0].title}"`;
+      }
+    } catch (e) {}
+
     await db.update(packages).set({ status, updatedAt: new Date() }).where(eq(packages.id, id));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'packages',
+      action: 'Changed Package Status',
+      details: `Package ${pkgTitle} status updated to "${status}"`,
+    });
+
     revalidatePath('/admin/packages');
+    revalidatePath('/admin/hajj-packages');
+    revalidatePath('/admin/umrah-packages');
     revalidatePath('/');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah-packages');
@@ -208,8 +242,26 @@ export async function updatePackageStatus(id: number, status: 'available' | 'sol
 
 export async function deletePackage(id: number): Promise<void> {
   try {
+    let pkgTitle = `ID #${id}`;
+    try {
+      const found = await db.select().from(packages).where(eq(packages.id, id)).limit(1);
+      if (found && found.length > 0) {
+        pkgTitle = `"${found[0].title}"`;
+      }
+    } catch (e) {}
+
     await db.delete(packages).where(eq(packages.id, id));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'packages',
+      action: 'Deleted Package',
+      details: `Permanently removed package ${pkgTitle}`,
+    });
+
     revalidatePath('/admin/packages');
+    revalidatePath('/admin/hajj-packages');
+    revalidatePath('/admin/umrah-packages');
     revalidatePath('/');
     revalidatePath('/hajj-packages');
     revalidatePath('/umrah-packages');

@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { adminLogout } from '@/actions/authActions';
 import AdminPackageDetailModal from '@/components/admin/AdminPackageDetailModal';
 import SessionTimer from '@/components/admin/SessionTimer';
+import UserPresenceWidget from '@/components/admin/UserPresenceWidget';
 import { getSiteIdentity } from '@/actions/pageActions';
 import {
   User,
@@ -167,18 +168,6 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
           })}
         </nav>
 
-        {/* Sidebar Footer Logout Button */}
-        <div className="border-t border-white/10 pt-3">
-          <form action={adminLogout}>
-            <button
-              type="submit"
-              className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold text-white hover:bg-red-700 bg-red-600 transition-colors cursor-pointer text-left border border-red-500/30"
-            >
-              <LogOut className="w-4 h-4 shrink-0 text-red-400" />
-              Log Out
-            </button>
-          </form>
-        </div>
       </aside>
 
       {/* ── Right Panel ── */}
@@ -198,9 +187,10 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
             </div>
           </div>
 
-          {/* Center: 8-Hour Session Countdown Timer */}
-          <div className="flex items-center justify-center">
+          {/* Center: 8-Hour Session Countdown Timer & Team Presence */}
+          <div className="flex items-center justify-center gap-3">
             <SessionTimer loginTime={user?.loginTime} />
+            <UserPresenceWidget currentUser={user} />
           </div>
 
           {/* Right Side: Actions & Profile Menu */}
@@ -327,7 +317,7 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
                   </div>
 
                   {/* Logout Action */}
-                  <div className="p-2 border-t border-slate-100 bg-slate-50/80">
+                  {/* <div className="p-2 border-t border-slate-100 bg-slate-50/80">
                     <form action={adminLogout}>
                       <button
                         type="submit"
@@ -337,10 +327,20 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
                         <span>Sign Out</span>
                       </button>
                     </form>
-                  </div>
+                  </div> */}
                 </div>
               )}
             </div>
+            {/* User Logout Button */}
+            <form action={adminLogout}>
+              <button
+                type="submit"
+                className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-md text-xs font-semibold text-white hover:bg-red-700 bg-red-600 transition-colors cursor-pointer text-left border border-red-500/30"
+              >
+                <LogOut className="w-4 h-4 shrink-0 text-red-400" />
+                Log Out
+              </button>
+            </form>
           </div>
         </header>
 

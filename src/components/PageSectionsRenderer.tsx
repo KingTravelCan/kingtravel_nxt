@@ -469,7 +469,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
         }
 
         if (sec.type === "Upcoming Umrah Packages" || sec.type === "Umrah Packages" || sec.type === "Umrah Packages Grid") {
-          return <UpcomingUmrahPackages key={idx} data={sec.data} initialPackages={initialPackageData?.umrah} />;
+          return <UpcomingUmrahPackages key={idx} data={sec.data} initialPackages={initialPackageData?.umrah} pageData={pageData} />;
         }
 
         if (sec.type === "Travel Services" || sec.type === "Services Grid" || sec.type === "Umrah Services Grid" || sec.type === "Hajj Services Grid") {
@@ -481,7 +481,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
         }
 
         if (sec.type === "Hajj Packages" || sec.type === "Packages Grid") {
-          return <HajjPackagesSection key={idx} data={sec.data} initialPackages={initialPackageData?.hajj} />;
+          return <HajjPackagesSection key={idx} data={sec.data} initialPackages={initialPackageData?.hajj} pageData={pageData} />;
         }
 
         if (sec.type === "Banner 4 Grids") {

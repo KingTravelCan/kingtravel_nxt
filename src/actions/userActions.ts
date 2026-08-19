@@ -1,10 +1,13 @@
 'use server';
 
 import { db } from '@/db';
-import { users } from '@/db/schema';
+import { users, siteSettings } from '@/db/schema';
 import { eq, sql } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { hashPassword } from '@/lib/password';
+import { logAdminActivityAction } from '@/actions/activityActions';
+import { formatRelativeTime } from '@/lib/formatTime';
+import { getCurrentSession } from '@/lib/auth';
 
 let ensureColumnsRan = false;
 
@@ -17,6 +20,123 @@ async function ensureUserColumnsExist() {
   try {
     await db.execute(sql`ALTER TABLE \`users\` ADD COLUMN \`badge_text_color\` varchar(32) DEFAULT '#FFFFFF'`);
   } catch (e) {}
+}
+
+export interface UserPresenceInfo {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+  active: boolean;
+  badgeBg: string;
+  badgeTextColor: string;
+  isOnline: boolean;
+  lastSeen?: number;
+  lastSeenAgo?: string;
+}
+
+export async function recordUserHeartbeatAction(userData?: {
+  email: string;
+  name?: string;
+  role?: string;
+  badgeBg?: string;
+  badgeTextColor?: string;
+}) {
+  try {
+    let email = userData?.email?.trim().toLowerCase();
+    let name = userData?.name;
+    let role = userData?.role;
+    let badgeBg = userData?.badgeBg;
+    let badgeTextColor = userData?.badgeTextColor;
+
+    if (!email) {
+      const session = await getCurrentSession();
+      if (session?.email) {
+        email = session.email.toLowerCase();
+        name = name || session.name;
+        role = role || session.role;
+      }
+    }
+
+    if (!email) return { success: false, error: 'No session email found' };
+
+    const now = Date.now();
+    let presenceMap: Record<string, { name: string; role: string; lastSeen: number; badgeBg?: string; badgeTextColor?: string }> = {};
+
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'user_presence')).limit(1);
+    if (existing && existing.length > 0) {
+      try {
+        presenceMap = JSON.parse(existing[0].value) || {};
+      } catch (e) {
+        presenceMap = {};
+      }
+    }
+
+    presenceMap[email] = {
+      name: name || presenceMap[email]?.name || 'Admin',
+      role: role || presenceMap[email]?.role || 'admin',
+      badgeBg: badgeBg || presenceMap[email]?.badgeBg || '#0F766E',
+      badgeTextColor: badgeTextColor || presenceMap[email]?.badgeTextColor || '#FFFFFF',
+      lastSeen: now,
+    };
+
+    const json = JSON.stringify(presenceMap);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value: json, updatedAt: new Date() }).where(eq(siteSettings.key, 'user_presence'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'user_presence', value: json });
+    }
+
+    return { success: true, timestamp: now };
+  } catch (err: any) {
+    console.error('recordUserHeartbeatAction error:', err);
+    return { success: false };
+  }
+}
+
+export async function getUsersPresenceAction(): Promise<UserPresenceInfo[]> {
+  try {
+    const list = await getUsersList();
+    let presenceMap: Record<string, { lastSeen: number }> = {};
+
+    try {
+      const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'user_presence')).limit(1);
+      if (existing && existing.length > 0) {
+        presenceMap = JSON.parse(existing[0].value) || {};
+      }
+    } catch (e) {
+      presenceMap = {};
+    }
+
+    const now = Date.now();
+    const ONLINE_THRESHOLD_MS = 3 * 60 * 1000; // 3 minutes
+
+    const results: UserPresenceInfo[] = list.map((u) => {
+      const emailLower = (u.email || '').toLowerCase();
+      const pData = presenceMap[emailLower];
+      const lastSeen = pData?.lastSeen || undefined;
+      const isOnline = lastSeen ? now - lastSeen <= ONLINE_THRESHOLD_MS : false;
+      const lastSeenAgo = lastSeen ? formatRelativeTime(lastSeen) : 'Offline';
+
+      return {
+        id: u.id,
+        name: u.name,
+        email: u.email,
+        role: u.role,
+        active: Boolean(u.active),
+        badgeBg: u.badgeBg || '#0F766E',
+        badgeTextColor: u.badgeTextColor || '#FFFFFF',
+        isOnline,
+        lastSeen,
+        lastSeenAgo: isOnline ? 'Active now' : lastSeenAgo,
+      };
+    });
+
+    return results;
+  } catch (err: any) {
+    console.error('getUsersPresenceAction error:', err);
+    return [];
+  }
 }
 
 export async function getUsersList() {
@@ -104,7 +224,15 @@ export async function createUserAction(data: {
     const res = await db.insert(users).values(newUserObj);
     const insertId = res && res[0]?.insertId ? Number(res[0].insertId) : 0;
 
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'users',
+      action: 'Created User Account',
+      details: `Created "${newUserObj.name}" with role (${newUserObj.role}) - ${newUserObj.email}`,
+    });
+
     revalidatePath('/admin/settings');
+    revalidatePath('/admin/activity');
     return {
       success: true,
       user: {
@@ -152,7 +280,15 @@ export async function updateUserAction(
 
     await db.update(users).set(updateObj).where(eq(users.id, id));
 
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'users',
+      action: 'Updated User Account',
+      details: `Updated "${updateObj.name}" (${updateObj.role}) - Active: ${updateObj.active ? 'Yes' : 'No'}`,
+    });
+
     revalidatePath('/admin/settings');
+    revalidatePath('/admin/activity');
     return { success: true };
   } catch (err: any) {
     console.error('updateUserAction DB update error:', err);
@@ -162,8 +298,25 @@ export async function updateUserAction(
 
 export async function deleteUserAction(id: number) {
   try {
+    let userName = `User #${id}`;
+    try {
+      const found = await db.select().from(users).where(eq(users.id, id)).limit(1);
+      if (found && found.length > 0) {
+        userName = `"${found[0].name}" (${found[0].email})`;
+      }
+    } catch (e) {}
+
     await db.delete(users).where(eq(users.id, id));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'users',
+      action: 'Deleted User Account',
+      details: `Permanently removed user account: ${userName}`,
+    });
+
     revalidatePath('/admin/settings');
+    revalidatePath('/admin/activity');
     return { success: true };
   } catch (err: any) {
     console.error('deleteUserAction DB delete error:', err);

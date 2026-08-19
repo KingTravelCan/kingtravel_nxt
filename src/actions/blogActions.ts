@@ -4,6 +4,7 @@ import { db } from '@/db';
 import { blogPosts, siteSettings } from '@/db/schema';
 import { eq, desc, ne } from 'drizzle-orm';
 import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
+import { logAdminActivityAction } from '@/actions/activityActions';
 
 // ─── Auto-slugify title ────────────────────────────────────────────────────
 export async function slugifyBlogTitle(title: string): Promise<string> {
@@ -162,6 +163,14 @@ export async function updateBlogOrderAction(orderedIds: number[]) {
     } else {
       await db.insert(siteSettings).values({ key: 'ordered_blogs', value: JSON.stringify(orderedIds) });
     }
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'pages',
+      action: 'Reordered Blog Posts',
+      details: `Updated sequence for ${orderedIds.length} blog articles`,
+    });
+
     revalidatePath('/blogs');
     revalidatePath('/admin/blogs');
     revalidateTag('blogs', 'max');
@@ -261,6 +270,13 @@ export async function saveBlogAction(data: BlogSavePayload) {
 
       await db.update(blogPosts).set(updateData).where(eq(blogPosts.id, id));
 
+      // Log Activity
+      await logAdminActivityAction({
+        type: 'pages',
+        action: 'Updated Blog Post',
+        details: `Article: "${title}" (${category})`,
+      });
+
       revalidatePath('/blogs');
       revalidatePath(`/blogs/${slug}`);
       revalidatePath('/admin/blogs');
@@ -285,7 +301,14 @@ export async function saveBlogAction(data: BlogSavePayload) {
       if (inserted && inserted.length > 0) {
         savedId = inserted[0].id;
       }
-      
+
+      // Log Activity
+      await logAdminActivityAction({
+        type: 'pages',
+        action: 'Created Blog Post',
+        details: `Created article: "${title}" (${category})`,
+      });
+
       revalidatePath('/blogs');
       revalidatePath('/admin/blogs');
       revalidateTag('blogs', 'max');
@@ -301,7 +324,23 @@ export async function saveBlogAction(data: BlogSavePayload) {
 // ─── DELETE BLOG ───────────────────────────────────────────────────────────
 export async function deleteBlogAction(id: number) {
   try {
+    let blogTitle = `ID #${id}`;
+    try {
+      const found = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1);
+      if (found && found.length > 0) {
+        blogTitle = `"${found[0].title}"`;
+      }
+    } catch (e) {}
+
     await db.delete(blogPosts).where(eq(blogPosts.id, id));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'pages',
+      action: 'Deleted Blog Post',
+      details: `Removed blog article: ${blogTitle}`,
+    });
+
     revalidatePath('/blogs');
     revalidatePath('/admin/blogs');
     revalidateTag('blogs', 'max');
@@ -430,6 +469,13 @@ export async function saveBlogCategories(categories: string[]) {
         value: jsonStr,
       });
     }
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'settings',
+      action: 'Updated Blog Categories',
+      details: `Saved ${categories.length} blog categories`,
+    });
 
     revalidatePath('/admin/blogs');
     revalidatePath('/admin/blogs/edit');

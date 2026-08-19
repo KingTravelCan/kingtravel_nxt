@@ -5,6 +5,7 @@ import { enquiries, quoteEnquiries, packageBookingEnquiries, contactEnquiries, v
 import { eq, desc, inArray } from 'drizzle-orm';
 import { revalidatePath } from 'next/cache';
 import { dispatchFormEmails } from '@/lib/emailService';
+import { logAdminActivityAction } from '@/actions/activityActions';
 
 export async function submitQuoteEnquiryAction(data: {
   fullName: string;
@@ -486,6 +487,14 @@ export async function getVisaEnquiriesList() {
 
 export async function updateEnquiryStatus(enquiryId: number, status: any, internalNotes?: string): Promise<void> {
   try {
+    let enquiryNum = `#${enquiryId}`;
+    try {
+      const found = await db.select().from(enquiries).where(eq(enquiries.id, enquiryId)).limit(1);
+      if (found && found.length > 0) {
+        enquiryNum = `${found[0].enquiryNumber} (${found[0].fullName})`;
+      }
+    } catch (e) {}
+
     await db
       .update(enquiries)
       .set({
@@ -495,7 +504,15 @@ export async function updateEnquiryStatus(enquiryId: number, status: any, intern
       })
       .where(eq(enquiries.id, enquiryId));
 
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'enquiries',
+      action: 'Updated Enquiry Status',
+      details: `Enquiry ${enquiryNum} status changed to "${status}"`,
+    });
+
     revalidatePath('/admin/enquiries');
+    revalidatePath('/admin/dashboard');
   } catch (error) {
     console.error('Error updating enquiry status:', error);
   }
@@ -503,7 +520,23 @@ export async function updateEnquiryStatus(enquiryId: number, status: any, intern
 
 export async function deleteEnquiryAction(id: number): Promise<{ success: boolean; error?: string }> {
   try {
+    let enquiryNum = `#${id}`;
+    try {
+      const found = await db.select().from(enquiries).where(eq(enquiries.id, id)).limit(1);
+      if (found && found.length > 0) {
+        enquiryNum = `${found[0].enquiryNumber} (${found[0].fullName})`;
+      }
+    } catch (e) {}
+
     await db.delete(enquiries).where(eq(enquiries.id, id));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'enquiries',
+      action: 'Deleted CRM Enquiry',
+      details: `Removed enquiry ${enquiryNum}`,
+    });
+
     revalidatePath('/admin/enquiries');
     revalidatePath('/admin/dashboard');
     return { success: true };
@@ -519,9 +552,15 @@ export async function markEnquiriesReadAction(ids: number[]): Promise<{ success:
     if (!ids || ids.length === 0) return { success: true };
     console.log('About to call db.update');
     await db.update(enquiries).set({ status: 'contacted', updatedAt: new Date() }).where(inArray(enquiries.id, ids));
-    console.log('db.update successful, calling revalidatePath');
+    
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'enquiries',
+      action: 'Marked Enquiries Contacted',
+      details: `Marked ${ids.length} CRM enquiry records as contacted`,
+    });
+
     revalidatePath('/admin/enquiries');
-    console.log('revalidatePath successful');
     return { success: true };
   } catch (error: any) {
     console.error('Error marking enquiries read:', error);
@@ -533,7 +572,16 @@ export async function deleteEnquiriesBulkAction(ids: number[]): Promise<{ succes
   try {
     if (!ids || ids.length === 0) return { success: true };
     await db.delete(enquiries).where(inArray(enquiries.id, ids));
+
+    // Log Activity
+    await logAdminActivityAction({
+      type: 'enquiries',
+      action: 'Deleted Enquiries in Bulk',
+      details: `Permanently removed ${ids.length} enquiry records`,
+    });
+
     revalidatePath('/admin/enquiries');
+    revalidatePath('/admin/dashboard');
     return { success: true };
   } catch (error: any) {
     console.error('Error deleting enquiries:', error);

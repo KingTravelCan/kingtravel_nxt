@@ -6,7 +6,15 @@ import * as LucideIcons from "lucide-react";
 import DynamicIcon from "@/components/ui/DynamicIcon";
 import { getPackagesByType, getPackagesByIds } from "@/actions/packageActions";
 import PackageBookingModal from "@/components/PackageBookingModal";
-export default function HajjPackagesSection({ data, initialPackages }: { data: any, initialPackages?: any }) {
+export default function HajjPackagesSection({
+  data,
+  initialPackages,
+  pageData,
+}: {
+  data: any;
+  initialPackages?: any;
+  pageData?: any;
+}) {
   const pathname = usePathname();
   const eyebrow = data?.eyebrow || "LUXURY HAJJ PACKAGES";
   const title = data?.title || "Hajj Packages 2027";
@@ -14,6 +22,23 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
     data?.description ||
     data?.subtext ||
     "Luxury Hajj 2027 Packages with 5-Star Hotels, VIP Services & Complete Spiritual Guidance.";
+
+  const isHajjListingPage =
+    pathname === "/hajj-packages" ||
+    pathname === "/hajj" ||
+    pathname?.startsWith("/hajj") ||
+    pageData?.slug === "/hajj-packages" ||
+    pageData?.slug === "hajj-packages";
+
+  const isHomepage =
+    pathname === "/" ||
+    pathname === "" ||
+    pathname === "/home" ||
+    pageData?.slug === "/" ||
+    pageData?.slug === "" ||
+    pageData?.slug === "/home" ||
+    pageData?.slug === "home" ||
+    (!isHajjListingPage && (!pathname || pathname === "/"));
 
   const [pkgs, setPkgs] = useState<any[]>(initialPackages || []);
   const [loading, setLoading] = useState(!initialPackages);
@@ -43,8 +68,13 @@ export default function HajjPackagesSection({ data, initialPackages }: { data: a
         .finally(() => setLoading(false));
     }
   }, [data?.packageIds, initialPackages]);
+
+  const sectionClass = isHomepage
+    ? "pb-12 md:pb-16 bg-white px-4"
+    : "pt-12 md:pt-16 bg-sage px-4";
+
   return (
-    <section className={pathname === '/' ? 'pb-12 md:pb-16 bg-white px-4' : 'pt-12 md:pt-16 bg-sage px-4'}>
+    <section className={sectionClass}>
       <div className="max-w-[1400px] mx-auto px-5">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center md:items-end mb-12 gap-6 text-center md:text-left">
