@@ -20,6 +20,7 @@ export default function PackageBookingModal({
   const [childrenCount, setChildrenCount] = useState("0");
   const [infantsCount, setInfantsCount] = useState("0");
   const [selectedDate, setSelectedDate] = useState("");
+  const [selectedPackageType, setSelectedPackageType] = useState<string>("");
   const [errors, setErrors] = useState<{ [key: string]: boolean }>({});
   const [bookingStatus, setBookingStatus] = useState<string | null>(null);
 
@@ -39,12 +40,61 @@ export default function PackageBookingModal({
     }
   }
 
-  const price = pkg?.startingPrice
-    ? Number(pkg.startingPrice).toLocaleString("en-CA", {
+  let detailData = pkg?.detailPageData || {};
+  if (typeof detailData === "string") {
+    try {
+      detailData = JSON.parse(detailData);
+    } catch (e) {
+      detailData = {};
+    }
+  }
+
+  const packagePrices: { packageType: string; price: number }[] = (() => {
+    const rawList =
+      cd?.packagePrices ||
+      detailData?.packagePrices ||
+      pkg?.packagePrices ||
+      (Array.isArray(pkg?.prices)
+        ? pkg.prices.map((p: any) => ({
+          packageType:
+            p.occupancyType === 'quad'
+              ? 'Quad Occupancy'
+              : p.occupancyType === 'triple'
+                ? 'Triple Occupancy'
+                : p.occupancyType === 'double'
+                  ? 'Double Occupancy'
+                  : p.occupancyType === 'single'
+                    ? 'Single Occupancy'
+                    : p.notes || 'Package Type',
+          price: Number(p.amount) || 0,
+        }))
+        : null);
+
+    if (Array.isArray(rawList) && rawList.length > 0) {
+      return rawList
+        .map((item: any) => ({
+          packageType: (typeof item === 'object' ? item.packageType || item.type || '' : '').trim(),
+          price: Number(String(typeof item === 'object' ? item.price || item.amount || 0 : item).replace(/[^0-9.]/g, '')) || 0,
+        }))
+        .filter((item: any) => item.packageType && item.price > 0);
+    }
+
+    const legacyBase = Number(String(pkg?.startingPrice ?? pkg?.price ?? '2795').replace(/[^0-9.]/g, '')) || 2795;
+    return [
+      { packageType: 'Quad Occupancy', price: legacyBase },
+      { packageType: 'Triple Occupancy', price: legacyBase + 400 },
+      { packageType: 'Double Occupancy', price: legacyBase + 800 },
+    ];
+  })();
+
+  const selectedPriceItem = packagePrices.find((p) => p.packageType === selectedPackageType);
+  const selectedPackagePrice = selectedPriceItem ? selectedPriceItem.price : null;
+  const estimatedTotalFormatted = selectedPackagePrice !== null
+    ? selectedPackagePrice.toLocaleString("en-CA", {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     })
-    : "12,995";
+    : null;
 
   const currencyCode = cd.currencyCode || "CAD";
   const badgeTag = cd.badgeTag || "Package";
@@ -68,6 +118,10 @@ export default function PackageBookingModal({
       newErrors.email = true;
     }
 
+    if (packagePrices.length > 0 && !selectedPackageType) {
+      newErrors.selectedPackageType = true;
+    }
+
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -83,6 +137,7 @@ export default function PackageBookingModal({
           : undefined,
 
         packageName: pkg?.title || "Umrah Package",
+        packageType: selectedPackageType || undefined,
 
         fullName,
         phone,
@@ -94,7 +149,7 @@ export default function PackageBookingModal({
 
         startDate: selectedDate,
 
-        totalPrice: pkg?.price || "7,499",
+        totalPrice: estimatedTotalFormatted ? `${currencyCode} ${estimatedTotalFormatted}` : String(pkg?.startingPrice ?? pkg?.price ?? "7,499"),
       });
 
       if (res.success) {
@@ -309,7 +364,7 @@ export default function PackageBookingModal({
 
                 {/* Adults */}
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-start">
                     Adults
                   </label>
 
@@ -333,7 +388,7 @@ export default function PackageBookingModal({
 
                 {/* Children */}
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-start">
                     Children
                   </label>
 
@@ -356,7 +411,7 @@ export default function PackageBookingModal({
 
                 {/* Infants */}
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">
+                  <label className="block text-[11px] font-bold text-slate-700 mb-1 text-start">
                     Infants
                   </label>
 
@@ -467,6 +522,47 @@ export default function PackageBookingModal({
 
 
               {/* =====================================================
+                  PACKAGE TYPE
+              ====================================================== */}
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Package Type
+                </label>
+
+                <select
+                  value={selectedPackageType}
+                  onChange={(e) => {
+                    setSelectedPackageType(e.target.value);
+                    if (errors.selectedPackageType) {
+                      setErrors((prev) => ({
+                        ...prev,
+                        selectedPackageType: false,
+                      }));
+                    }
+                  }}
+                  className={`w-full border border-line p-3 pr-8 rounded-sm bg-white outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat cursor-pointer ${errors.selectedPackageType
+                      ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
+                      : "focus:border-emerald-800"
+                    }`}
+                >
+                  <option value="" className="bg-white text-slate-900">Select Package Type</option>
+                  {packagePrices.map((item, idx) => (
+                    <option key={idx} value={item.packageType} className="bg-white text-slate-900">
+                      CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
+                    </option>
+                  ))}
+                </select>
+
+                {errors.selectedPackageType && (
+                  <span className="text-[10px] font-bold text-red-600 mt-1 block">
+                    Please select a package type.
+                  </span>
+                )}
+              </div>
+
+
+              {/* =====================================================
                   ESTIMATED TOTAL
               ====================================================== */}
 
@@ -477,7 +573,7 @@ export default function PackageBookingModal({
                 </span>
 
                 <span className="text-xl font-black text-slate-900 font-serif">
-                  {currencyCode} {price}
+                  {estimatedTotalFormatted ? `${currencyCode} ${estimatedTotalFormatted}` : "—"}
                 </span>
 
               </div>

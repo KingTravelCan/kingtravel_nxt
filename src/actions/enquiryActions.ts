@@ -79,6 +79,7 @@ export async function submitQuoteEnquiryAction(data: {
 export async function submitPackageBookingEnquiryAction(data: {
   packageId?: number;
   packageName?: string;
+  packageType?: string;
   fullName: string;
   phone: string;
   email: string;
@@ -93,6 +94,7 @@ export async function submitPackageBookingEnquiryAction(data: {
     const {
       packageId,
       packageName = 'Umrah 2026 Package',
+      packageType = '',
       fullName,
       phone,
       email,
@@ -138,7 +140,7 @@ export async function submitPackageBookingEnquiryAction(data: {
       email,
       phone,
       packageId,
-      preferredPackageType: packageName,
+      preferredPackageType: packageType ? `${packageName} (${packageType})` : packageName,
       adults,
       children,
       infants,
@@ -160,6 +162,7 @@ export async function submitPackageBookingEnquiryAction(data: {
         infants,
         startDate,
         totalPrice,
+        packageType: packageType || undefined,
         message,
       }
     );

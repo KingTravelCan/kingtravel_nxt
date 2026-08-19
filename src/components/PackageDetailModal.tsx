@@ -58,7 +58,7 @@ interface PackageDetailModalProps {
 
 export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDetailModalProps) {
   const [selectedDate, setSelectedDate] = useState("");
-  const [guests, setGuests] = useState("1 Guest (Quad Occupancy)");
+  const [selectedPackageType, setSelectedPackageType] = useState<string>("");
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
 
   if (!isOpen || !pkg) return null;
@@ -79,15 +79,76 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
   const detailData = parseJsonSafe(pkg.detailPageData);
   const cardData = parseJsonSafe(pkg.cardData);
 
+  // Extract packagePrices from packageData, cardData, detailPageData, or relation
+  const packagePrices: { packageType: string; price: number }[] = (() => {
+    const rawList =
+      cardData?.packagePrices ||
+      detailData?.packagePrices ||
+      pkg.packagePrices ||
+      (Array.isArray(pkg.prices)
+        ? pkg.prices.map((p: any) => ({
+            packageType:
+              p.occupancyType === 'quad'
+                ? 'Quad Occupancy'
+                : p.occupancyType === 'triple'
+                ? 'Triple Occupancy'
+                : p.occupancyType === 'double'
+                ? 'Double Occupancy'
+                : p.occupancyType === 'single'
+                ? 'Single Occupancy'
+                : p.notes || 'Package Type',
+            price: Number(p.amount) || 0,
+          }))
+        : null);
+
+    if (Array.isArray(rawList) && rawList.length > 0) {
+      return rawList
+        .map((item: any) => ({
+          packageType: (typeof item === 'object' ? item.packageType || item.type || '' : '').trim(),
+          price: Number(String(typeof item === 'object' ? item.price || item.amount || 0 : item).replace(/[^0-9.]/g, '')) || 0,
+        }))
+        .filter((item: any) => item.packageType && item.price > 0);
+    }
+
+    const legacyBase = Number(String(pkg.startingPrice ?? pkg.price ?? '2795').replace(/[^0-9.]/g, '')) || 2795;
+    return [
+      { packageType: 'Quad Occupancy', price: legacyBase },
+      { packageType: 'Triple Occupancy', price: legacyBase + 400 },
+      { packageType: 'Double Occupancy', price: legacyBase + 800 },
+    ];
+  })();
+
+  // Find the minimum priced package type deterministically
+  const minPriceItem = packagePrices.length > 0
+    ? packagePrices.reduce((min, curr) => (curr.price < min.price ? curr : min), packagePrices[0])
+    : { packageType: 'QUAD OCCUPANCY', price: Number(String(pkg.startingPrice ?? pkg.price ?? '2795').replace(/[^0-9.]/g, '')) || 2795 };
+
   const title = pkg.title || "ECONOMY HAJJ PACKAGE 2027";
   const durationText = detailData.durationText || cardData.duration || pkg.durationText || `${pkg.duration || pkg.month || "14 DAYS"} / 13 NIGHTS`;
   const departure = detailData.departure || cardData.departure || pkg.departure || "CANADA";
   const destination = detailData.destination || cardData.destination || pkg.destination || "SAUDIA";
-  const rawPrice = (pkg.startingPrice || pkg.price || "12,995").toString();
-  const price = rawPrice.startsWith("CAD") ? rawPrice.replace("CAD", "").trim() : rawPrice.replace("$", "").trim();
-  const priceSubtext = cardData.priceSubtext || pkg.priceSubtext || "PER PERSON, QUAD OCCUPANCY";
+
+  const minFormattedPrice = minPriceItem.price.toLocaleString("en-CA", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
+
+  const bannerPrice = minFormattedPrice;
+  const priceSubtext = `PER PERSON - ${minPriceItem.packageType.toUpperCase()}`;
   const exclusiveBadge = detailData.exclusiveBadge || cardData.exclusiveBadge || pkg.exclusiveBadge || "STARTING FROM";
   const currencyCode = detailData.currencyCode || pkg.currencyCode || "CAD";
+
+  // Selected package type price for booking calculation
+  const selectedPriceItem = packagePrices.find((p) => p.packageType === selectedPackageType);
+  const selectedPackagePrice = selectedPriceItem ? selectedPriceItem.price : null;
+  const estimatedTotalFormatted = selectedPackagePrice !== null
+    ? selectedPackagePrice.toLocaleString("en-CA", {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+    : null;
+
+  const price = bannerPrice;
 
   const operatorName = cardData.operatorName || pkg.operatorName || "King Travel";
   const operatorRating = cardData.operatorRating || pkg.operatorRating || "4.4/5";
@@ -156,7 +217,8 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const msg = `Hi King Travel! I want to book: ${title} (${currencyCode} ${price}). Departure: ${departure}, Date: ${selectedDate || "Flexible"}, Guests: ${guests}.`;
+    const formattedPriceStr = estimatedTotalFormatted ? `${currencyCode} ${estimatedTotalFormatted}` : `${currencyCode} ${price}`;
+    const msg = `Hi King Travel! I want to book: ${title} (${formattedPriceStr}). Departure: ${departure}, Date: ${selectedDate || "Flexible"}, Package Type: ${selectedPackageType || "Standard"}.`;
     window.open(`https://wa.me/19056248344?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
@@ -508,20 +570,22 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                   </div>
                 </div>
 
-                {/* Number of Guests */}
+                {/* Package Type Dropdown */}
                 <div>
                   <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Number of Guests
+                    Package Type
                   </label>
                   <select
-                    value={guests}
-                    onChange={(e) => setGuests(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer"
+                    value={selectedPackageType}
+                    onChange={(e) => setSelectedPackageType(e.target.value)}
+                    className="w-full bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none cursor-pointer"
                   >
-                    <option value="1 Guest (Quad Occupancy)">1 Guest (Quad Occupancy)</option>
-                    <option value="2 Guests (Triple Occupancy)">2 Guests (Triple Occupancy)</option>
-                    <option value="3 Guests (Double Occupancy)">3 Guests (Double Occupancy)</option>
-                    <option value="4+ Guests (Custom Group)">4+ Guests (Custom Group)</option>
+                    <option value="" className="bg-white text-slate-900">Select Package Type</option>
+                    {packagePrices.map((item, idx) => (
+                      <option key={idx} value={item.packageType} className="bg-white text-slate-900">
+                        CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
@@ -529,7 +593,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                 <div className="pt-2 flex justify-between items-center">
                   <span className="text-xs font-bold text-slate-500">Estimated Total</span>
                   <span className="text-xl font-black text-slate-900 font-serif">
-                    {currencyCode} {price}
+                    {estimatedTotalFormatted ? `${currencyCode} ${estimatedTotalFormatted}` : "—"}
                   </span>
                 </div>
 

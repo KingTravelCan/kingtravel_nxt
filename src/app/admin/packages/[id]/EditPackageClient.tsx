@@ -366,8 +366,45 @@ export default function EditPackageClient({ packageData }: EditPackageClientProp
       .filter(Boolean);
   };
 
+  const initialPackagePrices: { packageType: string; price: string }[] = (() => {
+    const rawPrices =
+      packageData.packagePrices ||
+      parseJSON(packageData.cardData, {})?.packagePrices ||
+      parseJSON(packageData.detailPageData, {})?.packagePrices ||
+      (Array.isArray(packageData.prices)
+        ? packageData.prices.map((p: any) => ({
+            packageType:
+              p.occupancyType === 'quad'
+                ? 'Quad Occupancy'
+                : p.occupancyType === 'triple'
+                ? 'Triple Occupancy'
+                : p.occupancyType === 'double'
+                ? 'Double Occupancy'
+                : p.occupancyType === 'single'
+                ? 'Single Occupancy'
+                : p.notes || 'Package Type',
+            price: String(p.amount || ''),
+          }))
+        : null);
+
+    if (Array.isArray(rawPrices) && rawPrices.length > 0) {
+      return rawPrices.map((item: any) => ({
+        packageType: typeof item === 'object' ? item.packageType || item.type || '' : '',
+        price: typeof item === 'object' ? String(item.price || item.amount || '') : String(item || ''),
+      }));
+    }
+
+    const legacyStartingPrice = String(packageData.startingPrice || '2795.00').replace(/[^0-9.]/g, '');
+    return [
+      { packageType: 'Quad Occupancy', price: legacyStartingPrice || '2795.00' },
+      { packageType: 'Triple Occupancy', price: legacyStartingPrice ? String(Number(legacyStartingPrice) + 400) : '3195.00' },
+      { packageType: 'Double Occupancy', price: legacyStartingPrice ? String(Number(legacyStartingPrice) + 800) : '3595.00' },
+    ];
+  })();
+
   const initialPkg = {
     ...packageData,
+    packagePrices: initialPackagePrices,
     cardData: parseJSON(packageData.cardData, getDefaultCardData(packageData.type)),
     detailPageData: parseJSON(packageData.detailPageData, {}),
     packagesGallery: normalizeGallery(parseJSON(packageData.packagesGallery, [])),
@@ -378,22 +415,85 @@ export default function EditPackageClient({ packageData }: EditPackageClientProp
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
 
+  const addPackagePriceRow = () => {
+    setEditingPkg((prev: any) => ({
+      ...prev,
+      packagePrices: [...(prev.packagePrices || []), { packageType: '', price: '' }],
+    }));
+  };
+
+  const removePackagePriceRow = (idx: number) => {
+    setEditingPkg((prev: any) => {
+      const updated = [...(prev.packagePrices || [])];
+      updated.splice(idx, 1);
+      return { ...prev, packagePrices: updated };
+    });
+  };
+
+  const updatePackagePriceRow = (idx: number, field: 'packageType' | 'price', value: string) => {
+    setEditingPkg((prev: any) => {
+      const updated = [...(prev.packagePrices || [])];
+      updated[idx] = { ...updated[idx], [field]: value };
+      return { ...prev, packagePrices: updated };
+    });
+  };
+
   const handleUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingPkg) return;
+
+    // Filter and validate package types & prices
+    const validRows = (editingPkg.packagePrices || [])
+      .map((row: any) => ({
+        packageType: (row.packageType || '').trim(),
+        price: String(row.price || '').trim(),
+      }))
+      .filter((row: any) => row.packageType || row.price);
+
+    if (validRows.length === 0) {
+      alert('Please add at least one Package Type & Price.');
+      return;
+    }
+
+    for (const row of validRows) {
+      if (!row.packageType) {
+        alert('Package Type cannot be empty.');
+        return;
+      }
+      const num = Number(row.price);
+      if (isNaN(num) || num <= 0) {
+        alert(`Please enter a valid positive CAD price for "${row.packageType}".`);
+        return;
+      }
+    }
+
+    // Determine minimum numeric price for startingPrice column compatibility
+    const numericPrices = validRows.map((r: any) => Number(r.price)).filter((n: number) => !isNaN(n) && n > 0);
+    const minPrice = numericPrices.length > 0 ? Math.min(...numericPrices).toFixed(2) : '1995.00';
+
+    const updatedCardData = {
+      ...(editingPkg.cardData || {}),
+      packagePrices: validRows,
+    };
+
+    const updatedDetailPageData = {
+      ...(editingPkg.detailPageData || {}),
+      packagePrices: validRows,
+    };
+
     setIsSubmitting(true);
     const res = await updatePackageAction(editingPkg.id, {
       title: editingPkg.title,
       slug: editingPkg.slug,
       type: editingPkg.type,
       month: editingPkg.month,
-      startingPrice: editingPkg.startingPrice,
+      startingPrice: minPrice,
       starRating: editingPkg.starRating,
       status: editingPkg.status,
       shortDescription: editingPkg.shortDescription,
       fullDescription: editingPkg.fullDescription,
-      cardData: editingPkg.cardData,
-      detailPageData: editingPkg.detailPageData,
+      cardData: updatedCardData,
+      detailPageData: updatedDetailPageData,
       packagesGallery: (Array.isArray(editingPkg.packagesGallery) ? editingPkg.packagesGallery : []).filter(Boolean),
     });
     setIsSubmitting(false);
@@ -502,15 +602,67 @@ export default function EditPackageClient({ packageData }: EditPackageClientProp
                 </div>
               )}
 
-              {/* Price */}
-              <div>
-                <label className="text-xs font-bold text-slate-700 block mb-1">Starting Price (CAD)</label>
-                <input
-                  type="text"
-                  value={editingPkg.startingPrice || ''}
-                  onChange={e => setEditingPkg({ ...editingPkg, startingPrice: e.target.value })}
-                  className="w-full px-3.5 py-2.5 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-                />
+              {/* Package Type & Price (CAD) */}
+              <div className="col-span-full space-y-3 p-4 border border-slate-200 bg-slate-50/70 rounded-2xl">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <label className="text-xs font-bold text-slate-800 block">
+                      Package Type & Price (CAD) *
+                    </label>
+                    <span className="text-[10px] text-slate-500 font-medium">
+                      Configure multiple occupancy or package tiers with individual CAD prices.
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={addPackagePriceRow}
+                    className="text-[11px] font-extrabold text-[#004B39] border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-full transition-colors cursor-pointer flex items-center gap-1"
+                  >
+                    + Add Package Type
+                  </button>
+                </div>
+
+                <div className="space-y-2.5">
+                  {(editingPkg.packagePrices || []).map((row: any, idx: number) => (
+                    <div key={idx} className="flex items-center gap-2.5 bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+                      <div className="flex-1">
+                        <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">PACKAGE TYPE</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Quad Occupancy"
+                          value={row.packageType || ''}
+                          onChange={e => updatePackagePriceRow(idx, 'packageType', e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold outline-none focus:border-[#004B39]"
+                        />
+                      </div>
+                      <div className="w-40 sm:w-48">
+                        <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">PRICE (CAD)</label>
+                        <input
+                          type="text"
+                          placeholder="2795.00"
+                          value={row.price || ''}
+                          onChange={e => updatePackagePriceRow(idx, 'price', e.target.value)}
+                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-900 outline-none focus:border-[#004B39]"
+                        />
+                      </div>
+                      {(editingPkg.packagePrices || []).length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removePackagePriceRow(idx)}
+                          className="w-8 h-8 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 flex items-center justify-center border-none cursor-pointer shrink-0 mt-3 transition-colors"
+                          title="Remove Package Type"
+                        >
+                          <X className="w-3.5 h-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  {(editingPkg.packagePrices || []).length === 0 && (
+                    <p className="text-xs text-slate-400 italic py-2">
+                      No package types added. Click "+ Add Package Type".
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Status */}

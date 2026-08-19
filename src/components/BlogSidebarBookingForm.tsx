@@ -13,6 +13,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
   const [adults, setAdults] = useState("1");
   const [childrenCount, setChildrenCount] = useState("0");
   const [infantsCount, setInfantsCount] = useState("0");
+  const [selectedPackageType, setSelectedPackageType] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState("");
   const [bookingStatus, setBookingStatus] = useState("");
 
@@ -30,6 +31,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
     phone: false,
     email: false,
     selectedPackage: false,
+    selectedPackageType: false,
     selectedDate: false,
   });
 
@@ -62,11 +64,75 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
     };
   }, [packageType]);
 
+  const selectedPackage = availablePackages.find(
+    (pkg: any) => String(pkg.id) === selectedPackageId
+  );
+
+  const packagePrices: { packageType: string; price: number }[] = (() => {
+    if (!selectedPackage) return [];
+
+    let cd = selectedPackage.cardData;
+    if (typeof cd === "string") {
+      try {
+        cd = JSON.parse(cd);
+      } catch {
+        cd = {};
+      }
+    }
+
+    let detailData = selectedPackage.detailPageData;
+    if (typeof detailData === "string") {
+      try {
+        detailData = JSON.parse(detailData);
+      } catch {
+        detailData = {};
+      }
+    }
+
+    const rawList =
+      cd?.packagePrices ||
+      detailData?.packagePrices ||
+      selectedPackage.packagePrices ||
+      (Array.isArray(selectedPackage.prices)
+        ? selectedPackage.prices.map((p: any) => ({
+          packageType:
+            p.occupancyType === 'quad'
+              ? 'Quad Occupancy'
+              : p.occupancyType === 'triple'
+                ? 'Triple Occupancy'
+                : p.occupancyType === 'double'
+                  ? 'Double Occupancy'
+                  : p.occupancyType === 'single'
+                    ? 'Single Occupancy'
+                    : p.notes || 'Package Type',
+          price: Number(p.amount) || 0,
+        }))
+        : null);
+
+    if (Array.isArray(rawList) && rawList.length > 0) {
+      return rawList
+        .map((item: any) => ({
+          packageType: (typeof item === 'object' ? item.packageType || item.type || '' : '').trim(),
+          price: Number(String(typeof item === 'object' ? item.price || item.amount || 0 : item).replace(/[^0-9.]/g, '')) || 0,
+        }))
+        .filter((item: any) => item.packageType && item.price > 0);
+    }
+
+    const legacyBase = Number(String(selectedPackage.startingPrice ?? selectedPackage.price ?? '2795').replace(/[^0-9.]/g, '')) || 2795;
+    return [
+      { packageType: 'Quad Occupancy', price: legacyBase },
+      { packageType: 'Triple Occupancy', price: legacyBase + 400 },
+      { packageType: 'Double Occupancy', price: legacyBase + 800 },
+    ];
+  })();
+
   const todayDateStr = new Date().toISOString().split("T")[0];
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setBookingStatus("");
+    const selectedPackage = availablePackages.find(
+      (pkg: any) => String(pkg.id) === selectedPackageId
+    );
 
     // Validate
     const newErrors = {
@@ -74,6 +140,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
       phone: !phone.trim(),
       email: !email.trim(),
       selectedPackage: !selectedPackageId,
+      selectedPackageType: packagePrices.length > 0 && !selectedPackageType,
       selectedDate: !selectedDate.trim(),
     };
     setErrors(newErrors);
@@ -85,15 +152,13 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
 
     setBookingStatus("Submitting your inquiry...");
 
-    const selectedPackage = availablePackages.find(
-      (pkg: any) => String(pkg.id) === selectedPackageId
-    );
+    const selectedPriceItem = packagePrices.find((p) => p.packageType === selectedPackageType);
+    const formattedTotalPrice = selectedPriceItem ? `CAD ${selectedPriceItem.price.toLocaleString("en-CA")}` : "";
 
     const res = await submitPackageBookingEnquiryAction({
       packageId: Number(selectedPackageId),
-      packageName:
-        selectedPackage?.title ||
-        `${packageType === "hajj" ? "Hajj" : "Umrah"} Package`,
+      packageName: selectedPackage?.title || `${packageType === "hajj" ? "Hajj" : "Umrah"} Package`,
+      packageType: selectedPackageType || undefined,
       fullName,
       phone,
       email,
@@ -101,7 +166,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
       children: parseInt(childrenCount, 10),
       infants: parseInt(infantsCount, 10),
       startDate: selectedDate,
-      totalPrice: "",
+      totalPrice: formattedTotalPrice,
     });
 
     if (res.success) {
@@ -113,6 +178,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
       setChildrenCount("0");
       setInfantsCount("0");
       setSelectedPackageId("");
+      setSelectedPackageType("");
       setSelectedDate("");
 
       setModalMsg(res.message || "Your inquiry has been submitted.");
@@ -216,6 +282,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
                 onClick={() => {
                   setPackageType("hajj");
                   setSelectedPackageId("");
+                  setSelectedPackageType("");
                   if (errors.selectedPackage) {
                     setErrors((prev) => ({ ...prev, selectedPackage: false }));
                   }
@@ -233,6 +300,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
                 onClick={() => {
                   setPackageType("umrah");
                   setSelectedPackageId("");
+                  setSelectedPackageType("");
                   if (errors.selectedPackage) {
                     setErrors((prev) => ({ ...prev, selectedPackage: false }));
                   }
@@ -258,6 +326,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
               suppressHydrationWarning
               onChange={(e) => {
                 setSelectedPackageId(e.target.value);
+                setSelectedPackageType("");
                 if (errors.selectedPackage) {
                   setErrors((prev) => ({ ...prev, selectedPackage: false }));
                 }
@@ -291,7 +360,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
         {/* Adults, Children, Infants Dropdowns */}
         <div className="grid grid-cols-3 gap-2">
           <div>
-            <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">
+            <label className="block text-[11px] font-bold text-slate-700 mb-1 text-start">
               Adults
             </label>
             <select
@@ -309,7 +378,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
             </select>
           </div>
           <div>
-            <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">
+            <label className="block text-[11px] font-bold text-slate-700 mb-1 text-start">
               Children
             </label>
             <select
@@ -326,7 +395,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
             </select>
           </div>
           <div>
-            <label className="block text-[11px] font-bold text-slate-700 mb-1 text-center">
+            <label className="block text-[11px] font-bold text-slate-700 mb-1 text-start">
               Infants
             </label>
             <select
@@ -371,7 +440,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
               onClick={(e) => {
                 try {
                   (e.target as HTMLInputElement).showPicker?.();
-                } catch {}
+                } catch { }
               }}
               onChange={(e) => {
                 setSelectedDate(e.target.value);
@@ -382,6 +451,32 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
           </div>
           {errors.selectedDate && (
             <span className="text-[10px] font-bold text-red-600 mt-1 block">Please select a valid start date.</span>
+          )}
+        </div>
+
+        {/* Package Type Dropdown */}
+        <div>
+          <label className="block text-xs font-bold text-slate-700 mb-1">
+            Package Type
+          </label>
+          <select
+            value={selectedPackageType}
+            onChange={(e) => {
+              setSelectedPackageType(e.target.value);
+              if (errors.selectedPackageType) setErrors((prev) => ({ ...prev, selectedPackageType: false }));
+            }}
+            className={`cursor-pointer w-full border border-line p-3 pr-8 rounded-sm bg-white outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat ${errors.selectedPackageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"
+              }`}
+          >
+            <option value="" className="bg-white text-slate-900">Select Package Type</option>
+            {packagePrices.map((item, idx) => (
+              <option key={idx} value={item.packageType} className="bg-white text-slate-900">
+                CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
+              </option>
+            ))}
+          </select>
+          {errors.selectedPackageType && (
+            <span className="text-[10px] font-bold text-red-600 mt-1 block">Please select a package type.</span>
           )}
         </div>
 

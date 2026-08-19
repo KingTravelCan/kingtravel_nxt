@@ -25,7 +25,13 @@ export default function WhatsAppFloat({ initialIdentity }: { initialIdentity?: a
     return () => window.removeEventListener("identity_updated", onUpdate);
   }, []);
 
-  if (pathname?.startsWith("/admin")) {
+  if (
+    pathname?.startsWith("/admin") ||
+    pathname === "/letstravel" ||
+    pathname?.startsWith("/letstravel/") ||
+    pathname === "/login" ||
+    pathname?.startsWith("/login/")
+  ) {
     return null;
   }
 

@@ -17,7 +17,7 @@ export function formatFieldLabel(key: string): string {
     phoneNumber: 'Phone Number',
     contactPhone: 'Contact Phone',
 
-    packageType: 'Selected Package / Service',
+    packageType: 'Package Type',
     preferredPackageType: 'Preferred Package',
     packageName: 'Package Name',
     selectedPackage: 'Selected Package',
@@ -292,7 +292,7 @@ export function getResponsiveEmailTemplateHtml(
                 </tr>
                 <tr>
                   <td align="center" style="border-top: 1px solid #1e293b; padding-top: 16px; font-size: 11px; color: #ffffff;">
-                    © ${new Date().getFullYear()} King Travel Canada Ltd. All Rights Reserved. Automated system notification.
+                    © ${new Date().getFullYear()} King Travel Canada Ltd. All Rights Reserved.
                   </td>
                 </tr>
               </table>

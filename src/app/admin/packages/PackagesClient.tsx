@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { createPackage, updatePackageAction, deletePackage, updatePackageStatus } from '@/actions/packageActions';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
-import { Trash2, Edit2, Plus, Sparkles, Sliders } from 'lucide-react';
+import { Trash2, Edit2, Plus, Sparkles, Sliders, X } from 'lucide-react';
 import Link from 'next/link';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 
@@ -23,23 +23,83 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
     slug: '',
     type: 'umrah' as 'umrah' | 'hajj',
     month: '',
-    startingPrice: '1995.00',
+    packagePrices: [
+      { packageType: 'Quad Occupancy', price: '2795.00' },
+      { packageType: 'Triple Occupancy', price: '3195.00' },
+      { packageType: 'Double Occupancy', price: '3595.00' },
+    ],
     starRating: '5 Star',
     shortDescription: '',
     fullDescription: '',
   });
 
+  const addPackagePriceRow = () => {
+    setNewPkg((prev: any) => ({
+      ...prev,
+      packagePrices: [...(prev.packagePrices || []), { packageType: '', price: '' }],
+    }));
+  };
+
+  const removePackagePriceRow = (idx: number) => {
+    setNewPkg((prev: any) => {
+      const updated = [...(prev.packagePrices || [])];
+      updated.splice(idx, 1);
+      return { ...prev, packagePrices: updated };
+    });
+  };
+
+  const updatePackagePriceRow = (idx: number, field: 'packageType' | 'price', value: string) => {
+    setNewPkg((prev: any) => {
+      const updated = [...(prev.packagePrices || [])];
+      updated[idx] = { ...updated[idx], [field]: value };
+      return { ...prev, packagePrices: updated };
+    });
+  };
+
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const validRows = (newPkg.packagePrices || [])
+      .map((row: any) => ({
+        packageType: (row.packageType || '').trim(),
+        price: String(row.price || '').trim(),
+      }))
+      .filter((row: any) => row.packageType || row.price);
+
+    if (validRows.length === 0) {
+      alert('Please add at least one Package Type & Price.');
+      return;
+    }
+
+    for (const row of validRows) {
+      if (!row.packageType) {
+        alert('Package Type cannot be empty.');
+        return;
+      }
+      const num = Number(row.price);
+      if (isNaN(num) || num <= 0) {
+        alert(`Please enter a valid positive CAD price for "${row.packageType}".`);
+        return;
+      }
+    }
+
+    const numericPrices = validRows.map((r: any) => Number(r.price)).filter((n: number) => !isNaN(n) && n > 0);
+    const minPrice = numericPrices.length > 0 ? Math.min(...numericPrices).toFixed(2) : '1995.00';
+
+    const cardDataWithPrices = {
+      packagePrices: validRows,
+    };
+
     const formData = new FormData();
     formData.append('title', newPkg.title);
     formData.append('slug', newPkg.slug);
     formData.append('type', newPkg.type);
     formData.append('month', newPkg.month);
-    formData.append('startingPrice', newPkg.startingPrice);
+    formData.append('startingPrice', minPrice);
     formData.append('starRating', newPkg.starRating);
     formData.append('shortDescription', newPkg.shortDescription);
     formData.append('fullDescription', newPkg.fullDescription);
+    formData.append('cardData', JSON.stringify(cardDataWithPrices));
 
     const res = await createPackage(formData);
     if (res.success) {
@@ -51,7 +111,11 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
         slug: '',
         type: 'umrah',
         month: '',
-        startingPrice: '1995.00',
+        packagePrices: [
+          { packageType: 'Quad Occupancy', price: '2795.00' },
+          { packageType: 'Triple Occupancy', price: '3195.00' },
+          { packageType: 'Double Occupancy', price: '3595.00' },
+        ],
         starRating: '5 Star',
         shortDescription: '',
         fullDescription: '',
@@ -172,16 +236,67 @@ export default function PackagesClient({ initialPackages }: PackagesClientProps)
                 className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
               />
             </div>
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">Starting Price (CAD) *</label>
-              <input
-                type="text"
-                placeholder="2695.00"
-                value={newPkg.startingPrice}
-                onChange={(e) => setNewPkg({ ...newPkg, startingPrice: e.target.value })}
-                required
-                className="w-full px-3.5 py-2 border border-slate-200 rounded-xl text-xs outline-none focus:border-[#004B39]"
-              />
+            {/* Package Type & Price (CAD) */}
+            <div className="md:col-span-3 space-y-3 p-4 border border-slate-200 bg-slate-50/70 rounded-2xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <label className="text-xs font-bold text-slate-800 block">
+                    Package Type & Price (CAD) *
+                  </label>
+                  <span className="text-[10px] text-slate-500 font-medium">
+                    Configure multiple occupancy or package tiers with individual CAD prices.
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={addPackagePriceRow}
+                  className="text-[11px] font-extrabold text-[#004B39] border border-emerald-300 bg-emerald-50 hover:bg-emerald-100 px-3 py-1.5 rounded-full transition-colors cursor-pointer flex items-center gap-1"
+                >
+                  + Add Package Type
+                </button>
+              </div>
+
+              <div className="space-y-2.5">
+                {(newPkg.packagePrices || []).map((row: any, idx: number) => (
+                  <div key={idx} className="flex items-center gap-2.5 bg-white p-2.5 rounded-xl border border-slate-200 shadow-2xs">
+                    <div className="flex-1">
+                      <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">PACKAGE TYPE</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Quad Occupancy"
+                        value={row.packageType || ''}
+                        onChange={e => updatePackagePriceRow(idx, 'packageType', e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-semibold outline-none focus:border-[#004B39]"
+                      />
+                    </div>
+                    <div className="w-40 sm:w-48">
+                      <label className="text-[9px] font-bold text-slate-400 mb-0.5 block">PRICE (CAD)</label>
+                      <input
+                        type="text"
+                        placeholder="2795.00"
+                        value={row.price || ''}
+                        onChange={e => updatePackagePriceRow(idx, 'price', e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs font-bold text-slate-900 outline-none focus:border-[#004B39]"
+                      />
+                    </div>
+                    {(newPkg.packagePrices || []).length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removePackagePriceRow(idx)}
+                        className="w-8 h-8 rounded-lg bg-red-50 hover:bg-red-100 text-red-500 flex items-center justify-center border-none cursor-pointer shrink-0 mt-3 transition-colors"
+                        title="Remove Package Type"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+                {(newPkg.packagePrices || []).length === 0 && (
+                  <p className="text-xs text-slate-400 italic py-2">
+                    No package types added. Click "+ Add Package Type".
+                  </p>
+                )}
+              </div>
             </div>
             <div>
               <label className="text-xs font-bold text-slate-700 block mb-1">Hotel Star Rating</label>
