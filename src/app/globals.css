@@ -609,9 +609,7 @@ header {
   min-height: 640px;
   display: flex;
   align-items: center;
-  background:
-    linear-gradient(100deg, rgba(10, 20, 18, .92) 0%, rgba(10, 20, 18, .72) 38%, rgba(10, 20, 18, .15) 68%),
-    url('/img/hero.png') center/cover no-repeat;
+  background: #0a1412;
   padding: 0 20px;
   justify-content: space-between;
 }

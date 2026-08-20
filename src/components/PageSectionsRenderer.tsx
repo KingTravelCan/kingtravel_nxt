@@ -195,14 +195,15 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
             "Contact Us Form": "contact",
             "Drop Us A Message Form": "dropUsMessage"
           };
-          const isFlightBookingPage = pageData?.slug === "/airline-tickets-booking";
+          const isFlightBookingPage = pageData?.slug === "/airline-tickets-booking" || pageData?.slug === "airline-tickets-booking";
           const formKey = formKeyMap[sec.type];
           return (
-            <section key={idx} className={`relative z-10 w-full flex justify-center ${isFlightBookingPage ? "bg-white !py-0" : ""}`} suppressHydrationWarning>
+            <section key={idx} className={`relative z-10 w-full flex justify-center ${isFlightBookingPage ? "bg-sage" : ""}`} suppressHydrationWarning>
               <DynamicSiteForm
                 formKey={formKey}
                 bgColor={isFlightBookingPage ? "transparent" : sec.data?.bgColor}
                 forceNoPadding={isFlightBookingPage}
+                cardContainer={isFlightBookingPage}
                 maxWidth={sec.data?.maxWidth}
                 eyebrow={sec.data?.eyebrow}
                 title={sec.data?.title}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { submitQuoteEnquiryAction } from "@/actions/enquiryActions";
 import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
@@ -89,18 +90,24 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
     <>
       <section className="hero">
         <div className="hero-inner">
-          <div
-            ref={(el) => {
-              if (el) {
-                const bg = (heroData.bgImage || '/img/hero.png').replace(/"/g, "'");
-                el.style.backgroundImage = `linear-gradient(100deg, rgba(10, 20, 18, .92) 0%, rgba(10, 20, 18, .72) 38%, rgba(10, 20, 18, .15) 68%), url("${bg}")`;
-                el.style.backgroundPosition = heroData.position || 'center center';
-                el.style.backgroundSize = heroData.size || 'cover';
-                el.style.backgroundRepeat = 'no-repeat';
-              }
-            }}
-            className="hero-media min-h-[640px]"
-          >
+          <div className="hero-media min-h-[640px]">
+            <Image
+              src={heroData.bgImage || "/img/hero.png"}
+              alt=""
+              fill
+              preload
+              fetchPriority="high"
+              quality={60}
+              sizes="100vw"
+              style={{
+                objectFit: heroData.size === "auto" ? "none" : (heroData.size || "cover"),
+                objectPosition: heroData.position || "center center",
+              }}
+            />
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[linear-gradient(100deg,rgba(10,20,18,.92)_0%,rgba(10,20,18,.72)_38%,rgba(10,20,18,.15)_68%)]"
+            />
             <div className="hero-pattern"></div>
             <div className="hero-content">
               <div className="eyebrow">{heroData.heroEyebrow}</div>

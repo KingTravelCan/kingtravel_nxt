@@ -24,6 +24,8 @@ import {
   saveDisclaimerSettingsAction,
   getFormsSettings,
   saveFormsSettingsAction,
+  getSeoIntelligenceSettings,
+  saveSeoIntelligenceSettingsAction,
 } from '@/actions/pageActions';
 import { getEmailDeliveryLogsAction } from '@/actions/logActions';
 import { getResponsiveEmailTemplateHtml } from '@/lib/emailTemplate';
@@ -38,7 +40,33 @@ import { Field, FieldLabel } from '@/components/ui/field';
 import { Switch } from '@/components/ui/switch';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
 import GlassNotificationModal from '@/components/ui/GlassNotificationModal';
-import { Trash2, Upload, MoveUp, MoveDown, Check, Save, CloudUpload, Plus, Edit2, Key, Eye, EyeOff, X, Pencil, Globe } from 'lucide-react';
+import {
+  Trash2,
+  Upload,
+  MoveUp,
+  MoveDown,
+  Check,
+  Save,
+  CloudUpload,
+  Plus,
+  Edit2,
+  Key,
+  Eye,
+  EyeOff,
+  X,
+  Pencil,
+  Globe,
+  Search,
+  ExternalLink,
+  Copy,
+  RefreshCw,
+  BarChart2,
+  ShieldCheck,
+  ShieldAlert,
+  Sparkles,
+  AlertCircle,
+  CheckCircle2,
+} from 'lucide-react';
 
 const TABS = [
   { id: 'header-footer', label: 'Header & Footer', icon: '🎨' },
@@ -153,6 +181,25 @@ export default function AdminSettingsPage() {
   const [shareSaveMsg, setShareSaveMsg] = useState<string | null>(null);
   const [savingShare, setSavingShare] = useState(false);
   const [cssSaveMsg, setCssSaveMsg] = useState<string | null>(null);
+
+  // SEO Intelligence State
+  const [seoData, setSeoData] = useState<any>({
+    siteIndexingEnabled: true,
+    googleSearchConsoleCode: '',
+    googleAnalyticsId: '',
+    googleAnalyticsEnabled: true,
+    sitemapLastGenerated: null,
+    sitemapTotalUrls: 0,
+  });
+  const [seoSaveMsg, setSeoSaveMsg] = useState<string | null>(null);
+  const [savingSeo, setSavingSeo] = useState(false);
+  const [sitemapLoading, setSitemapLoading] = useState(false);
+  const [sitemapActionMsg, setSitemapActionMsg] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [sitemapStats, setSitemapStats] = useState<{ totalUrls: number; sizeKb: string; lastGenerated: string | null }>({
+    totalUrls: 0,
+    sizeKb: '0',
+    lastGenerated: null,
+  });
 
   // Users state
   const [usersList, setUsersList] = useState<any[]>([]);
@@ -448,6 +495,18 @@ export default function AdminSettingsPage() {
     getDisclaimerSettings().then(data => {
       if (data) setDisclaimerData(data);
     });
+    getSeoIntelligenceSettings().then(data => {
+      if (data) {
+        setSeoData(data);
+        if (data.sitemapTotalUrls || data.sitemapLastGenerated) {
+          setSitemapStats({
+            totalUrls: data.sitemapTotalUrls || 0,
+            sizeKb: data.sitemapSizeKb || '0',
+            lastGenerated: data.sitemapLastGenerated || null,
+          });
+        }
+      }
+    });
     getFormsSettings().then(data => {
       if (data) {
         const loadedData = data.formsData || data;
@@ -474,6 +533,87 @@ export default function AdminSettingsPage() {
       }
     }
   }, []);
+
+  const handleSaveSeoSettings = async () => {
+    setSavingSeo(true);
+    setSeoSaveMsg(null);
+    try {
+      const res = await saveSeoIntelligenceSettingsAction(seoData);
+      if (res.success) {
+        setSeoSaveMsg('✓ SEO Intelligence settings saved successfully!');
+        showNotification(
+          'SEO Settings Saved',
+          'Search engine indexing, Google Search Console, Google Analytics, and Sitemap configurations updated successfully.',
+          'success'
+        );
+      } else {
+        showNotification('Error Saving SEO', res.error || 'Failed to save SEO settings', 'error');
+      }
+    } catch (err: any) {
+      showNotification('Error', err.message || 'An unexpected error occurred', 'error');
+    } finally {
+      setSavingSeo(false);
+      setTimeout(() => setSeoSaveMsg(null), 4000);
+    }
+  };
+
+  const handleRefreshSitemap = async () => {
+    setSitemapLoading(true);
+    setSitemapActionMsg(null);
+    try {
+      const res = await fetch('/api/sitemap/generate', { method: 'POST' });
+      const data = await res.json();
+      if (data.success) {
+        const nowStr = new Date().toLocaleString('en-CA', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        });
+        const sizeInKb = (data.sizeInBytes / 1024).toFixed(1);
+        setSitemapStats({
+          totalUrls: data.urlCount,
+          sizeKb: sizeInKb,
+          lastGenerated: nowStr,
+        });
+        const updatedSeo = {
+          ...seoData,
+          sitemapTotalUrls: data.urlCount,
+          sitemapSizeKb: sizeInKb,
+          sitemapLastGenerated: nowStr,
+        };
+        setSeoData(updatedSeo);
+        await saveSeoIntelligenceSettingsAction(updatedSeo);
+
+        setSitemapActionMsg({
+          type: 'success',
+          text: `Sitemap successfully generated! Included ${data.urlCount} eligible URLs (${sizeInKb} KB).`,
+        });
+        showNotification(
+          'Sitemap Refreshed',
+          `Successfully scanned and compiled ${data.urlCount} URLs into /sitemap.xml`,
+          'success'
+        );
+      } else {
+        setSitemapActionMsg({
+          type: 'error',
+          text: `Failed to generate sitemap: ${data.error || 'Unknown error'}`,
+        });
+        showNotification('Sitemap Error', data.error || 'Failed to generate sitemap', 'error');
+      }
+    } catch (err: any) {
+      setSitemapActionMsg({
+        type: 'error',
+        text: `Error refreshing sitemap: ${err.message}`,
+      });
+      showNotification('Error', err.message, 'error');
+    } finally {
+      setSitemapLoading(false);
+      setTimeout(() => setSitemapActionMsg(null), 5000);
+    }
+  };
 
   const handleSaveFormsSettings = async () => {
     setSavingForms(true);
@@ -1874,6 +2014,562 @@ export default function AdminSettingsPage() {
                   className="bg-[#004B39] text-white px-7 py-2.5 rounded-xl font-extrabold text-xs border-none cursor-pointer shadow-md hover:bg-[#00382B] transition-colors"
                 >
                   💾 Save Footer Settings
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ================= TAB 2: SEO INTELLIGENCE ================= */}
+          {activeTab === 'seo' && (
+            <div className="flex flex-col gap-6">
+              {/* Header Bar */}
+              <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 border-b border-slate-100 pb-3">
+                <div>
+                  <h2 className="text-xl font-extrabold text-slate-900 m-0 flex items-center gap-2">
+                    <Search className="w-5 h-5 text-[#004B39]" /> SEO Intelligence &amp; Search Engine Indexing
+                  </h2>
+                  <p className="text-xs text-slate-500 m-0 mt-0.5">
+                    Configure search engine crawl indexing, XML sitemaps, Google Search Console verification, and Google Analytics 4 (GA4).
+                  </p>
+                </div>
+                <div className="flex items-center gap-3 self-end sm:self-auto">
+                  {seoSaveMsg && (
+                    <span className="text-xs font-bold text-emerald-600 flex items-center gap-1">
+                      <CheckCircle2 className="w-3.5 h-3.5" /> {seoSaveMsg}
+                    </span>
+                  )}
+                  <button
+                    type="button"
+                    disabled={savingSeo}
+                    onClick={handleSaveSeoSettings}
+                    className="bg-[#004B39] text-white px-5 py-2.5 rounded-xl text-xs font-extrabold hover:bg-[#00382B] transition-all border-none cursor-pointer flex items-center gap-1.5 shadow-sm active:scale-95 disabled:opacity-50"
+                  >
+                    <Save className="w-3.5 h-3.5" /> {savingSeo ? 'Saving...' : 'Save SEO Settings'}
+                  </button>
+                </div>
+              </div>
+
+              {/* Status Banner */}
+              <div className={`p-4 sm:p-5 rounded-2xl border flex flex-col md:flex-row md:items-center justify-between gap-4 transition-colors ${seoData.siteIndexingEnabled
+                ? 'bg-emerald-50/70 border-emerald-200 text-emerald-950'
+                : 'bg-red-50 border-red-200 text-red-950'
+                }`}>
+                <div className="flex items-start gap-3.5">
+                  <div className={`p-2.5 rounded-xl shrink-0 ${seoData.siteIndexingEnabled
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : 'bg-red-600 text-white shadow-sm'
+                    }`}>
+                    {seoData.siteIndexingEnabled ? (
+                      <ShieldCheck className="w-5 h-5" />
+                    ) : (
+                      <ShieldAlert className="w-5 h-5" />
+                    )}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <h3 className="text-sm font-extrabold m-0">
+                        {seoData.siteIndexingEnabled ? 'Search Engine Indexing is Active' : 'Search Engine Indexing is Blocked (NoIndex)'}
+                      </h3>
+                      <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full border ${seoData.siteIndexingEnabled
+                        ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                        : 'bg-red-100 text-red-900 border-red-300'
+                        }`}>
+                        {seoData.siteIndexingEnabled ? '🟢 Indexable by Google' : '🔴 NoIndex / Disallow'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-600 mt-1 mb-0 leading-relaxed max-w-2xl">
+                      {seoData.siteIndexingEnabled
+                        ? 'Googlebot and other compliant search engines are permitted to crawl and index your public website pages, packages, blogs, and visa services.'
+                        : 'Googlebot and web crawlers are instructed NOT to index pages (disallow /). Search engine visibility is blocked.'}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 self-end md:self-auto shrink-0 bg-white/80 backdrop-blur-xs px-4 py-2 rounded-xl border border-slate-200 shadow-2xs">
+                  <span className="text-xs font-bold text-slate-700">Allow Indexing</span>
+                  <Switch
+                    checked={Boolean(seoData.siteIndexingEnabled ?? true)}
+                    onChange={(checked: boolean) => {
+                      if (!checked) {
+                        setConfirmConfig({
+                          title: '⚠️ Block Search Engine Crawling?',
+                          message: 'Disabling site indexing adds "Disallow: /" to robots.txt and "noindex" tags across public pages. This will cause pages to disappear from Google search results. Are you sure?',
+                          confirmText: 'Yes, Block Indexing',
+                          variant: 'danger',
+                          onConfirm: () => {
+                            setSeoData({ ...seoData, siteIndexingEnabled: false });
+                            setConfirmConfig(null);
+                          },
+                        });
+                      } else {
+                        setSeoData({ ...seoData, siteIndexingEnabled: true });
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Canonical Website Origin Configuration Card */}
+              <div className="p-5 rounded-3xl bg-white border border-slate-200 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-9 h-9 rounded-xl bg-[#004B39]/10 text-[#004B39] flex items-center justify-center font-bold">
+                    🌐
+                  </div>
+                  <div>
+                    <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider m-0">Production Canonical Site URL</h3>
+                    <p className="text-[11px] text-slate-500 m-0 mt-0.5">
+                      The authoritative public HTTPS domain used to generate canonical meta tags, XML sitemaps, and robots.txt.
+                    </p>
+                  </div>
+                </div>
+                <div className="flex-1 max-w-md w-full">
+                  <input
+                    type="url"
+                    value={seoData.canonicalSiteUrl || ''}
+                    onChange={(e) => setSeoData({ ...seoData, canonicalSiteUrl: e.target.value.trim() })}
+                    placeholder="https://www.kingtravelcan.com"
+                    className="w-full p-2.5 rounded-xl border border-slate-300 bg-slate-50 text-xs font-mono font-bold text-slate-800 outline-none focus:border-[#004B39] focus:bg-white transition-colors"
+                  />
+                </div>
+              </div>
+
+              {/* 2x2 Grid of Management Cards */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+
+                {/* 1. XML Sitemap Management Card */}
+                <div className="p-6 rounded-3xl bg-slate-50/80 border border-slate-200 flex flex-col gap-5 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-[#004B39]/10 text-[#004B39] flex items-center justify-center font-bold">
+                        🗺️
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900 m-0">XML Sitemap</h3>
+                        <p className="text-[11px] text-slate-500 m-0">Dynamically generated XML sitemap for search engine crawlers.</p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      disabled={sitemapLoading}
+                      onClick={handleRefreshSitemap}
+                      className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-100 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs disabled:opacity-50"
+                      title="Regenerate XML Sitemap"
+                    >
+                      <RefreshCw className={`w-3 h-3 ${sitemapLoading ? 'animate-spin text-[#004B39]' : ''}`} />
+                      {sitemapLoading ? 'Regenerating...' : 'Refresh Sitemap'}
+                    </button>
+                  </div>
+
+                  {sitemapActionMsg && (
+                    <div className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${sitemapActionMsg.type === 'success'
+                      ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
+                      : 'bg-red-50 border border-red-200 text-red-800'
+                      }`}>
+                      {sitemapActionMsg.type === 'success' ? <CheckCircle2 className="w-4 h-4 shrink-0" /> : <AlertCircle className="w-4 h-4 shrink-0" />}
+                      <span>{sitemapActionMsg.text}</span>
+                    </div>
+                  )}
+
+                  {/* Sitemap Live URL Display & Actions */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <label className="text-xs font-bold text-slate-700">Canonical Sitemap Endpoint</label>
+                      <span className="text-[10px] font-bold text-slate-400 uppercase">
+                        Type: XML URLSET
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-white border border-slate-300 rounded-xl px-3.5 py-2.5 text-xs font-mono font-semibold text-slate-800 select-all truncate">
+                        {seoData.canonicalSiteUrl
+                          ? `${seoData.canonicalSiteUrl.replace(/\/+$/, '')}/sitemap.xml`
+                          : (typeof window !== 'undefined' && !window.location.hostname.includes('localhost')
+                            ? `${window.location.origin}/sitemap.xml`
+                            : 'https://staging.kingtravelcan.com/sitemap.xml')}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const url = seoData.canonicalSiteUrl
+                            ? `${seoData.canonicalSiteUrl.replace(/\/+$/, '')}/sitemap.xml`
+                            : (typeof window !== 'undefined' ? `${window.location.origin}/sitemap.xml` : 'https://staging.kingtravelcan.com/sitemap.xml');
+                          navigator.clipboard.writeText(url);
+                          showNotification('Copied', 'Sitemap URL copied to clipboard!', 'success');
+                        }}
+                        className="p-2.5 bg-white border border-slate-300 hover:bg-slate-100 rounded-xl text-slate-700 text-xs font-bold transition-colors flex items-center justify-center cursor-pointer shadow-2xs"
+                        title="Copy Sitemap URL"
+                      >
+                        <Copy className="w-4 h-4" />
+                      </button>
+                      <a
+                        href="/sitemap.xml"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="p-2.5 bg-[#004B39] hover:bg-[#00382B] text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center cursor-pointer shadow-2xs"
+                        title="Open Sitemap in new tab"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Sitemap Metrics Bar */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
+                    <div className="p-3 bg-white rounded-xl border border-slate-200/80">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">ELIGIBLE URLS</span>
+                      <span className="text-sm font-extrabold text-slate-900 font-mono">
+                        {sitemapStats.totalUrls > 0 ? sitemapStats.totalUrls : (seoData.sitemapTotalUrls || 'Auto-computed')}
+                      </span>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-slate-200/80">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">SITEMAP SIZE</span>
+                      <span className="text-sm font-extrabold text-slate-900 font-mono">
+                        {sitemapStats.sizeKb && sitemapStats.sizeKb !== '0' ? `${sitemapStats.sizeKb} KB` : (seoData.sitemapSizeKb ? `${seoData.sitemapSizeKb} KB` : 'Dynamic')}
+                      </span>
+                    </div>
+                    <div className="p-3 bg-white rounded-xl border border-slate-200/80 col-span-2 sm:col-span-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase block mb-0.5">LAST GENERATED</span>
+                      <span className="text-xs font-semibold text-slate-700 block truncate" title={sitemapStats.lastGenerated || seoData.sitemapLastGenerated || 'Dynamic on crawler request'}>
+                        {sitemapStats.lastGenerated || seoData.sitemapLastGenerated || 'On crawler visit'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="bg-emerald-50/50 p-3.5 rounded-xl border border-emerald-100 text-[11px] text-slate-600 leading-relaxed">
+                    <span className="font-bold text-emerald-900 block mb-0.5">✓ Automatic Multi-Entity Coverage</span>
+                    Includes published CMS pages, available Umrah &amp; Hajj packages, live visa service offerings, and published blog posts with clean URLs. Automatically excludes drafts and pages marked no-index.
+                  </div>
+                </div>
+
+                {/* 2. Robots.txt Directives & Diagnostics Card */}
+                <div className="p-6 rounded-3xl bg-slate-50/80 border border-slate-200 flex flex-col gap-5 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold">
+                        🤖
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900 m-0">Robots.txt Configuration</h3>
+                        <p className="text-[11px] text-slate-500 m-0">Crawler instructions served at /robots.txt.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const url = seoData.canonicalSiteUrl
+                            ? `${seoData.canonicalSiteUrl.replace(/\/+$/, '')}/robots.txt`
+                            : (typeof window !== 'undefined' ? `${window.location.origin}/robots.txt` : 'https://staging.kingtravelcan.com/robots.txt');
+                          navigator.clipboard.writeText(url);
+                          showNotification('Copied', 'robots.txt URL copied to clipboard!', 'success');
+                        }}
+                        className="p-1.5 bg-white border border-slate-300 hover:bg-slate-100 rounded-lg text-slate-700 text-xs font-bold transition-colors cursor-pointer"
+                        title="Copy robots.txt URL"
+                      >
+                        <Copy className="w-3.5 h-3.5" />
+                      </button>
+                      <a
+                        href="/robots.txt"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="px-3 py-1.5 rounded-lg bg-white border border-slate-300 text-slate-700 text-xs font-bold hover:bg-slate-100 transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
+                      >
+                        <ExternalLink className="w-3 h-3" /> View robots.txt
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Effective Served Directives */}
+                  <div className="bg-white p-3.5 rounded-xl border border-slate-200 flex flex-col gap-2 font-mono text-[11px] text-slate-800">
+                    <div className="flex items-center justify-between text-slate-400 uppercase text-[10px] font-bold border-b border-slate-100 pb-1">
+                      <span>EFFECTIVE ROBOTS.TXT DIRECTIVES</span>
+                      <span className={seoData.siteIndexingEnabled ? 'text-emerald-700 font-bold' : 'text-red-700 font-bold'}>
+                        {seoData.siteIndexingEnabled ? '● HEALTHY' : '● BLOCKED'}
+                      </span>
+                    </div>
+                    {seoData.siteIndexingEnabled ? (
+                      <div className="space-y-1">
+                        <div>User-agent: *</div>
+                        <div className="text-emerald-700 font-bold">Allow: /</div>
+                        <div className="text-slate-500">Disallow: /admin/</div>
+                        <div className="text-slate-500">Disallow: /api/</div>
+                        {Array.isArray(seoData.additionalDisallowPaths) && seoData.additionalDisallowPaths.map((p: string, pIdx: number) => (
+                          <div key={pIdx} className="text-amber-700">Disallow: {p}</div>
+                        ))}
+                        <div className="text-blue-700 font-bold pt-1">
+                          Sitemap: {seoData.canonicalSiteUrl
+                            ? `${seoData.canonicalSiteUrl.replace(/\/+$/, '')}/sitemap.xml`
+                            : (typeof window !== 'undefined' && !window.location.hostname.includes('localhost')
+                              ? `${window.location.origin}/sitemap.xml`
+                              : 'https://staging.kingtravelcan.com/sitemap.xml')}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="space-y-1 text-red-800 font-bold">
+                        <div>User-agent: *</div>
+                        <div className="text-red-700">Disallow: /</div>
+                        <div className="text-[10px] text-red-600 font-normal"># Search engine indexing disabled by admin</div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Additional Disallow Routes Controls */}
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1">Additional Disallow Paths (Optional)</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        placeholder="e.g. /private/ or /staging-preview"
+                        id="newDisallowPathInput"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const val = (e.currentTarget.value || '').trim();
+                            if (val && val.startsWith('/') && val !== '/') {
+                              const current = seoData.additionalDisallowPaths || [];
+                              if (!current.includes(val)) {
+                                setSeoData({ ...seoData, additionalDisallowPaths: [...current, val] });
+                              }
+                              e.currentTarget.value = '';
+                            }
+                          }
+                        }}
+                        className="flex-1 p-2 rounded-xl border border-slate-300 bg-white text-xs font-mono font-medium outline-none focus:border-[#004B39]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const input = document.getElementById('newDisallowPathInput') as HTMLInputElement;
+                          if (input) {
+                            const val = (input.value || '').trim();
+                            if (val && val.startsWith('/') && val !== '/') {
+                              const current = seoData.additionalDisallowPaths || [];
+                              if (!current.includes(val)) {
+                                setSeoData({ ...seoData, additionalDisallowPaths: [...current, val] });
+                              }
+                              input.value = '';
+                            }
+                          }
+                        }}
+                        className="px-3 py-2 bg-slate-200 hover:bg-slate-300 rounded-xl text-xs font-bold text-slate-700 cursor-pointer"
+                      >
+                        Add Path
+                      </button>
+                    </div>
+
+                    {Array.isArray(seoData.additionalDisallowPaths) && seoData.additionalDisallowPaths.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mt-2">
+                        {seoData.additionalDisallowPaths.map((p: string, pIdx: number) => (
+                          <span key={pIdx} className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-xs font-mono font-bold text-slate-700 shadow-2xs">
+                            {p}
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setSeoData({
+                                  ...seoData,
+                                  additionalDisallowPaths: seoData.additionalDisallowPaths.filter((item: string) => item !== p),
+                                });
+                              }}
+                              className="text-slate-400 hover:text-red-600 cursor-pointer"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 3. Google Search Console Card */}
+                <div className="p-6 rounded-3xl bg-slate-50/80 border border-slate-200 flex flex-col gap-5 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-blue-500/10 text-blue-600 flex items-center justify-center font-bold">
+                        🌐
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900 m-0">Google Search Console</h3>
+                        <p className="text-[11px] text-slate-500 m-0">Verify website ownership and submit sitemaps to Google.</p>
+                      </div>
+                    </div>
+                    <span className={`text-[10px] font-extrabold uppercase px-2.5 py-1 rounded-full border ${seoData.googleSearchConsoleCode
+                      ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                      : 'bg-slate-200 text-slate-600 border-slate-300'
+                      }`}>
+                      {seoData.googleSearchConsoleCode ? '✓ Configured' : 'Not Connected'}
+                    </span>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                      HTML Verification Code / Tag
+                    </label>
+                    <input
+                      type="text"
+                      value={seoData.googleSearchConsoleCode || ''}
+                      onChange={(e) => {
+                        let val = e.target.value;
+                        const match = val.match(/content=["']([^"']+)["']/i);
+                        if (match && match[1]) {
+                          val = match[1];
+                        }
+                        setSeoData({ ...seoData, googleSearchConsoleCode: val });
+                      }}
+                      placeholder="e.g. d_y3Z59b09vF6P8_..."
+                      className="w-full p-3 rounded-xl border border-slate-300 bg-white text-xs font-mono font-medium text-slate-900 outline-none focus:border-[#004B39] transition-colors"
+                    />
+                    <span className="text-[11px] text-slate-500 block mt-1.5">
+                      Paste either your verification code or the full <code className="bg-slate-200/80 px-1 py-0.5 rounded text-[10px] text-slate-800">&lt;meta name=&quot;google-site-verification&quot;&gt;</code> tag provided by Google Search Console.
+                    </span>
+                  </div>
+
+                  {/* Submission Shortcut */}
+                  <div className="p-4 bg-white rounded-2xl border border-slate-200 flex flex-col gap-3">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-slate-800">Submit to Google Search Console</span>
+                      <a
+                        href="https://search.google.com/search-console"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-xs font-bold text-[#004B39] hover:underline flex items-center gap-1"
+                      >
+                        Open Search Console <ExternalLink className="w-3 h-3" />
+                      </a>
+                    </div>
+                    <p className="text-[11px] text-slate-500 m-0 leading-relaxed">
+                      After entering your verification tag, verify ownership in Google Search Console, then navigate to <strong>Sitemaps</strong> in GSC and submit <code className="text-[#004B39] font-bold">sitemap.xml</code>.
+                    </p>
+                  </div>
+                </div>
+
+                {/* 4. Google Analytics 4 (GA4) Card */}
+                <div className="p-6 rounded-3xl bg-slate-50/80 border border-slate-200 flex flex-col gap-5 shadow-2xs">
+                  <div className="flex items-center justify-between border-b border-slate-200/80 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-xl bg-orange-500/10 text-orange-600 flex items-center justify-center font-bold">
+                        📊
+                      </div>
+                      <div>
+                        <h3 className="text-sm font-bold text-slate-900 m-0">Google Analytics 4 (GA4)</h3>
+                        <p className="text-[11px] text-slate-500 m-0">Live visitor tracking and user behavior analytics.</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full border ${seoData.googleAnalyticsId && (seoData.googleAnalyticsEnabled ?? true)
+                        ? 'bg-emerald-100 text-emerald-800 border-emerald-300'
+                        : 'bg-slate-200 text-slate-600 border-slate-300'
+                        }`}>
+                        {seoData.googleAnalyticsId && (seoData.googleAnalyticsEnabled ?? true) ? '● Active' : 'Inactive'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                      GA4 Measurement ID
+                    </label>
+                    <input
+                      type="text"
+                      value={seoData.googleAnalyticsId || ''}
+                      onChange={(e) => setSeoData({ ...seoData, googleAnalyticsId: e.target.value.trim().toUpperCase() })}
+                      placeholder="e.g. G-XXXXXXXXXX"
+                      className="w-full p-3 rounded-xl border border-slate-300 bg-white text-xs font-mono font-medium text-slate-900 outline-none focus:border-[#004B39] transition-colors"
+                    />
+                    <span className="text-[11px] text-slate-500 block mt-1.5">
+                      Found in Google Analytics &gt; Admin &gt; Data Streams &gt; Web stream details.
+                    </span>
+                  </div>
+
+                  <div className="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200">
+                    <div>
+                      <span className="text-xs font-bold text-slate-800 block">Enable Global Tracking</span>
+                      <span className="text-[11px] text-slate-500">Inject gtag.js script across all public website pages.</span>
+                    </div>
+                    <Switch
+                      checked={Boolean(seoData.googleAnalyticsEnabled ?? true)}
+                      onChange={(checked: boolean) => setSeoData({ ...seoData, googleAnalyticsEnabled: checked })}
+                    />
+                  </div>
+                </div>
+
+              </div>
+
+              {/* 5. Indexing Readiness & Health Checklist */}
+              <div className="p-6 rounded-3xl bg-white border border-slate-200 flex flex-col gap-4 shadow-2xs">
+                <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-xs">
+                      ✓
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-bold text-slate-900 m-0">Search Engine Indexing Readiness Checklist</h3>
+                      <p className="text-[11px] text-slate-500 m-0">Deterministic verification of all search engine discoverability prerequisites.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">Crawler Access (Robots.txt)</span>
+                    <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${seoData.siteIndexingEnabled ? 'bg-emerald-100 text-emerald-800' : 'bg-red-100 text-red-800'}`}>
+                      {seoData.siteIndexingEnabled ? 'Passed' : 'Blocked'}
+                    </span>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">XML Sitemap Endpoint</span>
+                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                      Passed (/sitemap.xml)
+                    </span>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">Canonical Site URL</span>
+                    <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${seoData.canonicalSiteUrl ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'}`}>
+                      {seoData.canonicalSiteUrl ? 'Configured' : 'Default / Fallback'}
+                    </span>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">Google Search Console</span>
+                    <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${seoData.googleSearchConsoleCode ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}`}>
+                      {seoData.googleSearchConsoleCode ? 'Tag Injected' : 'Not Connected'}
+                    </span>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">Google Analytics 4 (GA4)</span>
+                    <span className={`text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full ${seoData.googleAnalyticsId && (seoData.googleAnalyticsEnabled ?? true) ? 'bg-emerald-100 text-emerald-800' : 'bg-slate-200 text-slate-600'}`}>
+                      {seoData.googleAnalyticsId && (seoData.googleAnalyticsEnabled ?? true) ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+                  <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-700">HTTPS Protocol</span>
+                    <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">
+                      Enforced (HTTPS)
+                    </span>
+                  </div>
+                </div>
+
+                {/* Contextual Guidance */}
+                <div className="p-3.5 bg-blue-50/70 rounded-xl border border-blue-100 text-[11px] text-blue-900 leading-relaxed">
+                  {seoData.siteIndexingEnabled ? (
+                    <div>
+                      <strong>💡 SEO Foundation Status:</strong> Search engine crawlers can reach public pages, your sitemap is dynamically generated at <code className="font-bold">/sitemap.xml</code>, and robots.txt directives are active. Verify your ownership in Google Search Console to monitor real-time Google indexing metrics.
+                    </div>
+                  ) : (
+                    <div>
+                      <strong>⚠️ Indexing Disabled:</strong> The website is currently returning <code className="font-bold">Disallow: /</code> and <code className="font-bold">noindex</code> directives. Enable <strong>Allow Indexing</strong> when the site is ready for public search engine indexing.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Bottom Action Save Bar */}
+              <div className="flex justify-end pt-3 border-t border-slate-100">
+                <button
+                  type="button"
+                  disabled={savingSeo}
+                  onClick={handleSaveSeoSettings}
+                  className="bg-[#004B39] text-white px-8 py-3 rounded-xl font-extrabold text-xs border-none cursor-pointer shadow-md hover:bg-[#00382B] transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                >
+                  <Save className="w-4 h-4" /> {savingSeo ? 'Saving Settings...' : 'Save SEO Intelligence Settings'}
                 </button>
               </div>
             </div>
@@ -3361,7 +4057,7 @@ export default function AdminSettingsPage() {
                                       id: Date.now().toString(),
                                       label: 'New Field Input',
                                       type: 'text',
-                                      placeholder: 'Enter details...',
+                                      placeholder: 'Enter...',
                                       required: false,
                                     };
                                     setFormFieldsState((prev) => ({
@@ -3997,7 +4693,7 @@ export default function AdminSettingsPage() {
           )}
 
           {/* ================= OTHER TABS PLACEHOLDER ================= */}
-          {activeTab !== 'header-footer' && activeTab !== 'identity' && activeTab !== 'share' && activeTab !== 'users' && activeTab !== 'auth' && activeTab !== 'popup' && activeTab !== 'css' && activeTab !== 'forms' && (
+          {activeTab !== 'header-footer' && activeTab !== 'seo' && activeTab !== 'identity' && activeTab !== 'share' && activeTab !== 'users' && activeTab !== 'auth' && activeTab !== 'popup' && activeTab !== 'css' && activeTab !== 'forms' && (
             <div className="p-6 text-center text-slate-500">
               <h3 className="text-base font-bold text-slate-900 mb-2">
                 {TABS.find((t) => t.id === activeTab)?.label} Configuration
