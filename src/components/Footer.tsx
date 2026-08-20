@@ -123,23 +123,36 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
             <h5 className="text-[15px] tracking-[0.16em] uppercase text-gold mb-[18px] font-semibold">{footerData.supportTitle || '24/7 CUSTOMER SUPPORT'}</h5>
             <ul className="list-none p-0 m-0 space-y-2.5">
               {(footerData.supportItems || []).map((item: any, cIdx: number) => {
-                const displayText = item.phone && item.label 
-                  ? `${item.phone} - ${item.label}` 
-                  : (item.phone || item.text || '');
+                const phoneDisplay = item.phone || item.text || '';
+                const labelDisplay = item.label || '';
 
                 return (
                   <li key={cIdx} className="font-light whitespace-nowrap">
                     {item.url ? (
-                      <a
-                        href={item.url}
-                        target={item.openInNewTab ? "_blank" : "_self"}
-                        rel={item.openInNewTab ? "noopener noreferrer" : undefined}
-                        className="whitespace-nowrap inline-block"
-                      >
-                        {displayText}
-                      </a>
+                      <div className="whitespace-nowrap inline-flex items-center gap-1.5">
+                        <a
+                          href={item.url}
+                          target={item.openInNewTab ? "_blank" : "_self"}
+                          rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                          className="footer-support-phone text-gold-lt hover:text-gold transition-colors"
+                        >
+                          {phoneDisplay}
+                        </a>
+                        {labelDisplay && (
+                          <span className="footer-support-label font-normal text-xs">
+                            - {labelDisplay}
+                          </span>
+                        )}
+                      </div>
                     ) : (
-                      <span className="whitespace-nowrap inline-block">{displayText}</span>
+                      <span className="whitespace-nowrap text-md inline-flex items-center gap-1.5 text-gold-lt">
+                        <span className="footer-support-phone">{phoneDisplay}</span>
+                        {labelDisplay && (
+                          <span className="footer-support-label text-gold-lt/80 font-normal text-xs">
+                            - {labelDisplay}
+                          </span>
+                        )}
+                      </span>
                     )}
                   </li>
                 );
