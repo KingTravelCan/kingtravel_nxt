@@ -108,7 +108,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
     ];
 
   return (
-    <section className="py-12 md:py-16 bg-gray">
+    <section className="py-12 md:py-16 bg-sage">
       <div className="max-w-[1400px] mx-auto px-5">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
