@@ -15,14 +15,14 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
           <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center text-xl mb-4">
             <i className="fa-solid fa-location-dot"></i>
           </div>
-          <h3 className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] mb-4">
+          <h3 className="text-md font-extrabold uppercase tracking-widest text-[#004B39] mb-4">
             {data?.card1Title || "OUR LOCATIONS"}
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full text-center sm:text-left border-t border-slate-100 pt-4 mt-auto">
             {/* Head Office */}
             <div className="flex flex-col items-center sm:items-start">
-              <span className="text-[10px] font-extrabold text-[#004B39] uppercase tracking-wide mb-1">HEAD OFFICE</span>
+              <span className="text-[12px] font-extrabold text-[#004B39] uppercase tracking-wide mb-1">HEAD OFFICE</span>
               <a
                 className="text-xs font-medium leading-relaxed text-ink hover:text-emerald-800 transition no-underline"
                 href="https://maps.app.goo.gl/1BRUoBxtt4wWw58t6"
@@ -35,7 +35,7 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
 
             {/* Branch Office */}
             <div className="flex flex-col items-center sm:items-start border-t sm:border-t-0 sm:border-l border-slate-100 pt-3 sm:pt-0 sm:pl-4">
-              <span className="text-[10px] font-extrabold text-[#004B39] uppercase tracking-wide mb-1">BRANCH OFFICE</span>
+              <span className="text-[12px] font-extrabold text-[#004B39] uppercase tracking-wide mb-1">BRANCH OFFICE</span>
               <a
                 className="text-xs font-medium leading-relaxed text-ink hover:text-emerald-800 transition no-underline"
                 href="https://maps.app.goo.gl/U6B4fci2Jas4sh6S6"
@@ -54,7 +54,7 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center text-xl mb-4">
               <i className="fa-solid fa-phone"></i>
             </div>
-            <h3 className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] mb-4">
+            <h3 className="text-md font-extrabold uppercase tracking-widest text-[#004B39] mb-4">
               {data?.card2Title || "24/7 SUPPORT"}
             </h3>
             <div className="flex flex-col gap-1.5 border-t border-slate-100 pt-4 w-full">
@@ -102,7 +102,7 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
             <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-800 flex items-center justify-center text-xl mb-4">
               <i className="fa-solid fa-envelope"></i>
             </div>
-            <h3 className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] mb-2">
+            <h3 className="text-md font-extrabold uppercase tracking-widest text-[#004B39] mb-2">
               {data?.card3Title || "EMAIL US"}
             </h3>
             <a href={`mailto:${data?.email || "info@kingtravelcan.com"}`} className="text-sm text-ink hover:text-emerald-800 transition break-all font-semibold no-underline">
@@ -111,7 +111,7 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
           </div>
 
           <div className="w-full border-t border-slate-100 pt-3 flex flex-col items-center">
-            <h4 className="text-[10px] font-extrabold uppercase tracking-widest text-[#004B39] mb-2.5">FOLLOW US</h4>
+            <h4 className="text-md font-extrabold uppercase tracking-widest text-[#004B39] mb-2.5">FOLLOW US</h4>
             <div className="flex flex-wrap items-center justify-center gap-2">
               {(() => {
                 const socialList: any[] = (data?.socialLinks && Array.isArray(data.socialLinks) && data.socialLinks.length > 0)
@@ -409,10 +409,10 @@ function ContactMapsSection({ data }: { data?: any }) {
     <div className="flex flex-col gap-6 h-full justify-between">
       <div className="bg-white rounded-3xl shadow-xl shadow-slate-100/50 border border-slate-100/80 p-4 flex-1 flex flex-col min-h-[250px]">
         <div className="mb-3 pl-2">
-          <h3 className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] flex items-center gap-2">
+          <h3 className="text-md font-extrabold uppercase tracking-widest text-[#004B39] flex items-center gap-2">
             <i className="fa-solid fa-building text-gold"></i> {headTitle}
           </h3>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">{headAddress}</p>
+          <p className="text-sm text-slate-500 font-medium mt-0.5">{headAddress}</p>
         </div>
         <iframe
           src={headMap}
@@ -425,10 +425,10 @@ function ContactMapsSection({ data }: { data?: any }) {
 
       <div className="bg-white rounded-3xl shadow-xl shadow-slate-100/50 border border-slate-100/80 p-4 flex-1 flex flex-col min-h-[250px]">
         <div className="mb-3 pl-2">
-          <h3 className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] flex items-center gap-2">
+          <h3 className="text-md font-extrabold uppercase tracking-widest text-[#004B39] flex items-center gap-2">
             <i className="fa-solid fa-building text-gold"></i> {branchTitle}
           </h3>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">{branchAddress}</p>
+          <p className="text-sm text-slate-500 font-medium mt-0.5">{branchAddress}</p>
         </div>
         <iframe
           src={branchMap}
