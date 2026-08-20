@@ -551,8 +551,8 @@ export default function PackageBookingModal({
                       }
                     }}
                     className={`w-full border border-line p-3 pr-9 rounded-sm bg-white outline-none focus:border-gold transition-colors text-ink text-sm font-medium appearance-none cursor-pointer ${errors.selectedPackageType
-                        ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
-                        : "focus:border-emerald-800"
+                      ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600"
+                      : "focus:border-emerald-800"
                       }`}
                   >
                     <option value="" className="bg-white text-ink">Select Package Type</option>
@@ -583,7 +583,7 @@ export default function PackageBookingModal({
 
               <div className="pt-2 flex justify-between items-center">
 
-                <span className="text-xs font-bold text-slate-500">
+                <span className="text-xs font-bold text-slate-700">
                   Estimated Total
                 </span>
 

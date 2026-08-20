@@ -3400,7 +3400,7 @@ function PageBuilderContent() {
                                       >
                                         {/* Card Top Drag Handle & Delete Button */}
                                         <div className="flex justify-between items-center pb-2 border-b border-slate-200">
-                                          <span className="text-xs font-bold text-slate-500 flex items-center gap-1" title="Drag to reorder card">
+                                          <span className="text-xs font-bold text-slate-700 flex items-center gap-1" title="Drag to reorder card">
                                             <span className="text-slate-400">⋮⋮</span> Card #{cIdx + 1}
                                           </span>
                                           <button
@@ -3619,9 +3619,8 @@ function PageBuilderContent() {
                                                         updated[cIdx] = temp;
                                                         updateSectionData(sec.id, 'supportItems', updated);
                                                       }}
-                                                      className={`p-1 rounded-md border border-slate-200 flex items-center justify-center transition-colors ${
-                                                        isFirst ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                                                      }`}
+                                                      className={`p-1 rounded-md border border-slate-200 flex items-center justify-center transition-colors ${isFirst ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                                        }`}
                                                       title="Move Up"
                                                     >
                                                       <MoveUp className="w-3 h-3" />
@@ -3637,9 +3636,8 @@ function PageBuilderContent() {
                                                         updated[cIdx] = temp;
                                                         updateSectionData(sec.id, 'supportItems', updated);
                                                       }}
-                                                      className={`p-1 rounded-md border border-slate-200 flex items-center justify-center transition-colors ${
-                                                        isLast ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                                                      }`}
+                                                      className={`p-1 rounded-md border border-slate-200 flex items-center justify-center transition-colors ${isLast ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                                        }`}
                                                       title="Move Down"
                                                     >
                                                       <MoveDown className="w-3 h-3" />

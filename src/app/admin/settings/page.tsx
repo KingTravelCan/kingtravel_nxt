@@ -952,7 +952,7 @@ export default function AdminSettingsPage() {
               <div className="border-b border-slate-100 pb-6">
                 <div className="flex justify-between items-center mb-4">
                   <div className="flex items-center gap-2">
-                    <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider m-0">
+                    <h3 className="text-xs font-bold text-slate-700 uppercase tracking-wider m-0">
                       NAVIGATION MENU BUILDER
                     </h3>
                     {saveMsg && <span className="text-xs font-bold text-emerald-600">{saveMsg}</span>}

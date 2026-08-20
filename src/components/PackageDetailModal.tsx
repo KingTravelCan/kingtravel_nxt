@@ -86,18 +86,18 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
       pkg.packagePrices ||
       (Array.isArray(pkg.prices)
         ? pkg.prices.map((p: any) => ({
-            packageType:
-              p.occupancyType === 'quad'
-                ? 'Quad Occupancy'
-                : p.occupancyType === 'triple'
+          packageType:
+            p.occupancyType === 'quad'
+              ? 'Quad Occupancy'
+              : p.occupancyType === 'triple'
                 ? 'Triple Occupancy'
                 : p.occupancyType === 'double'
-                ? 'Double Occupancy'
-                : p.occupancyType === 'single'
-                ? 'Single Occupancy'
-                : p.notes || 'Package Type',
-            price: Number(p.amount) || 0,
-          }))
+                  ? 'Double Occupancy'
+                  : p.occupancyType === 'single'
+                    ? 'Single Occupancy'
+                    : p.notes || 'Package Type',
+          price: Number(p.amount) || 0,
+        }))
         : null);
 
     if (Array.isArray(rawList) && rawList.length > 0) {
@@ -127,7 +127,7 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
   if (!isOpen || !pkg) return null;
 
   const effectivePackageType = packagePrices.length === 1 ? (selectedPackageType || packagePrices[0].packageType) : selectedPackageType;
-  
+
   // Find the minimum priced package type deterministically
   const minPriceItem = packagePrices.length > 0
     ? packagePrices.reduce((min, curr) => (curr.price < min.price ? curr : min), packagePrices[0])
@@ -153,9 +153,9 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
   const selectedPackagePrice = selectedPriceItem ? selectedPriceItem.price : null;
   const estimatedTotalFormatted = selectedPackagePrice !== null
     ? selectedPackagePrice.toLocaleString("en-CA", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    })
     : null;
 
   const price = bannerPrice;
@@ -608,7 +608,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
 
                 {/* Total Calculation Display */}
                 <div className="pt-2 flex justify-between items-center">
-                  <span className="text-xs font-bold text-slate-500">Estimated Total</span>
+                  <span className="text-xs font-bold text-slate-700">Estimated Total</span>
                   <span className="text-xl font-black text-slate-900 font-serif">
                     {estimatedTotalFormatted ? `${currencyCode} ${estimatedTotalFormatted}` : "—"}
                   </span>
