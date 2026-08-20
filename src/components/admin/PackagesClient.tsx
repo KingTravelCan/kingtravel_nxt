@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { createPackage, updatePackageAction, deletePackage, updatePackageStatus } from '@/actions/packageActions';
+import { createPackage, updatePackageAction, deletePackage, updatePackageStatus, updatePackageOrderAction } from '@/actions/packageActions';
 import ConfirmModal, { ConfirmModalConfig } from '@/components/ui/ConfirmModal';
-import { Trash2, Edit2, Plus, Sparkles, Sliders, X, BookOpen, Hotel, Plane } from 'lucide-react';
+import { Trash2, Edit2, Plus, Sparkles, Sliders, X, BookOpen, Hotel, Plane, GripVertical } from 'lucide-react';
 import SeoCenterModal from '@/components/admin/SeoCenterModal';
 import ImageUploadWidget from '@/components/admin/ImageUploadWidget';
 import DetailPageDataFields from '@/components/admin/DetailPageDataFields';
@@ -342,6 +342,7 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
   const [saveMsg, setSaveMsg] = useState<string | null>(null);
   const [confirmConfig, setConfirmConfig] = useState<ConfirmModalConfig | null>(null);
   const [activeTab, setActiveTab] = useState<'umrah' | 'hajj'>(defaultTab);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
   const blankPkg = (type: 'hajj' | 'umrah') => ({
     title: '',
@@ -361,6 +362,35 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
   const [newPkg, setNewPkg] = useState(() => blankPkg(defaultTab));
 
   // ── handlers ──────────────────────────────────────────────────────────────
+
+  const handleDragStart = (e: React.DragEvent, index: number) => {
+    setDraggedIndex(index);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault();
+    if (draggedIndex === null || draggedIndex === index) return;
+
+    const currentTabPkgs = packagesList.filter(p => p.type === activeTab);
+    const otherTabPkgs = packagesList.filter(p => p.type !== activeTab);
+
+    const updatedTabPkgs = [...currentTabPkgs];
+    const movedItem = updatedTabPkgs.splice(draggedIndex, 1)[0];
+    updatedTabPkgs.splice(index, 0, movedItem);
+
+    setDraggedIndex(index);
+    setPackagesList([...updatedTabPkgs, ...otherTabPkgs]);
+  };
+
+  const handleDragEnd = async () => {
+    setDraggedIndex(null);
+    const orderedIds = packagesList.filter(p => p.type === activeTab).map(p => p.id);
+    setSaveMsg('Saving order...');
+    await updatePackageOrderAction(orderedIds);
+    setSaveMsg('✓ Order updated successfully!');
+    setTimeout(() => setSaveMsg(null), 3000);
+  };
 
   const handleCreate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -589,6 +619,7 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
           <table className="w-full text-left text-xs border-collapse">
             <thead>
               <tr className="bg-slate-900 text-slate-300 font-extrabold text-[10px] uppercase tracking-wider">
+                <th className="py-3 px-3 w-10 text-center text-slate-400" title="Drag to reorder">⋮⋮</th>
                 <th className="py-3 px-4">Package Title</th>
                 <th className="py-3 px-4">Type</th>
                 <th className="py-3 px-4">Month</th>
@@ -600,18 +631,31 @@ export default function PackagesClient({ initialPackages, defaultTab }: Packages
             <tbody className="divide-y divide-slate-100">
               {filteredPkgs.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="py-12 text-center text-slate-400 text-xs">
+                  <td colSpan={7} className="py-12 text-center text-slate-400 text-xs">
                     No packages found. Click "Create New {activeTab === 'hajj' ? 'Hajj' : 'Umrah'} Package" to add one.
                   </td>
                 </tr>
               ) : (
-                filteredPkgs.map((pkg) => {
+                filteredPkgs.map((pkg, idx) => {
                   const isSoldOut = pkg.status === 'sold_out';
                   return (
-                    <tr key={pkg.id} className={`transition-colors border-b ${isSoldOut
-                      ? 'bg-red-50/50 border-red-100 hover:bg-red-50/80'
-                      : 'border-slate-100 hover:bg-slate-50/60'
-                      }`}>
+                    <tr 
+                      key={pkg.id} 
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, idx)}
+                      onDragOver={(e) => handleDragOver(e, idx)}
+                      onDragEnd={handleDragEnd}
+                      className={`transition-colors border-b cursor-grab active:cursor-grabbing ${
+                        draggedIndex === idx
+                          ? 'bg-emerald-50/90 ring-2 ring-emerald-400 ring-inset'
+                          : isSoldOut
+                          ? 'bg-red-50/50 border-red-100 hover:bg-red-50/80'
+                          : 'border-slate-100 hover:bg-slate-50/60'
+                      }`}
+                    >
+                      <td className="py-3.5 px-3 text-center text-slate-400 hover:text-slate-700">
+                        <GripVertical className="w-4 h-4 mx-auto cursor-grab active:cursor-grabbing" />
+                      </td>
                       <td className="py-3.5 px-4">
                         <div className={`font-bold ${isSoldOut ? 'text-red-700' : 'text-slate-900'}`}>{pkg.title}</div>
                         <div className="text-[10px] font-mono text-slate-400">{pkg.slug}</div>
