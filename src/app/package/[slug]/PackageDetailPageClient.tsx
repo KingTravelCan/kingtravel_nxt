@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, TicketPercent, AlertCircle, ChevronDown, ChevronUp, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
@@ -47,7 +47,7 @@ export default function PackageDetailPageClient({
     if (!fullName.trim()) newErrors.fullName = true;
     if (!phone.trim()) newErrors.phone = true;
     if (!email.trim() || !/\S+@\S+\.\S+/.test(email)) newErrors.email = true;
-    if (packagePrices.length > 0 && !selectedPackageType) {
+    if (packagePrices.length > 0 && !effectivePackageType) {
       newErrors.selectedPackageType = true;
     }
 
@@ -62,7 +62,7 @@ export default function PackageDetailPageClient({
       const res = await submitPackageBookingEnquiryAction({
         packageId: pkg?.id ? parseInt(pkg.id, 10) || undefined : undefined,
         packageName: pkg?.title || "Umrah Package",
-        packageType: selectedPackageType || undefined,
+        packageType: effectivePackageType || undefined,
         fullName,
         phone,
         email,
@@ -192,8 +192,17 @@ export default function PackageDetailPageClient({
   const exclusiveBadge = detailData.exclusiveBadge || cardData.exclusiveBadge || pkg.exclusiveBadge || "STARTING FROM";
   const currencyCode = pkg.currency || pkg.currencyCode || "CAD";
 
+  // If there is only 1 package price, auto-select it by default
+  useEffect(() => {
+    if (packagePrices.length === 1 && !selectedPackageType) {
+      setSelectedPackageType(packagePrices[0].packageType);
+    }
+  }, [packagePrices, selectedPackageType]);
+
+  const effectivePackageType = packagePrices.length === 1 ? (selectedPackageType || packagePrices[0].packageType) : selectedPackageType;
+
   // Selected package type price for booking calculation
-  const selectedPriceItem = packagePrices.find((p) => p.packageType === selectedPackageType);
+  const selectedPriceItem = packagePrices.find((p) => p.packageType === effectivePackageType);
   const selectedPackagePrice = selectedPriceItem ? selectedPriceItem.price : null;
   const estimatedTotalFormatted = selectedPackagePrice !== null
     ? selectedPackagePrice.toLocaleString("en-CA", {
@@ -1025,7 +1034,7 @@ export default function PackageDetailPageClient({
                   </label>
                   <div className="relative">
                     <select
-                      value={selectedPackageType}
+                      value={effectivePackageType}
                       onChange={(e) => {
                         setSelectedPackageType(e.target.value);
                         if (errors.selectedPackageType) setErrors((prev) => ({ ...prev, selectedPackageType: false }));

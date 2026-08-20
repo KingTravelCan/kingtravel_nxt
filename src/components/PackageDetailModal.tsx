@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { X, Calendar, User, Check, Star, MapPin, Utensils, Plane, AlertCircle, ChevronDown, ChevronUp, ArrowLeft } from "lucide-react";
 import DynamicIcon from "./ui/DynamicIcon";
@@ -61,8 +61,6 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
   const [selectedPackageType, setSelectedPackageType] = useState<string>("");
   const [openFaqIdx, setOpenFaqIdx] = useState<number | null>(0);
 
-  if (!isOpen || !pkg) return null;
-
   const parseJsonSafe = (val: any) => {
     if (!val) return {};
     if (typeof val === "object") return val;
@@ -76,11 +74,12 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
     return {};
   };
 
-  const detailData = parseJsonSafe(pkg.detailPageData);
-  const cardData = parseJsonSafe(pkg.cardData);
+  const detailData = pkg ? parseJsonSafe(pkg.detailPageData) : {};
+  const cardData = pkg ? parseJsonSafe(pkg.cardData) : {};
 
   // Extract packagePrices from packageData, cardData, detailPageData, or relation
   const packagePrices: { packageType: string; price: number }[] = (() => {
+    if (!pkg) return [];
     const rawList =
       cardData?.packagePrices ||
       detailData?.packagePrices ||
@@ -118,6 +117,17 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
     ];
   })();
 
+  // If there is only 1 package price, auto-select it by default
+  useEffect(() => {
+    if (packagePrices.length === 1 && !selectedPackageType) {
+      setSelectedPackageType(packagePrices[0].packageType);
+    }
+  }, [packagePrices, selectedPackageType]);
+
+  if (!isOpen || !pkg) return null;
+
+  const effectivePackageType = packagePrices.length === 1 ? (selectedPackageType || packagePrices[0].packageType) : selectedPackageType;
+  
   // Find the minimum priced package type deterministically
   const minPriceItem = packagePrices.length > 0
     ? packagePrices.reduce((min, curr) => (curr.price < min.price ? curr : min), packagePrices[0])
@@ -139,7 +149,7 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
   const currencyCode = detailData.currencyCode || pkg.currencyCode || "CAD";
 
   // Selected package type price for booking calculation
-  const selectedPriceItem = packagePrices.find((p) => p.packageType === selectedPackageType);
+  const selectedPriceItem = packagePrices.find((p) => p.packageType === effectivePackageType);
   const selectedPackagePrice = selectedPriceItem ? selectedPriceItem.price : null;
   const estimatedTotalFormatted = selectedPackagePrice !== null
     ? selectedPackagePrice.toLocaleString("en-CA", {
@@ -218,7 +228,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
   const handleBookingSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const formattedPriceStr = estimatedTotalFormatted ? `${currencyCode} ${estimatedTotalFormatted}` : `${currencyCode} ${price}`;
-    const msg = `Hi King Travel! I want to book: ${title} (${formattedPriceStr}). Departure: ${departure}, Date: ${selectedDate || "Flexible"}, Package Type: ${selectedPackageType || "Standard"}.`;
+    const msg = `Hi King Travel! I want to book: ${title} (${formattedPriceStr}). Departure: ${departure}, Date: ${selectedDate || "Flexible"}, Package Type: ${effectivePackageType || "Standard"}.`;
     window.open(`https://wa.me/19056248344?text=${encodeURIComponent(msg)}`, "_blank");
   };
 
@@ -577,7 +587,7 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                   </label>
                   <div className="relative">
                     <select
-                      value={selectedPackageType}
+                      value={effectivePackageType}
                       onChange={(e) => setSelectedPackageType(e.target.value)}
                       className="w-full bg-white border border-slate-200 rounded-xl p-3.5 pr-9 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none appearance-none cursor-pointer"
                     >

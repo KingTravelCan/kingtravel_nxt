@@ -42,7 +42,7 @@ export function formatFieldLabel(key: string): string {
 
     website: 'Website',
 
-    message: 'Message / Special Notes',
+    message: 'Message',
     specialNotes: 'Special Notes',
     consultationDetails: 'Consultation Details',
 

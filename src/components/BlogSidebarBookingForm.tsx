@@ -126,6 +126,15 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
     ];
   })();
 
+  // If there is only 1 package price, auto-select it by default
+  useEffect(() => {
+    if (packagePrices.length === 1 && !selectedPackageType) {
+      setSelectedPackageType(packagePrices[0].packageType);
+    }
+  }, [packagePrices, selectedPackageType]);
+
+  const effectivePackageType = packagePrices.length === 1 ? (selectedPackageType || packagePrices[0].packageType) : selectedPackageType;
+
   const todayDateStr = new Date().toISOString().split("T")[0];
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
@@ -140,7 +149,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
       phone: !phone.trim(),
       email: !email.trim(),
       selectedPackage: !selectedPackageId,
-      selectedPackageType: packagePrices.length > 0 && !selectedPackageType,
+      selectedPackageType: packagePrices.length > 0 && !effectivePackageType,
       selectedDate: !selectedDate.trim(),
     };
     setErrors(newErrors);
@@ -152,13 +161,13 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
 
     setBookingStatus("Submitting your inquiry...");
 
-    const selectedPriceItem = packagePrices.find((p) => p.packageType === selectedPackageType);
+    const selectedPriceItem = packagePrices.find((p) => p.packageType === effectivePackageType);
     const formattedTotalPrice = selectedPriceItem ? `CAD ${selectedPriceItem.price.toLocaleString("en-CA")}` : "";
 
     const res = await submitPackageBookingEnquiryAction({
       packageId: Number(selectedPackageId),
       packageName: selectedPackage?.title || `${packageType === "hajj" ? "Hajj" : "Umrah"} Package`,
-      packageType: selectedPackageType || undefined,
+      packageType: effectivePackageType || undefined,
       fullName,
       phone,
       email,
@@ -461,7 +470,7 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
           </label>
           <div className="relative">
             <select
-              value={selectedPackageType}
+              value={effectivePackageType}
               onChange={(e) => {
                 setSelectedPackageType(e.target.value);
                 if (errors.selectedPackageType) setErrors((prev) => ({ ...prev, selectedPackageType: false }));

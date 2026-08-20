@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calendar, TicketPercent, X } from "lucide-react";
 import { submitPackageBookingEnquiryAction } from "@/actions/enquiryActions";
 
@@ -28,10 +28,7 @@ export default function PackageBookingModal({
   const [modalMsg, setModalMsg] = useState("");
   const [modalRef, setModalRef] = useState("");
 
-  if (!isOpen) return null;
-
   let cd = pkg?.cardData || {};
-
   if (typeof cd === "string") {
     try {
       cd = JSON.parse(cd);
@@ -50,6 +47,7 @@ export default function PackageBookingModal({
   }
 
   const packagePrices: { packageType: string; price: number }[] = (() => {
+    if (!pkg) return [];
     const rawList =
       cd?.packagePrices ||
       detailData?.packagePrices ||
@@ -87,7 +85,17 @@ export default function PackageBookingModal({
     ];
   })();
 
-  const selectedPriceItem = packagePrices.find((p) => p.packageType === selectedPackageType);
+  // If there is only 1 package price, auto-select it by default
+  useEffect(() => {
+    if (packagePrices.length === 1 && !selectedPackageType) {
+      setSelectedPackageType(packagePrices[0].packageType);
+    }
+  }, [packagePrices, selectedPackageType]);
+
+  if (!isOpen) return null;
+
+  const effectivePackageType = packagePrices.length === 1 ? (selectedPackageType || packagePrices[0].packageType) : selectedPackageType;
+  const selectedPriceItem = packagePrices.find((p) => p.packageType === effectivePackageType);
   const selectedPackagePrice = selectedPriceItem ? selectedPriceItem.price : null;
   const estimatedTotalFormatted = selectedPackagePrice !== null
     ? selectedPackagePrice.toLocaleString("en-CA", {
@@ -118,7 +126,7 @@ export default function PackageBookingModal({
       newErrors.email = true;
     }
 
-    if (packagePrices.length > 0 && !selectedPackageType) {
+    if (packagePrices.length > 0 && !effectivePackageType) {
       newErrors.selectedPackageType = true;
     }
 
@@ -137,7 +145,7 @@ export default function PackageBookingModal({
           : undefined,
 
         packageName: pkg?.title || "Umrah Package",
-        packageType: selectedPackageType || undefined,
+        packageType: effectivePackageType || undefined,
 
         fullName,
         phone,
@@ -532,7 +540,7 @@ export default function PackageBookingModal({
 
                 <div className="relative">
                   <select
-                    value={selectedPackageType}
+                    value={effectivePackageType}
                     onChange={(e) => {
                       setSelectedPackageType(e.target.value);
                       if (errors.selectedPackageType) {

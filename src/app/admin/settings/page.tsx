@@ -1508,9 +1508,8 @@ export default function AdminSettingsPage() {
                                 updated[lIdx] = temp;
                                 setFooterData({ ...footerData, servicesLinks: updated });
                               }}
-                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
-                                isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                              }`}
+                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                }`}
                               title="Move Up"
                             >
                               <MoveUp className="w-3 h-3" />
@@ -1526,9 +1525,8 @@ export default function AdminSettingsPage() {
                                 updated[lIdx] = temp;
                                 setFooterData({ ...footerData, servicesLinks: updated });
                               }}
-                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
-                                isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                              }`}
+                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                }`}
                               title="Move Down"
                             >
                               <MoveDown className="w-3 h-3" />
@@ -1614,9 +1612,8 @@ export default function AdminSettingsPage() {
                                 updated[lIdx] = temp;
                                 setFooterData({ ...footerData, sitemapLinks: updated });
                               }}
-                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
-                                isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                              }`}
+                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                }`}
                               title="Move Up"
                             >
                               <MoveUp className="w-3 h-3" />
@@ -1632,9 +1629,8 @@ export default function AdminSettingsPage() {
                                 updated[lIdx] = temp;
                                 setFooterData({ ...footerData, sitemapLinks: updated });
                               }}
-                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${
-                                isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                              }`}
+                              className={`p-1 rounded border border-slate-200 flex items-center justify-center transition-colors ${isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                }`}
                               title="Move Down"
                             >
                               <MoveDown className="w-3 h-3" />
@@ -1723,9 +1719,8 @@ export default function AdminSettingsPage() {
                               updated[cIdx] = temp;
                               setFooterData({ ...footerData, supportItems: updated });
                             }}
-                            className={`p-1.5 rounded-lg border border-slate-200 flex items-center justify-center transition-colors ${
-                              isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                            }`}
+                            className={`p-1.5 rounded-lg border border-slate-200 flex items-center justify-center transition-colors ${isFirst ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                              }`}
                             title="Move Up"
                           >
                             <MoveUp className="w-3.5 h-3.5" />
@@ -1741,9 +1736,8 @@ export default function AdminSettingsPage() {
                               updated[cIdx] = temp;
                               setFooterData({ ...footerData, supportItems: updated });
                             }}
-                            className={`p-1.5 rounded-lg border border-slate-200 flex items-center justify-center transition-colors ${
-                              isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
-                            }`}
+                            className={`p-1.5 rounded-lg border border-slate-200 flex items-center justify-center transition-colors ${isLast ? 'opacity-30 cursor-not-allowed bg-slate-50 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                              }`}
                             title="Move Down"
                           >
                             <MoveDown className="w-3.5 h-3.5" />
@@ -1760,7 +1754,7 @@ export default function AdminSettingsPage() {
                               const phoneVal = e.target.value;
                               const labelVal = item.label || '';
                               const combined = labelVal ? `${phoneVal} - ${labelVal}` : phoneVal;
-                              
+
                               // Auto-generate tel/mailto if url is empty or matches previous
                               let autoUrl = item.url;
                               if (!autoUrl || autoUrl.startsWith('tel:') || autoUrl.startsWith('mailto:')) {
@@ -1771,8 +1765,8 @@ export default function AdminSettingsPage() {
                                 }
                               }
 
-                              updated[cIdx] = { 
-                                ...updated[cIdx], 
+                              updated[cIdx] = {
+                                ...updated[cIdx],
                                 phone: phoneVal,
                                 label: labelVal,
                                 text: combined,
@@ -1791,8 +1785,8 @@ export default function AdminSettingsPage() {
                               const labelVal = e.target.value;
                               const phoneVal = item.phone || item.text || '';
                               const combined = labelVal ? `${phoneVal} - ${labelVal}` : phoneVal;
-                              updated[cIdx] = { 
-                                ...updated[cIdx], 
+                              updated[cIdx] = {
+                                ...updated[cIdx],
                                 label: labelVal,
                                 phone: phoneVal,
                                 text: combined
@@ -4211,7 +4205,7 @@ export default function AdminSettingsPage() {
                       </div>
                     )}
                     <div className="flex flex-col sm:flex-row">
-                      <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Message / Special Notes</div>
+                      <div className="w-full sm:w-1/3 bg-slate-50 px-5 py-4 font-bold text-slate-800 border-b sm:border-b-0 sm:border-r border-slate-200">Message</div>
                       <div className="w-full sm:w-2/3 px-5 py-4 text-slate-600 whitespace-pre-wrap">{activeInboxMsg.message || 'N/A'}</div>
                     </div>
                   </div>
