@@ -11,14 +11,45 @@ import { logAdminActivityAction } from '@/actions/activityActions';
  * Used by public-facing sections that should automatically show every package an
  * admin creates, without needing a separate manual "add to section" step.
  */
+function sortPackagesByOrderedList(pkgList: any[], orderIds: number[]): any[] {
+  if (!orderIds || orderIds.length === 0 || !pkgList || pkgList.length === 0) return pkgList;
+  const orderMap = new Map(orderIds.map((id, index) => [id, index]));
+  return [...pkgList].sort((a, b) => {
+    const orderA = orderMap.has(a.id) ? (orderMap.get(a.id) as number) : 9999;
+    const orderB = orderMap.has(b.id) ? (orderMap.get(b.id) as number) : 9999;
+    if (orderA !== orderB) return orderA - orderB;
+    return new Date(b.createdAt || 0).getTime() - new Date(a.createdAt || 0).getTime();
+  });
+}
+
+async function getStoredPackageOrderIds(): Promise<number[]> {
+  try {
+    const { siteSettings } = await import('@/db/schema');
+    const orderSetting = await db.select().from(siteSettings).where(eq(siteSettings.key, 'ordered_packages')).limit(1);
+    if (orderSetting && orderSetting.length > 0 && orderSetting[0].value) {
+      const parsed = JSON.parse(orderSetting[0].value);
+      if (Array.isArray(parsed)) return parsed;
+    }
+  } catch (err) {
+    // Non-blocking fallback
+  }
+  return [];
+}
+
+/**
+ * Fetch every non-draft package of a given type ('umrah' | 'hajj'), sorted by custom admin order.
+ * Used by public-facing sections that should automatically show every package an
+ * admin creates, adhering to the custom order configured in backend.
+ */
 export async function getPackagesByType(type: 'umrah' | 'hajj'): Promise<any[]> {
   try {
     const rows = await db
       .select()
       .from(packages)
-      .where(and(eq(packages.type, type), ne(packages.status, 'draft'), ne(packages.status, 'sold_out')))
-      .orderBy(desc(packages.createdAt));
-    return rows || [];
+      .where(and(eq(packages.type, type), ne(packages.status, 'draft'), ne(packages.status, 'sold_out')));
+    
+    const orderIds = await getStoredPackageOrderIds();
+    return sortPackagesByOrderedList(rows || [], orderIds);
   } catch (err) {
     console.error('getPackagesByType DB error:', err);
     return [];
@@ -27,8 +58,9 @@ export async function getPackagesByType(type: 'umrah' | 'hajj'): Promise<any[]> 
 
 export async function getAllPackages() {
   try {
-    let list = await db.select().from(packages).orderBy(desc(packages.createdAt));
-    return list || [];
+    const list = await db.select().from(packages);
+    const orderIds = await getStoredPackageOrderIds();
+    return sortPackagesByOrderedList(list || [], orderIds);
   } catch (err) {
     console.error('getAllPackages DB error:', err);
     throw new Error('Failed to fetch packages from database');
@@ -40,12 +72,44 @@ export async function getSoldOutPackages() {
     const rows = await db
       .select()
       .from(packages)
-      .where(eq(packages.status, 'sold_out'))
-      .orderBy(desc(packages.createdAt));
-    return rows || [];
+      .where(eq(packages.status, 'sold_out'));
+    
+    const orderIds = await getStoredPackageOrderIds();
+    return sortPackagesByOrderedList(rows || [], orderIds);
   } catch (err) {
     console.error('getSoldOutPackages DB error:', err);
     return [];
+  }
+}
+
+export async function updatePackageOrderAction(orderedIds: number[]) {
+  try {
+    const { siteSettings } = await import('@/db/schema');
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'ordered_packages')).limit(1);
+    const value = JSON.stringify(orderedIds);
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value, updatedAt: new Date() }).where(eq(siteSettings.key, 'ordered_packages'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'ordered_packages', value });
+    }
+
+    await logAdminActivityAction({
+      type: 'packages',
+      action: 'Reordered Packages',
+      details: `Reordered ${orderedIds.length} packages sequence`,
+    });
+
+    revalidatePath('/admin/packages');
+    revalidatePath('/admin/hajj-packages');
+    revalidatePath('/admin/umrah-packages');
+    revalidatePath('/hajj-packages');
+    revalidatePath('/umrah-packages');
+    revalidatePath('/hajj');
+    revalidatePath('/');
+    return { success: true };
+  } catch (err: any) {
+    console.error('updatePackageOrderAction error:', err);
+    return { success: false, error: err.message };
   }
 }
 
