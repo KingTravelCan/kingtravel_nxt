@@ -160,7 +160,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
             <form noValidate className="flex flex-col gap-4" onSubmit={handleQuoteSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="relative">
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
+                  <label htmlFor="quote-fullName" className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Your Name
                   </label>
                   <input
@@ -179,7 +179,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                 </div>
 
                 <div className="relative">
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
+                  <label htmlFor="quote-phone" className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Phone Number
                   </label>
                   <input
@@ -213,7 +213,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
                 </div>
 
                 <div className="relative">
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
+                  <label htmlFor="quote-email" className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Email Address
                   </label>
                   <input
@@ -234,10 +234,11 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                 <div className="relative">
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
+                  <label htmlFor="quote-package" className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Select Your Package
                   </label>
                   <select
+                    id="quote-package"
                     value={quoteForm.packageType}
                     onChange={(e) => setQuoteForm({ ...quoteForm, packageType: e.target.value })}
                     className="cursor-pointer w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-slate-900 text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat"
@@ -252,12 +253,13 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
 
 
                 <div className="relative">
-                  <label className="block text-xs font-bold uppercase tracking-wider mb-1.5">
+                  <label htmlFor="quote-pilgrims" className="block text-xs font-bold uppercase tracking-wider mb-1.5">
                     Number of Pilgrims
                   </label>
                   <input
                     type="number"
                     min="1"
+                    id="quote-pilgrims"
                     value={quoteForm.adults}
                     onChange={(e) => setQuoteForm({ ...quoteForm, adults: parseInt(e.target.value, 10) || 1 })}
                     className="w-full border border-line p-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-slate-900 text-sm font-medium"
