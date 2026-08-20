@@ -56,7 +56,7 @@ export default function VisaSolutionsSection({ data }: { data?: any }) {
 
   return (
     <section id="saudi-visa" className="py-12 md:py-16 w-full">
-      <div className="wrap max-w-7xl mx-auto px-4">
+      <div className="max-w-[1400px] mx-auto px-5">
         <div className="section-head center text-center mb-10">
           <div className="eyebrow uppercase text-xs font-bold tracking-widest text-gold mb-1">
             {data?.eyebrow || "EXPLORE OUR"}

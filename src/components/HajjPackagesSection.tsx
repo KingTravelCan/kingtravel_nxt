@@ -70,8 +70,8 @@ export default function HajjPackagesSection({
   }, [data?.packageIds, initialPackages]);
 
   const sectionClass = isHomepage
-    ? "pb-12 md:pb-16 bg-white px-4"
-    : "pt-12 md:pt-16 bg-sage px-4";
+    ? "pb-12 md:pb-16 bg-white"
+    : "pt-12 md:pt-16 bg-sage";
 
   return (
     <section className={sectionClass}>
