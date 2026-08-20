@@ -3361,7 +3361,7 @@ export default function AdminSettingsPage() {
                                       id: Date.now().toString(),
                                       label: 'New Field Input',
                                       type: 'text',
-                                      placeholder: 'Enter details...',
+                                      placeholder: 'Enter...',
                                       required: false,
                                     };
                                     setFormFieldsState((prev) => ({

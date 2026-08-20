@@ -21,6 +21,8 @@ interface DynamicSiteFormProps {
   title?: string | null;
   description?: string | null;
   forceNoPadding?: boolean;
+  cardContainer?: boolean;
+  className?: string;
 }
 
 // ── Dropdown options keyed by field label (case-insensitive partial match) ──
@@ -59,6 +61,8 @@ export default function DynamicSiteForm({
   title,
   description,
   forceNoPadding,
+  cardContainer = false,
+  className = "",
 }: DynamicSiteFormProps) {
   const [mounted, setMounted] = useState(false);
   const [fieldsList, setFieldsList] = useState<any[]>([]);
@@ -98,12 +102,15 @@ export default function DynamicSiteForm({
             });
             setFormData(initialData);
           } else if (settings[formKey]) {
-            setFieldsList(settings[formKey]);
-            const initialData: Record<string, string> = {};
-            settings[formKey].forEach((f: any) => {
-              initialData[f.id] = "";
-            });
-            setFormData(initialData);
+            setFormConfig(settings[formKey]);
+            if (settings[formKey].fields) {
+              setFieldsList(settings[formKey].fields);
+              const initialData: Record<string, string> = {};
+              settings[formKey].fields.forEach((f: any) => {
+                initialData[f.id] = "";
+              });
+              setFormData(initialData);
+            }
           }
 
           // Extract form configuration (title, subtitle, success message)
@@ -165,7 +172,6 @@ export default function DynamicSiteForm({
       const phone = getVal(["3", "phone", "contact_phone", "mobile"]);
       const packageType = getVal(["package_type", "packageType", "trip_type"]);
       const message = getVal(["11", "message", "special_request", "details"]);
-      const ticketNumber = "TKT-" + Date.now();
       const website = getVal(["website", "url"]);
 
       let res: { success: boolean; error?: string; message?: string } = {
@@ -276,36 +282,98 @@ export default function DynamicSiteForm({
   const mainFields = fieldsList.filter((f) => f.type !== "richtext" && f.type !== "textarea");
   const richFields = fieldsList.filter((f) => f.type === "richtext" || f.type === "textarea");
 
-  return (
-    <div style={{ backgroundColor: finalBgColor }} className="w-full !bg-white">
-      <div style={{ maxWidth: finalMaxWidth }} className={`mx-auto px-4 ${forceNoPadding ? "py-8" : "py-10"}`}>
-        <div className="text-center mb-10">
-          {eyebrow && (
-            <div className="text-[#004B39] font-bold text-sm tracking-widest uppercase mb-3">
-              {eyebrow}
-            </div>
-          )}
-          <h2 className="text-3xl md:text-4xl font-extrabold text-[#004B39] mb-4 uppercase">
-            {displayTitle}
-          </h2>
-          <p className="text-slate-700 font-sans text-sm max-w-2xl mx-auto uppercase tracking-wider">
-            {displayDesc}
-          </p>
-        </div>
+  const formInnerContent = (
+    <>
+      <div className="text-center mb-10">
+        {eyebrow && (
+          <div className="text-[#004B39] font-bold text-sm tracking-widest uppercase mb-3">
+            {eyebrow}
+          </div>
+        )}
+        <h2 className="text-3xl md:text-4xl font-extrabold text-[#004B39] mb-4 uppercase">
+          {displayTitle}
+        </h2>
+        <p className="text-slate-700 font-sans text-sm max-w-2xl mx-auto uppercase tracking-wider">
+          {displayDesc}
+        </p>
+      </div>
 
-        <GlassNotificationModal
-          isOpen={status.type !== null}
-          onClose={() => setStatus({ type: null, msg: "" })}
-          type={status.type || "info"}
-          title={status.type === "success" ? "Success!" : "Error"}
-          message={status.msg}
-          confirmText="Close"
-        />
+      <GlassNotificationModal
+        isOpen={status.type !== null}
+        onClose={() => setStatus({ type: null, msg: "" })}
+        type={status.type || "info"}
+        title={status.type === "success" ? "Success!" : "Error"}
+        message={status.msg}
+        confirmText="Close"
+      />
 
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* Main 2-col grid (excludes richtext/textarea) */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {mainFields.map((field) => {
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {(() => {
+            // Check if we have the 3 flight dropdowns to group together
+            const isFlight3Dropdown = (label?: string) => {
+              const l = (label || "").toLowerCase();
+              return l.includes("trip type") || l.includes("passengers") || l === "class" || l.includes("flight class");
+            };
+
+            const flight3Fields = mainFields.filter((f) => isFlight3Dropdown(f.label));
+            const hasFlight3Group = formKey === "flightInquiry" && flight3Fields.length === 3;
+
+            const renderedElements: React.ReactNode[] = [];
+            let flight3Rendered = false;
+
+            mainFields.forEach((field) => {
+              if (hasFlight3Group && isFlight3Dropdown(field.label)) {
+                if (!flight3Rendered) {
+                  flight3Rendered = true;
+                  renderedElements.push(
+                    <div key="flight-dropdowns-group" className="col-span-1 md:col-span-2 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                      {flight3Fields.map((f3) => {
+                        const isSelect = f3.type === "select";
+                        const selectOptions = isSelect ? getSelectOptions(f3.label || "") : [];
+                        return (
+                          <div key={f3.id} className="w-full">
+                            <label className="block text-sm font-bold text-slate-800 mb-2">
+                              {f3.label}{" "}
+                              {f3.required && <span className="text-red-500">*</span>}
+                            </label>
+                            <select
+                              name={f3.id}
+                              required={f3.required}
+                              value={formData[f3.id] || ""}
+                              onChange={handleChange}
+                              className="w-full border border-line p-3 pr-10 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium appearance-none bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2364748b%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpolyline%20points%3D%226%209%2012%2015%2018%209%22%3E%3C%2Fpolyline%3E%3C%2Fsvg%3E')] bg-[length:1.25rem] bg-[right_0.5rem_center] bg-no-repeat cursor-pointer focus:border-emerald-800"
+                            >
+                              <option value="">Select {f3.label}</option>
+                              {f3.type === "dropdown_flight_type" && ["One-Way", "Round Trip"].map(opt => (
+                                <option key={opt} value={opt}>{opt}</option>
+                              ))}
+                              {f3.type === "dropdown_numbers_1_6" && ["1", "2", "3", "4", "5", "6+"].map(opt => (
+                                <option key={opt} value={opt}>{opt}</option>
+                              ))}
+                              {f3.type === "dropdown_flight_class" && ["Economy", "Business", "First Class"].map(opt => (
+                                <option key={opt} value={opt}>{opt}</option>
+                              ))}
+                              {isSelect && selectOptions.map(opt => (
+                                <option key={opt} value={opt}>{opt}</option>
+                              ))}
+                              {isSelect && selectOptions.length === 0 && (
+                                <>
+                                  <option value="Option 1">Option 1</option>
+                                  <option value="Option 2">Option 2</option>
+                                  <option value="Option 3">Option 3</option>
+                                </>
+                              )}
+                            </select>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  );
+                }
+                return;
+              }
+
               const isDate = field.type === "date";
               const isTel = field.type === "tel";
               const isSelect = field.type === "select";
@@ -317,7 +385,7 @@ export default function DynamicSiteForm({
 
               const selectOptions = isSelect ? getSelectOptions(field.label || "") : [];
 
-              return (
+              renderedElements.push(
                 <div key={field.id} className={isFullWidth ? "md:col-span-2" : ""}>
                   <label className="block text-sm font-bold text-slate-800 mb-2">
                     {field.label}{" "}
@@ -426,38 +494,58 @@ export default function DynamicSiteForm({
                   )}
                 </div>
               );
-            })}
+            });
+
+            return renderedElements;
+          })()}
+        </div>
+
+        {/* Message / textarea fields — always full width, below grid */}
+        {richFields.map((field) => (
+          <div key={field.id}>
+            <label className="block text-sm font-bold text-slate-800 mb-2">
+              {field.label}{" "}
+              {field.required && <span className="text-red-500">*</span>}
+            </label>
+            <textarea
+              name={field.id}
+              required={field.required}
+              value={formData[field.id] || ""}
+              onChange={handleChange}
+              placeholder={field.placeholder || "Message"}
+              rows={4}
+              className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium resize-none focus:border-emerald-800"
+            />
           </div>
+        ))}
 
-          {/* Message / textarea fields — always full width, below grid */}
-          {richFields.map((field) => (
-            <div key={field.id}>
-              <label className="block text-sm font-bold text-slate-800 mb-2">
-                {field.label}{" "}
-                {field.required && <span className="text-red-500">*</span>}
-              </label>
-              <textarea
-                name={field.id}
-                required={field.required}
-                value={formData[field.id] || ""}
-                onChange={handleChange}
-                placeholder={field.placeholder || ""}
-                rows={4}
-                className="w-full border border-line p-3 pr-3 rounded-sm bg-slate-50 outline-none focus:border-gold transition-colors text-[#111111] text-sm font-medium resize-none focus:border-emerald-800"
-              />
-            </div>
-          ))}
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full bg-gold text-ink font-extrabold py-3.5 px-6 rounded-sm shadow-md hover:bg-gold-lt active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
+        >
+          {isSubmitting
+            ? "Submitting Request..."
+            : formConfig?.buttonText || "Submit Request"}
+        </button>
+      </form>
+    </>
+  );
 
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="w-full bg-gold text-ink font-extrabold py-3.5 px-6 rounded-sm shadow-md hover:bg-gold-lt active:scale-[0.99] transition-all duration-300 tracking-wider uppercase text-sm flex items-center justify-center cursor-pointer"
-          >
-            {isSubmitting
-              ? "Submitting Request..."
-              : formConfig?.buttonText || "Submit Request"}
-          </button>
-        </form>
+  if (cardContainer) {
+    return (
+      <div style={{ backgroundColor: finalBgColor }} className={`w-full py-12 md:py-16 px-4 sm:px-6 ${className}`}>
+        <div style={{ maxWidth: finalMaxWidth }} className="mx-auto bg-white rounded-3xl p-6 sm:p-10 shadow-xl border-0">
+          {formInnerContent}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ backgroundColor: finalBgColor }} className={`w-full bg-white ${className}`}>
+      <div style={{ maxWidth: finalMaxWidth }} className={`mx-auto px-4 ${forceNoPadding ? "py-8" : "py-10"}`}>
+        {formInnerContent}
       </div>
     </div>
   );
