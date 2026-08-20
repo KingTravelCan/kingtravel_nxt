@@ -20,6 +20,17 @@ function escapeXml(unsafe: string): string {
     .replace(/'/g, '&apos;');
 }
 
+function normalizeImageUrl(imgUrl: string, baseUrl: string): string {
+  if (!imgUrl) return '';
+  const trimmed = imgUrl.trim();
+  if (trimmed.startsWith('http://') || trimmed.startsWith('https://')) {
+    return trimmed;
+  }
+  const cleanBase = baseUrl.replace(/\/+$/, '');
+  const cleanPath = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+  return `${cleanBase}${cleanPath}`;
+}
+
 export async function generateSitemapXml(baseUrl: string): Promise<string> {
   const items = await gatherAllSitemapItems(baseUrl);
   
@@ -36,8 +47,9 @@ export async function generateSitemapXml(baseUrl: string): Promise<string> {
     if (item.images && item.images.length > 0) {
       for (const img of item.images) {
         if (!img) continue;
+        const absoluteImg = normalizeImageUrl(img, baseUrl);
         xml += `    <image:image>\n`;
-        xml += `      <image:loc>${escapeXml(img)}</image:loc>\n`;
+        xml += `      <image:loc>${escapeXml(absoluteImg)}</image:loc>\n`;
         xml += `    </image:image>\n`;
       }
     }

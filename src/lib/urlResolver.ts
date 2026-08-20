@@ -78,8 +78,14 @@ export function resolveCanonicalPublicOrigin(settings?: { canonicalSiteUrl?: str
     return normalizePublicOrigin(settings.canonicalSiteUrl);
   }
 
-  // 2. Production Environment Variable
-  const envUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXT_PUBLIC_BASE_URL || process.env.SITE_URL;
+  // 2. Production Environment Variable (supports both NEXT_PUBLIC_ prefixes and non-prefixed keys)
+  const envUrl =
+    process.env.APP_URL ||
+    process.env.BASE_URL ||
+    process.env.SITE_URL ||
+    process.env.NEXT_PUBLIC_APP_URL ||
+    process.env.NEXT_PUBLIC_BASE_URL;
+
   if (envUrl && isValidPublicOrigin(envUrl)) {
     return normalizePublicOrigin(envUrl);
   }
