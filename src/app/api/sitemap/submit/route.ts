@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/db';
 import { sitemapLogs } from '@/db/schema';
+import { getSeoIntelligenceSettings } from '@/actions/pageActions';
+import { resolveCanonicalPublicOrigin } from '@/lib/urlResolver';
 
 export async function POST() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kingtravel.ca';
+    const seoSettings = await getSeoIntelligenceSettings();
+    const canonicalOrigin = resolveCanonicalPublicOrigin(seoSettings);
+    const baseUrl = canonicalOrigin || 'https://staging.kingtravelcan.com';
     const sitemapUrl = `${baseUrl}/sitemap.xml`;
     
     // Ping Google
