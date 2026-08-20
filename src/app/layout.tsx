@@ -8,6 +8,7 @@ import RevealOnScroll from "@/components/RevealOnScroll";
 import FrontendMaintenanceWrapper from "@/components/FrontendMaintenanceWrapper";
 import DisclaimerPopupModal from "@/components/DisclaimerPopupModal";
 import FaviconSync from "@/components/FaviconSync";
+import FontAwesomeStylesheet from "@/components/FontAwesomeStylesheet";
 import Script from "next/script";
 import {
   getSiteIdentity,
@@ -16,7 +17,6 @@ import {
   getFooterData,
   getSeoIntelligenceSettings,
 } from "@/actions/pageActions";
-import "@fortawesome/fontawesome-free/css/all.min.css";
 import "./globals.css";
 
 const marcellus = Marcellus({
@@ -103,6 +103,7 @@ export default async function RootLayout({
         <link rel="icon" href={faviconUrl} />
         <link rel="shortcut icon" href={faviconUrl} />
         <link rel="apple-touch-icon" href={faviconUrl} />
+        <FontAwesomeStylesheet />
         {/* Global Robots Indexing Directive if disabled */}
         {!isIndexingEnabled && (
           <meta name="robots" content="noindex, nofollow" />
