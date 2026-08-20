@@ -291,6 +291,9 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                 <div className="relative">
                   <select
                     id="packageType"
+                    aria-label="Select package type"
+                    aria-invalid={Boolean(errors.packageType)}
+                    aria-describedby={errors.packageType ? "packageType-error" : undefined}
                     value={form.packageType}
                     onChange={(e) => {
                       setForm({ ...form, packageType: e.target.value });
@@ -307,7 +310,7 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                     <option value="Saudi Visa" className="text-[#111111]">Saudi Visa</option>
                     <option value="Other" className="text-[#111111]">Other</option>
                   </select>
-                  {errors.packageType && <span className="text-red-600 text-xs font-semibold mt-1 block">{errors.packageType}</span>}
+                  {errors.packageType && <span id="packageType-error" className="text-red-600 text-xs font-semibold mt-1 block">{errors.packageType}</span>}
                 </div>
               </div>
 

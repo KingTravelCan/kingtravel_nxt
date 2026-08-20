@@ -497,7 +497,11 @@ export default function AdminSettingsPage() {
     });
     getSeoIntelligenceSettings().then(data => {
       if (data) {
-        setSeoData(data);
+        setSeoData((prev: any) => ({
+          ...prev,
+          ...data,
+          siteIndexingEnabled: data.siteIndexingEnabled !== undefined ? Boolean(data.siteIndexingEnabled) : (prev.siteIndexingEnabled ?? true),
+        }));
         if (data.sitemapTotalUrls || data.sitemapLastGenerated) {
           setSitemapStats({
             totalUrls: data.sitemapTotalUrls || 0,

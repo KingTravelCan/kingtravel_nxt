@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Jost, Marcellus, Plus_Jakarta_Sans, Poppins } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/WhatsAppFloat";
@@ -7,6 +8,7 @@ import RevealOnScroll from "@/components/RevealOnScroll";
 import FrontendMaintenanceWrapper from "@/components/FrontendMaintenanceWrapper";
 import DisclaimerPopupModal from "@/components/DisclaimerPopupModal";
 import FaviconSync from "@/components/FaviconSync";
+import FontAwesomeStylesheet from "@/components/FontAwesomeStylesheet";
 import Script from "next/script";
 import {
   getSiteIdentity,
@@ -16,6 +18,37 @@ import {
   getSeoIntelligenceSettings,
 } from "@/actions/pageActions";
 import "./globals.css";
+
+const marcellus = Marcellus({
+  subsets: ["latin"],
+  weight: "400",
+  variable: "--font-marcellus",
+  display: "swap",
+});
+
+const plusJakartaSans = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: "variable",
+  variable: "--font-plus-jakarta-sans",
+  display: "swap",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
+  display: "swap",
+  preload: false,
+});
+
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-jost",
+  display: "swap",
+  preload: false,
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const [identity, seoSettings] = await Promise.all([
@@ -61,26 +94,16 @@ export default async function RootLayout({
   const isGaActive = (seoSettings?.googleAnalyticsEnabled ?? true) && gaId.length > 0;
 
   return (
-    <html lang="en" data-scroll-behavior="smooth">
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${marcellus.variable} ${plusJakartaSans.variable} ${poppins.variable} ${jost.variable}`}
+    >
       <head>
         <link rel="icon" href={faviconUrl} />
         <link rel="shortcut icon" href={faviconUrl} />
         <link rel="apple-touch-icon" href={faviconUrl} />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Marcellus&family=Jost:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
-        />
-
+        <FontAwesomeStylesheet />
         {/* Global Robots Indexing Directive if disabled */}
         {!isIndexingEnabled && (
           <meta name="robots" content="noindex, nofollow" />
