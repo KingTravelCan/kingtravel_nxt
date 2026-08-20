@@ -456,7 +456,7 @@ export default function HajjPackagesPageClient({ initialPageData, packages = [] 
       {(() => {
         let eyebrow = 'HAPPY PILGRIMS';
         let heading = 'What our clients say';
-        let reviewCount = '927';
+        let reviewCount = '942';
         let reviewLink = 'https://maps.app.goo.gl/1BRUoBxtt4wWw58t6';
         let ctaLabel = 'Write A Review';
         try {

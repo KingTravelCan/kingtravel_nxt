@@ -249,7 +249,7 @@ export default function EconomyHajj2027Page() {
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div>
                   <div className="text-xl font-extrabold text-emerald-900">King Travel</div>
-                  <span className="text-xs text-slate-400">928 verified reviews</span>
+                  <span className="text-xs text-slate-400">942 verified reviews</span>
                 </div>
                 <div className="bg-amber-50 text-amber-800 text-xs font-bold px-3 py-1.5 rounded-lg border border-amber-200">
                   4.4/5 <i className="fa-solid fa-star text-amber-500"></i>

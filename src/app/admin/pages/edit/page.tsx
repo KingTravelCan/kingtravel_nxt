@@ -545,7 +545,7 @@ function PageBuilderContent() {
       defaultData = {
         eyebrow: 'HAPPY PILGRIMS',
         title: 'What our clients say',
-        reviewCount: '927',
+        reviewCount: '942',
         reviewLink: 'https://maps.app.goo.gl/1BRUoBxtt4wWw58t6',
         ctaLabel: 'Write A Review',
         apiKey: '',
@@ -1735,7 +1735,7 @@ function PageBuilderContent() {
                                       type="text"
                                       value={sec.data?.reviewCount || ''}
                                       onChange={(e) => updateSectionData(sec.id, 'reviewCount', e.target.value)}
-                                      placeholder="e.g. 927"
+                                      placeholder="e.g. 942"
                                       className="w-full px-2.5 py-1.5 rounded-lg border border-slate-300 text-xs font-bold text-slate-900 bg-white"
                                     />
                                   </div>

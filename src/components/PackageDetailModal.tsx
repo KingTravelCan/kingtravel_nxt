@@ -162,7 +162,7 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
 
   const operatorName = cardData.operatorName || pkg.operatorName || "King Travel";
   const operatorRating = cardData.operatorRating || pkg.operatorRating || "4.4/5";
-  const operatorReviews = cardData.operatorReviews || pkg.operatorReviews || "928 verified reviews";
+  const operatorReviews = cardData.operatorReviews || pkg.operatorReviews || "942 verified reviews";
 
   const makkahHotel = detailData.makkahHotel || cardData.makkahHotel || pkg.makkahHotel || {};
   const makkahImg = makkahHotel?.image || makkahHotel?.image_url || "";

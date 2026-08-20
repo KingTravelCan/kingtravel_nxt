@@ -326,7 +326,7 @@ export default function PageSectionsRenderer({ sections, pageData, initialPackag
                           </g>
                         </svg>
                       </div>
-                      <span className="review-count">{sec.data?.reviewCount || "927"} Google reviews</span>
+                      <span className="review-count">{sec.data?.reviewCount || "942"} Google reviews</span>
                       {sec.data?.reviewLink && (
                         <a
                           href={sec.data.reviewLink}

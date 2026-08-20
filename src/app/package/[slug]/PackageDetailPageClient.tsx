@@ -215,7 +215,7 @@ export default function PackageDetailPageClient({
 
   const operatorName = cardData.operatorName || pkg.operatorName || "King Travel";
   const operatorRating = cardData.operatorRating || pkg.operatorRating || "4.4/5";
-  const operatorReviews = cardData.operatorReviews || pkg.operatorReviews || "928 verified reviews";
+  const operatorReviews = cardData.operatorReviews || pkg.operatorReviews || "942 verified reviews";
 
   // Hotel relation fallback if present
   const dbMakkahHotel = Array.isArray(pkg.hotels) ? pkg.hotels.find((h: any) => /makkah/i.test(h.city)) : null;
