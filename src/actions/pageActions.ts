@@ -1014,11 +1014,23 @@ export async function getDefaultSeoIntelligence() {
 let seoIntelligenceMemoryCache: any = null;
 
 async function fetchSeoIntelligenceFromDb() {
-  const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'seo_intelligence')).limit(1);
-  if (res && res.length > 0) {
-    return safeJsonParse(res[0].value, seoIntelligenceMemoryCache || await getDefaultSeoIntelligence());
+  try {
+    const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'seo_intelligence')).limit(1);
+    if (res && res.length > 0 && res[0].value) {
+      const parsed: any = safeJsonParse(res[0].value, null);
+      if (parsed && typeof parsed === 'object') {
+        const defaults = await getDefaultSeoIntelligence();
+        return {
+          ...defaults,
+          ...parsed,
+          siteIndexingEnabled: parsed.siteIndexingEnabled !== undefined ? Boolean(parsed.siteIndexingEnabled) : true,
+        };
+      }
+    }
+  } catch (err) {
+    console.warn('fetchSeoIntelligenceFromDb error:', err);
   }
-  return null;
+  return seoIntelligenceMemoryCache || await getDefaultSeoIntelligence();
 }
 
 export async function getSeoIntelligenceSettings() {
