@@ -998,6 +998,75 @@ export async function getPageSeoAction(pageId: number | string) {
   }
 }
 
+export async function getDefaultSeoIntelligence() {
+  return {
+    siteIndexingEnabled: true,
+    canonicalSiteUrl: '',
+    additionalDisallowPaths: [] as string[],
+    googleSearchConsoleCode: '',
+    googleAnalyticsId: '',
+    googleAnalyticsEnabled: true,
+    sitemapLastGenerated: null,
+    sitemapTotalUrls: 0,
+  };
+}
+
+let seoIntelligenceMemoryCache: any = null;
+
+async function fetchSeoIntelligenceFromDb() {
+  const res = await db.select().from(siteSettings).where(eq(siteSettings.key, 'seo_intelligence')).limit(1);
+  if (res && res.length > 0) {
+    return safeJsonParse(res[0].value, seoIntelligenceMemoryCache || await getDefaultSeoIntelligence());
+  }
+  return null;
+}
+
+export async function getSeoIntelligenceSettings() {
+  let data: any = null;
+  try {
+    const getCached = unstable_cache(
+      fetchSeoIntelligenceFromDb,
+      ['seo-intelligence'],
+      { tags: ['seo-intelligence'], revalidate: CONTENT_CACHE_SECONDS }
+    );
+    data = await getCached();
+  } catch (err) {
+    console.warn('getSeoIntelligenceSettings DB query failed, using defaults:', err);
+  }
+  if (!data) data = seoIntelligenceMemoryCache || await getDefaultSeoIntelligence();
+  return data;
+}
+
+export async function saveSeoIntelligenceSettingsAction(settings: any) {
+  try {
+    const existing = await db.select().from(siteSettings).where(eq(siteSettings.key, 'seo_intelligence')).limit(1);
+    const value = JSON.stringify(settings);
+    seoIntelligenceMemoryCache = settings;
+
+    if (existing && existing.length > 0) {
+      await db.update(siteSettings).set({ value, updatedAt: new Date() }).where(eq(siteSettings.key, 'seo_intelligence'));
+    } else {
+      await db.insert(siteSettings).values({ key: 'seo_intelligence', value });
+    }
+
+    await logAdminActivityAction({
+      type: 'settings',
+      action: 'Updated SEO Intelligence',
+      details: 'Updated site indexing, Google Search Console, Google Analytics, and Sitemap configurations.',
+    });
+
+    revalidateTag('seo-intelligence', 'max');
+    revalidatePath('/', 'layout');
+    revalidatePath('/sitemap.xml');
+    revalidatePath('/robots.txt');
+
+    return { success: true };
+  } catch (err: any) {
+    console.error('saveSeoIntelligenceSettingsAction error:', err);
+    return { success: false, error: err.message || 'Failed to save SEO Intelligence settings' };
+  }
+}
+
 
 
 

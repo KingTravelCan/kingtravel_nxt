@@ -1,4 +1,6 @@
 import { generateSitemapXml } from '@/lib/sitemapGenerator';
+import { getSeoIntelligenceSettings } from '@/actions/pageActions';
+import { resolveCanonicalPublicOrigin } from '@/lib/urlResolver';
 import { NextResponse } from 'next/server';
 
 // Revalidate this route according to cache preferences
@@ -6,7 +8,9 @@ export const revalidate = 86400; // Cache for 24 hours (86400 seconds)
 
 export async function GET() {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://www.kingtravel.ca';
+    const seoSettings = await getSeoIntelligenceSettings();
+    const canonicalOrigin = resolveCanonicalPublicOrigin(seoSettings);
+    const baseUrl = canonicalOrigin || 'https://staging.kingtravelcan.com';
     const sitemapXml = await generateSitemapXml(baseUrl);
 
     return new NextResponse(sitemapXml, {
