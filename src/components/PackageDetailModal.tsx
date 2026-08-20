@@ -117,21 +117,21 @@ export default function PackageDetailModal({ isOpen, onClose, pkg }: PackageDeta
     ];
   })();
 
-  // If there is only 1 package price, auto-select it by default
-  useEffect(() => {
-    if (packagePrices.length === 1 && !selectedPackageType) {
-      setSelectedPackageType(packagePrices[0].packageType);
-    }
-  }, [packagePrices, selectedPackageType]);
-
-  if (!isOpen || !pkg) return null;
-
-  const effectivePackageType = packagePrices.length === 1 ? (selectedPackageType || packagePrices[0].packageType) : selectedPackageType;
-
   // Find the minimum priced package type deterministically
   const minPriceItem = packagePrices.length > 0
     ? packagePrices.reduce((min, curr) => (curr.price < min.price ? curr : min), packagePrices[0])
-    : { packageType: 'QUAD OCCUPANCY', price: Number(String(pkg.startingPrice ?? pkg.price ?? '2795').replace(/[^0-9.]/g, '')) || 2795 };
+    : { packageType: 'QUAD OCCUPANCY', price: Number(String(pkg?.startingPrice ?? pkg?.price ?? '2795').replace(/[^0-9.]/g, '')) || 2795 };
+
+  // Default selected package type is the minimum priced package (or single price if only 1)
+  useEffect(() => {
+    if (packagePrices.length > 0 && !selectedPackageType) {
+      setSelectedPackageType(minPriceItem.packageType);
+    }
+  }, [packagePrices, selectedPackageType, minPriceItem.packageType]);
+
+  if (!isOpen || !pkg) return null;
+
+  const effectivePackageType = selectedPackageType || (minPriceItem ? minPriceItem.packageType : (packagePrices[0]?.packageType || ""));
 
   const title = pkg.title || "ECONOMY HAJJ PACKAGE 2027";
   const durationText = detailData.durationText || cardData.duration || pkg.durationText || `${pkg.duration || pkg.month || "14 DAYS"} / 13 NIGHTS`;
@@ -580,31 +580,32 @@ DURING STAY AT AZIZIYA - Hotel - Maktab-A-Category (Full Board)
                   </div>
                 </div>
 
-                {/* Package Type Dropdown */}
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                    Package Type
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={effectivePackageType}
-                      onChange={(e) => setSelectedPackageType(e.target.value)}
-                      className="w-full bg-white border border-slate-200 rounded-xl p-3.5 pr-9 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none appearance-none cursor-pointer"
-                    >
-                      <option value="" className="bg-white text-slate-900">Select Package Type</option>
-                      {packagePrices.map((item, idx) => (
-                        <option key={idx} value={item.packageType} className="bg-white text-slate-900">
-                          CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
+                {/* Package Type Dropdown (only if 2 or more package types) */}
+                {packagePrices.length > 1 && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 mb-1.5">
+                      Package Type
+                    </label>
+                    <div className="relative">
+                      <select
+                        value={effectivePackageType}
+                        onChange={(e) => setSelectedPackageType(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-xl p-3.5 pr-9 text-xs text-slate-800 font-medium focus:ring-2 focus:ring-[#004B39] focus:outline-none appearance-none cursor-pointer"
+                      >
+                        {packagePrices.map((item, idx) => (
+                          <option key={idx} value={item.packageType} className="bg-white text-slate-900">
+                            CAD {item.price ? item.price.toLocaleString("en-CA") : ""} - {item.packageType}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-slate-500">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <polyline points="6 9 12 15 18 9" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 {/* Total Calculation Display */}
                 <div className="pt-2 flex justify-between items-center">
