@@ -131,6 +131,7 @@ export default function CertificationsFlipCardsSection({
           <img
             src={bgImage}
             alt="Background pattern"
+            loading="lazy"
             className="w-full h-full object-cover"
           />
         </div>
@@ -234,6 +235,7 @@ export default function CertificationsFlipCardsSection({
                             item.title ||
                             "Certification Logo"
                           }
+                          loading="lazy"
                           className="
                             max-h-full
                             max-w-full

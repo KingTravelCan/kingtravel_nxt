@@ -24,7 +24,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
               <Link href="/">
                 {footerData.logo ? (
                   footerData.logo.startsWith('data:') ? (
-                    <img src={footerData.logo} alt="King Travel Logo" className="w-[210px] h-auto" />
+                    <img src={footerData.logo} alt="King Travel Logo" loading="lazy" className="w-[210px] h-auto" />
                   ) : (
                     <Image
                       src={footerData.logo}
@@ -62,6 +62,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
                           <img
                             src={item.icon}
                             alt={item.name || 'Social Icon'}
+                            loading="lazy"
                             className="w-[32px] h-[32px] max-w-[32px] max-h-[32px] block object-contain"
                           />
                         ) : (
@@ -83,6 +84,7 @@ export default function Footer({ initialFooterData = {} }: { initialFooterData?:
                       <img
                         src={badge.icon}
                         alt={badge.name || 'Trust Badge'}
+                        loading="lazy"
                         className="max-h-7 max-w-full object-contain"
                       />
                     ) : (

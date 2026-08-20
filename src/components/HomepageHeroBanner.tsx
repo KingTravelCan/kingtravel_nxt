@@ -97,6 +97,7 @@ export default function HomepageHeroBanner({ data, pageData }: { data: any, page
               fill
               preload
               fetchPriority="high"
+              quality={60}
               sizes="100vw"
               style={{
                 objectFit: heroData.size === "auto" ? "none" : (heroData.size || "cover"),
