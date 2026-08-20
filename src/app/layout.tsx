@@ -7,12 +7,24 @@ import RevealOnScroll from "@/components/RevealOnScroll";
 import FrontendMaintenanceWrapper from "@/components/FrontendMaintenanceWrapper";
 import DisclaimerPopupModal from "@/components/DisclaimerPopupModal";
 import FaviconSync from "@/components/FaviconSync";
-import { getSiteIdentity, getLoginAuthSettings, getNavItems, getFooterData } from "@/actions/pageActions";
+import Script from "next/script";
+import {
+  getSiteIdentity,
+  getLoginAuthSettings,
+  getNavItems,
+  getFooterData,
+  getSeoIntelligenceSettings,
+} from "@/actions/pageActions";
 import "./globals.css";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const identity = await getSiteIdentity();
+  const [identity, seoSettings] = await Promise.all([
+    getSiteIdentity(),
+    getSeoIntelligenceSettings(),
+  ]);
   const faviconUrl = identity?.favicon || "/img/favicon.png";
+  const isIndexingEnabled = seoSettings?.siteIndexingEnabled ?? true;
+
   return {
     title: identity?.siteName || "King Travel Canada",
     description: identity?.tagline || "Licensed Hajj & Umrah pilgrimage operator in Canada offering 5-star packages, visa consultation, and direct flights.",
@@ -21,6 +33,10 @@ export async function generateMetadata(): Promise<Metadata> {
       shortcut: faviconUrl,
       apple: faviconUrl,
     },
+    robots: !isIndexingEnabled ? { index: false, follow: false } : undefined,
+    verification: seoSettings?.googleSearchConsoleCode ? {
+      google: seoSettings.googleSearchConsoleCode,
+    } : undefined,
   };
 }
 
@@ -29,14 +45,20 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [identity, loginAuth, navItems, footerData] = await Promise.all([
+  const [identity, loginAuth, navItems, footerData, seoSettings] = await Promise.all([
     getSiteIdentity(),
     getLoginAuthSettings(),
     getNavItems(),
     getFooterData(),
+    getSeoIntelligenceSettings(),
   ]);
   const faviconUrl = identity?.favicon || "/img/favicon.ico";
   const initialMaintenanceMode = loginAuth?.maintenanceMode ?? false;
+
+  const isIndexingEnabled = seoSettings?.siteIndexingEnabled ?? true;
+  const gscCode = (seoSettings?.googleSearchConsoleCode || "").trim();
+  const gaId = (seoSettings?.googleAnalyticsId || "").trim();
+  const isGaActive = (seoSettings?.googleAnalyticsEnabled ?? true) && gaId.length > 0;
 
   return (
     <html lang="en" data-scroll-behavior="smooth">
@@ -58,6 +80,36 @@ export default async function RootLayout({
           rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
         />
+
+        {/* Global Robots Indexing Directive if disabled */}
+        {!isIndexingEnabled && (
+          <meta name="robots" content="noindex, nofollow" />
+        )}
+
+        {/* Google Search Console HTML Verification */}
+        {gscCode && (
+          <meta name="google-site-verification" content={gscCode} />
+        )}
+
+        {/* Google Analytics 4 (GA4) Tracking Script */}
+        {isGaActive && (
+          <>
+            <Script
+              src={`https://www.googletagmanager.com/gtag/js?id=${gaId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${gaId}', {
+                  page_path: window.location.pathname,
+                });
+              `}
+            </Script>
+          </>
+        )}
       </head>
 
       <body suppressHydrationWarning>
