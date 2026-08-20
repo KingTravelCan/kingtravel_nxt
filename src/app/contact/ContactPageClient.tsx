@@ -24,7 +24,7 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
             <div className="flex flex-col items-center sm:items-start">
               <span className="text-[10px] font-extrabold text-[#004B39] uppercase tracking-wide mb-1">HEAD OFFICE</span>
               <a
-                className="text-xs font-medium leading-relaxed text-slate-600 hover:text-emerald-800 transition no-underline"
+                className="text-xs font-medium leading-relaxed text-ink hover:text-emerald-800 transition no-underline"
                 href="https://maps.app.goo.gl/1BRUoBxtt4wWw58t6"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -37,7 +37,7 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
             <div className="flex flex-col items-center sm:items-start border-t sm:border-t-0 sm:border-l border-slate-100 pt-3 sm:pt-0 sm:pl-4">
               <span className="text-[10px] font-extrabold text-[#004B39] uppercase tracking-wide mb-1">BRANCH OFFICE</span>
               <a
-                className="text-xs font-medium leading-relaxed text-slate-600 hover:text-emerald-800 transition no-underline"
+                className="text-xs font-medium leading-relaxed text-ink hover:text-emerald-800 transition no-underline"
                 href="https://maps.app.goo.gl/U6B4fci2Jas4sh6S6"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -58,15 +58,40 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
               {data?.card2Title || "24/7 SUPPORT"}
             </h3>
             <div className="flex flex-col gap-1.5 border-t border-slate-100 pt-4 w-full">
-              <a className="text-sm text-slate-700 hover:text-emerald-800 transition font-semibold no-underline" href={`tel:${(data?.phone1 || "+18008445464").replace(/\s+/g, '')}`}>
-                {data?.phone1 || "+1 800-844-5464"}
-              </a>
-              <a className="text-sm text-slate-700 hover:text-emerald-800 transition font-semibold" href={`tel:${(data?.phone2 || "+19056248555").replace(/\s+/g, '')}`}>
-                {data?.phone2 || "+1 905-624-8555"}
-              </a>
-              <a className="text-sm text-slate-700 hover:text-emerald-800 transition font-semibold" href={`tel:${(data?.phone3 || "+19056248344").replace(/\s+/g, '')}`}>
-                {data?.phone3 || "+1 905-624-8344"}
-              </a>
+              {(() => {
+                const supportList: any[] = (data?.supportItems && Array.isArray(data.supportItems) && data.supportItems.length > 0)
+                  ? data.supportItems
+                  : [
+                    { phone: data?.phone1 || '+1 800-844-5464', label: '', text: data?.phone1 || '+1 800-844-5464', url: `tel:${(data?.phone1 || '+18008445464').replace(/\s+/g, '')}`, openInNewTab: false },
+                    { phone: data?.phone2 || '+1 905-624-8555', label: '', text: data?.phone2 || '+1 905-624-8555', url: `tel:${(data?.phone2 || '+19056248555').replace(/\s+/g, '')}`, openInNewTab: false },
+                    { phone: data?.phone3 || '+1 905-624-8344', label: '', text: data?.phone3 || '+1 905-624-8344', url: `tel:${(data?.phone3 || '+19056248344').replace(/\s+/g, '')}`, openInNewTab: false },
+                  ];
+
+                return supportList
+                  .filter((item: any) => item && (item.phone || item.text || item.url))
+                  .map((item: any, idx: number) => {
+                    const phoneDisplay = item.phone || item.text || '';
+                    const labelDisplay = item.label ? ` - ${item.label}` : '';
+                    const actionUrl = item.url || (phoneDisplay.includes('@') ? `mailto:${phoneDisplay.trim()}` : `tel:${phoneDisplay.replace(/[^0-9+]/g, '')}`);
+
+                    return (
+                      <a
+                        key={idx}
+                        className="text-sm hover:text-emerald-800 transition font-semibold no-underline flex items-center justify-center gap-1.5 flex-wrap"
+                        href={actionUrl}
+                        target={item.openInNewTab ? "_blank" : undefined}
+                        rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                      >
+                        <span className="text-ink font-sans text-sm">{phoneDisplay} -</span>
+                        {item.label && (
+                          <span className="text-ink-light font-medium text-xs inline-flex items-center">
+                            {item.label}
+                          </span>
+                        )}
+                      </a>
+                    );
+                  });
+              })()}
             </div>
           </div>
         </div>
@@ -80,8 +105,8 @@ function ContactInfoCardsSection({ data }: { data?: any }) {
             <h3 className="text-xs font-extrabold uppercase tracking-widest text-[#004B39] mb-2">
               {data?.card3Title || "EMAIL US"}
             </h3>
-            <a href={`mailto:${data?.email || "saudivisa@kingtravelcan.com"}`} className="text-sm text-slate-700 hover:text-emerald-800 transition break-all font-semibold no-underline">
-              {data?.email || "saudivisa@kingtravelcan.com"}
+            <a href={`mailto:${data?.email || "info@kingtravelcan.com"}`} className="text-sm text-ink hover:text-emerald-800 transition break-all font-semibold no-underline">
+              {data?.email || "info@kingtravelcan.com"}
             </a>
           </div>
 

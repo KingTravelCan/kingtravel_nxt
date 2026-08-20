@@ -50,15 +50,40 @@ export default function ContactInfoCardsSection({ data }: { data?: any }) {
               {data?.card2Title || "24/7 SUPPORT"}
             </h3>
             <div className="flex flex-col gap-1.5 border-t border-slate-100 pt-4 w-full">
-              <a className="text-sm text-slate-700 hover:text-emerald-800 transition font-semibold no-underline" href={`tel:${(data?.phone1 || "+18008445464").replace(/\s+/g, '')}`}>
-                {data?.phone1 || "+1 800-844-5464"}
-              </a>
-              <a className="text-sm text-slate-700 hover:text-emerald-800 transition font-semibold" href={`tel:${(data?.phone2 || "+19056248555").replace(/\s+/g, '')}`}>
-                {data?.phone2 || "+1 905-624-8555"}
-              </a>
-              <a className="text-sm text-slate-700 hover:text-emerald-800 transition font-semibold" href={`tel:${(data?.phone3 || "+19056248344").replace(/\s+/g, '')}`}>
-                {data?.phone3 || "+1 905-624-8344"}
-              </a>
+              {(() => {
+                const supportList: any[] = (data?.supportItems && Array.isArray(data.supportItems) && data.supportItems.length > 0)
+                  ? data.supportItems
+                  : [
+                    { phone: data?.phone1 || '+1 800-844-5464', label: '', text: data?.phone1 || '+1 800-844-5464', url: `tel:${(data?.phone1 || '+18008445464').replace(/\s+/g, '')}`, openInNewTab: false },
+                    { phone: data?.phone2 || '+1 905-624-8555', label: '', text: data?.phone2 || '+1 905-624-8555', url: `tel:${(data?.phone2 || '+19056248555').replace(/\s+/g, '')}`, openInNewTab: false },
+                    { phone: data?.phone3 || '+1 905-624-8344', label: '', text: data?.phone3 || '+1 905-624-8344', url: `tel:${(data?.phone3 || '+19056248344').replace(/\s+/g, '')}`, openInNewTab: false },
+                  ];
+
+                return supportList
+                  .filter((item: any) => item && (item.phone || item.text || item.url))
+                  .map((item: any, idx: number) => {
+                    const phoneDisplay = item.phone || item.text || '';
+                    const labelDisplay = item.label ? ` - ${item.label}` : '';
+                    const actionUrl = item.url || (phoneDisplay.includes('@') ? `mailto:${phoneDisplay.trim()}` : `tel:${phoneDisplay.replace(/[^0-9+]/g, '')}`);
+
+                    return (
+                      <a
+                        key={idx}
+                        className="text-sm hover:text-emerald-800 transition font-semibold no-underline flex items-center justify-center gap-1.5 flex-wrap"
+                        href={actionUrl}
+                        target={item.openInNewTab ? "_blank" : undefined}
+                        rel={item.openInNewTab ? "noopener noreferrer" : undefined}
+                      >
+                        <span className="text-ink-lt font-sans tracking-tight">{phoneDisplay}</span>
+                        {item.label && (
+                          <span className="text-ink-lt font-medium text-xs inline-flex items-center">
+                            {item.label}
+                          </span>
+                        )}
+                      </a>
+                    );
+                  });
+              })()}
             </div>
           </div>
         </div>

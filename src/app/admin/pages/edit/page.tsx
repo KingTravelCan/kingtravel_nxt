@@ -3589,43 +3589,155 @@ function PageBuilderContent() {
                                         />
                                       </div>
 
-                                      <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                                          Support Phone 1 (Toll Free / Main)
-                                        </label>
-                                        <input
-                                          type="text"
-                                          value={sec.data?.phone1 || '+1 800-844-5464'}
-                                          onChange={(e) => updateSectionData(sec.id, 'phone1', e.target.value)}
-                                          placeholder="+1 800-844-5464"
-                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-800 font-mono outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
-                                        />
-                                      </div>
+                                      {/* Dynamic Support Rows Manager with Tab Switches */}
+                                      <div className="flex flex-col gap-2.5">
+                                        {(() => {
+                                          const supportList: any[] = (sec.data?.supportItems && Array.isArray(sec.data.supportItems) && sec.data.supportItems.length > 0)
+                                            ? sec.data.supportItems
+                                            : [
+                                              { phone: sec.data?.phone1 || '+1 800-844-5464', label: '', text: sec.data?.phone1 || '+1 800-844-5464', url: `tel:${(sec.data?.phone1 || '+18008445464').replace(/\s+/g, '')}`, openInNewTab: false },
+                                              { phone: sec.data?.phone2 || '+1 905-624-8555', label: 'Reservation', text: `${sec.data?.phone2 || '+1 905-624-8555'} - Reservation`, url: `tel:${(sec.data?.phone2 || '+19056248555').replace(/\s+/g, '')}`, openInNewTab: false },
+                                              { phone: sec.data?.phone3 || '+1 905-624-8344', label: 'Saudi Visa', text: `${sec.data?.phone3 || '+1 905-624-8344'} - Saudi Visa`, url: `tel:${(sec.data?.phone3 || '+19056248344').replace(/\s+/g, '')}`, openInNewTab: false },
+                                            ];
 
-                                      <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                                          Support Phone 2 (Direct line)
-                                        </label>
-                                        <input
-                                          type="text"
-                                          value={sec.data?.phone2 || '+1 905-624-8555'}
-                                          onChange={(e) => updateSectionData(sec.id, 'phone2', e.target.value)}
-                                          placeholder="+1 905-624-8555"
-                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-800 font-mono outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
-                                        />
-                                      </div>
+                                          return supportList.map((item: any, cIdx: number) => {
+                                            const isFirst = cIdx === 0;
+                                            const isLast = cIdx === supportList.length - 1;
 
-                                      <div>
-                                        <label className="block text-[10px] font-bold text-slate-500 uppercase mb-1">
-                                          Support Phone 3 (Alternative)
-                                        </label>
-                                        <input
-                                          type="text"
-                                          value={sec.data?.phone3 || '+1 905-624-8344'}
-                                          onChange={(e) => updateSectionData(sec.id, 'phone3', e.target.value)}
-                                          placeholder="+1 905-624-8344"
-                                          className="w-full px-3 py-2 rounded-lg border border-slate-200 text-xs text-slate-800 font-mono outline-none focus:border-[#004B39] focus:ring-1 focus:ring-[#004B39]"
-                                        />
+                                            return (
+                                              <div key={cIdx} className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 flex flex-col gap-2">
+                                                <div className="flex items-center justify-between gap-2">
+                                                  <div className="flex items-center gap-1 shrink-0">
+                                                    <button
+                                                      type="button"
+                                                      disabled={isFirst}
+                                                      onClick={() => {
+                                                        if (isFirst) return;
+                                                        const updated = [...supportList];
+                                                        const temp = updated[cIdx - 1];
+                                                        updated[cIdx - 1] = updated[cIdx];
+                                                        updated[cIdx] = temp;
+                                                        updateSectionData(sec.id, 'supportItems', updated);
+                                                      }}
+                                                      className={`p-1 rounded-md border border-slate-200 flex items-center justify-center transition-colors ${
+                                                        isFirst ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                                      }`}
+                                                      title="Move Up"
+                                                    >
+                                                      <MoveUp className="w-3 h-3" />
+                                                    </button>
+                                                    <button
+                                                      type="button"
+                                                      disabled={isLast}
+                                                      onClick={() => {
+                                                        if (isLast) return;
+                                                        const updated = [...supportList];
+                                                        const temp = updated[cIdx + 1];
+                                                        updated[cIdx + 1] = updated[cIdx];
+                                                        updated[cIdx] = temp;
+                                                        updateSectionData(sec.id, 'supportItems', updated);
+                                                      }}
+                                                      className={`p-1 rounded-md border border-slate-200 flex items-center justify-center transition-colors ${
+                                                        isLast ? 'opacity-30 cursor-not-allowed bg-slate-100 text-slate-400' : 'bg-white hover:bg-slate-100 text-slate-700 cursor-pointer shadow-2xs'
+                                                      }`}
+                                                      title="Move Down"
+                                                    >
+                                                      <MoveDown className="w-3 h-3" />
+                                                    </button>
+                                                  </div>
+
+                                                  <div className="flex items-center gap-3">
+                                                    <div className="flex items-center gap-1.5">
+                                                      <span className="text-[9px] font-bold text-slate-600">New Tab</span>
+                                                      <Switch
+                                                        checked={item.openInNewTab ?? false}
+                                                        onChange={(val) => {
+                                                          const updated = [...supportList];
+                                                          updated[cIdx] = { ...updated[cIdx], openInNewTab: val };
+                                                          updateSectionData(sec.id, 'supportItems', updated);
+                                                        }}
+                                                      />
+                                                    </div>
+                                                    <button
+                                                      type="button"
+                                                      onClick={() => {
+                                                        const updated = supportList.filter((_: any, i: number) => i !== cIdx);
+                                                        updateSectionData(sec.id, 'supportItems', updated);
+                                                      }}
+                                                      className="text-white hover:bg-red-700 bg-red-600 border-none rounded-md p-1 cursor-pointer flex items-center justify-center transition-colors"
+                                                      title="Remove row"
+                                                    >
+                                                      <Trash2 className="w-3 h-3" />
+                                                    </button>
+                                                  </div>
+                                                </div>
+
+                                                <div className="grid grid-cols-1 md:grid-cols-3 gap-1.5 w-full">
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Phone / Text (e.g. +1905-624-8555)"
+                                                    value={item.phone || item.text || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...supportList];
+                                                      const phoneVal = e.target.value;
+                                                      const labelVal = item.label || '';
+                                                      const combined = labelVal ? `${phoneVal} - ${labelVal}` : phoneVal;
+
+                                                      let autoUrl = item.url;
+                                                      if (!autoUrl || autoUrl.startsWith('tel:') || autoUrl.startsWith('mailto:')) {
+                                                        if (phoneVal.includes('@')) {
+                                                          autoUrl = `mailto:${phoneVal.trim()}`;
+                                                        } else if (phoneVal.replace(/[^0-9+]/g, '').length > 5) {
+                                                          autoUrl = `tel:${phoneVal.replace(/[^0-9+]/g, '')}`;
+                                                        }
+                                                      }
+
+                                                      updated[cIdx] = {
+                                                        ...updated[cIdx],
+                                                        phone: phoneVal,
+                                                        label: labelVal,
+                                                        text: combined,
+                                                        url: autoUrl || updated[cIdx].url || ''
+                                                      };
+                                                      updateSectionData(sec.id, 'supportItems', updated);
+                                                    }}
+                                                    className="p-1.5 rounded border border-slate-300 text-xs font-medium bg-white"
+                                                  />
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Label (e.g. Reservation)"
+                                                    value={item.label || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...supportList];
+                                                      const labelVal = e.target.value;
+                                                      const phoneVal = item.phone || item.text || '';
+                                                      const combined = labelVal ? `${phoneVal} - ${labelVal}` : phoneVal;
+                                                      updated[cIdx] = {
+                                                        ...updated[cIdx],
+                                                        label: labelVal,
+                                                        phone: phoneVal,
+                                                        text: combined
+                                                      };
+                                                      updateSectionData(sec.id, 'supportItems', updated);
+                                                    }}
+                                                    className="p-1.5 rounded border border-slate-300 text-xs font-medium bg-white"
+                                                  />
+                                                  <input
+                                                    type="text"
+                                                    placeholder="Action Link (e.g. tel:+19056248555)"
+                                                    value={item.url || ''}
+                                                    onChange={(e) => {
+                                                      const updated = [...supportList];
+                                                      updated[cIdx] = { ...updated[cIdx], url: e.target.value };
+                                                      updateSectionData(sec.id, 'supportItems', updated);
+                                                    }}
+                                                    className="p-1.5 rounded border border-slate-300 text-xs font-mono bg-white"
+                                                  />
+                                                </div>
+                                              </div>
+                                            );
+                                          });
+                                        })()}
                                       </div>
                                     </div>
                                   </div>
