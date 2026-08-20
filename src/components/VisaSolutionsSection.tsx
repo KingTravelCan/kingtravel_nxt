@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const defaultVisaSolutions = [
   {
@@ -46,16 +49,21 @@ const defaultVisaSolutions = [
   },
 ];
 
-export default function VisaSolutionsSection({ data }: { data?: any }) {
+export default function VisaSolutionsSection({ data, className }: { data?: any; className?: string }) {
+  const pathname = usePathname();
+  const isHomepage = pathname === "/";
+
   const items =
     data?.items &&
-    Array.isArray(data.items) &&
-    data.items.length > 0
+      Array.isArray(data.items) &&
+      data.items.length > 0
       ? data.items
       : defaultVisaSolutions;
 
+  const bgClass = data?.bgColor || (isHomepage ? "bg-white" : "bg-sage");
+
   return (
-    <section id="saudi-visa" className="py-12 md:py-16 w-full">
+    <section id="saudi-visa" className={`py-12 md:py-16 w-full ${bgClass} ${className || ""}`}>
       <div className="max-w-[1400px] mx-auto px-5">
         <div className="section-head center text-center mb-10">
           <div className="eyebrow uppercase text-xs font-bold tracking-widest text-gold mb-1">
