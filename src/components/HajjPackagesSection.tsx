@@ -263,7 +263,7 @@ export default function HajjPackagesSection({
                         <div className="text-[10px] font-bold text-ink-soft uppercase tracking-widest mb-1.5">
                           OPERATOR
                         </div>
-                        <div className="text-sm font-bold text-ink flex items-center gap-2">
+                        <div className="text-sm font-bold text-ink flex items-center gap-2 whitespace-nowrap">
                           {operatorName}{" "}
                           <span className="bg-gold text-ink text-[10px] px-1.5 py-0.5 rounded font-black">
                             {operatorRating}
