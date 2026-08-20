@@ -10,6 +10,16 @@ interface SitemapItem {
   images?: string[];
 }
 
+function escapeXml(unsafe: string): string {
+  if (!unsafe) return '';
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
 export async function generateSitemapXml(baseUrl: string): Promise<string> {
   const items = await gatherAllSitemapItems(baseUrl);
   
@@ -18,15 +28,16 @@ export async function generateSitemapXml(baseUrl: string): Promise<string> {
   
   for (const item of items) {
     xml += `  <url>\n`;
-    xml += `    <loc>${item.loc}</loc>\n`;
-    if (item.lastmod) xml += `    <lastmod>${item.lastmod}</lastmod>\n`;
-    if (item.changefreq) xml += `    <changefreq>${item.changefreq}</changefreq>\n`;
-    if (item.priority) xml += `    <priority>${item.priority}</priority>\n`;
+    xml += `    <loc>${escapeXml(item.loc)}</loc>\n`;
+    if (item.lastmod) xml += `    <lastmod>${escapeXml(item.lastmod)}</lastmod>\n`;
+    if (item.changefreq) xml += `    <changefreq>${escapeXml(item.changefreq)}</changefreq>\n`;
+    if (item.priority) xml += `    <priority>${escapeXml(item.priority)}</priority>\n`;
     
     if (item.images && item.images.length > 0) {
       for (const img of item.images) {
+        if (!img) continue;
         xml += `    <image:image>\n`;
-        xml += `      <image:loc>${img}</image:loc>\n`;
+        xml += `      <image:loc>${escapeXml(img)}</image:loc>\n`;
         xml += `    </image:image>\n`;
       }
     }
