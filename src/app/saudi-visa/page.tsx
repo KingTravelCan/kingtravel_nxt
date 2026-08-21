@@ -7,7 +7,7 @@ import PageSectionsRenderer from "@/components/PageSectionsRenderer";
 function VisaProcessStepsSection({ data }: { data?: any }) {
   return (
     <section className="visa-section py-12 bg-emerald-950 text-white">
-      <div className="container max-w-7xl mx-auto px-4 visa-grid-bottom grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      <div className="max-w-[1400px] mx-auto px-5 visa-grid-bottom grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
         <div className="visa-info-pane space-y-6">
           <span className="eyebrow">
             {data?.eyebrow || "IN 3 EASY STEPS"}
