@@ -160,6 +160,9 @@ export default function SoldOutPackagesSection({ data, initialPackages }: { data
                     <h3 className="text-2xl font-serif mb-2">
                       {pkg.title}
                     </h3>
+                    <span className="text-xs font-medium text-ink-soft">
+                      Starting From
+                    </span>
                     <div className="text-ink font-black text-xl mb-6">
                       {price}{" "}
                       <span className="text-sm font-medium text-ink-soft">
