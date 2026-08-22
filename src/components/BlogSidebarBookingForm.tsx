@@ -6,6 +6,28 @@ import { submitPackageBookingEnquiryAction } from "@/actions/enquiryActions";
 import { getPackagesByType } from "@/actions/packageActions";
 import SubmissionSuccessModal from "@/components/SubmissionSuccessModal";
 
+const MONTH_NAMES = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
+function formatTravelMonth(value?: string | null): string {
+  if (!value || typeof value !== 'string') return '';
+  const trimmed = value.trim();
+  const yyyymmMatch = trimmed.match(/^(\d{4})-(\d{1,2})$/);
+  if (yyyymmMatch) {
+    const year = parseInt(yyyymmMatch[1], 10);
+    const monthIdx = parseInt(yyyymmMatch[2], 10) - 1;
+    if (monthIdx >= 0 && monthIdx < 12) return `${MONTH_NAMES[monthIdx]} ${year}`;
+  }
+  const legacyMatch = trimmed.match(/^([A-Za-z]+)\s+(\d{4})/);
+  if (legacyMatch) {
+    const foundIdx = MONTH_NAMES.findIndex(m => m.toLowerCase() === legacyMatch[1].toLowerCase());
+    if (foundIdx !== -1) return `${MONTH_NAMES[foundIdx]} ${legacyMatch[2]}`;
+  }
+  return trimmed;
+}
+
 export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: string }) {
   const [fullName, setFullName] = useState("");
   const [phone, setPhone] = useState("");
