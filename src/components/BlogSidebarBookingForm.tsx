@@ -191,9 +191,15 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
     const selectedPriceItem = packagePrices.find((p) => p.packageType === effectivePackageType);
     const formattedTotalPrice = selectedPriceItem ? `CAD ${selectedPriceItem.price.toLocaleString("en-CA")}` : "";
 
+    const basePackageName = selectedPackage?.title || `${packageType === "hajj" ? "Hajj" : "Umrah"} Package`;
+    const travelMonthSuffix = packageType === "umrah" && selectedPackage?.month
+      ? ` - ${formatTravelMonth(selectedPackage.month)}`
+      : "";
+    const packageName = `${basePackageName}${travelMonthSuffix}`;
+
     const res = await submitPackageBookingEnquiryAction({
       packageId: Number(selectedPackageId),
-      packageName: selectedPackage?.title || `${packageType === "hajj" ? "Hajj" : "Umrah"} Package`,
+      packageName,
       packageType: effectivePackageType || undefined,
       fullName,
       phone,
