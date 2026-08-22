@@ -356,11 +356,17 @@ export default function BlogSidebarBookingForm({ blogTitle }: { blogTitle?: stri
                     : `Select a ${packageType === "hajj" ? "Hajj" : "Umrah"} package`}
               </option>
 
-              {availablePackages.map((pkg: any) => (
-                <option key={pkg.id} value={String(pkg.id)}>
-                  {pkg.title}
-                </option>
-              ))}
+              {availablePackages.map((pkg: any) => {
+                const travelMonth = packageType === 'umrah' && pkg.month ? formatTravelMonth(pkg.month) : null;
+                const label = travelMonth
+                  ? `${pkg.title} - ${travelMonth}`
+                  : pkg.title;
+                return (
+                  <option key={pkg.id} value={String(pkg.id)}>
+                    {label}
+                  </option>
+                );
+              })}
             </select>
 
             {errors.selectedPackage && (

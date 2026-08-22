@@ -303,7 +303,6 @@ export default function ContactFormSection({ data }: { data: ContactSectionData 
                       } ${errors.packageType ? "border-red-600 focus:border-red-600 focus:ring-1 focus:ring-red-600" : "focus:border-emerald-800"}`}
                   >
                     <option value="" disabled hidden>Select Package *</option>
-                    <option value="Hajj/Umrah Packages" className="text-[#111111]">Hajj/Umrah Packages</option>
                     <option value="Umrah Package" className="text-[#111111]">Umrah Package</option>
                     <option value="Hajj Package" className="text-[#111111]">Hajj Package</option>
                     <option value="Flight Only" className="text-[#111111]">Flight Only</option>
